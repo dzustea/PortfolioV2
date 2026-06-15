@@ -3,224 +3,250 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Filip Lochman</title>
+<title>Filip Lochman — Web Developer</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml"/>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 
-<div id="cursor"></div>
+<!-- Loading bar -->
+<div id="loader"><div id="loader-bar"></div></div>
 
-<!-- ══ NAV ══ -->
-<nav id="nav">
-  <a class="nav-mark" href="#home">FL</a>
-  <div class="nav-center">
-    <a href="#about"    data-s="about">O&nbsp;mně</a>
+<!-- Nav -->
+<header id="hdr">
+  <a class="logo" href="#home">FL<span class="logo-dot">.</span></a>
+  <nav>
+    <a href="#about"    data-s="about">O mně</a>
     <a href="#projects" data-s="projects">Projekty</a>
     <a href="#contact"  data-s="contact">Kontakt</a>
+  </nav>
+  <div class="hdr-badge">
+    <span class="badge-dot"></span>
+    <span>K dispozici</span>
   </div>
-  <div class="nav-right">
-    <span class="dot-live"></span><span>K dispozici</span>
-  </div>
-</nav>
+</header>
 
-<!-- ══ HOME ══ -->
-<section id="home" class="s-home">
-  <div class="home-kicker">
-    <span class="mono-sm">Web Developer</span>
-    <span class="mono-sm sep">/</span>
-    <span class="mono-sm">Kroměříž · Zlín</span>
-    <span class="mono-sm sep">/</span>
-    <span class="mono-sm year" id="yr">2026</span>
-  </div>
+<!-- ═══ HERO ═══ -->
+<section id="home" class="s-hero">
+  <div class="hero-bg-num" aria-hidden="true">01</div>
 
-  <div class="hero-name-wrap">
-    <h1 class="hero-name">
-      <span class="hn-row"><span class="hn-text">Filip</span></span>
-      <span class="hn-row"><span class="hn-text">Loch&shy;man</span></span>
+  <div class="hero-content">
+    <div class="hero-tag">
+      <span class="tag-line"></span>
+      <span>Web Developer · Kroměříž / Zlín</span>
+    </div>
+
+    <h1 class="hero-title">
+      <span class="ht-row"><span class="ht-inner">Filip</span></span>
+      <span class="ht-row"><span class="ht-inner">Lochman</span></span>
     </h1>
-    <div class="hero-aside">
+
+    <div class="hero-foot">
       <p class="hero-desc">
-        Přeměním váš návrh<br>ve funkční web —<br>
-        čistý kód, silný vizuál.
+        Přeměním váš návrh ve funkční web —
+        čistý kód, silný vizuál, plynulé animace.
+        Otevřen dlouhodobé spolupráci.
       </p>
-      <a href="#projects" class="btn-primary">
-        Moje projekty <svg viewBox="0 0 18 18"><line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/></svg>
-      </a>
+      <div class="hero-actions">
+        <a href="#projects" class="btn-ora">Moje projekty <svg viewBox="0 0 20 20"><line x1="4" y1="10" x2="16" y2="10"/><polyline points="10 4 16 10 10 16"/></svg></a>
+        <a href="#contact" class="btn-ghost">Kontakt</a>
+      </div>
     </div>
   </div>
 
-  <div class="home-bar">
-    <div class="home-bar-left mono-sm">
-      <span>Frontend · Backend · Game dev · Android</span>
+  <div class="hero-side">
+    <div class="hero-stat">
+      <span class="stat-n">4+</span>
+      <span class="stat-l">Jazyků</span>
     </div>
-    <div class="home-bar-right mono-sm">
-      <span class="scroll-label">Scroll</span>
-      <div class="scroll-line"><div class="scroll-run"></div></div>
+    <div class="hero-stat">
+      <span class="stat-n">20</span>
+      <span class="stat-l">Let</span>
     </div>
+    <div class="hero-stat">
+      <span class="stat-n">∞</span>
+      <span class="stat-l">Kávy</span>
+    </div>
+  </div>
+
+  <div class="scroll-ind" aria-hidden="true">
+    <div class="si-track"><div class="si-thumb"></div></div>
+    <span class="si-label">SCROLL</span>
   </div>
 </section>
 
-<!-- ══ ABOUT ══ -->
+<!-- ═══ ABOUT ═══ -->
 <section id="about" class="s-about">
-  <div class="sec-cap">
-    <span class="sec-num mono-sm">01 /</span>
-    <span class="sec-title">O mně</span>
+  <div class="sec-label">
+    <span class="sl-num">02</span>
+    <span class="sl-text">O mně</span>
   </div>
 
-  <div class="about-grid">
-    <div class="about-left">
-      <h2 class="about-head">
-        Full-stack<br><em>vývojář</em>
-      </h2>
-      <div class="about-body">
-        <p>Je mi 20 let. Čerstvý absolvent <strong>CreativeHill College Zlín</strong>, obor Vývoj počítačových her a multimediálních aplikací.</p>
-        <p>Stavím projekty na míru — od čistého frontendu po kompletní logiku s <strong>backendem v PHP</strong>. Zakládám si na bezpečném, přehledném kódu.</p>
-        <p>Otevřen jednorázovým projektům i dlouhodobé spolupráci. Remote&nbsp;OK.</p>
+  <div class="about-layout">
+    <div class="about-left rv">
+      <h2 class="about-title">Co<br><em>dělám</em></h2>
+      <p class="about-sub">Full-stack vývojář se zaměřením na weby, které nejen fungují, ale taky vypadají dobře.</p>
+      <div class="about-text">
+        <p>Je mi 20 let, čerstvý absolvent <strong>CreativeHill College Zlín</strong> — obor Vývoj počítačových her a multimediálních aplikací.</p>
+        <p>Stavím projekty na míru — od čistého frontendu po backend v PHP s databází. Zakládám si na bezpečném, čitelném kódu. Remote&nbsp;OK.</p>
       </div>
     </div>
 
     <div class="about-right">
-      <div class="skill-list">
-        <div class="skill-row rv">
-          <div class="sk-num mono-sm">01</div>
-          <div class="sk-body">
-            <h3>Frontend</h3>
-            <p>HTML5, CSS3, JavaScript — responzivní weby, animace, čistý kód bez frameworků.</p>
-          </div>
+      <div class="skill-card rv">
+        <div class="sk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg></div>
+        <div>
+          <h3>Frontend</h3>
+          <p>HTML5, CSS3, JavaScript — responzivní weby, animace, čistý kód bez frameworků.</p>
         </div>
-        <div class="skill-row rv" style="--d:.07s">
-          <div class="sk-num mono-sm">02</div>
-          <div class="sk-body">
-            <h3>Backend & databáze</h3>
-            <p>PHP, MySQL, MongoDB — serverová logika, správa dat, bezpečné API endpointy.</p>
-          </div>
+      </div>
+      <div class="skill-card rv" style="--d:.08s">
+        <div class="sk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div>
+        <div>
+          <h3>Backend & databáze</h3>
+          <p>PHP, MySQL, MongoDB — serverová logika, správa dat, bezpečné API endpointy.</p>
         </div>
-        <div class="skill-row rv" style="--d:.14s">
-          <div class="sk-num mono-sm">03</div>
-          <div class="sk-body">
-            <h3>Game & App Dev</h3>
-            <p>C#, Java, C++, Unity 2D/3D — vývoj her a desktopových aplikací.</p>
-          </div>
+      </div>
+      <div class="skill-card rv" style="--d:.16s">
+        <div class="sk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+        <div>
+          <h3>Game & App Dev</h3>
+          <p>C#, Java, C++, Unity 2D/3D — vývoj her a desktopových aplikací.</p>
         </div>
-        <div class="skill-row rv" style="--d:.21s">
-          <div class="sk-num mono-sm">04</div>
-          <div class="sk-body">
-            <h3>Java & Android</h3>
-            <p>Školní projekty — bankovní systém, knihovna, hypotéka. Mobilní apps v Android Studiu.</p>
-          </div>
+      </div>
+      <div class="skill-card rv" style="--d:.24s">
+        <div class="sk-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+        <div>
+          <h3>Java & Android</h3>
+          <p>Školní projekty — bankovní systém, knihovna, hypotéka. Mobilní apps v Android Studiu.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ══ PROJECTS ══ -->
+<!-- ═══ PROJECTS ═══ -->
 <section id="projects" class="s-projects">
-  <div class="sec-cap">
-    <span class="sec-num mono-sm">02 /</span>
-    <span class="sec-title">Projekty</span>
+  <div class="sec-label">
+    <span class="sl-num">03</span>
+    <span class="sl-text">Projekty</span>
   </div>
 
-  <div class="proj-table">
-    <div class="proj-thead mono-sm">
-      <span>Č.</span><span>Název</span><span class="hide-sm">Tech</span><span>Status</span>
-    </div>
+  <div class="proj-intro rv">
+    <h2 class="proj-heading">Vybrané<br><em>práce</em></h2>
+  </div>
 
-    <a href="https://motivo.free.nf" target="_blank" class="proj-tr rv">
-      <span class="pt-num mono-sm">01</span>
-      <div class="pt-title-wrap">
-        <span class="pt-title">Herní akademie</span>
-        <span class="pt-sub mono-sm hide-sm">Webová aplikace pro herní akademii</span>
+  <div class="proj-list">
+    <a href="https://motivo.free.nf" target="_blank" class="proj-item rv">
+      <div class="pi-num">01</div>
+      <div class="pi-body">
+        <div class="pi-top">
+          <h3>Herní akademie</h3>
+          <span class="pi-live">● Live</span>
+        </div>
+        <p class="pi-desc">Webová aplikace pro herní akademii s backendem v PHP a MySQL databází.</p>
+        <div class="pi-tags">
+          <span>HTML</span><span>CSS</span><span>JavaScript</span><span>PHP</span><span>MySQL</span>
+        </div>
       </div>
-      <span class="pt-tech mono-sm hide-sm">HTML · CSS · JS · PHP · MySQL</span>
-      <span class="pt-status live mono-sm">● Live</span>
-      <span class="pt-arr">↗</span>
+      <div class="pi-thumb">
+        <img src="project-preview.png" alt="Herní akademie" onerror="this.parentElement.classList.add('no-img')"/>
+      </div>
+      <div class="pi-arrow">↗</div>
     </a>
 
-    <a href="#" target="_blank" class="proj-tr rv" style="--d:.08s">
-      <span class="pt-num mono-sm">02</span>
-      <div class="pt-title-wrap">
-        <span class="pt-title">Detektivní hra</span>
-        <span class="pt-sub mono-sm hide-sm">2D adventura s narativní mechanikou</span>
+    <a href="#" target="_blank" class="proj-item rv" style="--d:.1s">
+      <div class="pi-num">02</div>
+      <div class="pi-body">
+        <div class="pi-top">
+          <h3>Detektivní hra</h3>
+          <span class="pi-live">● Live</span>
+        </div>
+        <p class="pi-desc">2D adventura vyvíjená v Unity s narativní mechanikou a vlastní grafikou.</p>
+        <div class="pi-tags">
+          <span>C#</span><span>Unity 2D</span>
+        </div>
       </div>
-      <span class="pt-tech mono-sm hide-sm">C# · Unity 2D</span>
-      <span class="pt-status live mono-sm">● Live</span>
-      <span class="pt-arr">↗</span>
+      <div class="pi-thumb no-img"></div>
+      <div class="pi-arrow">↗</div>
     </a>
 
-    <div class="proj-tr proj-wip rv" style="--d:.16s">
-      <span class="pt-num mono-sm">03</span>
-      <div class="pt-title-wrap">
-        <span class="pt-title">Projekt #3</span>
-        <span class="pt-sub mono-sm hide-sm">Připravuji...</span>
+    <div class="proj-item proj-wip rv" style="--d:.2s">
+      <div class="pi-num">03</div>
+      <div class="pi-body">
+        <div class="pi-top">
+          <h3>Projekt #3</h3>
+          <span class="pi-wip">○ V přípravě</span>
+        </div>
+        <p class="pi-desc">Připravuji...</p>
+        <div class="pi-tags"><span>—</span></div>
       </div>
-      <span class="pt-tech mono-sm hide-sm">—</span>
-      <span class="pt-status wip mono-sm">○ Brzy</span>
-      <span class="pt-arr muted">···</span>
+      <div class="pi-thumb no-img"></div>
+      <div class="pi-arrow muted">···</div>
     </div>
   </div>
 </section>
 
-<!-- ══ CONTACT ══ -->
+<!-- ═══ CONTACT ═══ -->
 <section id="contact" class="s-contact">
-  <div class="sec-cap">
-    <span class="sec-num mono-sm">03 /</span>
-    <span class="sec-title">Kontakt</span>
+  <div class="sec-label">
+    <span class="sl-num">04</span>
+    <span class="sl-text">Kontakt</span>
   </div>
 
-  <div class="contact-wrap">
-    <div class="contact-left">
-      <h2 class="contact-head">
-        Pojďme<br><em>spolupracovat.</em>
-      </h2>
+  <div class="contact-layout">
+    <div class="contact-left rv">
+      <h2 class="contact-title">Pojďme<br><em>spolupracovat.</em></h2>
+      <p class="contact-desc">Odpovím do 24 hodin. Jsem otevřen jak jednorázovým projektům, tak dlouhodobé spolupráci.</p>
 
-      <div class="avail-pill rv">
+      <div class="avail-row">
         <span class="avail-dot"></span>
-        <span class="mono-sm">Otevřen nabídkám</span>
+        <span>Otevřen nabídkám</span>
       </div>
 
-      <div class="contact-links rv" style="--d:.08s">
+      <div class="contact-links">
         <a href="mailto:filda.lochman12@gmail.com" class="cl">
-          <span class="cl-lbl mono-sm">Email</span>
-          <span class="cl-val">filda.lochman12@gmail.com ↗</span>
+          <span class="cl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"/><polyline points="22,6 12,13 2,6"/></svg></span>
+          <span class="cl-val">filda.lochman12@gmail.com</span>
+          <span class="cl-arr">↗</span>
         </a>
         <a href="https://linkedin.com" target="_blank" class="cl">
-          <span class="cl-lbl mono-sm">LinkedIn</span>
-          <span class="cl-val">Filip Lochman ↗</span>
+          <span class="cl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></span>
+          <span class="cl-val">LinkedIn</span>
+          <span class="cl-arr">↗</span>
         </a>
-        <div class="cl">
-          <span class="cl-lbl mono-sm">Lokace</span>
+        <div class="cl no-link">
+          <span class="cl-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
           <span class="cl-val">Kroměříž / Zlín · Remote OK</span>
         </div>
       </div>
     </div>
 
-    <form id="cform" class="contact-form rv" style="--d:.14s">
+    <form id="cform" class="contact-form rv" style="--d:.12s">
       <div class="fg">
-        <label>Jméno</label>
+        <label for="fn">Jméno</label>
         <input id="fn" name="name" type="text" placeholder="Jan Novák" autocomplete="off" required/>
       </div>
       <div class="fg">
-        <label>Email</label>
+        <label for="fe">Email</label>
         <input id="fe" name="email" type="email" placeholder="jan@firma.cz" autocomplete="off" required/>
       </div>
       <div class="fg">
-        <label>Zpráva</label>
+        <label for="fm">Zpráva</label>
         <textarea id="fm" name="message" placeholder="Ahoj Filipe..." required></textarea>
       </div>
       <button type="submit" id="btn-send">
         <span id="btn-txt">Odeslat zprávu</span>
-        <svg viewBox="0 0 18 18" width="16" height="16"><line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/></svg>
+        <svg viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="10" x2="16" y2="10"/><polyline points="10 4 16 10 10 16"/></svg>
       </button>
       <div class="form-msg" id="fmsg"></div>
     </form>
   </div>
 
   <footer>
-    <span class="mono-sm">© Filip Lochman · 2026</span>
-    <span class="mono-sm">Kroměříž / Zlín, CZ</span>
+    <span>© Filip Lochman · 2026</span>
+    <span>Kroměříž / Zlín, CZ</span>
   </footer>
 </section>
 
