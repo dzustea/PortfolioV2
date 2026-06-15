@@ -1,38 +1,36 @@
 /* ── CURSOR ── */
-const cur = document.getElementById('cur');
+const cursor = document.getElementById('cursor');
 if (window.matchMedia('(hover:hover)').matches) {
-  let cx = 0, cy = 0;
   document.addEventListener('mousemove', e => {
-    cx = e.clientX; cy = e.clientY;
-    cur.style.left = cx + 'px';
-    cur.style.top  = cy + 'px';
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
   });
-  document.querySelectorAll('a, button, .skill-item, .proj-row').forEach(el => {
-    el.addEventListener('mouseenter', () => cur.classList.add('big'));
-    el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+  document.querySelectorAll('a, button, .skill-row, .proj-tr').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('grow'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('grow'));
   });
 }
 
-/* ── HEADER ── */
-const hdr = document.getElementById('hdr');
+/* ── NAV SCROLL SHADOW ── */
+const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
-  hdr.classList.toggle('scrolled', window.scrollY > 40);
+  nav.classList.toggle('up', window.scrollY > 20);
 }, { passive: true });
 
 /* ── NAV ACTIVE ── */
-const sections   = ['home','about','projects','contact'].map(id => document.getElementById(id)).filter(Boolean);
-const sectionIds = ['home','about','projects','contact'];
-const navLinks   = document.querySelectorAll('nav a');
+const SEC_IDS = ['home','about','projects','contact'];
+const secs    = SEC_IDS.map(id => document.getElementById(id)).filter(Boolean);
+const nlinks  = document.querySelectorAll('.nav-center a');
 
 const updateNav = () => {
-  const y = window.scrollY + window.innerHeight * 0.4;
-  let current = 'home';
-  for (let i = sections.length - 1; i >= 0; i--) {
-    if (sections[i] && sections[i].getBoundingClientRect().top + window.scrollY <= y) {
-      current = sectionIds[i]; break;
+  const mid = window.scrollY + window.innerHeight * 0.38;
+  let active = 'home';
+  for (let i = secs.length - 1; i >= 0; i--) {
+    if (secs[i].getBoundingClientRect().top + window.scrollY <= mid) {
+      active = SEC_IDS[i]; break;
     }
   }
-  navLinks.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + current));
+  nlinks.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + active));
 };
 window.addEventListener('scroll', updateNav, { passive: true });
 updateNav();
@@ -40,54 +38,43 @@ updateNav();
 /* ── SMOOTH SCROLL ── */
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
-    const id = a.getAttribute('href').slice(1);
-    const target = document.getElementById(id);
+    const target = document.getElementById(a.getAttribute('href').slice(1));
     if (!target) return;
     e.preventDefault();
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
 
-/* ── SCROLL REVEAL ── */
-const ro = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    const el = entry.target;
-    if (el.classList.contains('reveal-up')) {
-      el.classList.add('in');
-    } else if (el.classList.contains('reveal-line')) {
-      el.classList.add('in');
-    }
-    ro.unobserve(el);
+/* ── REVEAL ON SCROLL ── */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(en => {
+    if (en.isIntersecting) { en.target.classList.add('in'); ro.unobserve(en.target); }
   });
-}, { threshold: 0.12 });
-
-document.querySelectorAll('.reveal-up, .reveal-line').forEach(el => ro.observe(el));
+}, { threshold: 0.1 });
+document.querySelectorAll('.rv').forEach(el => ro.observe(el));
 
 /* ── FORM ── */
-const formEl = document.getElementById('contact-form');
-if (formEl) {
-  formEl.addEventListener('submit', async function(e) {
+const form = document.getElementById('cform');
+if (form) {
+  form.addEventListener('submit', async function(e) {
     e.preventDefault();
     const name    = document.getElementById('fn').value.trim();
     const email   = document.getElementById('fe').value.trim();
     const message = document.getElementById('fm').value.trim();
     const btn     = document.getElementById('btn-send');
-    const msg     = document.getElementById('form-msg');
+    const btntxt  = document.getElementById('btn-txt');
+    const msg     = document.getElementById('fmsg');
 
     if (!name || !email || !message) {
       msg.textContent = 'Vyplň prosím všechna pole.';
       msg.className = 'form-msg form-err'; return;
     }
-
-    btn.disabled = true;
-    btn.querySelector('span').textContent = 'Odesílám...';
+    btn.disabled = true; btntxt.textContent = 'Odesílám...';
     msg.textContent = ''; msg.className = 'form-msg';
 
-    const formData = new FormData(this);
     try {
-      const res  = await fetch('https://formspree.io/f/xnjryend', {
-        method: 'POST', body: formData,
+      const res = await fetch('https://formspree.io/f/xnjryend', {
+        method: 'POST', body: new FormData(this),
         headers: { Accept: 'application/json' }
       });
       if (res.ok) {
@@ -99,8 +86,6 @@ if (formEl) {
       msg.textContent = 'Nepodařilo se odeslat. Napiš přímo na filda.lochman12@gmail.com';
       msg.className = 'form-msg form-err';
     }
-
-    btn.disabled = false;
-    btn.querySelector('span').textContent = 'Odeslat zprávu';
+    btn.disabled = false; btntxt.textContent = 'Odeslat zprávu';
   });
 }
