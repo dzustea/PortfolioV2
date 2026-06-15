@@ -1,295 +1,239 @@
 <!doctype html>
 <html lang="cs">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <title>Filip Lochman</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200;12..96,400;12..96,700;12..96,800&family=DM+Mono:ital@0;1&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <canvas id="bgc"></canvas>
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Filip Lochman — Web Developer</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Space+Mono:ital@0;1&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
 
-    <nav id="navigace">
-      <a href="#home" class="nav-logo">Filip<b>.</b></a>
-      <div class="nav-links">
-        <a href="#home" data-sekce="home" class="on">Home</a>
-        <a href="#about" data-sekce="about">O mně</a>
-        <a href="#projects" data-sekce="projects">Projekty</a>
-        <a href="#contact" data-sekce="contact">Kontakt</a>
-      </div>
+  <!-- CURSOR -->
+  <div id="cur"></div>
+
+  <!-- NAV -->
+  <header id="hdr">
+    <a href="#home" class="logo" data-nav="home">FL<span>.</span></a>
+    <nav>
+      <a href="#about"    data-nav="about">O mně</a>
+      <a href="#projects" data-nav="projects">Projekty</a>
+      <a href="#contact"  data-nav="contact">Kontakt</a>
     </nav>
+    <div class="hdr-right">
+      <span class="avail"><i></i>K dispozici</span>
+    </div>
+  </header>
 
-    <!-- ═══ LAYER 0 — HERO (pevný základ, ostatní se scrollují přes něj) ═══ -->
-    <div class="layer layer-hero" id="home">
-      <!-- Ambient blobs pouze na hero vrstvě -->
-      <div class="blob blob-a"></div>
-      <div class="blob blob-b"></div>
-      <div class="blob blob-c"></div>
-
-      <div class="hero-inner">
-        <div class="hero-eyebrow">
-          <span class="hero-role">Web Developer</span>
-          <span class="hero-sep">·</span>
-          <span class="hero-loc">Kroměříž / Zlín</span>
-        </div>
-
-        <h1 class="h-name">
-          <span class="ln"><span class="w">Filip</span></span>
-          <span class="ln"><span class="w">Lochman</span></span>
-        </h1>
-
-        <p class="h-desc">
-          Tvořím responzivní a bezpečné weby, které skvěle vypadají a hladce
-          fungují. Jsem připraven přeměnit vaše grafické návrhy a nápady ve
-          funkční realitu.
-        </p>
-
-        <a href="#projects" class="hero-cta">
-          <span>Moje projekty</span>
-          <svg viewBox="0 0 24 24">
-            <line x1="5" y1="12" x2="19" y2="12" />
-            <polyline points="12 5 19 12 12 19" />
-          </svg>
-        </a>
+  <!-- ══════ HOME ══════ -->
+  <section id="home" class="section s-home">
+    <div class="home-inner">
+      <div class="home-top">
+        <p class="eyebrow">Web Developer · Kroměříž / Zlín</p>
       </div>
 
-      <!-- scroll indicator -->
-      <div class="scroll-hint" aria-hidden="true">
-        <div class="sh-line"></div>
-        <span>scroll</span>
+      <h1 class="hero-name">
+        <span class="name-line reveal-line"><em>Filip</em></span>
+        <span class="name-line reveal-line delay-1"><em>Lochman</em></span>
+      </h1>
+
+      <div class="home-bottom">
+        <p class="hero-tagline reveal-up delay-2">
+          Přeměním váš návrh<br>ve funkční realitu.
+        </p>
+        <a href="#projects" class="cta-link reveal-up delay-3">
+          Zobrazit projekty
+          <svg viewBox="0 0 24 24" width="16" height="16"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
       </div>
     </div>
 
-    <!-- ═══ LAYER 0.5 — O MNĚ / CO DĚLÁM ═══ -->
-    <div class="layer layer-about" id="about">
-      <div class="layer-inner">
-        <div class="sec-hd r">
-          <div class="sec-idx">— o mně</div>
-          <h2 class="sec-ttl">Zaměření</h2>
-        </div>
+    <!-- rotating badge -->
+    <div class="spin-badge" aria-hidden="true">
+      <svg viewBox="0 0 200 200" class="spin-svg">
+        <path id="circle-path" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/>
+        <text font-size="13.5" letter-spacing="7.2" font-family="Space Mono, monospace">
+          <textPath href="#circle-path">FRONTEND · BACKEND · DESIGN · </textPath>
+        </text>
+      </svg>
+      <div class="spin-center">
+        <svg viewBox="0 0 24 24" width="22" height="22"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </div>
 
-        <div class="about-grid">
-          <div class="about-bio r">
-            <p>
-              Je mi 20 let a zaměřuji se na
-              <strong>full-stack vývoj webů</strong>. Zkušenosti z vývoje her a
-              multimédií promítám do toho, aby byly stránky plynulé,
-              interaktivní a přívětivé.
-            </p>
-            <p>
-              Stavím projekty na míru — od čistého frontendu po kompletní
-              logiku, databáze a <strong>backend</strong>. Zakládám si na
-              psaní efektivního kódu a na tom, aby byly weby rychlé, funkční a
-              především <strong>bezpečné</strong>.
-            </p>
+    <!-- scroll hint -->
+    <div class="scroll-cue">
+      <div class="scroll-track"><div class="scroll-thumb"></div></div>
+      <span>SCROLL</span>
+    </div>
+  </section>
+
+  <!-- ══════ ABOUT ══════ -->
+  <section id="about" class="section s-about">
+    <div class="section-inner">
+      <div class="section-label reveal-up">
+        <span>01</span>
+        <span>O mně</span>
+      </div>
+
+      <div class="about-layout">
+        <h2 class="about-heading reveal-line">
+          <em>Zaměření</em>
+        </h2>
+
+        <div class="about-body">
+          <div class="about-text reveal-up delay-1">
+            <p>Je mi 20 let a zaměřuji se na <strong>full-stack vývoj webů</strong>. Zkušenosti z vývoje her a multimédií promítám do toho, aby byly stránky plynulé, interaktivní a přívětivé.</p>
+            <p>Stavím projekty na míru — od čistého frontendu po kompletní logiku a <strong>backend v PHP</strong>. Zakládám si na psaní efektivního, bezpečného kódu.</p>
+            <p>Jsem otevřen jak jednorázovým projektům, tak dlouhodobé spolupráci.</p>
           </div>
-           <div class="about-cards">
-            <div class="about-card r">
-              <div class="about-card-icon">
-                <svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-              </div>
+
+          <div class="skills-grid reveal-up delay-2">
+            <div class="skill-item">
+              <div class="skill-num">01</div>
               <h3>Frontend</h3>
               <p>HTML5, CSS3, JavaScript — responzivní weby, animace, čistý kód bez frameworků.</p>
             </div>
-            <div class="about-card r" style="transition-delay:.08s">
-              <div class="about-card-icon">
-                <svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-              </div>
+            <div class="skill-item">
+              <div class="skill-num">02</div>
               <h3>Backend & databáze</h3>
-              <p>PHP, MySQL — serverová logika, správa dat, bezpečné API endpointy.</p>
+              <p>PHP, MySQL, MongoDB — serverová logika, správa dat, bezpečné API endpointy.</p>
             </div>
-            <div class="about-card r" style="transition-delay:.16s">
-              <div class="about-card-icon">
-                <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-              </div>
+            <div class="skill-item">
+              <div class="skill-num">03</div>
+              <h3>Game & App Dev</h3>
+              <p>C#, Java, C++, Unity — vývoj 2D/3D her a desktopových aplikací.</p>
+            </div>
+            <div class="skill-item">
+              <div class="skill-num">04</div>
               <h3>Java & Android</h3>
-              <p>Java SE, Kotlin — objektové návrhy, desktopové systémy a vývoj nativních mobilních aplikací.</p>
+              <p>Školní projekty — bankovní systém, knihovní systém, výpočet hypotéky. Základy mobilních aplikací v Android Studiu.</p>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- ═══ LAYER 1 — PROJECTS (jede přes hero jako karta) ═══ -->
-    <div class="layer layer-projects" id="projects">
-      <div class="layer-inner">
-        <div class="sec-hd r">
-          <div class="sec-idx">— projekty</div>
-          <h2 class="sec-ttl">Projekty</h2>
-        </div>
+  </section>
 
-        <!--MOTIVO -->
-        <div class="proj-list">
-          <a href="https://motivo.free.nf" target="_blank" class="pl-item r">
-            <div class="pl-left">
-              <span class="pl-num">01</span>
-              <div class="pl-info">
-                <span class="pl-live">● live</span>
-                <strong class="pl-title">Herní akademie</strong>
-                <span class="pl-tech"
-                  >HTML · CSS · JavaScript · PHP · MySQL</span
-                >
-              </div>
-            </div>
-            <div class="pl-right">
-              <div class="pl-thumb">
-                <img
-                  src="project-preview.png"
-                  alt="Herní akademie"
-                  onerror="this.parentElement.style.display = 'none'"
-                />
-              </div>
-              <span class="pl-arrow">↗</span>
-            </div>
-          </a>
+  <!-- ══════ PROJECTS ══════ -->
+  <section id="projects" class="section s-projects">
+    <div class="section-inner">
+      <div class="section-label reveal-up">
+        <span>02</span>
+        <span>Projekty</span>
+      </div>
 
-          <!-- 2D HRA UNITY -->
-          <a href="#" target="_blank" class="pl-item r">
-            <div class="pl-left">
-              <span class="pl-num">02</span>
-              <div class="pl-info">
-                <span class="pl-live">● live</span>
-                <strong class="pl-title">Detektivní hra</strong>
-                <span class="pl-tech">C# · Unity 2D</span>
-              </div>
-            </div>
-            <div class="pl-right">
-              <div class="pl-thumb">
-                <img
-                  src="project-preview.png"
-                  alt="Detektivní hra"
-                  onerror="this.parentElement.style.display = 'none'"
-                />
-              </div>
-              <span class="pl-arrow">↗</span>
-            </div>
-          </a>
+      <div class="proj-header reveal-line">
+        <h2><em>Vybrané</em><br>práce</h2>
+      </div>
 
-          <div class="pl-item pl-wip r">
-            <div class="pl-left">
-              <span class="pl-num">03</span>
-              <div class="pl-info">
-                <strong class="pl-title">Projekt #3</strong>
-                <span class="pl-tech">Připravuji...</span>
-              </div>
-            </div>
-            <div class="pl-right">
-              <span class="pl-wip-badge"><i></i>v přípravě</span>
-            </div>
+      <div class="proj-list">
+        <a href="https://motivo.free.nf" target="_blank" class="proj-row reveal-up">
+          <div class="proj-meta">
+            <span class="proj-num">01</span>
+            <span class="proj-status live">● Live</span>
           </div>
+          <div class="proj-info">
+            <h3>Herní akademie</h3>
+            <p>Webová aplikace pro herní akademii s backendem v PHP a MySQL.</p>
+          </div>
+          <div class="proj-tags">
+            <span>HTML</span><span>CSS</span><span>JS</span><span>PHP</span><span>MySQL</span>
+          </div>
+          <div class="proj-arrow">↗</div>
+        </a>
+
+        <a href="#" target="_blank" class="proj-row reveal-up delay-1">
+          <div class="proj-meta">
+            <span class="proj-num">02</span>
+            <span class="proj-status live">● Live</span>
+          </div>
+          <div class="proj-info">
+            <h3>Detektivní hra</h3>
+            <p>2D adventura vyvíjená v Unity s narativní mechanikou a pixel art grafikou.</p>
+          </div>
+          <div class="proj-tags">
+            <span>C#</span><span>Unity 2D</span>
+          </div>
+          <div class="proj-arrow">↗</div>
+        </a>
+
+        <div class="proj-row proj-wip reveal-up delay-2">
+          <div class="proj-meta">
+            <span class="proj-num">03</span>
+            <span class="proj-status wip">○ Brzy</span>
+          </div>
+          <div class="proj-info">
+            <h3>Projekt #3</h3>
+            <p>V přípravě.</p>
+          </div>
+          <div class="proj-tags">
+            <span>—</span>
+          </div>
+          <div class="proj-arrow muted">···</div>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- ═══ LAYER 2 — CONTACT (jede přes projekty) ═══ -->
-    <div class="layer layer-contact" id="contact">
-      <div class="layer-inner">
-        <div class="sec-hd r">
-          <div class="sec-idx">— kontakt</div>
-        </div>
-
-        <div class="ct-grid">
-          <div class="ct-left r">
-            <h2 class="ct-ttl">Kontaktuj<br />mě.</h2>
-
-            <div class="avail-badge">
-              <span class="avail-dot"></span>
-              Otevřen nabídkám
-            </div>
-
-            <div class="ct-links">
-              <a href="mailto:filda.lochman12@gmail.com" class="ct-lnk">
-                <div class="ct-ico">
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M4 4h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6a2 2 0 012-2z"
-                    />
-                    <polyline points="22,6 12,13 2,6" />
-                  </svg>
-                </div>
-                filda.lochman12@gmail.com
-              </a>
-              <a href="https://linkedin.com" target="_blank" class="ct-lnk">
-                <div class="ct-ico">
-                  <svg viewBox="0 0 24 24">
-                    <path
-                      d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"
-                    />
-                    <rect x="2" y="9" width="4" height="12" />
-                    <circle cx="4" cy="4" r="2" />
-                  </svg>
-                </div>
-                LinkedIn
-              </a>
-              <div class="ct-lnk" style="cursor: default">
-                <div class="ct-ico">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                </div>
-                Kroměříž / Zlín · Remote OK
-              </div>
-            </div>
-          </div>
-
-          <form
-            class="ct-form r"
-            id="kontaktni-formular"
-            style="transition-delay: 0.12s"
-          >
-            <div class="fg">
-              <label>Jméno</label>
-              <input
-                id="fn"
-                name="name"
-                type="text"
-                placeholder="Jan Novák"
-                autocomplete="off"
-                required
-              />
-            </div>
-            <div class="fg">
-              <label>Email</label>
-              <input
-                id="fe"
-                name="email"
-                type="email"
-                placeholder="JanNovak@email.cz"
-                autocomplete="off"
-                required
-              />
-            </div>
-            <div class="fg">
-              <label>Zpráva</label>
-              <textarea
-                id="fm"
-                name="message"
-                placeholder="Ahoj Filipe..."
-                required
-              ></textarea>
-            </div>
-            <button class="btn-send" type="submit" id="btn-odeslat">
-              <svg viewBox="0 0 24 24">
-                <line x1="22" y1="2" x2="11" y2="13" />
-                <polygon points="22 2 15 22 11 13 2 9 22 2" />
-              </svg>
-              Odeslat zprávu
-            </button>
-            <div class="form-zprava" id="form-zprava"></div>
-          </form>
-        </div>
+  <!-- ══════ CONTACT ══════ -->
+  <section id="contact" class="section s-contact">
+    <div class="section-inner">
+      <div class="section-label reveal-up">
+        <span>03</span>
+        <span>Kontakt</span>
       </div>
 
-      <footer>
-        <p>Filip Lochman · 2026</p>
-        <p>Kroměříž / Zlín, CZ</p>
-      </footer>
+      <div class="contact-layout">
+        <div class="contact-left">
+          <h2 class="contact-heading reveal-line">
+            <em>Pojďme</em><br><em>spolupracovat.</em>
+          </h2>
+          <div class="contact-links reveal-up delay-1">
+            <a href="mailto:filda.lochman12@gmail.com" class="contact-link">
+              <span class="cl-label">Email</span>
+              <span class="cl-val">filda.lochman12@gmail.com ↗</span>
+            </a>
+            <a href="https://linkedin.com" target="_blank" class="contact-link">
+              <span class="cl-label">LinkedIn</span>
+              <span class="cl-val">Filip Lochman ↗</span>
+            </a>
+            <div class="contact-link">
+              <span class="cl-label">Lokace</span>
+              <span class="cl-val">Kroměříž / Zlín · Remote OK</span>
+            </div>
+          </div>
+        </div>
+
+        <form id="contact-form" class="contact-form reveal-up delay-2">
+          <div class="fg">
+            <label for="fn">Jméno</label>
+            <input id="fn" name="name" type="text" placeholder="Jan Novák" autocomplete="off" required/>
+          </div>
+          <div class="fg">
+            <label for="fe">Email</label>
+            <input id="fe" name="email" type="email" placeholder="jan@firma.cz" autocomplete="off" required/>
+          </div>
+          <div class="fg">
+            <label for="fm">Zpráva</label>
+            <textarea id="fm" name="message" placeholder="Ahoj Filipe..." required></textarea>
+          </div>
+          <button type="submit" id="btn-send" class="btn-submit">
+            <span>Odeslat zprávu</span>
+            <svg viewBox="0 0 24 24" width="16" height="16"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+          <div class="form-msg" id="form-msg"></div>
+        </form>
+      </div>
     </div>
-    <script src="script.js"></script>
-  </body>
+
+    <footer>
+      <span>© Filip Lochman 2026</span>
+      <span>Kroměříž / Zlín, CZ</span>
+    </footer>
+  </section>
+
+<script src="script.js"></script>
+</body>
 </html>
