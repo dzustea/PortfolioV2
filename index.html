@@ -4,8 +4,35 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>Filip Lochman — Full-stack Developer</title>
+<meta name="description" content="Filip Lochman — full-stack developer z Kroměříže. Responzivní a bezpečné webové aplikace: HTML, CSS, JavaScript, PHP, MySQL."/>
+<meta name="author" content="Filip Lochman"/>
+<meta name="robots" content="index, follow, max-image-preview:large"/>
+<meta name="theme-color" content="#0e1015"/>
+<link rel="canonical" href="https://www.filiplochman.cz/"/>
 <link rel="icon" href="favicon.svg" type="image/svg+xml"/>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Manrope:wght@300;400;500&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<!-- fonty jsou hostované lokálně (viz @font-face v style.css); přednačteme ty z prvního viewportu -->
+<link rel="preload" href="fonts/barlow-condensed-700-latin.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="fonts/manrope-latin-ext.woff2" as="font" type="font/woff2" crossorigin/>
+
+<!-- ══ NÁHLED PŘI SDÍLENÍ ODKAZU (Instagram / Facebook / WhatsApp / LinkedIn) ══ -->
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Filip Lochman"/>
+<meta property="og:locale" content="cs_CZ"/>
+<meta property="og:url" content="https://www.filiplochman.cz/"/>
+<meta property="og:title" content="Filip Lochman — Full-stack Developer"/>
+<meta property="og:description" content="Responzivní a bezpečné webové aplikace. Frontend, backend i databáze — Kroměříž / Zlín, remote OK."/>
+<meta property="og:image" content="https://www.filiplochman.cz/og-image.png"/>
+<meta property="og:image:secure_url" content="https://www.filiplochman.cz/og-image.png"/>
+<meta property="og:image:type" content="image/png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="FL — Filip Lochman, Full-stack Developer"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Filip Lochman — Full-stack Developer"/>
+<meta name="twitter:description" content="Responzivní a bezpečné webové aplikace. Frontend, backend i databáze — Kroměříž / Zlín, remote OK."/>
+<meta name="twitter:image" content="https://www.filiplochman.cz/og-image.png"/>
+<meta name="twitter:image:alt" content="FL — Filip Lochman, Full-stack Developer"/>
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
@@ -22,6 +49,8 @@
     <a href="#contact"   data-s="contact">Contact</a>
   </nav>
 </header>
+
+<main>
 
 <!-- ══════════════════ HERO ══════════════════ -->
 <section id="hero">
@@ -102,7 +131,7 @@
 
     <div class="exp-vline" aria-hidden="true"></div>
 
-    <div class="exp-col rv" style="--d:.1s">
+    <div class="exp-col rv d-10">
       <div class="exp-head">
         <span class="exp-num">02</span>
         <h3>Backend &amp; Databáze</h3>
@@ -118,7 +147,7 @@
 
   </div>
 
-  <div class="tech-ribbon rv" style="--d:.18s" aria-label="Tech stack">
+  <div class="tech-ribbon rv d-18" aria-label="Tech stack">
     <span class="tr-label">stack</span>
     <div class="tr-pills">
       <span>HTML</span><span>CSS</span><span>JavaScript</span><span>PHP</span>
@@ -135,7 +164,7 @@
     <h2 class="sec-title">Projekty</h2>
   </div>
 
-  <div class="proj-list rv" style="--d:.06s">
+  <div class="proj-list rv d-06">
 
     <!-- row 01 -->
     <article class="prow">
@@ -156,7 +185,7 @@
         <div class="pd-inner">
           <div class="pd-text">
             <p>Motivo je full-stack sociální platforma spojující vzdělávání s herní komunitou. Obsahuje systém úkolů, XP, žebříčky, chat a interakce jako follow či komentáře. Díky pokročilé roli uživatelů (RBAC) a vlastnímu zabezpečenému backendu (PHP/MySQL) nabízí komplexní správu obsahu. Projekt je postaven na robustní architektuře pro maximální uživatelskou angažovanost.</p>
-            <a href="https://motivo.free.nf" target="_blank" rel="noopener" class="pd-link">
+            <a href="https://motivo.free.nf" target="_blank" rel="noopener noreferrer" class="pd-link">
               Zobrazit projekt
               <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
@@ -164,8 +193,8 @@
             </a>
           </div>
           <div class="pd-thumb">
-            <img src="motivo.png" alt="Herní akademie"
-                 onerror="this.parentElement.classList.add('empty')"/>
+            <img src="motivo.webp" alt="Herní akademie"
+                 width="1200" height="786" loading="lazy" decoding="async"/>
           </div>
         </div>
       </div>
@@ -174,7 +203,7 @@
      
     <!-- row 02 -->
     <article class="prow">
-      <button class="pt" aria-expanded="false" aria-controls="pd-01">
+      <button class="pt" aria-expanded="false" aria-controls="pd-02">
         <span class="pt-num">02</span>
         <span class="pt-name">Restovski Webový Koncept</span>
         <span class="pt-chips">
@@ -187,11 +216,11 @@
           </svg>
         </span>
       </button>
-      <div class="pd" id="pd-01" role="region">
+      <div class="pd" id="pd-02" role="region">
         <div class="pd-inner">
           <div class="pd-text">
             <p>Fanouškovský redesign webové prezentace českého rappera Resta (Restovski), vytvořený jako moderní koncept s důrazem na minimalistický vizuální styl, přehlednou navigaci a plnou responzivitu. Stránka obsahuje biografii, diskografii, koncerty, galerii, informace o spolupracovnících, merch i kontaktní sekci. Součástí je také dynamické filtrování koncertů, světlý a tmavý režim a plynulé animační prvky pro příjemnější uživatelský zážitek.</p>
-            <a href="https://restovski.vercel.app/" target="_blank" rel="noopener" class="pd-link">
+            <a href="https://restovski.vercel.app/" target="_blank" rel="noopener noreferrer" class="pd-link">
               Zobrazit projekt
               <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
@@ -199,8 +228,8 @@
             </a>
           </div>
           <div class="pd-thumb">
-            <img src="restovski.png" alt="Restovski redesign"
-                 onerror="this.parentElement.classList.add('empty')"/>
+            <img src="restovski.webp" alt="Restovski redesign"
+                 width="1200" height="547" loading="lazy" decoding="async"/>
           </div>
         </div>
       </div>
@@ -208,7 +237,7 @@
 
     <!-- row 03 -->
     <article class="prow">
-      <button class="pt" aria-expanded="false" aria-controls="pd-01">
+      <button class="pt" aria-expanded="false" aria-controls="pd-03">
         <span class="pt-num">03</span>
         <span class="pt-name">Vyhlídkář web/app</span>
         <span class="pt-chips">
@@ -221,11 +250,11 @@
           </svg>
         </span>
       </button>
-      <div class="pd" id="pd-01" role="region">
+      <div class="pd" id="pd-03" role="region">
         <div class="pd-inner">
           <div class="pd-text">
             <p>Vyhlídkář je full-stack webová a mobilní aplikace zaměřená na objevování skrytých vyhlídek, laviček, car spotů a dalších jedinečných míst, která znají především místní. Uživatelé mohou přidávat vlastní lokality, fotografie, hodnocení i komentáře a společně budovat komunitní mapu autentických míst mimo přeplněné turistické atrakce. Projekt využívá interaktivní mapy, geolokaci, vlastní REST API, PostgreSQL s PostGIS pro práci s geodaty, Cloudflare R2 pro ukládání fotografií a OpenAI API pro automatickou moderaci nahraného obsahu. Součástí je také mobilní aplikace postavená pomocí Capacitoru se sdíleným backendem.</p>
-            <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener" class="pd-link">
+            <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener noreferrer" class="pd-link">
               Zobrazit projekt
               <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
@@ -234,7 +263,7 @@
           </div>
           <div class="pd-thumb">
             <img src="vyhlidkar.webp" alt="Vyhlídkář web/app"
-                 onerror="this.parentElement.classList.add('empty')"/>
+                 width="1459" height="864" loading="lazy" decoding="async"/>
           </div>
         </div>
       </div>
@@ -281,7 +310,7 @@
         <span class="pt-name">Projekt #4</span>
         <span class="pt-chips"><span>—</span></span>
         <span class="pt-badge wip">○ V přípravě</span>
-        <span class="pt-arrow" aria-hidden="true" style="opacity:.1">
+        <span class="pt-arrow pt-arrow-faint" aria-hidden="true">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8">
             <line x1="8" y1="2" x2="8" y2="14"/><line x1="2" y1="8" x2="14" y2="8"/>
           </svg>
@@ -315,12 +344,12 @@
           <span class="cll-val">filda.lochman12@gmail.com</span>
           <span class="cll-arr" aria-hidden="true">↗</span>
         </a>
-        <a href="https://linkedin.com/in/filip-lochman-a313a9301" target="_blank" rel="noopener" class="cl-link">
+        <a href="https://linkedin.com/in/filip-lochman-a313a9301" target="_blank" rel="noopener noreferrer" class="cl-link">
           <span class="cll-label">LinkedIn</span>
           <span class="cll-val">Filip Lochman</span>
           <span class="cll-arr" aria-hidden="true">↗</span>
         </a>
-        <a href="https://instagram.com/imdzustea" class="cl-link">
+        <a href="https://instagram.com/imdzustea" rel="noopener noreferrer" class="cl-link">
           <span class="cll-label">Instagram</span>
           <span class="cll-val">Filip Lochman</span>
           <span class="cll-arr" aria-hidden="true">↗</span>
@@ -332,7 +361,7 @@
       </div>
     </div>
 
-    <div class="cl-form-wrap rv" style="--d:.12s">
+    <div class="cl-form-wrap rv d-12">
       <form id="cform" novalidate>
 
         <div class="fg">
@@ -364,6 +393,8 @@
 
   </div>
 </section>
+
+</main>
 
 <!-- ══ FOOTER ══ -->
 <footer>

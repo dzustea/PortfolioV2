@@ -10,19 +10,30 @@ const secs    = secIds.map(id => document.getElementById(id)).filter(Boolean);
 const navLinks= document.querySelectorAll('nav a');
 
 const updateNav = () => {
-  hdr.classList.toggle('solid', window.scrollY > 30);
-  const mid = window.scrollY + window.innerHeight * 0.38;
+  // Nejdřív všechna čtení layoutu, teprve pak zápisy tříd. Původně se
+  // classList měnil ještě před getBoundingClientRect(), takže si prohlížeč
+  // uprostřed scrollování vynucoval přepočet layoutu (forced reflow).
+  const y   = window.scrollY;
+  const mid = y + window.innerHeight * 0.38;
   let active = 'hero';
   for (let i = secs.length - 1; i >= 0; i--) {
-    if (secs[i].getBoundingClientRect().top + window.scrollY <= mid) {
+    if (secs[i].getBoundingClientRect().top + y <= mid) {
       active = secIds[i]; break;
     }
   }
+  hdr.classList.toggle('solid', y > 30);
   navLinks.forEach(a =>
     a.classList.toggle('active', a.getAttribute('href') === '#' + active)
   );
 };
-window.addEventListener('scroll', updateNav, { passive: true });
+
+// Scroll se může spustit i stokrát za vteřinu — překreslujeme nejvýš jednou za snímek.
+let navQueued = false;
+window.addEventListener('scroll', () => {
+  if (navQueued) return;
+  navQueued = true;
+  requestAnimationFrame(() => { navQueued = false; updateNav(); });
+}, { passive: true });
 updateNav();
 
 /* ── SMOOTH SCROLL ── */
@@ -66,6 +77,16 @@ document.querySelectorAll('.prow:not(.prow-wip)').forEach(row => {
     row.classList.toggle('open', !isOpen);
     trigger.setAttribute('aria-expanded', String(!isOpen));
   });
+});
+
+/* ── NÁHLEDY PROJEKTŮ: fallback při nenačtení ──
+   Původně inline onerror="" přímo v HTML. Přesunuto sem, aby stránka
+   běžela pod striktní CSP (script-src 'self') bez 'unsafe-inline'.
+   Chování je identické: když obrázek chybí, rámeček se skryje. */
+document.querySelectorAll('.pd-thumb img').forEach(img => {
+  const markEmpty = () => img.parentElement.classList.add('empty');
+  img.addEventListener('error', markEmpty);
+  if (img.complete && img.naturalWidth === 0) markEmpty();   // chyba mohla nastat dřív, než se skript spustil
 });
 
 /* ── FORM ── */
