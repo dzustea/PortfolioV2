@@ -51,7 +51,7 @@
       "headers": [
         {
           "key": "Link",
-          "value": "</style.css>; rel=preload; as=style, </fonts/barlow-condensed-700-latin.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </fonts/manrope-latin.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </fonts/manrope-latin-ext.woff2>; rel=preload; as=font; type=font/woff2; crossorigin"
+          "value": "</style.css>; rel=preload; as=style, </fonts/geist-latin.woff2>; rel=preload; as=font; type=font/woff2; crossorigin, </fonts/geist-latin-ext.woff2>; rel=preload; as=font; type=font/woff2; crossorigin"
         }
       ]
     },
