@@ -1,25 +1,25 @@
 /* ══════════════════════════════════════════════════════════════
    FILIP LOCHMAN · styl webu
 
-   Stránka je stavěná jako prostor složený z vrstev, kterým se
-   při scrollování prochází. Vrstvy jsou čtyři a drží se v tomto
-   pořadí po celé stránce:
+   Prostor stránky drží tři prvky:
 
-     -2   pozadí scény: perspektivní mřížka a dvě barevná světla
-     -1   vodoznaky: obří čísla a monogram schované za obsahem
-      0   obsah
-     +1   plovoucí desky: náhledy projektů, panel formuláře
-     +2   zrno a fixní vodicí linky
+     1. Vysazené jméno v úvodu. Není to obrázek ani stín, ale
+        šest skutečných vrstev textu odstupňovaných po ose Z.
+        Když se s ním otočí, otočí se i bok písmen.
 
-   Osvětlení je dvoubarevné, stejně jako ve skutečné scéně:
-   teplé klíčové světlo (#ff6520, barva značky) a studené
-   ambientní (#3457e8). Studená barva se objevuje výhradně
-   v pozadí. Všechno, na co jde kliknout, zůstává oranžové.
+     2. Scéna v pozadí: perspektivní mřížka a dvě světla, teplé
+        oranžové shora vpravo a studené modré zdola vlevo.
+        Studená barva zůstává výhradně v pozadí, všechno
+        interaktivní je oranžové.
 
-   Hloubka je celá postavená na CSS transformacích a na animacích
-   řízených scrollem. Žádná knihovna, žádný canvas, žádné WebGL:
-   obsahová politika webu povoluje jen vlastní skripty a každý
-   kilobajt navíc by se projevil na rychlosti načtení.
+     3. Přehled projektů. Vlevo jména, vpravo panel s náhledem,
+        který se při přepnutí otočí kolem svislé osy. Jedna
+        obrazovka místo pěti, na telefonu i na počítači.
+
+   Hloubka stojí na CSS transformacích a na animacích řízených
+   scrollem. Žádná knihovna, žádný canvas, žádné WebGL: obsahová
+   politika webu povoluje jen vlastní skripty a každý kilobajt
+   navíc by byl znát na rychlosti načtení.
 ══════════════════════════════════════════════════════════════ */
 
 
@@ -37,23 +37,18 @@
 @font-face{font-family:'Geist Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/geist-mono-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Geist Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/geist-mono-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
-/* Postup karty ve stohu projektů, hodnota 0 až 1. Vlastní
-   vlastnost je nutné registrovat, protože neregistrované se
-   berou jako text a nešly by plynule animovat. */
-@property --p{syntax:'<number>';inherits:true;initial-value:0}
-
 
 /* ── VÝCHOZÍ NASTAVENÍ PRVKŮ ─────────────────────────────────── */
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 img{display:block;max-width:100%}
-button{font:inherit;background:none;border:none;cursor:pointer;padding:0;color:inherit}
+button{font:inherit;background:none;border:none;cursor:pointer;padding:0;color:inherit;text-align:left}
 a{color:inherit;text-decoration:none}
-ul{list-style:none}
+ul,ol{list-style:none}
 
 
 /* ── PROMĚNNÉ ──────────────────────────────────────────────────
-   Jedno místo, kde se mění barvy, rytmus i zaoblení. Odstíny
+   Jedno místo pro barvy, rytmus, zaoblení i časování. Odstíny
    textu jsou vybrané tak, aby všechny tři prošly kontrastem
    podle WCAG AA na hlavním pozadí.
    ───────────────────────────────────────────────────────────── */
@@ -63,7 +58,6 @@ ul{list-style:none}
   --bg: #08090d;
   --s1: #0d1017;
   --s2: #131824;
-  --s3: #1a2131;
 
   /* linky a obrysy */
   --line:  rgba(255,255,255,.07);
@@ -92,9 +86,12 @@ ul{list-style:none}
   --nav:  64px;
   --wrap: 1340px;
 
-  /* křivky zrychlení: první pro dojezdy, druhá pro překlopení stavu */
-  --e:    cubic-bezier(.16,1,.3,1);
-  --e-io: cubic-bezier(.4,0,.2,1);
+  /* Křivky. Vestavěné easings jsou příliš měkké a pohyb s nimi
+     působí nerozhodně, tyhle mají znatelně ostřejší náběh.
+     Nikde se nepoužívá ease-in: začíná pomalu, tedy přesně ve
+     chvíli, kdy se uživatel dívá nejpozorněji. */
+  --out:    cubic-bezier(.23,1,.32,1);
+  --in-out: cubic-bezier(.77,0,.175,1);
 
   /* bezpečné zóny telefonu, na počítači vycházejí nulové */
   --sat: env(safe-area-inset-top,0px);
@@ -123,7 +120,7 @@ body{
 
 
 /* ══════════════════════════════════════════════════════════════
-   VRSTVA -2 · POZADÍ SCÉNY
+   POZADÍ SCÉNY
 
    Celý blok je fixní a bez reakce na myš. Fixní proto, že se
    pak při scrollování nepřekresluje: prohlížeč si ho jednou
@@ -132,9 +129,9 @@ body{
 
 .bg{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
 
-/* Mřížka podlahy. Sklopená dozadu přes perspective, takže
-   ubíhá do dálky. Maska ji nahoře rozpouští do tmy, aby
-   nekončila ostrou hranou. */
+/* Mřížka podlahy. Sklopená dozadu přes perspective, takže ubíhá
+   do dálky. Maska ji nahoře rozpouští do tmy, aby nekončila
+   ostrou hranou. */
 .bg-grid{
   position:absolute;
   left:-25%;right:-25%;bottom:-10%;
@@ -167,8 +164,8 @@ body{
 }
 
 /* Světla se pomalu posouvají. Posun jde přes vlastnost translate,
-   kterou vyřídí kompozitor, takže animace neběží po hlavním vlákně
-   a nebrzdí zbytek stránky. */
+   kterou vyřídí kompozitor, takže animace neběží po hlavním
+   vlákně a nebrzdí zbytek stránky. */
 @media (prefers-reduced-motion:no-preference){
   .orb-warm{animation:orbA 26s ease-in-out infinite alternate}
   .orb-cool{animation:orbB 32s ease-in-out infinite alternate}
@@ -194,12 +191,7 @@ body{
 /* Na užších oknech by linky lezly do textu, proto zmizí. */
 @media (max-width:900px){.rails{display:none}}
 
-
-/* ── VRSTVA +2 · ZRNO ──────────────────────────────────────────
-   Jemná textura přes celou plochu. Také fixní a bez reakce na
-   myš, ze stejného důvodu jako pozadí.
-   ───────────────────────────────────────────────────────────── */
-
+/* Jemné zrno přes celou plochu, také fixní a bez reakce na myš. */
 body::after{
   content:'';
   position:fixed;inset:0;z-index:90;pointer-events:none;
@@ -225,7 +217,7 @@ body::after{
   padding:10px 16px;border-radius:var(--r-md);
   background:var(--warm);color:#08090d;
   font-weight:600;font-size:.85rem;
-  transition:top .2s var(--e);
+  transition:top .16s var(--out);
 }
 .skip:focus{top:calc(var(--sat) + 10px)}
 
@@ -260,7 +252,7 @@ body::after{
   padding:var(--sat) var(--ph) 0;
   display:flex;align-items:center;justify-content:space-between;
   border-bottom:1px solid transparent;
-  transition:background .35s var(--e-io),border-color .35s var(--e-io);
+  transition:background .2s var(--out),border-color .2s var(--out);
 }
 #hdr.solid{
   background:rgba(8,9,13,.7);
@@ -279,7 +271,7 @@ body::after{
   font-size:.74rem;letter-spacing:.13em;text-transform:uppercase;
   color:var(--tx3);
   padding-block:6px;
-  transition:color .25s var(--e-io);
+  transition:color .14s var(--out);
 }
 
 /* Podtržení aktivní sekce. Roste ze zvětšení, ne ze změny šířky,
@@ -289,7 +281,7 @@ body::after{
   position:absolute;left:0;right:0;bottom:0;height:1px;
   background:var(--warm);
   transform:scaleX(0);transform-origin:left;
-  transition:transform .35s var(--e);
+  transition:transform .22s var(--out);
 }
 #hdr nav a:hover,
 #hdr nav a.active{color:var(--tx1)}
@@ -297,16 +289,17 @@ body::after{
 
 
 /* ══════════════════════════════════════════════════════════════
-   ÚVOD · PROLNUTÉ VRSTVY
+   ÚVOD · VYSAZENÉ JMÉNO
 
-   Jméno leží vzadu, deska s náhledy projektů plave před ním
-   a odstavec s tlačítky je zase před deskou. Že se vrstvy
-   opravdu překrývají, je vidět na tom, jak deska mizí za sklem
-   textového bloku.
+   Jméno není plochý nápis. Za předním lícem stojí šest kopií
+   odstupňovaných po ose Z, které dohromady tvoří bok písmen.
+   Nejbližší z nich je oranžová, takže mezi lícem a bokem vznikne
+   světlá hrana, jako by na nápis svítilo teplé světlo scény.
 
-   Při pohybu myši se každá vrstva posune jinak daleko a jiným
-   směrem. Tím vzniká pocit hloubky, který samotná perspektiva
-   nedá. Hodnoty --px a --py doplňuje skript.
+   Celá skupina se otáčí za kurzorem. Protože jsou vrstvy
+   skutečně rozmístěné v prostoru, otočí se s nimi i bok.
+   Jediné, co dodává skript, jsou dvě čísla: výchylka kurzoru
+   od středu okna v rozsahu -0,5 až 0,5.
 ══════════════════════════════════════════════════════════════ */
 
 #hero{
@@ -315,106 +308,62 @@ body::after{
   padding-top:calc(var(--nav) + var(--sat) + clamp(30px,7vh,80px));
   padding-bottom:clamp(48px,8vh,90px);
   display:flex;flex-direction:column;justify-content:center;
-  perspective:1600px;
 }
-/* Bez preserve-3d: vrstvy v úvodu se řadí podle z-index, samotná
-   prostorovost se odehrává až uvnitř desky. */
 .hero-inner{position:relative}
 
-.hero-kicker{display:inline-flex;align-items:center;gap:12px;margin-bottom:clamp(16px,2.2vw,24px)}
+.hero-kicker{display:inline-flex;align-items:center;gap:12px;margin-bottom:clamp(16px,2.4vw,26px)}
 .hk-rule{width:clamp(28px,4vw,54px);height:1px;background:linear-gradient(90deg,var(--warm),transparent)}
 
-/* Jméno leží před deskou. Vrstvení je tím pádem vidět na tom, jak
-   deska vykukuje kolem písmen, a text zůstane vždy celý čitelný. */
 .hero-name{
-  position:relative;z-index:2;
-  font-size:clamp(3.2rem,12.2vw,10rem);
-  font-weight:700;letter-spacing:-.055em;line-height:.85;
-  translate:calc(var(--px,0) * 10px) calc(var(--py,0) * 6px);
-  transition:translate .9s var(--e);
+  perspective:1100px;
+  perspective-origin:30% 50%;
+  font-size:clamp(3.9rem,13vw,12rem);
+  font-weight:700;letter-spacing:-.055em;line-height:.86;
+  margin-bottom:clamp(26px,3.6vw,46px);
 }
-/* Řádky vyjedou zpod ořezu. Ořez je na obalu, samotné slovo se
-   jen posouvá, takže animaci zvládne kompozitor. */
-.hn-row{display:block;overflow:hidden;padding-bottom:.05em}
-.hn-word{
-  display:block;font-style:normal;
-  transform:translateY(102%);
-  animation:nameUp .8s .05s var(--e) forwards;
-}
-.hn-row:nth-child(2) .hn-word{animation-delay:.15s}
-/* Odsazení druhého řádku rozbíjí pravidelný blok textu. */
-.hn-row:nth-child(2){margin-left:clamp(0px,7vw,140px)}
-@keyframes nameUp{to{transform:translateY(0)}}
 
-/* Deska je nejdál vzadu a posouvá se nejvíc, proti směru jména. */
-.deck-wrap{
-  position:absolute;z-index:1;
-  top:-6%;right:-2%;
-  width:min(46vw,560px);
-  perspective:1500px;
-  translate:calc(var(--px,0) * -34px) calc(var(--py,0) * -18px);
-  transition:translate .9s var(--e);
-}
-.deck{
-  position:relative;width:100%;aspect-ratio:1/.98;
+/* Řádek jména. Otáčí se jako celek, proto preserve-3d. */
+.hn-line{
+  display:block;position:relative;
   transform-style:preserve-3d;
-  transform:rotateX(calc(var(--py,0) * -8deg)) rotateY(calc(var(--px,0) * 14deg));
-  transition:transform .8s var(--e);
+  transform:rotateY(calc(var(--px,0) * 15deg)) rotateX(calc(var(--py,0) * -9deg));
+  transition:transform .45s var(--out);
+}
+/* Druhý řádek je odsazený a otáčí se o něco víc, takže jméno
+   nepůsobí jako jeden tuhý blok. */
+.hn-line + .hn-line{
+  margin-left:clamp(0px,7vw,132px);
+  transform:rotateY(calc(var(--px,0) * 19deg)) rotateX(calc(var(--py,0) * -11deg));
 }
 
-/* Jednotlivé desky. Odstupňované přes translateZ, takže mezi
-   nimi je skutečná vzdálenost, ne jen zmenšení. */
-.plate{
-  position:absolute;
-  border-radius:var(--r-lg);overflow:hidden;
-  border:1px solid var(--line2);
-  background:var(--s2);
-  box-shadow:0 46px 90px -34px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.08);
-  transform-style:preserve-3d;
-}
-.plate img{width:100%;height:100%;object-fit:cover;object-position:top center}
+/* Přední líc. Jediné místo, kde je jméno skutečným textem,
+   zbytek je výzdoba schovaná před čtečkami obrazovky. */
+.hn-face{position:relative;z-index:2;display:block;color:var(--tx1)}
 
-/* Ztmavení podle hloubky. Co je dál, je tmavší, jinak by se
-   vrstvy slily do jedné plochy. */
-.plate::after{content:'';position:absolute;inset:0;background:linear-gradient(200deg,rgba(8,9,13,.42),rgba(8,9,13,.78))}
-.p-1{top:0;right:0;width:62%;aspect-ratio:16/10.6;transform:translate3d(0,0,-160px) rotateY(8deg)}
-.p-2{top:28%;left:8%;width:66%;aspect-ratio:16/9.9;transform:translate3d(0,0,-46px) rotateY(4deg)}
-.p-2::after{background:linear-gradient(200deg,rgba(8,9,13,.34),rgba(8,9,13,.66))}
-.p-3{bottom:0;left:0;width:76%;aspect-ratio:16/10.5;transform:translate3d(0,0,110px) rotateY(-4deg)}
-.p-3::after{background:linear-gradient(200deg,rgba(8,9,13,.2),rgba(8,9,13,.5))}
-
-/* Nepatrné stoupání a klesání drží scénu živou i bez myši.
-   Každá deska má jiný čas i posun startu, aby se pohyb
-   nesešel do jednoho rytmu. */
-@media (prefers-reduced-motion:no-preference){
-  .p-1{animation:drift 13s -2s ease-in-out infinite alternate}
-  .p-2{animation:drift 15s -7s ease-in-out infinite alternate}
-  .p-3{animation:drift 11s -4s ease-in-out infinite alternate}
+.hn-depth{position:absolute;inset:0;z-index:1;display:block}
+.hn-depth i{
+  position:absolute;inset:0;
+  font-style:normal;
+  color:#141821;
+  /* každá další kopie o tři pixely hlouběji */
+  transform:translateZ(calc(var(--d) * -4px));
 }
-@keyframes drift{to{translate:0 -16px}}
+.hn-depth i:nth-child(1){--d:1;color:var(--warm)}
+.hn-depth i:nth-child(2){--d:2;color:#7a3416}
+.hn-depth i:nth-child(3){--d:3;color:#2b2029}
+.hn-depth i:nth-child(4){--d:4}
+.hn-depth i:nth-child(5){--d:5}
+.hn-depth i:nth-child(6){--d:6;color:#0f131b}
 
-/* Vrstva +1,5. Odstavec prochází před deskou, proto má sklo:
-   deska za ním prosvítá rozostřeně a překryv je tím čitelný. */
-.hero-body{
-  position:relative;z-index:3;
-  margin-top:clamp(26px,3.4vw,44px);
-  max-width:min(52ch,86%);
-  padding:clamp(18px,2.2vw,28px) clamp(20px,2.4vw,32px);
-  border:1px solid var(--line);
-  border-radius:var(--r-lg);
-  background:rgba(13,16,23,.55);
-  backdrop-filter:blur(14px) saturate(140%);
-  -webkit-backdrop-filter:blur(14px) saturate(140%);
-  translate:calc(var(--px,0) * 16px) calc(var(--py,0) * 8px);
-  transition:translate .9s var(--e);
-}
-.hero-desc{color:var(--tx2);font-size:clamp(1rem,1.3vw,1.1rem);margin-bottom:clamp(20px,2.4vw,28px)}
+.hero-body{position:relative;max-width:52ch}
+.hero-desc{color:var(--tx2);font-size:clamp(1rem,1.3vw,1.1rem);margin-bottom:clamp(20px,2.6vw,30px)}
 .hero-ctas{display:flex;gap:14px;flex-wrap:wrap}
 
 
 /* ── TLAČÍTKA ──────────────────────────────────────────────────
-   Stisk je znát posunutím o dva pixely dolů. Barva textu na
-   oranžové je téměř černá, poměr kontrastu vychází 6,7 : 1.
+   Stisk musí být znát okamžitě, jinak si uživatel není jistý,
+   jestli rozhraní zareagovalo. Proto zmenšení při :active
+   a krátké trvání: zpětná vazba se odehrává do 140 ms.
    ───────────────────────────────────────────────────────────── */
 
 .btn-primary,.btn-ghost{
@@ -422,21 +371,21 @@ body::after{
   border-radius:var(--r-md);
   font-size:.92rem;font-weight:500;
   white-space:nowrap;
-  transition:transform .28s var(--e),background .28s var(--e-io),border-color .28s var(--e-io),box-shadow .28s var(--e);
+  transition:transform .14s var(--out),border-color .14s var(--out),box-shadow .18s var(--out);
 }
 .btn-primary{
   padding:14px 22px;
   background:var(--warm);color:#08090d;
   box-shadow:0 10px 34px -14px var(--warm);
 }
-.btn-primary svg{width:16px;height:16px;transition:transform .3s var(--e)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 42px -14px var(--warm)}
+.btn-primary svg{width:16px;height:16px;transition:transform .18s var(--out)}
+.btn-primary:hover{box-shadow:0 16px 42px -14px var(--warm)}
 .btn-primary:hover svg{transform:translateX(3px)}
-.btn-primary:active{transform:translateY(0) scale(.985)}
+.btn-primary:active{transform:scale(.97)}
 
 .btn-ghost{padding:13px 20px;border:1px solid var(--line2);color:var(--tx2)}
-.btn-ghost:hover{border-color:var(--warm-line);color:var(--tx1);transform:translateY(-2px)}
-.btn-ghost:active{transform:translateY(0) scale(.985)}
+.btn-ghost:hover{border-color:var(--warm-line);color:var(--tx1)}
+.btn-ghost:active{transform:scale(.97)}
 
 
 /* ══════════════════════════════════════════════════════════════
@@ -460,9 +409,8 @@ body::after{
 .exp-rail{position:sticky;top:calc(var(--nav) + var(--sat) + 40px)}
 .exp-rail .sec-title{margin-bottom:clamp(28px,3.4vw,44px)}
 
-/* Čísla v řádcích oddělených vlasovou linkou. Linka je jen
-   nahoře, poslední řádek ji dostane i dole, takže seznam
-   nekončí useknutě. */
+/* Čísla v řádcích oddělených vlasovou linkou, hodnota vlevo,
+   popisek zarovnaný na pravý okraj. */
 .facts{display:flex;flex-direction:column}
 .fact{
   display:grid;grid-template-columns:minmax(0,1fr) auto;
@@ -489,7 +437,7 @@ body::after{
   background:linear-gradient(158deg,var(--s2),var(--s1) 68%);
   box-shadow:0 40px 80px -50px rgba(0,0,0,.95);
   transform-style:preserve-3d;
-  transition:transform .55s var(--e),border-color .4s var(--e-io);
+  transition:transform .28s var(--out),border-color .18s var(--out);
 }
 
 /* Druhá deska je zasunutá hlouběji a odsazená doprava. Kdyby
@@ -498,9 +446,10 @@ body::after{
 .exp-card:nth-child(1):hover{transform:translateZ(22px);border-color:var(--line2)}
 .exp-card:nth-child(2):hover{transform:translateZ(-8px);border-color:var(--line2)}
 
-/* Vodoznak s číslem sekce. Leží za textem, proto tak nízká sytost:
-   má tvořit hloubku, ne poutat pozornost. Vykresluje se z CSS, ne
-   z dokumentu, aby ho kontrola kontrastu nebrala jako čtený text. */
+/* Vodoznak s číslem sekce. Leží za textem, proto tak nízká
+   sytost: má tvořit hloubku, ne poutat pozornost. Vykresluje se
+   z CSS, ne z dokumentu, aby ho kontrola kontrastu nebrala jako
+   čtený text. */
 .exp-card::before{
   position:absolute;top:-.34em;right:.06em;
   font-size:clamp(7rem,13vw,12rem);
@@ -522,7 +471,7 @@ body::after{
   padding:7px 13px;
   border:1px solid var(--line);border-radius:999px;
   background:rgba(255,255,255,.02);
-  transition:border-color .25s var(--e-io),color .25s var(--e-io);
+  transition:border-color .18s var(--out),color .18s var(--out);
 }
 .exp-card:hover .exp-skills li{border-color:var(--line2);color:var(--tx1)}
 
@@ -546,8 +495,9 @@ body::after{
 .mq-track{display:flex;width:max-content}
 
 @media (prefers-reduced-motion:no-preference){
+  /* Rovnoměrný pohyb bez zrychlování, proto linear. */
   .mq-track{animation:mq 36s linear infinite}
-  /* zastavení při najetí, ať jdou názvy přečíst */
+  /* Zastavení při najetí, ať jdou názvy přečíst. */
   .marquee:hover .mq-track{animation-play-state:paused}
 }
 @keyframes mq{to{transform:translateX(-50%)}}
@@ -561,138 +511,153 @@ body::after{
 
 
 /* ══════════════════════════════════════════════════════════════
-   PROJEKTY · STOH KARET
+   PROJEKTY · PŘEHLED S NÁHLEDEM
 
-   Každá karta se přilepí pod navigaci a zůstane stát, dokud na
-   ni shora nenajede další. Karty se postupně skládají na sebe
-   jako listy na hromádce.
+   Vlevo je rejstřík jmen, vpravo jediný panel, který ukazuje
+   vybraný projekt. Celá sekce se tak vejde na jednu obrazovku
+   místo pěti karet pod sebou, a to i na telefonu, kde panel
+   sjede pod seznam.
 
-   Aby bylo poznat, co je nahoře a co vespod, dostává každá
-   další karta o kousek větší odsazení odshora. Ta, která
-   odjíždí do pozadí, se zároveň zmenšuje a tmavne.
+   Přepnutí je otočka kolem svislé osy doplněná rozostřením.
+   Rozostření tu není pro efekt: bez něj jsou během prolnutí
+   vidět dva zřetelné obrazy přes sebe a oko to čte jako závadu.
+   Rozostřený mezikrok je propojí do jednoho pohybu.
 ══════════════════════════════════════════════════════════════ */
 
-/* Zespodu stačí menší mezera: kontakt si nahoře přidává vlastní
-   odsazení a dvě plná sekční odsazení za sebou dělají díru. */
-#projects{padding-block:var(--sec) clamp(40px,5vw,80px);position:relative}
-.stack{position:relative;perspective:1800px}
-
-/* Obal karty. Jeho výška určuje, kolik se musí odscrollovat,
-   než se karta pustí a nastoupí další. */
-.slot{position:relative}
-.slot:not(:last-child){min-height:clamp(560px,88svh,820px)}
-.slot:last-child{min-height:0}
-
-.card{
-  position:sticky;
-  top:calc(var(--nav) + var(--sat) + clamp(18px,3.4vh,42px));
-  border:1px solid var(--line2);
-  border-radius:var(--r-lg);
-  background:linear-gradient(158deg,var(--s2),var(--s1) 70%);
-  overflow:hidden;
-  /* zmenšuje se od horní hrany, aby karta při ustupování
-     nevyjížděla zpod té následující */
-  transform-origin:50% 0%;
-  box-shadow:0 -1px 0 rgba(255,255,255,.05),0 50px 90px -40px rgba(0,0,0,1);
-  transform:scale(calc(1 - var(--p,0) * .06));
+.px{
+  display:grid;
+  grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+  gap:clamp(28px,4vw,64px);
+  align-items:start;
 }
 
-/* Odstupňované odsazení. Po dojetí je z každé spodní karty
-   vidět proužek horní hrany a stoh je čitelný na první pohled. */
-.slot:nth-child(2) .card{top:calc(var(--nav) + var(--sat) + clamp(18px,3.4vh,42px) + 12px)}
-.slot:nth-child(3) .card{top:calc(var(--nav) + var(--sat) + clamp(18px,3.4vh,42px) + 24px)}
-.slot:nth-child(4) .card{top:calc(var(--nav) + var(--sat) + clamp(18px,3.4vh,42px) + 36px)}
-.slot:nth-child(5) .card{top:calc(var(--nav) + var(--sat) + clamp(18px,3.4vh,42px) + 48px)}
+/* ── rejstřík ── */
+.px-list{display:flex;flex-direction:column}
 
-/* Stmívací plocha karty, která ustupuje dozadu. Řeší se
-   průhledností jednobarevné vrstvy, ne filtrem: průhlednost
-   je pro prohlížeč nesrovnatelně levnější. */
-.card::after{
+.px-row{
+  width:100%;
+  display:grid;grid-template-columns:auto 1fr auto;
+  align-items:center;gap:16px;
+  padding:clamp(16px,1.8vw,22px) 6px;
+  border-top:1px solid var(--line);
+  color:var(--tx2);
+  transition:color .14s var(--out),padding-left .18s var(--out);
+}
+.px-list .px-item:last-child .px-row{border-bottom:1px solid var(--line)}
+
+.px-num{
+  font-family:'Geist Mono',ui-monospace,monospace;
+  font-size:.72rem;letter-spacing:.12em;color:var(--tx3);
+  transition:color .14s var(--out);
+}
+.px-name{
+  font-size:clamp(1.05rem,1.7vw,1.4rem);
+  font-weight:600;letter-spacing:-.025em;line-height:1.2;
+}
+/* Značka stavu vpravo. Zůstává vidět i u nevybraných řádků,
+   aby se seznam nerozpadl na „aktivní a prázdné". */
+.px-state{
+  font-family:'Geist Mono',ui-monospace,monospace;
+  font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--tx3);
+  transition:color .14s var(--out);
+}
+
+.px-row[aria-selected="true"]{color:var(--tx1);padding-left:14px}
+.px-row[aria-selected="true"] .px-num{color:var(--warm)}
+.px-row:hover{color:var(--tx1)}
+.px-row:active{transform:scale(.995)}
+
+/* Svislá značka vybraného řádku. Šířka se nemění, jen zvětšení,
+   takže se nepřepočítává rozvržení. */
+.px-item{position:relative}
+.px-item::before{
   content:'';
-  position:absolute;inset:0;z-index:4;pointer-events:none;
-  background:var(--bg);
-  opacity:calc(var(--p,0) * .55);
+  position:absolute;left:0;top:12%;bottom:12%;width:2px;
+  background:var(--warm);
+  transform:scaleY(0);transform-origin:50% 50%;
+  transition:transform .22s var(--out);
+}
+.px-item:has(.px-row[aria-selected="true"])::before{transform:scaleY(1)}
+
+/* ── panel s náhledem ── */
+/* Všechny panely leží přes sebe v jedné buňce mřížky. Buňka je
+   vysoká jako ten nejvyšší z nich, takže se při přepnutí výška
+   nemění a obsah pod sekcí nepodskakuje. */
+.px-stage{display:grid;perspective:1600px}
+
+.px-panel{
+  grid-area:1/1;
+  display:flex;flex-direction:column;gap:16px;
+  opacity:0;
+  /* visibility zároveň vyřadí skryté panely z pořadí tabulátoru,
+     takže se klávesnicí nedá dostat na odkaz, který není vidět */
+  visibility:hidden;
+  transform:rotateY(9deg) translateZ(-60px);
+  transform-origin:0% 50%;
+  filter:blur(6px);
+  /* Odchod je kratší než příchod: systém má odpovídat okamžitě,
+     zatímco příchod smí mít dojezd. */
+  transition:opacity .13s var(--out),transform .13s var(--out),filter .13s var(--out),visibility 0s linear .13s;
+}
+.px-panel.is-on{
+  opacity:1;visibility:visible;
+  transform:none;
+  filter:none;
+  transition:opacity .24s var(--out),transform .24s var(--out),filter .24s var(--out),visibility 0s;
 }
 
-/* Postup --p plní animace řízená scrollem. Neběží v ní žádný
-   skript, časovou osu odvozuje prohlížeč z pozice obalu karty
-   v okně. Kde tahle funkce chybí, zůstane --p na nule a karty
-   se pouze skládají, bez ustupování. */
-@supports (animation-timeline:view()){
-  @media (prefers-reduced-motion:no-preference){
-    .slot{animation:stackP linear both;animation-timeline:view();animation-range:exit 0% exit 92%}
-    @keyframes stackP{to{--p:1}}
-  }
+.px-shot{
+  position:relative;
+  border-radius:var(--r-lg);overflow:hidden;
+  border:1px solid var(--line2);
+  background:var(--s2);
+  box-shadow:0 44px 80px -40px rgba(0,0,0,1);
+}
+.px-shot img{width:100%;height:auto;aspect-ratio:16/9.6;object-fit:cover;object-position:top center}
+.px-shot::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(8,9,13,0),rgba(8,9,13,.32));
 }
 
-.card-in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);min-height:clamp(320px,46svh,440px)}
-.card-copy{padding:clamp(26px,3.2vw,52px);display:flex;flex-direction:column;justify-content:center;gap:16px}
-.card-top{display:flex;align-items:baseline;gap:14px}
-.card-num{font-family:'Geist Mono',ui-monospace,monospace;font-size:.74rem;color:var(--warm);letter-spacing:.13em}
-.card-live{font-family:'Geist Mono',ui-monospace,monospace;font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;color:var(--tx3)}
-.card-name{font-size:clamp(1.6rem,3vw,2.5rem);font-weight:600;letter-spacing:-.035em;line-height:1.06}
-.card-text{color:var(--tx2);font-size:.93rem;line-height:1.62;max-width:54ch}
-
-.card-chips{display:flex;flex-wrap:wrap;gap:6px}
-.card-chips span{
+.px-text{color:var(--tx2);font-size:.92rem;line-height:1.62}
+.px-chips{display:flex;flex-wrap:wrap;gap:6px}
+.px-chips span{
   font-family:'Geist Mono',ui-monospace,monospace;
   font-size:.68rem;color:var(--tx3);
   padding:5px 10px;
   border:1px solid var(--line);border-radius:999px;
 }
-.card-link{
+.px-link{
   align-self:flex-start;
   display:inline-flex;align-items:center;gap:8px;
-  margin-top:4px;
   font-size:.88rem;font-weight:500;color:var(--warm);
+  transition:transform .14s var(--out);
 }
-.card-link svg{width:15px;height:15px;transition:transform .3s var(--e)}
-.card-link:hover svg{transform:translateX(4px)}
+.px-link svg{width:15px;height:15px;transition:transform .18s var(--out)}
+.px-link:hover svg{transform:translateX(4px)}
+.px-link:active{transform:scale(.97)}
 
-/* Náhled uvnitř karty je vlastní vrstva. Je natočený a vysunutý
-   dopředu, po najetí se narovná a přijde ještě blíž. */
-.card-media{
-  position:relative;
-  padding:clamp(24px,3vw,48px) 0 clamp(24px,3vw,48px) clamp(8px,1.2vw,20px);
-  display:flex;align-items:center;
-  perspective:1400px;
+/* Panel připravovaného projektu nemá co ukazovat, proto místo
+   náhledu jen prázdná plocha s přerušovaným obrysem. */
+.px-blank{
+  border:1px dashed var(--line2);
+  border-radius:var(--r-lg);
+  aspect-ratio:16/9.6;
+  display:grid;place-items:center;
+  color:var(--tx3);
+  font-family:'Geist Mono',ui-monospace,monospace;
+  font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;
 }
-.card-media::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(80% 70% at 70% 30%,var(--warm-soft),transparent 68%);
-}
-.card-shot{
-  position:relative;
-  /* přesah přes okraj ořízne karta, ne tenhle blok */
-  width:116%;
-  border-radius:12px;overflow:hidden;
-  border:1px solid var(--line2);
-  box-shadow:0 40px 70px -30px rgba(0,0,0,.95);
-  transform:rotateY(-9deg) rotateX(3deg) translateZ(30px);
-  transform-origin:100% 50%;
-  transition:transform .7s var(--e);
-}
-.card:hover .card-shot{transform:rotateY(-4deg) rotateX(1deg) translateZ(60px)}
-.card-shot img{width:100%;height:auto}
-
-/* Poslední list stohu patří připravovanému projektu. Přerušovaný
-   obrys ho odliší od hotových prací. */
-.card-wip{border-style:dashed;background:rgba(19,24,36,.5);box-shadow:none}
-.card-wip .card-in{grid-template-columns:1fr;min-height:clamp(220px,26svh,300px)}
-.card-wip .card-copy{align-items:flex-start}
-.card-wip .card-name{color:var(--tx3);font-weight:500}
-.card-wip-label{font-family:'Geist Mono',ui-monospace,monospace;font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--tx3)}
 
 
 /* ══════════════════════════════════════════════════════════════
    KONTAKT
-
-   Vzadu leží monogram jako vodoznak, před ním údaje a formulář.
 ══════════════════════════════════════════════════════════════ */
 
 #contact{padding-block:var(--sec);position:relative;overflow:hidden}
 
-/* Monogram v pozadí kontaktu, také jen výzdoba z CSS. */
+/* Monogram v pozadí, jen výzdoba z CSS. */
 #contact::before{
   content:"FL";
   position:absolute;right:3%;top:6%;
@@ -724,7 +689,7 @@ body::after{
   margin-bottom:clamp(28px,3.4vw,44px);
 }
 .avail i{width:6px;height:6px;border-radius:50%;background:var(--warm);flex:none}
-@media (prefers-reduced-motion:no-preference){.avail i{animation:pulse 2.4s var(--e-io) infinite}}
+@media (prefers-reduced-motion:no-preference){.avail i{animation:pulse 2.4s var(--in-out) infinite}}
 @keyframes pulse{0%,100%{opacity:1;scale:1}50%{opacity:.35;scale:.82}}
 
 /* Kontaktní řádky. Při najetí se řádek odsune doprava, což je
@@ -735,14 +700,14 @@ body::after{
   align-items:center;gap:14px;
   padding:17px 4px;
   border-top:1px solid var(--line);
-  transition:padding-left .35s var(--e);
+  transition:padding-left .18s var(--out);
 }
 .ct-links .ct-link:last-child{border-bottom:1px solid var(--line)}
 a.ct-link:hover{padding-left:12px}
 .cll-label{font-family:'Geist Mono',ui-monospace,monospace;font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:var(--tx3)}
-.cll-val{color:var(--tx2);font-size:.94rem;overflow-wrap:anywhere;transition:color .25s var(--e-io)}
+.cll-val{color:var(--tx2);font-size:.94rem;overflow-wrap:anywhere;transition:color .14s var(--out)}
 a.ct-link:hover .cll-val{color:var(--tx1)}
-.cll-arr{color:var(--tx3);transition:transform .35s var(--e),color .25s var(--e-io)}
+.cll-arr{color:var(--tx3);transition:transform .18s var(--out),color .14s var(--out)}
 a.ct-link:hover .cll-arr{color:var(--warm);transform:translate(3px,-3px)}
 
 /* Panel formuláře je neprůhledný. Rozostření podkladu by tu
@@ -761,7 +726,7 @@ a.ct-link:hover .cll-arr{color:var(--warm);transform:translate(3px,-3px)}
   background:rgba(8,9,13,.6);
   border:1px solid var(--line2);border-radius:var(--r-md);
   color:var(--tx1);font:inherit;font-size:.94rem;
-  transition:border-color .25s var(--e-io),background .25s var(--e-io);
+  transition:border-color .14s var(--out),background .14s var(--out);
 }
 .fg textarea{min-height:132px;resize:vertical}
 .fg input::placeholder,.fg textarea::placeholder{color:var(--tx3)}
@@ -775,12 +740,12 @@ a.ct-link:hover .cll-arr{color:var(--warm);transform:translate(3px,-3px)}
   background:var(--warm);color:#08090d;
   font-size:.94rem;font-weight:600;
   box-shadow:0 10px 34px -16px var(--warm);
-  transition:transform .28s var(--e),box-shadow .28s var(--e),opacity .2s;
+  transition:transform .14s var(--out),box-shadow .18s var(--out),opacity .14s var(--out);
 }
-#btn-send svg{width:16px;height:16px;transition:transform .3s var(--e)}
-#btn-send:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 16px 42px -16px var(--warm)}
+#btn-send svg{width:16px;height:16px;transition:transform .18s var(--out)}
+#btn-send:hover:not(:disabled){box-shadow:0 16px 42px -16px var(--warm)}
 #btn-send:hover:not(:disabled) svg{transform:translateX(3px)}
-#btn-send:active:not(:disabled){transform:translateY(0) scale(.99)}
+#btn-send:active:not(:disabled){transform:scale(.98)}
 #btn-send:disabled{opacity:.6;cursor:progress}
 
 .form-feedback{min-height:1.4em;margin-top:12px;font-size:.86rem;color:var(--tx3)}
@@ -810,54 +775,45 @@ footer{border-top:1px solid var(--line);background:rgba(13,16,23,.6);position:re
    Používají se samostatné vlastnosti translate a rotate, ne
    transform. Transform totiž potřebují karty pro svoje naklánění
    a hloubku; kdyby si ho odhalování vzalo pro sebe, přepsalo by
-   ho a 3D efekty by přestaly fungovat.
+   ho a prostorové efekty by přestaly fungovat.
 ══════════════════════════════════════════════════════════════ */
 
-.rv{opacity:0;translate:0 28px;rotate:x 8deg;transform-origin:50% 100%}
+.rv{opacity:0;translate:0 24px}
 .rv.in{
-  opacity:1;translate:none;rotate:none;
-  transition:opacity .8s var(--e),translate .8s var(--e),rotate .8s var(--e);
+  opacity:1;translate:none;
+  transition:opacity .6s var(--out),translate .6s var(--out);
 }
 
-/* Postupné naskakování položek uvnitř skupiny. */
-.rv-stagger.in>*{animation:rise .7s var(--e) backwards}
-.rv-stagger.in>*:nth-child(1){animation-delay:.04s}
-.rv-stagger.in>*:nth-child(2){animation-delay:.10s}
-.rv-stagger.in>*:nth-child(3){animation-delay:.16s}
-.rv-stagger.in>*:nth-child(4){animation-delay:.22s}
-@keyframes rise{from{opacity:0;translate:0 20px}}
+/* Postupné naskakování položek uvnitř skupiny. Krok 50 ms:
+   delší prodleva už působí, že se stránka načítá pomalu. */
+.rv-stagger.in>*{animation:rise .5s var(--out) backwards}
+.rv-stagger.in>*:nth-child(1){animation-delay:0ms}
+.rv-stagger.in>*:nth-child(2){animation-delay:50ms}
+.rv-stagger.in>*:nth-child(3){animation-delay:100ms}
+.rv-stagger.in>*:nth-child(4){animation-delay:150ms}
+.rv-stagger.in>*:nth-child(5){animation-delay:200ms}
+@keyframes rise{from{opacity:0;translate:0 16px}}
 
 
 /* ══════════════════════════════════════════════════════════════
    PŘIZPŮSOBENÍ ŠÍŘCE OKNA
 ══════════════════════════════════════════════════════════════ */
 
-/* Užší monitory a tablety naležato: deska se zmenší, ať
-   nepřeleze přes jméno. */
-@media (max-width:1180px){
-  .deck-wrap{width:min(52vw,470px);top:2%;right:-4%}
-  .hero-name{font-size:clamp(3rem,11vw,7rem)}
+@media (max-width:1080px){
+  .px{grid-template-columns:1fr;gap:clamp(24px,3vw,36px)}
+  /* Panel sjede pod seznam, jinak se nic nemění: panely se
+     překrývají v mřížce stejně jako na širokém okně. */
+  .px-stage{perspective:1200px}
 }
 
-/* Pod tuhle šířku už se vrstvy překrývat nemohou, obsah by se
-   stal nečitelným. Úvod se proto rozloží pod sebe, sklo pod
-   textem zmizí a desky se posunou pod tlačítka. */
 @media (max-width:980px){
-  #hero{padding-bottom:clamp(30px,5vh,60px)}
-  .deck-wrap{
-    position:relative;top:auto;right:auto;
-    width:100%;max-width:520px;
-    margin:clamp(26px,4vh,44px) auto 0;
-    translate:none;
+  #hero{
+    justify-content:flex-start;
+    padding-top:calc(var(--nav) + var(--sat) + clamp(40px,13vh,120px));
+    padding-bottom:clamp(30px,5vh,60px);
   }
-  .hero-body{
-    max-width:100%;padding:0;
-    background:none;border:none;
-    backdrop-filter:none;-webkit-backdrop-filter:none;
-    translate:none;
-  }
-  .hn-row:nth-child(2){margin-left:0}
-  .hero-name{translate:none}
+  .hero-name{perspective:800px}
+  .hn-line + .hn-line{margin-left:0}
 
   .exp-layout{grid-template-columns:1fr;gap:clamp(28px,5vw,44px)}
   .exp-rail{position:static}
@@ -866,23 +822,7 @@ footer{border-top:1px solid var(--line);background:rgba(13,16,23,.6);position:re
   .exp-card:nth-child(1):hover,
   .exp-card:nth-child(2):hover{transform:none}
 
-  .card-in{grid-template-columns:1fr;min-height:0}
-  .card-media{order:-1;padding:clamp(20px,3vw,32px) clamp(20px,3vw,32px) 0}
-  .card-shot{transform:none}
-  .card:hover .card-shot{transform:translateY(-4px)}
-
   .ct-grid{grid-template-columns:1fr;gap:44px}
-}
-
-/* Na telefonu se stoh ruší úplně. Karty jsou vyšší než displej,
-   takže by se z lepení stalo poskakování. Místo toho jdou pod
-   sebe jako běžný seznam. */
-@media (max-width:860px){
-  .card{position:static;transform:none!important}
-  .card::after{display:none}
-  .slot{min-height:0!important;margin-bottom:clamp(16px,3vw,24px)}
-  .slot:last-child{padding-bottom:var(--sec)}
-  .slot:nth-child(n) .card{top:auto}
 }
 
 @media (max-width:560px){
@@ -891,17 +831,26 @@ footer{border-top:1px solid var(--line);background:rgba(13,16,23,.6);position:re
   #hdr nav a{font-size:.68rem;letter-spacing:.09em}
   .hero-ctas{width:100%}
   .btn-primary,.btn-ghost{flex:1 1 auto;justify-content:center}
+
+  /* Na úzkém displeji ubereme hloubku jména: šest vrstev by se
+     při téhle velikosti písma slilo do jedné tmavé skvrny. */
+  .hn-depth i:nth-child(n+4){display:none}
+
+  .px-row{grid-template-columns:auto 1fr;gap:12px}
+  .px-state{display:none}
+  .px-state--wip{display:block;grid-column:2;font-size:.6rem}
+
   .ct-link{grid-template-columns:1fr auto;gap:4px 12px}
   .cll-label{grid-column:1/-1}
-  .fact{flex-direction:column;gap:2px}
-  .fact-val{min-width:0}
+  .fact{grid-template-columns:1fr}
+  .fact-key{text-align:left}
 }
 
-/* Dotykové ovládání: naklánění nemá podle čeho reagovat,
-   protože kurzor neexistuje. */
+/* Dotykové ovládání: najetí myší neexistuje, takže se stavy
+   navázané na hover nesmí spouštět klepnutím. */
 @media (hover:none){
-  .card-shot,
-  .card:hover .card-shot{transform:none}
+  .px-row:hover{color:var(--tx2)}
+  .px-row[aria-selected="true"]:hover{color:var(--tx1)}
 }
 
 
@@ -909,7 +858,8 @@ footer{border-top:1px solid var(--line);background:rgba(13,16,23,.6);position:re
    OMEZENÝ POHYB
 
    Kdo má v systému zapnuté omezení animací, dostane stejnou
-   stránku bez pohybu. Nic se neskrývá, jen se nic nehýbe.
+   stránku bez pohybu. Prolínání zůstává, protože pomáhá
+   pochopit, že se obsah vyměnil; mizí posuny a otáčení.
 ══════════════════════════════════════════════════════════════ */
 
 @media (prefers-reduced-motion:reduce){
@@ -917,15 +867,13 @@ footer{border-top:1px solid var(--line);background:rgba(13,16,23,.6);position:re
   *,*::before,*::after{
     animation-duration:.01ms!important;
     animation-iteration-count:1!important;
-    transition-duration:.01ms!important;
   }
-  .hn-word{transform:none;animation:none}
-  .rv{opacity:1;translate:none;rotate:none}
-  .deck{transform:none}
-  .card{position:static;transform:none}
-  .card::after{display:none}
-  .slot{min-height:0!important;margin-bottom:20px}
-  .card-shot{transform:none}
+  .hn-line,.hn-line + .hn-line{transform:none;transition:none}
+  .rv{opacity:1;translate:none}
+  .exp-card:nth-child(2){transform:none}
+  .exp-card:nth-child(1):hover,.exp-card:nth-child(2):hover{transform:none}
+  .px-panel{transform:none;filter:none;transition:opacity .15s linear,visibility 0s linear .15s}
+  .px-panel.is-on{transform:none;filter:none;transition:opacity .15s linear,visibility 0s}
   .mq-track{animation:none;width:auto}
   .mq-group:nth-child(2){display:none}
   .marquee{overflow-x:auto}

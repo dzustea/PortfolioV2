@@ -1,15 +1,16 @@
 /* ══════════════════════════════════════════════════════════════
    FILIP LOCHMAN · chování stránky
 
-   Skript dělá jen to, co se v CSS udělat nedá. Všechno ostatní,
-   včetně skládání karet a celé hloubky scény, obstarává styl.
+   Skript dělá jen to, co se v CSS udělat nedá. Vzhled, hloubka
+   i přechody jsou ve stylu; sem patří výběr projektu, sledování
+   polohy ve stránce a odeslání formuláře.
 
    Tři pravidla, která tady platí bez výjimky:
 
      1. Nikde se neposlouchá událost scroll. Scroll se spouští
         desítky až stovky krát za vteřinu a jakýkoli výpočet
-        v jeho obsluze brzdí celou stránku. Místo toho pracuje
-        IntersectionObserver, kterému polohu hlídá prohlížeč sám.
+        v jeho obsluze brzdí celou stránku. Polohu prvků hlídá
+        IntersectionObserver, tedy sám prohlížeč.
 
      2. Poloha kurzoru se nezapisuje přímo v události, ale až
         v requestAnimationFrame. Mezi dvěma snímky tak proběhne
@@ -23,16 +24,9 @@
 (function () {
   'use strict';
 
-  /* Dvě systémová nastavení, na která se stránka ohlíží.
-     Uložená v proměnné, aby se dotaz nevyhodnocoval opakovaně. */
+  /* Dvě systémová nastavení, na která se stránka ohlíží. */
   var omezenyPohyb = matchMedia('(prefers-reduced-motion: reduce)');
-  var bezKurzoru   = matchMedia('(hover: none)');
-
-  /* Prostorové efekty mají smysl jen tam, kde je čím mířit
-     a kde si o klid neřekl sám uživatel. */
-  function pohybPovolen() {
-    return !bezKurzoru.matches && !omezenyPohyb.matches;
-  }
+  var jemnyKurzor  = matchMedia('(hover: hover) and (pointer: fine)');
 
 
   /* ── PODKLAD NAVIGACE ─────────────────────────────────────────
@@ -53,10 +47,9 @@
 
 
   /* ── ZVÝRAZNĚNÍ AKTIVNÍ SEKCE ─────────────────────────────────
-     Sleduje se pás uprostřed okna, zhruba mezi 38 a 45 procenty
-     jeho výšky. Sekce, která do pásu zasahuje, je ta aktuální.
-     Když jich zasahuje víc, vyhrává ta níž na stránce, protože
-     k ní uživatel právě míří.
+     Sleduje se pás uprostřed okna. Sekce, která do něj zasahuje,
+     je ta aktuální; když jich zasahuje víc, vyhrává ta níž na
+     stránce, protože k ní uživatel právě míří.
      ──────────────────────────────────────────────────────────── */
 
   var odkazy = {};
@@ -92,8 +85,8 @@
 
 
   /* ── ODHALOVÁNÍ OBSAHU ────────────────────────────────────────
-     Prvek se odhalí, jakmile je z osmi procent v okně. Po odhalení
-     se přestane sledovat: efekt má proběhnout jednou, ne pokaždé,
+     Prvek se odhalí, jakmile je z osmi procent v okně, a pak se
+     přestane sledovat: efekt má proběhnout jednou, ne pokaždé,
      když se kolem něj projede nahoru a dolů.
      ──────────────────────────────────────────────────────────── */
 
@@ -110,51 +103,107 @@
   });
 
 
-  /* ── HLOUBKA ÚVODNÍ SCÉNY ─────────────────────────────────────
-     Sem skript dodává jediné dvě čísla: vodorovnou a svislou
-     výchylku kurzoru od středu okna, obě v rozsahu -0,5 až 0,5.
-     O zbytek se stará CSS, které si z nich spočítá, jak daleko
-     se má která vrstva posunout a o kolik stupňů natočit.
+  /* ── NATOČENÍ JMÉNA ZA KURZOREM ───────────────────────────────
+     Skript dodává jediná dvě čísla: výchylku kurzoru od středu
+     okna v rozsahu -0,5 až 0,5. Kolik stupňů z toho bude a jak
+     se rozdělí mezi oba řádky, řeší styl.
 
-     Zapisuje se na obal scény, ne na jednotlivé vrstvy. Vlastní
-     vlastnosti se dědí, takže stačí jeden zápis místo čtyř.
+     Zapisuje se na obal úvodu, ne na jednotlivé řádky. Vlastní
+     vlastnosti se dědí, takže stačí jeden zápis místo dvou.
+
+     Na dotykových zařízeních a při zapnutém omezení pohybu se
+     posluchač vůbec nenavěsí: u dotyku by se natočení projevilo
+     až po klepnutí a působilo by to jako závada.
      ──────────────────────────────────────────────────────────── */
 
   var scena = document.getElementById('stage');
   var uvod  = document.getElementById('hero');
 
-  if (scena && uvod && pohybPovolen()) {
+  if (scena && uvod && jemnyKurzor.matches && !omezenyPohyb.matches) {
     var vychylkaX = 0;
     var vychylkaY = 0;
     var cekaNaSnimek = false;
 
-    function zapisVychylku() {
+    var zapisVychylku = function () {
       cekaNaSnimek = false;
       scena.style.setProperty('--px', vychylkaX.toFixed(3));
       scena.style.setProperty('--py', vychylkaY.toFixed(3));
-    }
+    };
 
-    function naplanujZapis() {
+    var naplanujZapis = function () {
       if (cekaNaSnimek) return;
       cekaNaSnimek = true;
       requestAnimationFrame(zapisVychylku);
-    }
+    };
 
     uvod.addEventListener('pointermove', function (udalost) {
-      /* Dotyk ani pero scénu nenaklánějí: u dotyku by se posun
-         projevil až po klepnutí a vypadalo by to jako závada. */
       if (udalost.pointerType !== 'mouse') return;
       vychylkaX = udalost.clientX / window.innerWidth  - 0.5;
       vychylkaY = udalost.clientY / window.innerHeight - 0.5;
       naplanujZapis();
     }, { passive: true });
 
-    /* Po odjetí myši se scéna vrátí do základní polohy. */
+    /* Po odjetí myši se nápis vrátí do základní polohy. */
     uvod.addEventListener('pointerleave', function () {
       vychylkaX = 0;
       vychylkaY = 0;
       naplanujZapis();
     }, { passive: true });
+  }
+
+
+  /* ── PŘEHLED PROJEKTŮ ─────────────────────────────────────────
+     Řádky jsou záložky, panely jejich obsah. Vybírá se myší
+     najetím, klepnutím i klávesnicí.
+
+     Pořadí tabulátoru je plovoucí: do seznamu se vstoupí jedním
+     stisknutím tabulátoru a mezi projekty se pak přepíná
+     šipkami, jak to u záložek očekává čtečka obrazovky.
+     Skryté panely jsou ve stylu neviditelné, čímž z pořadí
+     tabulátoru vypadnou i odkazy uvnitř nich.
+     ──────────────────────────────────────────────────────────── */
+
+  var zalozky = Array.prototype.slice.call(document.querySelectorAll('.px-row'));
+  var panely  = Array.prototype.slice.call(document.querySelectorAll('.px-panel'));
+
+  if (zalozky.length && zalozky.length === panely.length) {
+    var vyber = function (index, presunoutZaostreni) {
+      zalozky.forEach(function (zalozka, i) {
+        var jeVybrana = i === index;
+        zalozka.setAttribute('aria-selected', jeVybrana ? 'true' : 'false');
+        zalozka.tabIndex = jeVybrana ? 0 : -1;
+        panely[i].classList.toggle('is-on', jeVybrana);
+      });
+      if (presunoutZaostreni) zalozky[index].focus();
+    };
+
+    zalozky.forEach(function (zalozka, i) {
+      zalozka.addEventListener('click', function () { vyber(i, false); });
+
+      /* Najetí myší přepíná rovnou, aby se dal seznam projet
+         jedním tahem. Na dotyku se tahle větev nepoužije. */
+      if (jemnyKurzor.matches) {
+        zalozka.addEventListener('pointerenter', function (udalost) {
+          if (udalost.pointerType !== 'mouse') return;
+          vyber(i, false);
+        });
+      }
+
+      zalozka.addEventListener('keydown', function (udalost) {
+        var cil = null;
+        switch (udalost.key) {
+          case 'ArrowDown':
+          case 'ArrowRight': cil = (i + 1) % zalozky.length; break;
+          case 'ArrowUp':
+          case 'ArrowLeft':  cil = (i - 1 + zalozky.length) % zalozky.length; break;
+          case 'Home':       cil = 0; break;
+          case 'End':        cil = zalozky.length - 1; break;
+          default: return;
+        }
+        udalost.preventDefault();
+        vyber(cil, true);
+      });
+    });
   }
 
 
@@ -173,9 +222,9 @@
     formular.addEventListener('submit', function (udalost) {
       udalost.preventDefault();
 
-      var jmeno   = document.getElementById('fn').value.trim();
-      var email   = document.getElementById('fe').value.trim();
-      var zprava  = document.getElementById('fm').value.trim();
+      var jmeno    = document.getElementById('fn').value.trim();
+      var email    = document.getElementById('fe').value.trim();
+      var zprava   = document.getElementById('fm').value.trim();
       var tlacitko = document.getElementById('btn-send');
       var popisek  = document.getElementById('btn-txt');
       var hlaska   = document.getElementById('fmsg');

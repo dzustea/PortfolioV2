@@ -67,8 +67,10 @@
 <main id="main">
 
 <!-- ══ ÚVOD ══════════════════════════════════════════════════════
-     Jméno, deska s náhledy a textový blok leží v různých hloubkách
-     a při pohybu myši se posouvají jinak daleko.
+     Jméno má za předním lícem šest kopií odstupňovaných do hloubky.
+     Dohromady tvoří bok písmen, který se otáčí spolu s nápisem.
+     Kopie jsou výzdoba, proto jsou skryté před čtečkami obrazovky
+     a skutečný text nadpisu je jen v .hn-face.
 ══════════════════════════════════════════════════════════════════ -->
 <section id="hero" class="wrap">
   <div class="hero-inner" id="stage">
@@ -79,19 +81,15 @@
     </p>
 
     <h1 class="hero-name">
-      <span class="hn-row"><em class="hn-word">Filip</em></span>
-      <span class="hn-row"><em class="hn-word">Lochman</em></span>
+      <span class="hn-line">
+        <span class="hn-depth" aria-hidden="true"><i>Filip</i><i>Filip</i><i>Filip</i><i>Filip</i><i>Filip</i><i>Filip</i></span>
+        <span class="hn-face">Filip</span>
+      </span>
+      <span class="hn-line">
+        <span class="hn-depth" aria-hidden="true"><i>Lochman</i><i>Lochman</i><i>Lochman</i><i>Lochman</i><i>Lochman</i><i>Lochman</i></span>
+        <span class="hn-face">Lochman</span>
+      </span>
     </h1>
-
-    <!-- Náhledy skutečných projektů. Slouží tu jako obraz, samotné
-         projekty jsou níž ve vlastní sekci, proto aria-hidden. -->
-    <div class="deck-wrap" aria-hidden="true">
-      <div class="deck">
-        <figure class="plate p-1"><img src="hero-b.webp" alt="" width="560" height="332" decoding="async"/></figure>
-        <figure class="plate p-2"><img src="hero-c.webp" alt="" width="560" height="347" decoding="async"/></figure>
-        <figure class="plate p-3"><img src="hero-a.webp" alt="" width="560" height="367" decoding="async" fetchpriority="high"/></figure>
-      </div>
-    </div>
 
     <div class="hero-body">
       <p class="hero-desc">
@@ -187,145 +185,132 @@
 </section>
 
 <!-- ══ PROJEKTY ══════════════════════════════════════════════════
-     Karty se skládají na sebe. Každá se přilepí pod navigaci
-     a zůstane, dokud ji nepřekryje následující.
+     Rejstřík jmen a jeden panel s náhledem vybraného projektu.
+     Řádky jsou záložky, panely jejich obsah: klávesnicí se mezi
+     nimi jde pohybovat šipkami, myší stačí najet.
 ══════════════════════════════════════════════════════════════════ -->
 <section id="projects">
   <div class="wrap">
     <h2 class="sec-title rv">Projekty</h2>
 
-    <div class="stack">
+    <div class="px rv">
 
-      <div class="slot">
-        <article class="card">
-          <div class="card-in">
-            <div class="card-copy">
-              <div class="card-top">
-                <span class="card-num">01</span>
-                <span class="card-live">Live</span>
-              </div>
-              <h3 class="card-name">Herní akademie</h3>
-              <p class="card-text">Motivo je full-stack sociální platforma spojující vzdělávání s herní komunitou. Obsahuje systém úkolů, XP, žebříčky, chat a interakce jako follow či komentáře. Díky pokročilé roli uživatelů (RBAC) a vlastnímu zabezpečenému backendu (PHP/MySQL) nabízí komplexní správu obsahu. Projekt je postaven na robustní architektuře pro maximální uživatelskou angažovanost.</p>
-              <div class="card-chips">
-                <span>HTML</span><span>CSS</span><span>JS</span><span>PHP</span><span>MySQL</span>
-              </div>
-              <a href="https://motivo.free.nf" target="_blank" rel="noopener noreferrer" class="card-link">
-                Zobrazit projekt
-                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-                </svg>
-              </a>
-            </div>
-            <div class="card-media">
-              <div class="card-shot">
-                <img src="motivo.webp" alt="Náhled projektu Herní akademie" width="1200" height="786" loading="lazy" decoding="async"/>
-              </div>
-            </div>
-          </div>
-        </article>
+      <div class="px-list" role="tablist" aria-label="Seznam projektů">
+
+        <div class="px-item">
+          <button class="px-row" role="tab" id="ptab-1" aria-controls="ppan-1" aria-selected="true" tabindex="0">
+            <span class="px-num">01</span>
+            <span class="px-name">Herní akademie</span>
+            <span class="px-state">Live</span>
+          </button>
+        </div>
+
+        <div class="px-item">
+          <button class="px-row" role="tab" id="ptab-2" aria-controls="ppan-2" aria-selected="false" tabindex="-1">
+            <span class="px-num">02</span>
+            <span class="px-name">Restovski Webový Koncept</span>
+            <span class="px-state">Live</span>
+          </button>
+        </div>
+
+        <div class="px-item">
+          <button class="px-row" role="tab" id="ptab-3" aria-controls="ppan-3" aria-selected="false" tabindex="-1">
+            <span class="px-num">03</span>
+            <span class="px-name">Vyhlídkář web/app</span>
+            <span class="px-state">Live</span>
+          </button>
+        </div>
+
+        <div class="px-item">
+          <button class="px-row" role="tab" id="ptab-4" aria-controls="ppan-4" aria-selected="false" tabindex="-1">
+            <span class="px-num">04</span>
+            <span class="px-name">Kadeřnictví Hrabalová</span>
+            <span class="px-state">Live</span>
+          </button>
+        </div>
+
+        <div class="px-item">
+          <button class="px-row" role="tab" id="ptab-5" aria-controls="ppan-5" aria-selected="false" tabindex="-1">
+            <span class="px-num">05</span>
+            <span class="px-name">Projekt #5</span>
+            <span class="px-state px-state--wip">V přípravě</span>
+          </button>
+        </div>
+
       </div>
 
-      <div class="slot">
-        <article class="card">
-          <div class="card-in">
-            <div class="card-copy">
-              <div class="card-top">
-                <span class="card-num">02</span>
-                <span class="card-live">Live</span>
-              </div>
-              <h3 class="card-name">Restovski Webový Koncept</h3>
-              <p class="card-text">Fanouškovský redesign webové prezentace českého rappera Resta (Restovski), vytvořený jako moderní koncept s důrazem na minimalistický vizuální styl, přehlednou navigaci a plnou responzivitu. Stránka obsahuje biografii, diskografii, koncerty, galerii, informace o spolupracovnících, merch i kontaktní sekci. Součástí je také dynamické filtrování koncertů, světlý a tmavý režim a plynulé animační prvky pro příjemnější uživatelský zážitek.</p>
-              <div class="card-chips">
-                <span>HTML</span><span>Tailwind CSS</span><span>JS</span><span>JSON</span>
-              </div>
-              <a href="https://restovski.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">
-                Zobrazit projekt
-                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-                </svg>
-              </a>
-            </div>
-            <div class="card-media">
-              <div class="card-shot">
-                <img src="restovski.webp" alt="Náhled projektu Restovski Webový Koncept" width="1200" height="547" loading="lazy" decoding="async"/>
-              </div>
-            </div>
-          </div>
-        </article>
-      </div>
+      <div class="px-stage">
 
-      <div class="slot">
-        <article class="card">
-          <div class="card-in">
-            <div class="card-copy">
-              <div class="card-top">
-                <span class="card-num">03</span>
-                <span class="card-live">Live</span>
-              </div>
-              <h3 class="card-name">Vyhlídkář web/app</h3>
-              <p class="card-text">Vyhlídkář je full-stack webová a mobilní aplikace zaměřená na objevování skrytých vyhlídek, laviček, car spotů a dalších jedinečných míst, která znají především místní. Uživatelé mohou přidávat vlastní lokality, fotografie, hodnocení i komentáře a společně budovat komunitní mapu autentických míst mimo přeplněné turistické atrakce. Projekt využívá interaktivní mapy, geolokaci, vlastní REST API, PostgreSQL s PostGIS pro práci s geodaty, Cloudflare R2 pro ukládání fotografií a OpenAI API pro automatickou moderaci nahraného obsahu. Součástí je také mobilní aplikace postavená pomocí Capacitoru se sdíleným backendem.</p>
-              <div class="card-chips">
-                <span>Next.js</span><span>TypeScript</span><span>Tailwind CSS</span><span>Leaflet</span><span>PostGIS</span><span>Drizzle ORM</span><span>OpenAI API</span><span>Cloudflare R2</span><span>Capacitor</span>
-              </div>
-              <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">
-                Zobrazit projekt
-                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-                </svg>
-              </a>
-            </div>
-            <div class="card-media">
-              <div class="card-shot">
-                <img src="vyhlidkar.webp" alt="Náhled projektu Vyhlídkář web/app" width="1459" height="864" loading="lazy" decoding="async"/>
-              </div>
-            </div>
+        <article class="px-panel is-on" role="tabpanel" id="ppan-1" aria-labelledby="ptab-1">
+          <div class="px-shot">
+            <img src="motivo.webp" alt="Náhled projektu Herní akademie" width="1200" height="786" decoding="async"/>
           </div>
-        </article>
-      </div>
-
-      <div class="slot">
-        <article class="card">
-          <div class="card-in">
-            <div class="card-copy">
-              <div class="card-top">
-                <span class="card-num">04</span>
-                <span class="card-live">Live</span>
-              </div>
-              <h3 class="card-name">Kadeřnictví Hrabalová</h3>
-              <p class="card-text">Denisa Hair je moderní web a rezervační systém na míru pro kadeřnický salon. Zákazníkům nabízí přehledný online kalendář s výběrem volných časů a automatickým e-mailovým potvrzením. Součástí je blesková administrace, ve které kadeřnice snadno spravuje termíny, mění jejich stavy a ručně zapisuje telefonické objednávky. Celý systém je navržený s důrazem na bleskové načítání, perfektní zobrazení na telefonu i počítači (se světlým i tmavým režimem) a absolutní spolehlivost, která garantuje, že se dva zákazníci nikdy nezarezervují na stejný čas.</p>
-              <div class="card-chips">
-                <span>PHP</span><span>MySQL / TiDB Cloud</span><span>JS</span><span>CSS</span><span>REST API</span><span>Resend API</span>
-              </div>
-              <a href="https://denisa-hair.vercel.app/" target="_blank" rel="noopener noreferrer" class="card-link">
-                Zobrazit projekt
-                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-                </svg>
-              </a>
-            </div>
-            <div class="card-media">
-              <div class="card-shot">
-                <img src="hrabalova.webp" alt="Náhled projektu Kadeřnictví Hrabalová" width="1459" height="864" loading="lazy" decoding="async"/>
-              </div>
-            </div>
+          <p class="px-text">Motivo je full-stack sociální platforma spojující vzdělávání s herní komunitou. Obsahuje systém úkolů, XP, žebříčky, chat a interakce jako follow či komentáře. Díky pokročilé roli uživatelů (RBAC) a vlastnímu zabezpečenému backendu (PHP/MySQL) nabízí komplexní správu obsahu. Projekt je postaven na robustní architektuře pro maximální uživatelskou angažovanost.</p>
+          <div class="px-chips">
+            <span>HTML</span><span>CSS</span><span>JS</span><span>PHP</span><span>MySQL</span>
           </div>
+          <a href="https://motivo.free.nf" target="_blank" rel="noopener noreferrer" class="px-link">
+            Zobrazit projekt
+            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
+            </svg>
+          </a>
         </article>
-      </div>
 
-      <div class="slot">
-        <article class="card card-wip">
-          <div class="card-in">
-            <div class="card-copy">
-              <div class="card-top">
-                <span class="card-num">05</span>
-              </div>
-              <h3 class="card-name">Projekt #5</h3>
-              <span class="card-wip-label">V přípravě</span>
-            </div>
+        <article class="px-panel" role="tabpanel" id="ppan-2" aria-labelledby="ptab-2">
+          <div class="px-shot">
+            <img src="restovski.webp" alt="Náhled projektu Restovski Webový Koncept" width="1200" height="547" loading="lazy" decoding="async"/>
           </div>
+          <p class="px-text">Fanouškovský redesign webové prezentace českého rappera Resta (Restovski), vytvořený jako moderní koncept s důrazem na minimalistický vizuální styl, přehlednou navigaci a plnou responzivitu. Stránka obsahuje biografii, diskografii, koncerty, galerii, informace o spolupracovnících, merch i kontaktní sekci. Součástí je také dynamické filtrování koncertů, světlý a tmavý režim a plynulé animační prvky pro příjemnější uživatelský zážitek.</p>
+          <div class="px-chips">
+            <span>HTML</span><span>Tailwind CSS</span><span>JS</span><span>JSON</span>
+          </div>
+          <a href="https://restovski.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
+            Zobrazit projekt
+            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
+            </svg>
+          </a>
         </article>
-      </div>
 
+        <article class="px-panel" role="tabpanel" id="ppan-3" aria-labelledby="ptab-3">
+          <div class="px-shot">
+            <img src="vyhlidkar.webp" alt="Náhled projektu Vyhlídkář web/app" width="1459" height="864" loading="lazy" decoding="async"/>
+          </div>
+          <p class="px-text">Vyhlídkář je full-stack webová a mobilní aplikace zaměřená na objevování skrytých vyhlídek, laviček, car spotů a dalších jedinečných míst, která znají především místní. Uživatelé mohou přidávat vlastní lokality, fotografie, hodnocení i komentáře a společně budovat komunitní mapu autentických míst mimo přeplněné turistické atrakce. Projekt využívá interaktivní mapy, geolokaci, vlastní REST API, PostgreSQL s PostGIS pro práci s geodaty, Cloudflare R2 pro ukládání fotografií a OpenAI API pro automatickou moderaci nahraného obsahu. Součástí je také mobilní aplikace postavená pomocí Capacitoru se sdíleným backendem.</p>
+          <div class="px-chips">
+            <span>Next.js</span><span>TypeScript</span><span>Tailwind CSS</span><span>Leaflet</span><span>PostGIS</span><span>Drizzle ORM</span><span>OpenAI API</span><span>Cloudflare R2</span><span>Capacitor</span>
+          </div>
+          <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
+            Zobrazit projekt
+            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
+            </svg>
+          </a>
+        </article>
+
+        <article class="px-panel" role="tabpanel" id="ppan-4" aria-labelledby="ptab-4">
+          <div class="px-shot">
+            <img src="hrabalova.webp" alt="Náhled projektu Kadeřnictví Hrabalová" width="1459" height="864" loading="lazy" decoding="async"/>
+          </div>
+          <p class="px-text">Denisa Hair je moderní web a rezervační systém na míru pro kadeřnický salon. Zákazníkům nabízí přehledný online kalendář s výběrem volných časů a automatickým e-mailovým potvrzením. Součástí je blesková administrace, ve které kadeřnice snadno spravuje termíny, mění jejich stavy a ručně zapisuje telefonické objednávky. Celý systém je navržený s důrazem na bleskové načítání, perfektní zobrazení na telefonu i počítači (se světlým i tmavým režimem) a absolutní spolehlivost, která garantuje, že se dva zákazníci nikdy nezarezervují na stejný čas.</p>
+          <div class="px-chips">
+            <span>PHP</span><span>MySQL / TiDB Cloud</span><span>JS</span><span>CSS</span><span>REST API</span><span>Resend API</span>
+          </div>
+          <a href="https://denisa-hair.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
+            Zobrazit projekt
+            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
+            </svg>
+          </a>
+        </article>
+
+        <article class="px-panel" role="tabpanel" id="ppan-5" aria-labelledby="ptab-5">
+          <div class="px-blank">V přípravě</div>
+          <p class="px-text">Projekt #5</p>
+        </article>
+
+      </div>
     </div>
   </div>
 </section>
