@@ -1,39 +1,116 @@
 /* ══════════════════════════════════════════════════════════════
    FILIP LOCHMAN · chování stránky
 
-   Skript dělá jen to, co se v CSS udělat nedá. Vzhled, hloubka
-   i přechody jsou ve stylu; sem patří výběr projektu, sledování
-   polohy ve stránce a odeslání formuláře.
+   Skript dělá jen to, co se v CSS udělat nedá: rozbalování
+   projektů, sledování polohy ve stránce a odeslání formuláře.
+   Vzhled i všechny přechody jsou ve stylu.
 
    Tři pravidla, která tady platí bez výjimky:
 
-     1. Nikde se neposlouchá událost scroll. Scroll se spouští
-        desítky až stovky krát za vteřinu a jakýkoli výpočet
-        v jeho obsluze brzdí celou stránku. Polohu prvků hlídá
+     1. Nikde se neposlouchá událost scroll. Spouští se desítky
+        až stovky krát za vteřinu a jakýkoli výpočet v její
+        obsluze brzdí celou stránku. Polohu prvků hlídá
         IntersectionObserver, tedy sám prohlížeč.
 
-     2. Poloha kurzoru se nezapisuje přímo v události, ale až
-        v requestAnimationFrame. Mezi dvěma snímky tak proběhne
-        vždy nejvýš jeden zápis, i když myš pošle deset událostí.
-
-     3. Do stránky se text vkládá výhradně přes textContent.
+     2. Do stránky se text vkládá výhradně přes textContent.
         Nikde není innerHTML, takže se do dokumentu nedá
         propašovat žádné značkování.
+
+     3. Stav se drží v atributech, které něco znamenají i pro
+        čtečku obrazovky (aria-expanded), ne jen ve třídách.
 ══════════════════════════════════════════════════════════════ */
 
 (function () {
   'use strict';
 
-  /* Dvě systémová nastavení, na která se stránka ohlíží. */
-  var omezenyPohyb = matchMedia('(prefers-reduced-motion: reduce)');
-  var jemnyKurzor  = matchMedia('(hover: hover) and (pointer: fine)');
+  /* ── NAČÍTACÍ VRSTVA ──────────────────────────────────────────
+     Proužek postupuje podle skutečných událostí, ne podle stopek:
+
+       0,25  styl je načtený a skript běží
+       0,60  dokument je hotový
+       1,00  písma jsou připravená
+
+     Odkrytí přijde hned po posledním kroku. Když je všechno
+     v mezipaměti, proběhne to dřív, než se vrstva vůbec rozsvítí,
+     a návštěvník žádné načítání neuvidí.
+
+     Celý blok je první v souboru a v try/catch, aby případná
+     chyba kdekoli níž nenechala stránku zakrytou.
+     ──────────────────────────────────────────────────────────── */
+
+  try {
+    var korenDokumentu = document.documentElement;
+    var prouzekNacitani = document.querySelector('.ld-bar i');
+    var zacatek = performance.now();
+
+    var postup = function (hodnota) {
+      if (prouzekNacitani) prouzekNacitani.style.setProperty('--load', hodnota);
+    };
+
+    var odkryj = function () {
+      /* Když bylo hotovo dřív, než se vrstva stihla rozsvítit,
+         nemá smysl ji plynule zhasínat. */
+      if (performance.now() - zacatek < 150) {
+        korenDokumentu.classList.add('ready-hned');
+      }
+      korenDokumentu.classList.add('ready');
+    };
+
+    postup('.25');
+
+    /* Čeká se jen na Geist, tedy na písmo, které je pod vrstvou
+       skutečně vidět. Kdyby se čekalo na document.fonts.ready,
+       zdrželo by odkrytí i monospace písmo drobných popisků,
+       které na první pohled nikdo nepostrádá. */
+    var pripravaPisem = document.fonts && document.fonts.load
+      ? Promise.all([
+          document.fonts.load('250 1rem Geist'),
+          document.fonts.load('400 1rem Geist')
+        ])
+      : Promise.resolve();
+
+    var dokumentHotov = document.readyState === 'loading'
+      ? new Promise(function (splneno) {
+          document.addEventListener('DOMContentLoaded', function () { splneno(); }, { once: true });
+        })
+      : Promise.resolve();
+
+    dokumentHotov.then(function () { postup('.6'); });
+
+    /* Pojistka: kdyby se příslib písem nesplnil, stránka se odkryje
+       sama. Písmo se načítá s font-display:swap, takže mezitím
+       naskočí náhradní a text je čitelný; držet kvůli tomu vrstvu
+       déle by bylo horší než krátká výměna písma. */
+    var pojistka = new Promise(function (splneno) { setTimeout(splneno, 1500); });
+
+    /* Na písma se čeká nejvýš půl vteřiny od chvíle, kdy je hotový
+       dokument. Déle už by vrstva držela hotový obsah schovaný jen
+       kvůli výměně písma, a to je horší než ta výměna sama:
+       font-display:swap mezitím vykreslí náhradní řez. */
+    var pisemNejvys = dokumentHotov.then(function () {
+      return Promise.race([
+        pripravaPisem,
+        new Promise(function (splneno) { setTimeout(splneno, 500); })
+      ]);
+    });
+
+    Promise.race([
+      pisemNejvys,
+      pojistka
+    ]).then(function () {
+      postup('1');
+      requestAnimationFrame(odkryj);
+    });
+  } catch (chyba) {
+    document.documentElement.classList.add('ready', 'ready-hned');
+  }
 
 
   /* ── PODKLAD NAVIGACE ─────────────────────────────────────────
-     Nahoře v dokumentu leží neviditelný proužek vysoký 64 pixelů.
-     Dokud je vidět, stránka stojí na začátku a lišta zůstává
-     průhledná. Jakmile proužek vyjede z okna, lišta dostane
-     rozostřený podklad, aby text pod ní nerušil čitelnost.
+     Nahoře v dokumentu leží neviditelný proužek. Dokud je vidět,
+     stránka stojí na začátku a lišta zůstává průhledná. Jakmile
+     proužek vyjede z okna, lišta dostane podklad, aby text pod
+     ní nerušil čitelnost odkazů.
      ──────────────────────────────────────────────────────────── */
 
   var lista   = document.getElementById('hdr');
@@ -103,108 +180,45 @@
   });
 
 
-  /* ── NATOČENÍ JMÉNA ZA KURZOREM ───────────────────────────────
-     Skript dodává jediná dvě čísla: výchylku kurzoru od středu
-     okna v rozsahu -0,5 až 0,5. Kolik stupňů z toho bude a jak
-     se rozdělí mezi oba řádky, řeší styl.
+  /* ── ROZBALOVÁNÍ PROJEKTŮ ─────────────────────────────────────
+     Otevřený je vždy nejvýš jeden projekt. Druhé klepnutí na
+     otevřený řádek ho zase zavře, takže se dá seznam sbalit celý.
 
-     Zapisuje se na obal úvodu, ne na jednotlivé řádky. Vlastní
-     vlastnosti se dědí, takže stačí jeden zápis místo dvou.
-
-     Na dotykových zařízeních a při zapnutém omezení pohybu se
-     posluchač vůbec nenavěsí: u dotyku by se natočení projevilo
-     až po klepnutí a působilo by to jako závada.
+     Skript jen přepíná atribut a třídu. Samotné roztažení řeší
+     CSS přechodem grid-template-rows z 0fr na 1fr, což je jediný
+     způsob, jak plynule přejít na výšku obsahu bez toho, aby se
+     musela dopředu změřit.
      ──────────────────────────────────────────────────────────── */
 
-  var scena = document.getElementById('stage');
-  var uvod  = document.getElementById('hero');
+  var radky = Array.prototype.slice.call(document.querySelectorAll('.px-row[aria-controls]'));
 
-  if (scena && uvod && jemnyKurzor.matches && !omezenyPohyb.matches) {
-    var vychylkaX = 0;
-    var vychylkaY = 0;
-    var cekaNaSnimek = false;
-
-    var zapisVychylku = function () {
-      cekaNaSnimek = false;
-      scena.style.setProperty('--px', vychylkaX.toFixed(3));
-      scena.style.setProperty('--py', vychylkaY.toFixed(3));
-    };
-
-    var naplanujZapis = function () {
-      if (cekaNaSnimek) return;
-      cekaNaSnimek = true;
-      requestAnimationFrame(zapisVychylku);
-    };
-
-    uvod.addEventListener('pointermove', function (udalost) {
-      if (udalost.pointerType !== 'mouse') return;
-      vychylkaX = udalost.clientX / window.innerWidth  - 0.5;
-      vychylkaY = udalost.clientY / window.innerHeight - 0.5;
-      naplanujZapis();
-    }, { passive: true });
-
-    /* Po odjetí myši se nápis vrátí do základní polohy. */
-    uvod.addEventListener('pointerleave', function () {
-      vychylkaX = 0;
-      vychylkaY = 0;
-      naplanujZapis();
-    }, { passive: true });
-  }
-
-
-  /* ── PŘEHLED PROJEKTŮ ─────────────────────────────────────────
-     Řádky jsou záložky, panely jejich obsah. Vybírá se myší
-     najetím, klepnutím i klávesnicí.
-
-     Pořadí tabulátoru je plovoucí: do seznamu se vstoupí jedním
-     stisknutím tabulátoru a mezi projekty se pak přepíná
-     šipkami, jak to u záložek očekává čtečka obrazovky.
-     Skryté panely jsou ve stylu neviditelné, čímž z pořadí
-     tabulátoru vypadnou i odkazy uvnitř nich.
-     ──────────────────────────────────────────────────────────── */
-
-  var zalozky = Array.prototype.slice.call(document.querySelectorAll('.px-row'));
-  var panely  = Array.prototype.slice.call(document.querySelectorAll('.px-panel'));
-
-  if (zalozky.length && zalozky.length === panely.length) {
-    var vyber = function (index, presunoutZaostreni) {
-      zalozky.forEach(function (zalozka, i) {
-        var jeVybrana = i === index;
-        zalozka.setAttribute('aria-selected', jeVybrana ? 'true' : 'false');
-        zalozka.tabIndex = jeVybrana ? 0 : -1;
-        panely[i].classList.toggle('is-on', jeVybrana);
-      });
-      if (presunoutZaostreni) zalozky[index].focus();
-    };
-
-    zalozky.forEach(function (zalozka, i) {
-      zalozka.addEventListener('click', function () { vyber(i, false); });
-
-      /* Najetí myší přepíná rovnou, aby se dal seznam projet
-         jedním tahem. Na dotyku se tahle větev nepoužije. */
-      if (jemnyKurzor.matches) {
-        zalozka.addEventListener('pointerenter', function (udalost) {
-          if (udalost.pointerType !== 'mouse') return;
-          vyber(i, false);
-        });
-      }
-
-      zalozka.addEventListener('keydown', function (udalost) {
-        var cil = null;
-        switch (udalost.key) {
-          case 'ArrowDown':
-          case 'ArrowRight': cil = (i + 1) % zalozky.length; break;
-          case 'ArrowUp':
-          case 'ArrowLeft':  cil = (i - 1 + zalozky.length) % zalozky.length; break;
-          case 'Home':       cil = 0; break;
-          case 'End':        cil = zalozky.length - 1; break;
-          default: return;
-        }
-        udalost.preventDefault();
-        vyber(cil, true);
-      });
+  /* Na telefonu začíná seznam sbalený. Otevřený náhled by hned
+     na začátku přidal skoro půl obrazovky a přehled projektů by
+     se rozpadl na scrollování. Na počítači zůstává první projekt
+     otevřený, protože tam je na náhled místo. */
+  if (matchMedia('(max-width: 620px)').matches) {
+    radky.forEach(function (radek) {
+      radek.setAttribute('aria-expanded', 'false');
+      radek.closest('.px-item').classList.remove('is-open');
     });
   }
+
+  radky.forEach(function (radek) {
+    radek.addEventListener('click', function () {
+      var polozka  = radek.closest('.px-item');
+      var otevreny = radek.getAttribute('aria-expanded') === 'true';
+
+      radky.forEach(function (jiny) {
+        jiny.setAttribute('aria-expanded', 'false');
+        jiny.closest('.px-item').classList.remove('is-open');
+      });
+
+      if (!otevreny) {
+        radek.setAttribute('aria-expanded', 'true');
+        polozka.classList.add('is-open');
+      }
+    });
+  });
 
 
   /* ── KONTAKTNÍ FORMULÁŘ ───────────────────────────────────────

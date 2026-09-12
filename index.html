@@ -7,12 +7,13 @@
 <meta name="description" content="Filip Lochman — full-stack developer z Kroměříže. Responzivní a bezpečné webové aplikace: HTML, CSS, JavaScript, PHP, MySQL."/>
 <meta name="author" content="Filip Lochman"/>
 <meta name="robots" content="index, follow, max-image-preview:large"/>
-<meta name="theme-color" content="#08090d"/>
+<meta name="theme-color" content="#060e13"/>
 <link rel="canonical" href="https://www.filiplochman.cz/"/>
 <link rel="icon" href="favicon.svg" type="image/svg+xml"/>
 
 <!-- Písma leží na vlastní doméně, viz @font-face ve style.css.
-     Přednačítáme jen ta dvě, která jsou potřeba na první obrazovce. -->
+     Přednačítají se obě podmnožiny základního řezu: měřením vyšlo,
+     že přednačíst jen latinku první vykreslení zpomalí. -->
 <link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="fonts/geist-latin-ext.woff2" as="font" type="font/woff2" crossorigin/>
 
@@ -39,16 +40,15 @@
 </head>
 <body>
 
-<!-- Pozadí scény: mřížka podlahy a dvě barevná světla.
-     Fixní vrstva, se kterou se při scrollování jen posouvá. -->
-<div class="bg" aria-hidden="true">
-  <div class="bg-grid"></div>
-  <div class="bg-orb orb-warm"></div>
-  <div class="bg-orb orb-cool"></div>
+<!-- Načítací vrstva. Mizí podle skutečné připravenosti stránky,
+     ne po uplynutí nastaveného času. -->
+<div id="loader" aria-hidden="true">
+  <div class="ld-mark">FL<span>.</span></div>
+  <div class="ld-bar"><i></i></div>
 </div>
 
-<!-- Svislé linky po stranách obsahu, nad pozadím a pod obsahem -->
-<div class="rails" aria-hidden="true"></div>
+<!-- Jediná ozdoba pozadí. Fixní vrstva bez reakce na myš. -->
+<div class="glow" aria-hidden="true"></div>
 
 <!-- Podle tohoto proužku skript pozná, že stránka popojela -->
 <div id="nav-sentinel" aria-hidden="true"></div>
@@ -67,263 +67,253 @@
 <main id="main">
 
 <!-- ══ ÚVOD ══════════════════════════════════════════════════════
-     Jméno má za předním lícem šest kopií odstupňovaných do hloubky.
-     Dohromady tvoří bok písmen, který se otáčí spolu s nápisem.
-     Kopie jsou výzdoba, proto jsou skryté před čtečkami obrazovky
-     a skutečný text nadpisu je jen v .hn-face.
+     Hierarchii nese rozdíl tloušťky písma: křestní jméno lehké,
+     příjmení silnější. Fakta jsou v jednom pruhu pod linkou.
 ══════════════════════════════════════════════════════════════════ -->
 <section id="hero" class="wrap">
-  <div class="hero-inner" id="stage">
 
-    <p class="hero-kicker">
-      <span class="hk-rule" aria-hidden="true"></span>
-      <span class="eyebrow">Full-stack Developer</span>
-    </p>
+  <p class="hero-kicker rv">
+    <span class="hk-rule" aria-hidden="true"></span>
+    <span class="label">Full-stack Developer</span>
+  </p>
 
-    <h1 class="hero-name">
-      <span class="hn-line">
-        <span class="hn-depth" aria-hidden="true"><i>Filip</i><i>Filip</i><i>Filip</i><i>Filip</i><i>Filip</i><i>Filip</i></span>
-        <span class="hn-face">Filip</span>
-      </span>
-      <span class="hn-line">
-        <span class="hn-depth" aria-hidden="true"><i>Lochman</i><i>Lochman</i><i>Lochman</i><i>Lochman</i><i>Lochman</i><i>Lochman</i></span>
-        <span class="hn-face">Lochman</span>
-      </span>
-    </h1>
+  <h1 class="hero-name rv">
+    <em>Filip</em>
+    <em>Lochman</em>
+  </h1>
 
-    <div class="hero-body">
-      <p class="hero-desc">
-        Proměňuji komplexní nápady v responzivní a bezpečné webové aplikace s &nbsp;důrazem na detail a výkon.
-      </p>
-      <div class="hero-ctas">
-        <a href="#projects" class="btn-primary">
-          Projekty
-          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-          </svg>
-        </a>
-        <a href="#contact" class="btn-ghost">Napsat zprávu</a>
-      </div>
-    </div>
+  <p class="hero-desc rv">
+    Proměňuji komplexní nápady v responzivní a bezpečné webové aplikace s &nbsp;důrazem na detail a výkon.
+  </p>
 
+  <div class="hero-act rv">
+    <a href="#projects" class="btn">
+      Projekty
+      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
+      </svg>
+    </a>
+    <a href="#contact" class="lnk">Napsat zprávu</a>
   </div>
+
+  <div class="hero-facts rv rv-stagger">
+    <div>
+      <span class="fact-val">20</span>
+      <span class="fact-key">Let</span>
+    </div>
+    <div>
+      <span class="fact-val">6+</span>
+      <span class="fact-key">Jazyků</span>
+    </div>
+    <div>
+      <span class="fact-val">Full-stack</span>
+      <span class="fact-key">Frontend + Backend</span>
+    </div>
+    <div>
+      <span class="fact-val">Remote OK</span>
+      <span class="fact-key">Kroměříž / Zlín</span>
+    </div>
+  </div>
+
 </section>
 
-<!-- ══ ZAMĚŘENÍ ══════════════════════════════════════════════════
-     Vlevo stojící sloupec s čísly, vpravo dvě desky v různé hloubce.
-══════════════════════════════════════════════════════════════════ -->
+<!-- ══ ZAMĚŘENÍ ══════════════════════════════════════════════════ -->
 <section id="expertise" class="wrap">
+
   <div class="exp-layout">
 
-    <div class="exp-rail">
-      <h2 class="sec-title rv">Expertise</h2>
-      <div class="facts rv rv-stagger">
-        <div class="fact">
-          <span class="fact-val">20</span>
-          <span class="fact-key">Let</span>
-        </div>
-        <div class="fact">
-          <span class="fact-val">6+</span>
-          <span class="fact-key">Jazyků</span>
-        </div>
-        <div class="fact">
-          <span class="fact-val">Full-stack</span>
-          <span class="fact-key">Frontend + Backend</span>
-        </div>
-        <div class="fact">
-          <span class="fact-val">Remote OK</span>
-          <span class="fact-key">Kroměříž / Zlín</span>
-        </div>
-      </div>
+    <h2 class="side-title rv">Expertise</h2>
+
+    <div class="exp-grid">
+
+    <div class="exp-col rv">
+      <span class="exp-num">01</span>
+      <h3>Frontend</h3>
+      <p class="exp-desc">Vývoj vysoce výkonných a plně responzivních uživatelských rozhraní. Zaměřeno na špičkovou optimalizaci a intuitivní digitální zážitek na všech typech zařízení.</p>
+      <ul class="exp-skills">
+        <li>HTML5 · CSS3 · JavaScript</li>
+        <li>Responzivní design &amp; Přehlednost</li>
+        <li>Výkon &amp; Přístupnost</li>
+        <li>Vanilla JS bez frameworků</li>
+      </ul>
     </div>
 
-    <div class="exp-cards">
-
-      <article class="exp-card rv">
-        <span class="exp-num">01</span>
-        <h3>Frontend</h3>
-        <p class="exp-desc">Vývoj vysoce výkonných a plně responzivních uživatelských rozhraní. Zaměřeno na špičkovou optimalizaci a intuitivní digitální zážitek na všech typech zařízení.</p>
-        <ul class="exp-skills">
-          <li>HTML5 · CSS3 · JavaScript</li>
-          <li>Responzivní design &amp; Přehlednost</li>
-          <li>Výkon &amp; Přístupnost</li>
-          <li>Vanilla JS bez frameworků</li>
-        </ul>
-      </article>
-
-      <article class="exp-card rv">
-        <span class="exp-num">02</span>
-        <h3>Backend &amp; Databáze</h3>
-        <p class="exp-desc">Návrh a implementace robustní serverové logiky a bezpečné správy dat. Vývoj škálovatelných systémů, které zajišťují bezchybný chod, stabilitu a vysokou úroveň zabezpečení aplikace.</p>
-        <ul class="exp-skills">
-          <li>PHP · MySQL</li>
-          <li>Java SE · Kotlin</li>
-          <li>Android Studio</li>
-          <li>C# · Unity 2D / 3D</li>
-        </ul>
-      </article>
+    <div class="exp-col rv">
+      <span class="exp-num">02</span>
+      <h3>Backend &amp; Databáze</h3>
+      <p class="exp-desc">Návrh a implementace robustní serverové logiky a bezpečné správy dat. Vývoj škálovatelných systémů, které zajišťují bezchybný chod, stabilitu a vysokou úroveň zabezpečení aplikace.</p>
+      <ul class="exp-skills">
+        <li>PHP · MySQL</li>
+        <li>Java SE · Kotlin</li>
+        <li>Android Studio</li>
+        <li>C# · Unity 2D / 3D</li>
+      </ul>
+    </div>
 
     </div>
   </div>
 
-  <!-- Pás technologií. Druhá skupina je jen kopie kvůli plynulé
-       smyčce, pro čtečky obrazovky je skrytá. -->
-  <div class="marquee rv" aria-label="Tech stack">
-    <div class="mq-track">
-      <div class="mq-group">
-        <span>HTML</span><span>CSS</span><span>JavaScript</span><span>PHP</span>
-        <span>MySQL</span><span>Vanilla Java</span><span>Kotlin</span>
-        <span>C#</span><span>C++</span>
-      </div>
-      <div class="mq-group" aria-hidden="true">
-        <span>HTML</span><span>CSS</span><span>JavaScript</span><span>PHP</span>
-        <span>MySQL</span><span>Vanilla Java</span><span>Kotlin</span>
-        <span>C#</span><span>C++</span>
-      </div>
-    </div>
+  <div class="stack rv" aria-label="Tech stack">
+    <span>HTML</span><span>CSS</span><span>JavaScript</span><span>PHP</span>
+    <span>MySQL</span><span>Vanilla Java</span><span>Kotlin</span>
+    <span>C#</span><span>C++</span>
   </div>
+
 </section>
 
 <!-- ══ PROJEKTY ══════════════════════════════════════════════════
-     Rejstřík jmen a jeden panel s náhledem vybraného projektu.
-     Řádky jsou záložky, panely jejich obsah: klávesnicí se mezi
-     nimi jde pohybovat šipkami, myší stačí najet.
+     Rejstřík s rozbalovacími řádky. Otevřený je vždy jen jeden,
+     takže zavřená sekce zabere pár set pixelů a na telefonu se
+     nescrolluje donekonečna.
 ══════════════════════════════════════════════════════════════════ -->
-<section id="projects">
-  <div class="wrap">
-    <h2 class="sec-title rv">Projekty</h2>
+<section id="projects" class="wrap">
 
-    <div class="px rv">
+  <div class="sec-head rv">
+    <h2 class="sec-title">Projekty</h2>
+  </div>
 
-      <div class="px-list" role="tablist" aria-label="Seznam projektů">
+  <div class="px rv">
 
-        <div class="px-item">
-          <button class="px-row" role="tab" id="ptab-1" aria-controls="ppan-1" aria-selected="true" tabindex="0">
-            <span class="px-num">01</span>
-            <span class="px-name">Herní akademie</span>
-            <span class="px-state">Live</span>
-          </button>
+    <div class="px-item is-open">
+      <button class="px-row" id="prow-1" aria-expanded="true" aria-controls="pbody-1">
+        <span class="px-num">01</span>
+        <span class="px-name">Herní akademie</span>
+        <span class="px-tech">HTML · CSS</span>
+        <span class="px-sign" aria-hidden="true"></span>
+      </button>
+      <div class="px-body" id="pbody-1" role="region" aria-labelledby="prow-1">
+        <div class="px-inner">
+          <div class="px-grid">
+            <div class="px-shot">
+              <img src="motivo.webp" alt="Náhled projektu Herní akademie" width="1200" height="786" decoding="async"/>
+            </div>
+            <div>
+              <p class="px-text">Motivo je full-stack sociální platforma spojující vzdělávání s herní komunitou. Obsahuje systém úkolů, XP, žebříčky, chat a interakce jako follow či komentáře. Díky pokročilé roli uživatelů (RBAC) a vlastnímu zabezpečenému backendu (PHP/MySQL) nabízí komplexní správu obsahu. Projekt je postaven na robustní architektuře pro maximální uživatelskou angažovanost.</p>
+              <div class="px-chips">
+                <span>HTML</span><span>CSS</span><span>JS</span><span>PHP</span><span>MySQL</span>
+              </div>
+              <a href="https://motivo.free.nf" target="_blank" rel="noopener noreferrer" class="px-link">
+                Zobrazit projekt
+                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
+                </svg>
+              </a>
+            </div>
+          </div>
         </div>
-
-        <div class="px-item">
-          <button class="px-row" role="tab" id="ptab-2" aria-controls="ppan-2" aria-selected="false" tabindex="-1">
-            <span class="px-num">02</span>
-            <span class="px-name">Restovski Webový Koncept</span>
-            <span class="px-state">Live</span>
-          </button>
-        </div>
-
-        <div class="px-item">
-          <button class="px-row" role="tab" id="ptab-3" aria-controls="ppan-3" aria-selected="false" tabindex="-1">
-            <span class="px-num">03</span>
-            <span class="px-name">Vyhlídkář web/app</span>
-            <span class="px-state">Live</span>
-          </button>
-        </div>
-
-        <div class="px-item">
-          <button class="px-row" role="tab" id="ptab-4" aria-controls="ppan-4" aria-selected="false" tabindex="-1">
-            <span class="px-num">04</span>
-            <span class="px-name">Kadeřnictví Hrabalová</span>
-            <span class="px-state">Live</span>
-          </button>
-        </div>
-
-        <div class="px-item">
-          <button class="px-row" role="tab" id="ptab-5" aria-controls="ppan-5" aria-selected="false" tabindex="-1">
-            <span class="px-num">05</span>
-            <span class="px-name">Projekt #5</span>
-            <span class="px-state px-state--wip">V přípravě</span>
-          </button>
-        </div>
-
-      </div>
-
-      <div class="px-stage">
-
-        <article class="px-panel is-on" role="tabpanel" id="ppan-1" aria-labelledby="ptab-1">
-          <div class="px-shot">
-            <img src="motivo.webp" alt="Náhled projektu Herní akademie" width="1200" height="786" decoding="async"/>
-          </div>
-          <p class="px-text">Motivo je full-stack sociální platforma spojující vzdělávání s herní komunitou. Obsahuje systém úkolů, XP, žebříčky, chat a interakce jako follow či komentáře. Díky pokročilé roli uživatelů (RBAC) a vlastnímu zabezpečenému backendu (PHP/MySQL) nabízí komplexní správu obsahu. Projekt je postaven na robustní architektuře pro maximální uživatelskou angažovanost.</p>
-          <div class="px-chips">
-            <span>HTML</span><span>CSS</span><span>JS</span><span>PHP</span><span>MySQL</span>
-          </div>
-          <a href="https://motivo.free.nf" target="_blank" rel="noopener noreferrer" class="px-link">
-            Zobrazit projekt
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-            </svg>
-          </a>
-        </article>
-
-        <article class="px-panel" role="tabpanel" id="ppan-2" aria-labelledby="ptab-2">
-          <div class="px-shot">
-            <img src="restovski.webp" alt="Náhled projektu Restovski Webový Koncept" width="1200" height="547" loading="lazy" decoding="async"/>
-          </div>
-          <p class="px-text">Fanouškovský redesign webové prezentace českého rappera Resta (Restovski), vytvořený jako moderní koncept s důrazem na minimalistický vizuální styl, přehlednou navigaci a plnou responzivitu. Stránka obsahuje biografii, diskografii, koncerty, galerii, informace o spolupracovnících, merch i kontaktní sekci. Součástí je také dynamické filtrování koncertů, světlý a tmavý režim a plynulé animační prvky pro příjemnější uživatelský zážitek.</p>
-          <div class="px-chips">
-            <span>HTML</span><span>Tailwind CSS</span><span>JS</span><span>JSON</span>
-          </div>
-          <a href="https://restovski.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
-            Zobrazit projekt
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-            </svg>
-          </a>
-        </article>
-
-        <article class="px-panel" role="tabpanel" id="ppan-3" aria-labelledby="ptab-3">
-          <div class="px-shot">
-            <img src="vyhlidkar.webp" alt="Náhled projektu Vyhlídkář web/app" width="1459" height="864" loading="lazy" decoding="async"/>
-          </div>
-          <p class="px-text">Vyhlídkář je full-stack webová a mobilní aplikace zaměřená na objevování skrytých vyhlídek, laviček, car spotů a dalších jedinečných míst, která znají především místní. Uživatelé mohou přidávat vlastní lokality, fotografie, hodnocení i komentáře a společně budovat komunitní mapu autentických míst mimo přeplněné turistické atrakce. Projekt využívá interaktivní mapy, geolokaci, vlastní REST API, PostgreSQL s PostGIS pro práci s geodaty, Cloudflare R2 pro ukládání fotografií a OpenAI API pro automatickou moderaci nahraného obsahu. Součástí je také mobilní aplikace postavená pomocí Capacitoru se sdíleným backendem.</p>
-          <div class="px-chips">
-            <span>Next.js</span><span>TypeScript</span><span>Tailwind CSS</span><span>Leaflet</span><span>PostGIS</span><span>Drizzle ORM</span><span>OpenAI API</span><span>Cloudflare R2</span><span>Capacitor</span>
-          </div>
-          <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
-            Zobrazit projekt
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-            </svg>
-          </a>
-        </article>
-
-        <article class="px-panel" role="tabpanel" id="ppan-4" aria-labelledby="ptab-4">
-          <div class="px-shot">
-            <img src="hrabalova.webp" alt="Náhled projektu Kadeřnictví Hrabalová" width="1459" height="864" loading="lazy" decoding="async"/>
-          </div>
-          <p class="px-text">Denisa Hair je moderní web a rezervační systém na míru pro kadeřnický salon. Zákazníkům nabízí přehledný online kalendář s výběrem volných časů a automatickým e-mailovým potvrzením. Součástí je blesková administrace, ve které kadeřnice snadno spravuje termíny, mění jejich stavy a ručně zapisuje telefonické objednávky. Celý systém je navržený s důrazem na bleskové načítání, perfektní zobrazení na telefonu i počítači (se světlým i tmavým režimem) a absolutní spolehlivost, která garantuje, že se dva zákazníci nikdy nezarezervují na stejný čas.</p>
-          <div class="px-chips">
-            <span>PHP</span><span>MySQL / TiDB Cloud</span><span>JS</span><span>CSS</span><span>REST API</span><span>Resend API</span>
-          </div>
-          <a href="https://denisa-hair.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
-            Zobrazit projekt
-            <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-            </svg>
-          </a>
-        </article>
-
-        <article class="px-panel" role="tabpanel" id="ppan-5" aria-labelledby="ptab-5">
-          <div class="px-blank">V přípravě</div>
-          <p class="px-text">Projekt #5</p>
-        </article>
-
       </div>
     </div>
+
+    <div class="px-item">
+      <button class="px-row" id="prow-2" aria-expanded="false" aria-controls="pbody-2">
+        <span class="px-num">02</span>
+        <span class="px-name">Restovski Webový Koncept</span>
+        <span class="px-tech">HTML · Tailwind CSS</span>
+        <span class="px-sign" aria-hidden="true"></span>
+      </button>
+      <div class="px-body" id="pbody-2" role="region" aria-labelledby="prow-2">
+        <div class="px-inner">
+          <div class="px-grid">
+            <div class="px-shot">
+              <img src="restovski.webp" alt="Náhled projektu Restovski Webový Koncept" width="1200" height="547" loading="lazy" decoding="async"/>
+            </div>
+            <div>
+              <p class="px-text">Fanouškovský redesign webové prezentace českého rappera Resta (Restovski), vytvořený jako moderní koncept s důrazem na minimalistický vizuální styl, přehlednou navigaci a plnou responzivitu. Stránka obsahuje biografii, diskografii, koncerty, galerii, informace o spolupracovnících, merch i kontaktní sekci. Součástí je také dynamické filtrování koncertů, světlý a tmavý režim a plynulé animační prvky pro příjemnější uživatelský zážitek.</p>
+              <div class="px-chips">
+                <span>HTML</span><span>Tailwind CSS</span><span>JS</span><span>JSON</span>
+              </div>
+              <a href="https://restovski.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
+                Zobrazit projekt
+                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-item">
+      <button class="px-row" id="prow-3" aria-expanded="false" aria-controls="pbody-3">
+        <span class="px-num">03</span>
+        <span class="px-name">Vyhlídkář web/app</span>
+        <span class="px-tech">Next.js · TypeScript</span>
+        <span class="px-sign" aria-hidden="true"></span>
+      </button>
+      <div class="px-body" id="pbody-3" role="region" aria-labelledby="prow-3">
+        <div class="px-inner">
+          <div class="px-grid">
+            <div class="px-shot">
+              <img src="vyhlidkar.webp" alt="Náhled projektu Vyhlídkář web/app" width="1459" height="864" loading="lazy" decoding="async"/>
+            </div>
+            <div>
+              <p class="px-text">Vyhlídkář je full-stack webová a mobilní aplikace zaměřená na objevování skrytých vyhlídek, laviček, car spotů a dalších jedinečných míst, která znají především místní. Uživatelé mohou přidávat vlastní lokality, fotografie, hodnocení i komentáře a společně budovat komunitní mapu autentických míst mimo přeplněné turistické atrakce. Projekt využívá interaktivní mapy, geolokaci, vlastní REST API, PostgreSQL s PostGIS pro práci s geodaty, Cloudflare R2 pro ukládání fotografií a OpenAI API pro automatickou moderaci nahraného obsahu. Součástí je také mobilní aplikace postavená pomocí Capacitoru se sdíleným backendem.</p>
+              <div class="px-chips">
+                <span>Next.js</span><span>TypeScript</span><span>Tailwind CSS</span><span>Leaflet</span><span>PostGIS</span><span>Drizzle ORM</span><span>OpenAI API</span><span>Cloudflare R2</span><span>Capacitor</span>
+              </div>
+              <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
+                Zobrazit projekt
+                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="px-item">
+      <button class="px-row" id="prow-4" aria-expanded="false" aria-controls="pbody-4">
+        <span class="px-num">04</span>
+        <span class="px-name">Kadeřnictví Hrabalová</span>
+        <span class="px-tech">PHP · MySQL / TiDB Cloud</span>
+        <span class="px-sign" aria-hidden="true"></span>
+      </button>
+      <div class="px-body" id="pbody-4" role="region" aria-labelledby="prow-4">
+        <div class="px-inner">
+          <div class="px-grid">
+            <div class="px-shot">
+              <img src="hrabalova.webp" alt="Náhled projektu Kadeřnictví Hrabalová" width="1459" height="864" loading="lazy" decoding="async"/>
+            </div>
+            <div>
+              <p class="px-text">Denisa Hair je moderní web a rezervační systém na míru pro kadeřnický salon. Zákazníkům nabízí přehledný online kalendář s výběrem volných časů a automatickým e-mailovým potvrzením. Součástí je blesková administrace, ve které kadeřnice snadno spravuje termíny, mění jejich stavy a ručně zapisuje telefonické objednávky. Celý systém je navržený s důrazem na bleskové načítání, perfektní zobrazení na telefonu i počítači (se světlým i tmavým režimem) a absolutní spolehlivost, která garantuje, že se dva zákazníci nikdy nezarezervují na stejný čas.</p>
+              <div class="px-chips">
+                <span>PHP</span><span>MySQL / TiDB Cloud</span><span>JS</span><span>CSS</span><span>REST API</span><span>Resend API</span>
+              </div>
+              <a href="https://denisa-hair.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
+                Zobrazit projekt
+                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Připravovaný projekt se nerozbaluje, není co ukázat. -->
+    <div class="px-item">
+      <div class="px-row">
+        <span class="px-num">05</span>
+        <span class="px-name">Projekt #5</span>
+        <span class="px-tech px-tech--stav">V přípravě</span>
+      </div>
+    </div>
+
   </div>
 </section>
 
 <!-- ══ KONTAKT ═══════════════════════════════════════════════════ -->
 <section id="contact" class="wrap">
 
-  <h2 class="sec-title rv">Kontakt</h2>
-
   <div class="ct-grid">
 
-    <div class="ct-info rv">
-      <h3 class="ct-head">Pojďme<br><em>spolupracovat.</em></h3>
+    <div class="rv">
+      <p class="label ct-label">Kontakt</p>
+      <h2 class="ct-head">Pojďme<br><em>spolupracovat.</em></h2>
       <p class="ct-sub">Jsem otevřen novým projektům a příležitostem.</p>
 
       <p class="avail"><i aria-hidden="true"></i>Otevřen nabídkám</p>
@@ -351,7 +341,7 @@
       </div>
     </div>
 
-    <div class="form-panel rv">
+    <div class="rv">
       <form id="cform" novalidate>
 
         <div class="fg">
@@ -370,9 +360,9 @@
                     placeholder="Dobrý den, mám dotaz..." required></textarea>
         </div>
 
-        <button id="btn-send" type="submit">
+        <button id="btn-send" class="btn" type="submit">
           <span id="btn-txt">Odeslat zprávu</span>
-          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
             <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
           </svg>
         </button>
