@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>Filip Lochman · Full-stack developer</title>
+<meta name="description" content="Filip Lochman, full-stack developer z Kroměříže. Responzivní a bezpečné webové aplikace: HTML, CSS, JavaScript, PHP, MySQL."/>
+<meta name="author" content="Filip Lochman"/>
+<meta name="robots" content="index, follow, max-image-preview:large"/>
+<meta name="theme-color" content="#0c0b0d"/>
+<link rel="canonical" href="https://www.filiplochman.cz/"/>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"/>
+
+<!-- Jediné písmo stránky leží na vlastní doméně, viz @font-face ve
+     style.css. Obě podmnožiny se přednačítají, protože z obou je
+     vysázená první obrazovka (čeština potřebuje latin-ext). -->
+<link rel="preload" href="fonts/saira-latin.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="fonts/saira-latin-ext.woff2" as="font" type="font/woff2" crossorigin/>
+
+<meta property="og:type" content="website"/>
+<meta property="og:site_name" content="Filip Lochman"/>
+<meta property="og:locale" content="cs_CZ"/>
+<meta property="og:url" content="https://www.filiplochman.cz/"/>
+<meta property="og:title" content="Filip Lochman · Full-stack developer"/>
+<meta property="og:description" content="Responzivní a bezpečné webové aplikace. Frontend, backend i databáze. Kroměříž / Zlín, remote OK."/>
+<meta property="og:image" content="https://www.filiplochman.cz/og-image.png"/>
+<meta property="og:image:secure_url" content="https://www.filiplochman.cz/og-image.png"/>
+<meta property="og:image:type" content="image/png"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="Typový štítek Filipa Lochmana, full-stack developer"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Filip Lochman · Full-stack developer"/>
+<meta name="twitter:description" content="Responzivní a bezpečné webové aplikace. Frontend, backend i databáze. Kroměříž / Zlín, remote OK."/>
+<meta name="twitter:image" content="https://www.filiplochman.cz/og-image.png"/>
+<meta name="twitter:image:alt" content="Typový štítek Filipa Lochmana, full-stack developer"/>
+
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!--
+  THESIS: Stránka je čelní panel stroje, který ukazuje vlastní naměřený
+  stav. Odmítá tmavý portfoliový hero s přechodem, velkým jménem a mřížkou
+  dlaždic; hodnoty se neslibují přídavnými jmény, ale čtou se ze štítku.
+
+  OWN-WORLD: Eloxovaný grafit s jemným brusem jako jediná plocha, gravírovaný
+  laminátový štítek (světlé písmo vyříznuté do tmavé desky) jako jediný nosič
+  textu, doutnavka za sklem jako jediná rudá. Šrouby v rozích desek, vlasové
+  spáry mezi moduly, Saira jako jediné písmo. Poznatelné i bez obsahu.
+
+  STORY: Personalista pozná do půl minuty, co Filip staví a jak dobře, protože
+  panel ukazuje ověřitelné hodnoty téhle stránky. Projekty projde jako moduly
+  v rozvaděči. Odejde přes jediné svítící tlačítko: napsat zprávu.
+
+  FIRST VIEWPORT: Vlevo gravírovaný štítek se jménem přes dva řádky a pod ním
+  profese na užším proužku. Vpravo typový štítek: hodnoty v řádcích o stejné
+  velikosti, žádné hrdinské číslo. Pod štítkem doutnavka OTEVŘEN NABÍDKÁM.
+  Hlavní akce vlevo dole, zapuštěné tlačítko s rámečkem, který se při najetí
+  rozsvítí.
+
+  FORM: Rozvaděč, kandidát 5 mého seřazeného seznamu, klíč 07db5d94.
+
+  FINISH: unreviewed and undocumented is unfinished; this build ends with the
+  finish review, the verdict, DESIGN.md, and every shipping raster carrying
+  its provenance.
+-->
+
+<div id="loader" aria-hidden="true"><i></i></div>
+
+<div id="nav-sentinel" aria-hidden="true"></div>
+
+<a class="skip" href="#main">Přeskočit na obsah</a>
+
+<!-- ══ LIŠTA ═════════════════════════════════════════════════════
+     Horní lišta rozvaděče: značka na levém konci, popisky sekcí
+     uprostřed, hlavní akce vpravo. Tvar je stejný na všech šířkách,
+     pod 900 px se jen popisky sbalí pod tlačítko nabídky.
+══════════════════════════════════════════════════════════════════ -->
+<header id="hdr">
+  <div class="hdr-in">
+
+    <a class="mark" href="#hero" aria-label="FL, Filip Lochman, zpět na začátek">
+      <span class="mark-fl">FL</span><span class="mark-dot">.</span>
+    </a>
+
+    <nav class="hdr-nav" id="nav" aria-label="Hlavní">
+      <a href="#expertise">Zaměření</a>
+      <a href="#projects">Projekty</a>
+      <a href="#contact">Kontakt</a>
+    </nav>
+
+    <div class="hdr-akce">
+      <a href="#contact" class="btn btn-sm btn-lampa">
+        <span>Napsat zprávu</span><i aria-hidden="true">{{i:arrow-right}}</i>
+      </a>
+      <button type="button" class="hdr-menu" id="menu-btn"
+              aria-expanded="false" aria-controls="panel" aria-label="Otevřít nabídku">
+        <i class="ico-list" aria-hidden="true">{{i:list}}</i>
+        <i class="ico-x" aria-hidden="true">{{i:x}}</i>
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<div class="panel" id="panel" hidden>
+  <nav aria-label="Nabídka">
+    <a href="#expertise"><span>Zaměření</span>{{i:arrow-right}}</a>
+    <a href="#projects"><span>Projekty</span>{{i:arrow-right}}</a>
+    <a href="#contact"><span>Kontakt</span>{{i:arrow-right}}</a>
+  </nav>
+  <a href="mailto:filda.lochman12@gmail.com" class="panel-mail">filda.lochman12@gmail.com</a>
+</div>
+
+<main id="main">
+
+<!-- ══ ÚVOD ══════════════════════════════════════════════════════
+     Čelní deska: gravírovaný štítek se jménem vlevo, typový štítek
+     s ověřitelnými hodnotami vpravo, doutnavka a hlavní akce dole.
+══════════════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="wrap">
+   <div class="celo brus">
+
+    <div class="deska-levy">
+      <div class="nazevnik">
+        <h1 class="stitek">
+          <span class="stitek-ryt">Filip</span>
+          <span class="stitek-ryt">Lochman</span>
+        </h1>
+        <p class="prouzek">Full-stack developer</p>
+      </div>
+
+      <p class="uvod-text">Proměňuji komplexní nápady v responzivní a bezpečné webové aplikace s&nbsp;důrazem na detail a výkon.</p>
+
+      <div class="uvod-akce">
+        <a href="#projects" class="btn">Projekty<i aria-hidden="true">{{i:arrow-right}}</i></a>
+        <a href="#contact" class="btn-ghost btn-lampa">Napsat zprávu<i aria-hidden="true">{{i:arrow-up-right}}</i></a>
+      </div>
+    </div>
+
+    <!-- Typový štítek. Hodnoty jsou ověřitelné na téhle stránce, ne
+         tvrzení o Filipovi. Pod štítkem stojí, čím se měřily. -->
+    <div class="deska-pravy">
+      <div class="typstitek">
+        <p class="ts-hlava">Typový štítek</p>
+        <dl class="ts-radky">
+          <div><dt>Nasazené projekty</dt><dd>4</dd></div>
+          <div><dt>Cizí skripty</dt><dd>0</dd></div>
+          <div><dt>Frameworky</dt><dd>0</dd></div>
+          <div><dt>Porušení CSP</dt><dd>0</dd></div>
+          <div><dt>Lighthouse, počítač</dt><dd>100</dd></div>
+          <div><dt>Váha stránky</dt><dd data-vaha>&#8199;</dd></div>
+        </dl>
+        <p class="ts-puvod">Měřeno na této stránce. Váhu čte prohlížeč z rozhraní Performance, zbytek je Lighthouse a vlastní kontroly.</p>
+      </div>
+
+      <p class="doutnavka"><i aria-hidden="true"></i>Otevřen nabídkám</p>
+    </div>
+
+    <span class="sroub sroub-lh" aria-hidden="true"></span>
+    <span class="sroub sroub-ph" aria-hidden="true"></span>
+    <span class="sroub sroub-ld" aria-hidden="true"></span>
+    <span class="sroub sroub-pd" aria-hidden="true"></span>
+
+   </div>
+  </div>
+</section>
+
+
+<!-- ══ ZAMĚŘENÍ ══════════════════════════════════════════════════
+     Dva moduly v jedné řadě. Žádná třetí stejná karta, žádná ikona
+     s nadpisem a odstavcem jako struktura stránky.
+══════════════════════════════════════════════════════════════════ -->
+<section id="expertise" class="wrap">
+  <h2 class="sec-h2">Co stavím</h2>
+
+  <div class="moduly">
+
+    <article class="modul">
+      <h3>Frontend</h3>
+      <p>Rozhraní, která se načtou dřív, než si jich stihnete všimnout, a fungují stejně dobře na telefonu i na velkém monitoru.</p>
+      <ul class="vypis">
+        <li>HTML5, CSS3, JavaScript</li>
+        <li>Responzivní design</li>
+        <li>Výkon a přístupnost</li>
+        <li>Bez frameworků</li>
+      </ul>
+    </article>
+
+    <article class="modul">
+      <h3>Backend a databáze</h3>
+      <p>Serverová logika a databáze navržené tak, aby unesly provoz, nepustily dál nepovolané a daly se po roce ještě rozšířit.</p>
+      <ul class="vypis">
+        <li>PHP, MySQL</li>
+        <li>Java SE, Kotlin</li>
+        <li>Android Studio</li>
+        <li>C#, Unity 2D a 3D</li>
+      </ul>
+    </article>
+
+  </div>
+
+  <!-- Pás technologií. Gravírované popisky, ne cizí značky:
+       logo je nábytek šablony, štítek patří do panelu. -->
+  <ul class="pas">
+    <li>HTML</li><li>CSS</li><li>JavaScript</li>
+    <li>PHP</li><li>MySQL</li><li>Java</li>
+    <li>Kotlin</li><li>C#</li><li>C++</li>
+  </ul>
+</div>
+</section>
+
+
+<!-- ══ PROJEKTY ══════════════════════════════════════════════════
+     Moduly v rozvaděči. Při scrollu se zasouvají pod lištu a
+     stohují se na sebe, jak se plní rám. Aktivní modul svítí,
+     ostatní ztmavnou. Screenshot je až v detailu, ne v seznamu:
+     na telefonu by z každého modulu udělal půl obrazovky.
+══════════════════════════════════════════════════════════════════ -->
+<section id="projects" class="wrap">
+  <h2 class="sec-h2">Nasazené projekty</h2>
+
+  <div class="rám" id="ram">
+
+    <article class="jednotka" data-jednotka>
+      <div class="j-okno" aria-hidden="true">
+        <picture>
+          <source type="image/avif" srcset="motivo-680.avif"/>
+          <img src="motivo-680.webp" alt="" width="680" height="445" loading="lazy" decoding="async"/>
+        </picture>
+      </div>
+      <div class="j-hlava">
+        <h3>Herní akademie</h3>
+        <span class="j-oznaceni">Motivo</span>
+      </div>
+      <p class="j-popis">Full-stack sociální platforma spojující vzdělávání s herní komunitou. Úkoly, XP, žebříčky a role uživatelů nad vlastním backendem.</p>
+      <ul class="j-tech"><li>PHP</li><li>MySQL</li><li>JavaScript</li></ul>
+      <div class="j-akce">
+        <button class="btn-plate" data-dialog="dlg-1" type="button">Detail<i aria-hidden="true">{{i:arrow-right}}</i></button>
+        <a href="https://motivo.free.nf" target="_blank" rel="noopener noreferrer" class="lnk">Otevřít web{{i:arrow-up-right}}</a>
+      </div>
+    </article>
+
+    <article class="jednotka" data-jednotka>
+      <div class="j-okno" aria-hidden="true">
+        <picture>
+          <source type="image/avif" srcset="restovski-680.avif"/>
+          <img src="restovski-680.webp" alt="" width="680" height="310" loading="lazy" decoding="async"/>
+        </picture>
+      </div>
+      <div class="j-hlava">
+        <h3>Restovski</h3>
+        <span class="j-oznaceni">Webový koncept</span>
+      </div>
+      <p class="j-popis">Fanouškovský redesign prezentace českého rappera Resta. Biografie, diskografie, koncerty a galerie v minimalistickém stylu.</p>
+      <ul class="j-tech"><li>HTML</li><li>Tailwind CSS</li><li>JavaScript</li></ul>
+      <div class="j-akce">
+        <button class="btn-plate" data-dialog="dlg-2" type="button">Detail<i aria-hidden="true">{{i:arrow-right}}</i></button>
+        <a href="https://restovski.vercel.app/" target="_blank" rel="noopener noreferrer" class="lnk">Otevřít web{{i:arrow-up-right}}</a>
+      </div>
+    </article>
+
+    <article class="jednotka" data-jednotka>
+      <div class="j-okno" aria-hidden="true">
+        <picture>
+          <source type="image/avif" srcset="vyhlidkar-680.avif"/>
+          <img src="vyhlidkar-680.webp" alt="" width="680" height="403" loading="lazy" decoding="async"/>
+        </picture>
+      </div>
+      <div class="j-hlava">
+        <h3>Vyhlídkář</h3>
+        <span class="j-oznaceni">Web a mobilní aplikace</span>
+      </div>
+      <p class="j-popis">Objevování skrytých vyhlídek, laviček a míst, která znají hlavně místní. Vlastní REST API, geodata v PostGIS a sdílený backend s mobilní aplikací.</p>
+      <ul class="j-tech"><li>Next.js</li><li>TypeScript</li><li>PostGIS</li></ul>
+      <div class="j-akce">
+        <button class="btn-plate" data-dialog="dlg-3" type="button">Detail<i aria-hidden="true">{{i:arrow-right}}</i></button>
+        <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener noreferrer" class="lnk">Otevřít web{{i:arrow-up-right}}</a>
+      </div>
+    </article>
+
+    <article class="jednotka" data-jednotka>
+      <div class="j-okno" aria-hidden="true">
+        <picture>
+          <source type="image/avif" srcset="hrabalova-680.avif"/>
+          <img src="hrabalova-680.webp" alt="" width="680" height="420" loading="lazy" decoding="async"/>
+        </picture>
+      </div>
+      <div class="j-hlava">
+        <h3>Kadeřnictví Hrabalová</h3>
+        <span class="j-oznaceni">Denisa Hair</span>
+      </div>
+      <p class="j-popis">Web a rezervační systém na míru. Online kalendář s volnými časy, automatické potvrzení e-mailem a administrace pro ruční zápis objednávek.</p>
+      <ul class="j-tech"><li>PHP</li><li>TiDB Cloud</li><li>Resend API</li></ul>
+      <div class="j-akce">
+        <button class="btn-plate" data-dialog="dlg-4" type="button">Detail<i aria-hidden="true">{{i:arrow-right}}</i></button>
+        <a href="https://denisa-hair.vercel.app/" target="_blank" rel="noopener noreferrer" class="lnk">Otevřít web{{i:arrow-up-right}}</a>
+      </div>
+    </article>
+
+  </div>
+
+  <p class="volna-pozice">Pátá pozice v rámu je volná. Projekt je rozdělaný.</p>
+</section>
+
+
+<!-- ══ KONTAKT ═══════════════════════════════════════════════════
+     Ovládací modul: gravírované popisky nad zapuštěnými poli,
+     rámeček pole se při zaostření rozsvítí.
+══════════════════════════════════════════════════════════════════ -->
+<section id="contact" class="wrap">
+  <h2 class="sec-h2">Pojďme spolupracovat</h2>
+
+  <div class="kontakt">
+
+    <div class="kt-levy">
+      <p class="kt-uvod">Jsem otevřen novým projektům a příležitostem. Ozvu se do dvou pracovních dnů.</p>
+
+      <div class="kt-linky">
+        <a href="mailto:filda.lochman12@gmail.com" class="kt-link">
+          <span class="kt-kdo">Email</span>
+          <span class="kt-co">filda.lochman12@gmail.com</span>
+          <i aria-hidden="true">{{i:arrow-up-right}}</i>
+        </a>
+        <a href="https://linkedin.com/in/filip-lochman-a313a9301" target="_blank" rel="noopener noreferrer" class="kt-link">
+          <span class="kt-kdo">LinkedIn</span>
+          <span class="kt-co">Filip Lochman</span>
+          <i aria-hidden="true">{{i:arrow-up-right}}</i>
+        </a>
+        <a href="https://instagram.com/imdzustea" rel="noopener noreferrer" class="kt-link">
+          <span class="kt-kdo">Instagram</span>
+          <span class="kt-co">Filip Lochman</span>
+          <i aria-hidden="true">{{i:arrow-up-right}}</i>
+        </a>
+        <div class="kt-link kt-link-tichy">
+          <span class="kt-kdo">Lokace</span>
+          <span class="kt-co">Kroměříž / Zlín, remote OK</span>
+        </div>
+        <div class="kt-link kt-link-tichy">
+          <span class="kt-kdo">Odpověď</span>
+          <span class="kt-co">Do dvou pracovních dnů</span>
+        </div>
+      </div>
+
+      <p class="doutnavka doutnavka-kt"><i aria-hidden="true"></i>Otevřen nabídkám</p>
+    </div>
+
+    <form id="cform" class="kt-form" novalidate>
+      <div class="fg">
+        <label for="fn">Jméno</label>
+        <input id="fn" name="name" type="text" placeholder="Jan Novák" autocomplete="name"
+               aria-describedby="fn-err" required/>
+        <p class="fg-err" id="fn-err" hidden>Bez jména nevím, komu odepsat.</p>
+      </div>
+
+      <div class="fg">
+        <label for="fe">Email</label>
+        <input id="fe" name="email" type="email" placeholder="jan@firma.cz" autocomplete="email"
+               aria-describedby="fe-napoveda fe-err" required/>
+        <p class="fg-napoveda" id="fe-napoveda">Použiju ho jen na odpověď.</p>
+        <p class="fg-err" id="fe-err" hidden>Tahle adresa nevypadá na platnou.</p>
+      </div>
+
+      <div class="fg">
+        <label for="fm">Zpráva</label>
+        <textarea id="fm" name="message" placeholder="Dobrý den, mám dotaz..."
+                  aria-describedby="fm-err" required></textarea>
+        <p class="fg-err" id="fm-err" hidden>Napište prosím aspoň pár slov.</p>
+      </div>
+
+      <button id="btn-send" class="btn btn-wide btn-lampa" type="submit">
+        <span id="btn-txt">Odeslat zprávu</span>
+        <i aria-hidden="true">{{i:arrow-right}}</i>
+      </button>
+
+      <p class="form-feedback" id="fmsg" role="status" aria-live="polite"></p>
+    </form>
+
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <span>© Filip Lochman 2026</span>
+    <span>Kroměříž / Zlín, CZ</span>
+  </div>
+</footer>
+
+<!-- ══ DETAILY PROJEKTŮ ══════════════════════════════════════════
+     Nativní dialog prohlížeče: sám zamkne zaostření uvnitř, sám se
+     zavře klávesou Esc a sám se překryje zbytkem stránky. Tady žije
+     screenshot, protože tady na něj je místo.
+══════════════════════════════════════════════════════════════════ -->
+
+<dialog class="dlg" id="dlg-1" aria-labelledby="dlg-1-t">
+  <div class="dlg-in">
+    <button class="dlg-close" type="button" aria-label="Zavřít">{{i:x}}</button>
+    <div class="dlg-shot"><img src="motivo.webp" alt="Náhled projektu Herní akademie" width="1200" height="786" loading="lazy" decoding="async"/></div>
+    <h3 id="dlg-1-t">Herní akademie</h3>
+    <p>Motivo je full-stack sociální platforma spojující vzdělávání s herní komunitou. Obsahuje systém úkolů, XP, žebříčky, chat a interakce jako follow či komentáře. Díky pokročilé roli uživatelů (RBAC) a vlastnímu zabezpečenému backendu (PHP/MySQL) nabízí komplexní správu obsahu.</p>
+    <ul class="j-tech"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>PHP</li><li>MySQL</li></ul>
+    <a href="https://motivo.free.nf" target="_blank" rel="noopener noreferrer" class="btn">Otevřít web<i aria-hidden="true">{{i:arrow-up-right}}</i></a>
+  </div>
+</dialog>
+
+<dialog class="dlg" id="dlg-2" aria-labelledby="dlg-2-t">
+  <div class="dlg-in">
+    <button class="dlg-close" type="button" aria-label="Zavřít">{{i:x}}</button>
+    <div class="dlg-shot"><img src="restovski.webp" alt="Náhled projektu Restovski Webový Koncept" width="1200" height="547" loading="lazy" decoding="async"/></div>
+    <h3 id="dlg-2-t">Restovski Webový Koncept</h3>
+    <p>Fanouškovský redesign webové prezentace českého rappera Resta (Restovski), vytvořený jako moderní koncept s důrazem na minimalistický vizuální styl, přehlednou navigaci a plnou responzivitu. Stránka obsahuje biografii, diskografii, koncerty, galerii, merch i kontaktní sekci, dynamické filtrování koncertů a světlý i tmavý režim.</p>
+    <ul class="j-tech"><li>HTML</li><li>Tailwind CSS</li><li>JavaScript</li><li>JSON</li></ul>
+    <a href="https://restovski.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn">Otevřít web<i aria-hidden="true">{{i:arrow-up-right}}</i></a>
+  </div>
+</dialog>
+
+<dialog class="dlg" id="dlg-3" aria-labelledby="dlg-3-t">
+  <div class="dlg-in">
+    <button class="dlg-close" type="button" aria-label="Zavřít">{{i:x}}</button>
+    <div class="dlg-shot"><img src="vyhlidkar.webp" alt="Náhled projektu Vyhlídkář web/app" width="1459" height="864" loading="lazy" decoding="async"/></div>
+    <h3 id="dlg-3-t">Vyhlídkář web/app</h3>
+    <p>Full-stack webová a mobilní aplikace zaměřená na objevování skrytých vyhlídek, laviček, car spotů a dalších jedinečných míst, která znají především místní. Uživatelé přidávají vlastní lokality, fotografie, hodnocení i komentáře. Projekt využívá interaktivní mapy, geolokaci, vlastní REST API, PostgreSQL s PostGIS, Cloudflare R2 pro fotografie a OpenAI API pro automatickou moderaci. Mobilní aplikace stojí na Capacitoru se sdíleným backendem.</p>
+    <ul class="j-tech"><li>Next.js</li><li>TypeScript</li><li>Tailwind CSS</li><li>Leaflet</li><li>PostGIS</li><li>Drizzle ORM</li><li>OpenAI API</li><li>Cloudflare R2</li><li>Capacitor</li></ul>
+    <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn">Otevřít web<i aria-hidden="true">{{i:arrow-up-right}}</i></a>
+  </div>
+</dialog>
+
+<dialog class="dlg" id="dlg-4" aria-labelledby="dlg-4-t">
+  <div class="dlg-in">
+    <button class="dlg-close" type="button" aria-label="Zavřít">{{i:x}}</button>
+    <div class="dlg-shot"><img src="hrabalova.webp" alt="Náhled projektu Kadeřnictví Hrabalová" width="1452" height="901" loading="lazy" decoding="async"/></div>
+    <h3 id="dlg-4-t">Kadeřnictví Hrabalová</h3>
+    <p>Denisa Hair je moderní web a rezervační systém na míru pro kadeřnický salon. Zákazníkům nabízí přehledný online kalendář s výběrem volných časů a automatickým e-mailovým potvrzením. Součástí je administrace, ve které kadeřnice spravuje termíny, mění jejich stavy a ručně zapisuje telefonické objednávky. Systém garantuje, že se dva zákazníci nikdy nezarezervují na stejný čas.</p>
+    <ul class="j-tech"><li>PHP</li><li>MySQL / TiDB Cloud</li><li>JavaScript</li><li>CSS</li><li>REST API</li><li>Resend API</li></ul>
+    <a href="https://denisa-hair.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn">Otevřít web<i aria-hidden="true">{{i:arrow-up-right}}</i></a>
+  </div>
+</dialog>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "portfolio",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["nastroje-v5/serve.js"],
+      "port": 4173,
+      "autoPort": true
+    }
+  ]
+}

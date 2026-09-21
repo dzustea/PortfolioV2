@@ -1,0 +1,1038 @@
+/* ══════════════════════════════════════════════════════════════
+   FILIP LOCHMAN · styl webu
+
+   Svět: ROZVADĚČ. Stránka je čelní panel stroje.
+
+   Materiály jsou tři a každý má jednu práci:
+
+     eloxovaný grafit s jemným brusem   jediná plocha
+     gravírovaný laminátový štítek      jediný nosič textu
+     doutnavka za sklem                 jediná rudá
+
+   Gravírování je světlé písmo vyříznuté do tmavé desky: nad tahem
+   je stín řezu, pod ním odlesk hrany. Odtud bere text hloubku,
+   ne ze záře.
+
+   Pohyb má jediný autorský okamžik: moduly projektů se při scrollu
+   zasouvají pod lištu a stohují se, jak se plní rám. Sekce
+   nenaskakují; obsah je vidět od začátku.
+
+   Zaoblení jsou tři a žádné jiné:
+     14px  desky a moduly
+      8px  ovládací prvky
+     999px  doutnavka a drobné štítky
+══════════════════════════════════════════════════════════════ */
+
+
+/* ── PÍSMO ─────────────────────────────────────────────────────
+   Saira, proměnný řez 300 až 800. Hranaté dříky a krátké výběhy
+   jsou písmo přístrojových štítků, ne webová klasika. Nese displej,
+   text i číslice; rozdíl mezi nimi dělá řez, prostrkání a verzálky,
+   ne druhá rodina.
+
+   Leží na vlastní doméně, takže IP adresa návštěvníka nikam
+   neodchází a obsahová politika může zůstat přísná.
+   Licence: SIL Open Font License 1.1.
+   ───────────────────────────────────────────────────────────── */
+
+@font-face{font-family:'Saira';font-style:normal;font-weight:300 800;font-display:swap;src:url(fonts/saira-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Saira';font-style:normal;font-weight:300 800;font-display:swap;src:url(fonts/saira-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+
+
+/* ── VÝCHOZÍ NASTAVENÍ PRVKŮ ─────────────────────────────────── */
+
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+img,svg,picture{display:block;max-width:100%}
+img{height:auto}
+button{font:inherit;background:none;border:none;cursor:pointer;padding:0;color:inherit;text-align:left}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+dialog{border:none;padding:0;color:inherit;max-width:none;max-height:none}
+[hidden]{display:none!important}
+
+
+/* ── PROMĚNNÉ ──────────────────────────────────────────────────
+   Kontrasty měřené proti --sasi. Rudá je doutnavka, ne text:
+   na běžný text se nepoužívá, jen na stav a na to, co právě
+   reaguje.
+   ───────────────────────────────────────────────────────────── */
+
+:root{
+  /* kov */
+  --sasi:    #0c0b0d;   /* šasi, nejhlubší plocha */
+  --deska:   #17161a;   /* čelní deska */
+  --deska-2: #1e1d22;   /* vyvýšená deska */
+  --jamka:   #080709;   /* zapuštěná jamka */
+
+  /* gravírování: teplá slonovina jádra laminátu, ne bílá */
+  --ryt:     #e4dfd4;   /* 15,2 : 1 */
+  --ryt-2:   #a8a49b;   /*  7,0 : 1 */
+  --ryt-3:   #8d8982;   /*  4,8 : 1 i na vyvýšené desce */
+
+  /* doutnavka */
+  --zar:     #ff2d3f;   /* světlo: 4,9 : 1 jako text na desce */
+  --zar-vypln:#b8091a;  /* výplň: bílý text 6,8 : 1 */
+  --zar-jadro:#ff8a7e;
+  --zar-tlum: rgba(255,45,63,.14);
+
+  /* spáry a hrany */
+  --spara:   rgba(255,255,255,.07);
+  --spara-2: rgba(255,255,255,.14);
+  --rez:     rgba(0,0,0,.85);   /* stín řezu nad tahem */
+  --hrana:   rgba(255,255,255,.07); /* odlesk hrany pod tahem */
+
+  /* zaoblení */
+  --r-deska: 14px;
+  --r-ovl:   8px;
+  --r-kulat: 999px;
+
+  /* rytmus */
+  --pad:  clamp(18px,4.2vw,56px);
+  --sec:  clamp(72px,8.5vw,136px);
+  --wrap: 1180px;
+  --nav:  64px;
+
+  /* křivka: exponenciální doběh, nikde ease-in */
+  --out:  cubic-bezier(.16,1,.3,1);
+  --mech: cubic-bezier(.3,.9,.2,1);   /* cvaknutí spínače */
+
+  --sat: env(safe-area-inset-top,0px);
+  --sab: env(safe-area-inset-bottom,0px);
+  --ph:  max(var(--pad), env(safe-area-inset-left,0px), env(safe-area-inset-right,0px));
+}
+
+
+/* ── MATERIÁL: BROUŠENÝ ELOX ───────────────────────────────────
+   Jemný svislý brus plus široký odlesk. Textura patří do světa
+   panelu, proto tu smí být; je to povrch desky, ne dekorace.
+   ───────────────────────────────────────────────────────────── */
+
+.brus{
+  background-image:
+    repeating-linear-gradient(90deg,
+      rgba(255,255,255,.055) 0 1px,
+      rgba(0,0,0,.065) 1px 2px,
+      transparent 2px 5px);
+  background-size:5px 100%;
+}
+
+
+/* ── ZÁKLAD STRÁNKY ──────────────────────────────────────────── */
+
+html{
+  scroll-behavior:smooth;
+  color-scheme:dark;
+  scrollbar-width:thin;
+  scrollbar-color:#3a3941 transparent;
+}
+::-webkit-scrollbar{width:11px;height:11px}
+::-webkit-scrollbar-track{background:var(--jamka)}
+::-webkit-scrollbar-thumb{
+  background:linear-gradient(90deg,#2a2930,#3d3c45 40%,#2a2930);
+  border-radius:var(--r-kulat);border:3px solid var(--jamka);
+}
+::-webkit-scrollbar-thumb:hover{background:linear-gradient(90deg,#33323a,#4a4953 40%,#33323a)}
+::selection{background:var(--zar-vypln);color:#fff}
+
+body{
+  background:var(--sasi);
+  color:var(--ryt);
+  font-family:'Saira',system-ui,-apple-system,'Segoe UI',sans-serif;
+  font-weight:400;font-size:16px;line-height:1.58;
+  overflow-x:hidden;
+  overflow-x:clip;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  caret-color:var(--zar);
+}
+
+/* Světlo v místnosti: jediný zdroj shora, ukotvený k panelu. */
+body::before{
+  content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:
+    radial-gradient(80vw 52vh at 50% -18%,rgba(255,45,63,.10),transparent 64%),
+    radial-gradient(60vw 40vh at 50% -10%,rgba(255,255,255,.035),transparent 60%);
+}
+
+.wrap{width:100%;max-width:var(--wrap);margin-inline:auto;padding-inline:var(--ph)}
+section[id]{scroll-margin-top:calc(var(--nav) + 18px)}
+
+:focus-visible{
+  outline:2px solid var(--zar);outline-offset:3px;border-radius:4px;
+}
+a{text-underline-offset:3px}
+
+.skip{
+  position:fixed;top:-100px;left:var(--ph);z-index:600;
+  padding:11px 20px;border-radius:var(--r-ovl);
+  background:var(--zar-vypln);color:#fff;font-weight:600;font-size:.92rem;
+  transition:top .16s var(--out);
+}
+.skip:focus{top:calc(var(--sat) + 10px)}
+
+/* Gravírovaný popisek: verzálky, prostrkané, vyříznuté do desky. */
+.ryt-popis{
+  font-size:.72rem;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ryt-3);
+}
+
+
+/* ── ŠROUB ─────────────────────────────────────────────────────
+   Drobná geometrie v rozích desek. Kreslí se přesně, ne jako
+   obrázek: kruh, zapuštěná hrana a drážka.
+   ───────────────────────────────────────────────────────────── */
+
+.sroub{
+  position:absolute;width:11px;height:11px;border-radius:50%;
+  background:radial-gradient(circle at 34% 28%,#55545f,#26252c 58%,#111014);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.3),
+    inset 0 -1px 0 rgba(0,0,0,.6),
+    0 1px 2px rgba(0,0,0,.9);
+  pointer-events:none;
+}
+.sroub::after{
+  content:'';position:absolute;inset:0;margin:auto;
+  width:6px;height:1.5px;border-radius:1px;
+  background:rgba(0,0,0,.75);
+  box-shadow:0 1px 0 rgba(255,255,255,.12);
+  transform:rotate(38deg);
+}
+.sroub-lh{top:14px;left:14px}
+.sroub-ph{top:14px;right:14px}
+.sroub-ld{bottom:14px;left:14px}
+.sroub-pd{bottom:14px;right:14px}
+
+
+/* ══════════════════════════════════════════════════════════════
+   LIŠTA ROZVADĚČE
+══════════════════════════════════════════════════════════════ */
+
+#hdr{
+  position:fixed;z-index:100;top:0;left:0;right:0;
+  padding-top:var(--sat);
+  border-bottom:1px solid transparent;
+  transition:background .3s var(--out),border-color .3s var(--out);
+}
+#hdr.solid{
+  background:rgba(12,11,13,.86);
+  backdrop-filter:blur(14px) saturate(130%);
+  -webkit-backdrop-filter:blur(14px) saturate(130%);
+  border-bottom-color:var(--spara);
+}
+.hdr-in{
+  width:100%;max-width:var(--wrap);margin-inline:auto;
+  padding-inline:var(--ph);
+  height:var(--nav);
+  display:flex;align-items:center;gap:20px;
+}
+
+.mark{
+  display:inline-flex;align-items:baseline;flex:none;
+  font-size:1.16rem;font-weight:700;letter-spacing:-.02em;
+  text-shadow:0 -1px 0 var(--rez),0 1px 0 var(--hrana);
+}
+.mark-dot{color:var(--zar)}
+
+.hdr-nav{display:flex;gap:4px;margin-inline:auto}
+.hdr-nav a{
+  position:relative;
+  padding:8px 14px;border-radius:var(--r-ovl);
+  font-size:.92rem;font-weight:500;color:var(--ryt-2);
+  transition:color .22s var(--out),background .22s var(--out);
+}
+.hdr-nav a:hover,.hdr-nav a:focus-visible{color:var(--ryt);background:rgba(255,255,255,.05)}
+/* Aktivní sekci drží doutnavka pod popiskem, ne posuvná pilulka. */
+.hdr-nav a.active{color:var(--ryt)}
+.hdr-nav a.active::after{
+  content:'';position:absolute;left:14px;right:14px;bottom:2px;height:2px;
+  border-radius:var(--r-kulat);
+  background:var(--zar);
+  box-shadow:0 0 8px rgba(255,45,63,.8);
+}
+
+.hdr-akce{display:flex;align-items:center;gap:10px;flex:none}
+
+.hdr-menu{
+  display:none;position:relative;
+  width:42px;height:42px;flex:none;
+  border:1px solid var(--spara-2);border-radius:var(--r-ovl);
+  background:linear-gradient(180deg,var(--deska-2),var(--deska));
+  color:var(--ryt);
+  transition:border-color .22s var(--out);
+}
+.hdr-menu:hover{border-color:rgba(255,45,63,.55)}
+.hdr-menu i{position:absolute;inset:0;display:grid;place-items:center;transition:opacity .24s var(--out),rotate .3s var(--mech)}
+.hdr-menu svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:16}
+.hdr-menu .ico-x{opacity:0;rotate:-90deg}
+.hdr-menu[aria-expanded="true"] .ico-list{opacity:0;rotate:90deg}
+.hdr-menu[aria-expanded="true"] .ico-x{opacity:1;rotate:0deg}
+
+.panel{
+  position:fixed;z-index:99;
+  top:calc(var(--sat) + var(--nav));left:0;right:0;
+  padding:10px var(--ph) calc(22px + var(--sab));
+  background:rgba(12,11,13,.97);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  border-bottom:1px solid var(--spara);
+}
+.panel nav{display:flex;flex-direction:column}
+.panel nav a{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:15px 2px;
+  font-size:1.22rem;font-weight:600;letter-spacing:-.02em;
+  border-bottom:1px solid var(--spara);
+  transition:color .22s var(--out),translate .28s var(--mech);
+}
+.panel nav a svg{width:15px;height:15px;stroke:var(--zar);fill:none;stroke-width:16;transition:translate .28s var(--mech)}
+.panel nav a:hover{color:var(--zar);translate:7px 0}
+.panel nav a:hover svg{translate:4px 0}
+.panel-mail{display:block;margin-top:16px;font-size:.82rem;color:var(--ryt-3);letter-spacing:.04em}
+
+
+/* ══════════════════════════════════════════════════════════════
+   TLAČÍTKA
+
+   Zapuštěné do desky. Při najetí se rozsvítí rámeček, ne celá
+   plocha; při stisku se tlačítko zamáčkne. Je to cvaknutí spínače,
+   ne přelití barvou.
+══════════════════════════════════════════════════════════════ */
+
+.btn{
+  position:relative;
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:14px 24px;
+  border-radius:var(--r-ovl);
+  background:linear-gradient(180deg,#26252c,#191820);
+  color:var(--ryt);
+  font-size:1rem;font-weight:600;letter-spacing:.01em;white-space:nowrap;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.1),
+    inset 0 0 0 1px var(--spara-2),
+    0 2px 5px rgba(0,0,0,.6);
+  transition:box-shadow .26s var(--out),translate .12s var(--mech),color .26s var(--out);
+}
+.btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:16;transition:translate .28s var(--mech)}
+
+.btn:hover,.btn:focus-visible{
+  color:#fff;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.14),
+    inset 0 0 0 1px rgba(255,45,63,.85),
+    inset 0 0 14px rgba(255,45,63,.2),
+    0 3px 14px -4px rgba(255,45,63,.45);
+}
+.btn:hover svg,.btn:focus-visible svg{translate:4px 0}
+.btn:active{
+  translate:0 1px;
+  box-shadow:
+    inset 0 2px 6px rgba(0,0,0,.8),
+    inset 0 0 0 1px rgba(255,45,63,.7);
+}
+
+.btn-sm{padding:9px 16px;font-size:.92rem;gap:8px}
+.btn-sm svg{width:14px;height:14px}
+.btn-wide{width:100%;padding-block:15px}
+
+.btn:disabled{opacity:.5;cursor:progress}
+.btn:disabled:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 0 1px var(--spara-2),0 2px 5px rgba(0,0,0,.6);color:var(--ryt)}
+
+/* Druhá akce: samotný gravírovaný rámeček bez desky. */
+.btn-ghost{
+  position:relative;
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:14px 22px;
+  border-radius:var(--r-ovl);
+  color:var(--ryt-2);
+  font-size:1rem;font-weight:600;white-space:nowrap;
+  box-shadow:inset 0 0 0 1px var(--spara-2);
+  transition:box-shadow .26s var(--out),color .26s var(--out),translate .12s var(--mech);
+}
+.btn-ghost svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:16;transition:translate .28s var(--mech)}
+.btn-ghost:hover,.btn-ghost:focus-visible{
+  color:var(--ryt);
+  box-shadow:inset 0 0 0 1px rgba(255,45,63,.65),inset 0 0 12px rgba(255,45,63,.12);
+}
+.btn-ghost:hover svg,.btn-ghost:focus-visible svg{translate:3px -3px}
+.btn-ghost:active{translate:0 1px}
+
+/* Jediný východ stránky nese doutnavku i v klidu. Akce "napsat
+   zprávu" má proto všude stejné ošetření, aby se nedala přehlédnout
+   vedle druhé, klidné desky. */
+.btn-lampa{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.1),
+    inset 0 0 0 1px rgba(255,45,63,.55),
+    inset 0 0 12px rgba(255,45,63,.12),
+    0 2px 5px rgba(0,0,0,.6);
+  transition:box-shadow .32s var(--out),translate .12s var(--mech),color .26s var(--out);
+}
+/* V liště zůstává východ klidnou deskou, dokud je vidět ten
+   v úvodu. Jinak by na jedné obrazovce svítily dva. */
+#hdr:not(.uvod-pryc) .hdr-akce .btn-lampa{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.1),
+    inset 0 0 0 1px var(--spara-2),
+    0 2px 5px rgba(0,0,0,.6);
+}
+.btn-ghost.btn-lampa{
+  color:var(--ryt);
+  box-shadow:inset 0 0 0 1px rgba(255,45,63,.45),inset 0 0 10px rgba(255,45,63,.08);
+}
+.btn-lampa:hover,.btn-lampa:focus-visible{
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.16),
+    inset 0 0 0 1px rgba(255,45,63,1),
+    inset 0 0 20px rgba(255,45,63,.3),
+    0 4px 18px -4px rgba(255,45,63,.55);
+}
+
+/* Tlačítko na desce modulu: menší, plošší, stejné cvaknutí. */
+.btn-plate{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 16px;border-radius:var(--r-ovl);
+  background:linear-gradient(180deg,#232229,#17161c);
+  color:var(--ryt);font-size:.92rem;font-weight:600;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 0 1px var(--spara-2);
+  transition:box-shadow .26s var(--out),translate .12s var(--mech);
+}
+.btn-plate svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:16;transition:translate .28s var(--mech)}
+.btn-plate:hover,.btn-plate:focus-visible{box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 0 1px rgba(255,45,63,.75),inset 0 0 10px rgba(255,45,63,.15)}
+.btn-plate:hover svg{translate:3px 0}
+.btn-plate:active{translate:0 1px;box-shadow:inset 0 2px 5px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,45,63,.6)}
+
+.lnk{
+  position:relative;display:inline-flex;align-items:center;gap:7px;
+  font-size:.92rem;font-weight:600;color:var(--zar);padding-bottom:2px;
+}
+.lnk svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:16;transition:translate .24s var(--mech)}
+.lnk::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:currentColor;scale:0 1;transform-origin:left center;
+  transition:scale .28s var(--out);
+}
+.lnk:hover::after,.lnk:focus-visible::after{scale:1 1}
+.lnk:hover svg,.lnk:focus-visible svg{translate:3px -3px}
+
+
+/* ══════════════════════════════════════════════════════════════
+   DOUTNAVKA
+
+   Skutečná kontrolka: jádro, bloom kolem něj a skleněný kroužek.
+   Svítí jen ona, ne hrany celé stránky.
+══════════════════════════════════════════════════════════════ */
+
+.doutnavka{
+  display:inline-flex;align-items:center;gap:11px;
+  padding:9px 18px 9px 13px;
+  border-radius:var(--r-kulat);
+  box-shadow:inset 0 0 0 1px var(--spara-2);
+  background:rgba(255,45,63,.05);
+  font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ryt);
+}
+.doutnavka i{
+  position:relative;width:8px;height:8px;border-radius:50%;flex:none;
+  background:radial-gradient(circle at 40% 36%,var(--zar-jadro),var(--zar) 58%,#8c0d19);
+  box-shadow:0 0 9px 1px rgba(255,45,63,.8),inset 0 0 0 1px rgba(255,255,255,.25);
+}
+/* Kontrolka svítí klidně: blikání nesdělovalo nic navíc. */
+
+
+/* ══════════════════════════════════════════════════════════════
+   ÚVOD · ČELNÍ DESKA
+══════════════════════════════════════════════════════════════ */
+
+#hero{
+  min-height:100svh;
+  display:flex;align-items:center;
+  padding-top:calc(var(--nav) + var(--sat) + clamp(20px,4vh,48px));
+  padding-bottom:clamp(40px,6vh,72px);
+}
+
+/* Čelní deska. Tohle je ta plocha, na které celá stránka stojí:
+   broušený elox, zkosená hrana, šrouby v rozích. Bez ní by jméno
+   viselo v prázdnu a ze světa by zbyla jen barva. */
+.celo{
+  position:relative;
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);
+  gap:clamp(26px,3.6vw,56px);
+  align-items:center;
+  padding:clamp(30px,4.4vw,60px) clamp(24px,3.6vw,52px);
+  border-radius:var(--r-deska);
+  background-color:var(--deska);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.085),
+    inset 0 -1px 0 rgba(0,0,0,.6),
+    inset 0 0 0 1px var(--spara),
+    0 40px 70px -50px rgba(0,0,0,1);
+}
+/* Odlesk přejíždí po desce, jak se stránka posouvá. Jede na časové
+   ose posuvníku, tedy mimo hlavní vlákno a bez posluchače scrollu. */
+.celo::after{
+  content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(104deg,transparent 34%,rgba(255,255,255,.05) 47%,transparent 60%);
+}
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    .celo::after{
+      animation:odlesk linear both;
+      animation-timeline:view();
+      animation-range:entry 0% exit 100%;
+    }
+  }
+}
+@keyframes odlesk{from{translate:-18% 0}to{translate:18% 0}}
+
+.celo > :not(.sroub){min-width:0;position:relative;z-index:1}
+
+/* Gravírovaný štítek se jménem. Písmo je vyříznuté do desky:
+   nad tahem stín řezu, pod ním odlesk hrany. */
+/* Gravírovaný názevník: zapuštěná destička, do které je písmo
+   vyříznuté. Nad tahem stín řezu, pod ním odlesk hrany. */
+.nazevnik{
+  display:inline-block;
+  padding:clamp(16px,2vw,24px) clamp(20px,2.4vw,30px) clamp(14px,1.8vw,20px);
+  border-radius:var(--r-ovl);
+  background:linear-gradient(180deg,#131218,#0d0c10);
+  box-shadow:
+    inset 0 2px 5px rgba(0,0,0,.85),
+    inset 0 -1px 0 rgba(255,255,255,.05),
+    inset 0 0 0 1px rgba(0,0,0,.6);
+}
+
+.stitek{
+  font-size:clamp(2.5rem,6.6vw,5rem);
+  font-weight:800;letter-spacing:-.035em;line-height:.95;
+  text-transform:uppercase;
+}
+.stitek-ryt{
+  display:block;
+  color:var(--ryt);
+  text-shadow:
+    0 -1px 0 var(--rez),
+    0 -2px 3px rgba(0,0,0,.6),
+    0 1px 0 rgba(255,255,255,.09);
+}
+
+.prouzek{
+  display:block;
+  margin-top:clamp(12px,1.6vw,18px);
+  padding-top:clamp(10px,1.4vw,14px);
+  border-top:1px solid rgba(255,255,255,.08);
+  font-size:clamp(.72rem,1.3vw,.88rem);font-weight:600;
+  letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ryt-2);
+}
+
+.uvod-text{
+  margin-top:clamp(20px,2.6vw,30px);
+  color:var(--ryt-2);
+  font-size:clamp(1rem,1.15vw,1.1rem);
+  max-width:46ch;
+}
+.uvod-akce{display:flex;gap:11px;flex-wrap:wrap;margin-top:clamp(22px,2.8vw,34px)}
+
+.deska-pravy{display:flex;flex-direction:column;align-items:stretch;gap:16px}
+
+/* Typový štítek. Hodnoty v řádcích o stejné velikosti: je to
+   výrobní štítek, ne přehled s hrdinským číslem. */
+.typstitek{
+  position:relative;width:100%;
+  padding:20px 22px 18px;
+  border-radius:var(--r-deska);
+  background:linear-gradient(168deg,var(--deska-2),var(--deska) 72%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.07),
+    inset 0 0 0 1px var(--spara);
+}
+.typstitek::before,.typstitek::after{
+  content:'';position:absolute;top:9px;width:9px;height:9px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#4a4952,#232228 62%,#141317);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22);
+}
+.typstitek::before{left:9px}
+.typstitek::after{right:9px}
+
+.ts-hlava{
+  margin-bottom:14px;padding-bottom:11px;
+  border-bottom:1px solid var(--spara);
+  font-size:.72rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+  color:var(--ryt-3);text-align:center;
+}
+.ts-radky{font-variant-numeric:tabular-nums}
+.ts-radky > div{
+  display:flex;align-items:baseline;justify-content:space-between;gap:12px;
+  padding:7px 0;
+}
+.ts-radky dt{flex:1 1 auto;min-width:0}
+.ts-radky dd{flex:none;white-space:nowrap}
+.ts-radky > div + div{border-top:1px solid rgba(255,255,255,.04)}
+.ts-radky dt{font-size:.82rem;color:var(--ryt-3);letter-spacing:.02em}
+.ts-radky dd{font-size:.92rem;font-weight:700;color:var(--ryt);letter-spacing:.01em}
+.ts-puvod{
+  margin-top:13px;padding-top:11px;
+  border-top:1px solid var(--spara);
+  font-size:.82rem;line-height:1.5;color:var(--ryt-3);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   NADPISY SEKCÍ
+
+   Bez popisku nad nimi. Nadpis unese sám sebe.
+══════════════════════════════════════════════════════════════ */
+
+.sec-h2{
+  font-size:clamp(1.7rem,3.2vw,2.5rem);
+  font-weight:700;letter-spacing:-.03em;line-height:1.1;
+  margin-bottom:clamp(26px,3.4vw,44px);
+  text-shadow:0 -1px 0 var(--rez),0 1px 0 rgba(255,255,255,.06);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   ZAMĚŘENÍ · DVA MODULY
+══════════════════════════════════════════════════════════════ */
+
+#expertise{padding-block:var(--sec)}
+
+.moduly{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:clamp(14px,1.6vw,20px);
+}
+.modul{
+  position:relative;
+  padding:clamp(22px,2.4vw,30px);
+  border-radius:var(--r-deska);
+  background:linear-gradient(170deg,var(--deska-2),var(--deska) 76%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),inset 0 0 0 1px var(--spara);
+}
+.modul h3{
+  font-size:1.2rem;font-weight:700;letter-spacing:-.02em;
+  margin-bottom:10px;
+  text-shadow:0 -1px 0 var(--rez);
+}
+.modul p{color:var(--ryt-2);font-size:1.02rem;line-height:1.55;margin-bottom:20px;max-width:42ch}
+
+.vypis{display:flex;flex-direction:column}
+.vypis li{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 0;
+  font-size:.82rem;letter-spacing:.04em;color:var(--ryt-3);
+}
+.vypis li + li{border-top:1px solid rgba(255,255,255,.045)}
+.vypis li::before{
+  content:'';width:5px;height:5px;flex:none;border-radius:50%;
+  background:var(--zar);opacity:.55;
+}
+
+/* Pás technologií: gravírované značky v jedné liště. */
+/* Gravírované popisky, ne cizí loga: značka jiného výrobce je
+   nábytek šablony a na panelu nemá co dělat. */
+.pas{
+  display:grid;grid-template-columns:repeat(9,minmax(0,1fr));
+  margin-top:clamp(14px,1.6vw,20px);
+  border-radius:var(--r-deska);
+  background:linear-gradient(180deg,var(--deska),var(--sasi));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),inset 0 0 0 1px var(--spara);
+  overflow:hidden;
+}
+.pas li{
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(18px,2.1vw,24px) 6px;
+  font-size:.82rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ryt-2);
+  text-shadow:0 -1px 0 var(--rez),0 1px 0 rgba(255,255,255,.05);
+  transition:color .24s var(--out),background .24s var(--out);
+}
+.pas li + li{border-left:1px solid var(--spara)}
+.pas li:hover{color:var(--ryt);background:rgba(255,255,255,.03)}
+
+
+/* ══════════════════════════════════════════════════════════════
+   PROJEKTY · RÁM ROZVADĚČE
+
+   Autorský okamžik celé stránky: jednotky se při scrollu zasouvají
+   pod lištu a stohují se na sebe, jak se rám plní. Drží to jediná
+   vlastnost position:sticky, žádný posluchač scrollu.
+
+   Aktivní jednotka svítí, ostatní ztmavnou: v rámu se drží jedna
+   věc.
+══════════════════════════════════════════════════════════════ */
+
+#projects{padding-block:var(--sec)}
+
+/* Moduly v jednom rámu: dělí je vlasová spára, ne mezera. */
+.rám{display:flex;flex-direction:column;gap:2px}
+
+.jednotka{
+  position:sticky;
+  top:calc(var(--nav) + var(--sat) + 14px);
+  padding:clamp(20px,2.4vw,28px) clamp(20px,2.4vw,28px) clamp(20px,2.4vw,28px) clamp(28px,3.2vw,40px);
+  border-radius:var(--r-deska);
+  background:linear-gradient(170deg,#1b1a20,var(--deska) 70%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.07),
+    inset 0 0 0 1px var(--spara),
+    0 -14px 28px -20px rgba(0,0,0,1);
+  transition:opacity .3s var(--out),box-shadow .3s var(--out);
+}
+/* Hřbet modulu: úchyt na levé hraně, podle kterého se pozná, že
+   jednotka je zasunutá do rámu a ne jen položená na stránce. */
+.jednotka::before{
+  content:'';position:absolute;left:12px;top:22px;bottom:22px;width:3px;
+  border-radius:var(--r-kulat);
+  background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.03));
+  box-shadow:0 1px 0 rgba(0,0,0,.7);
+}
+/* Každá další jednotka se zastaví o kousek níž, takže je pod ní
+   vidět hrana té předchozí, jako hřbety zasunutých modulů. */
+.jednotka:nth-child(2){top:calc(var(--nav) + var(--sat) + 26px)}
+.jednotka:nth-child(3){top:calc(var(--nav) + var(--sat) + 38px)}
+.jednotka:nth-child(4){top:calc(var(--nav) + var(--sat) + 50px)}
+
+/* Okno se snímkem: zapuštěné do desky modulu, proto rámuje stín
+   řezu, ne obrys karty. Na telefonu se nezobrazuje ani nestahuje. */
+.j-okno{
+  display:none;
+  grid-area:okno;
+  border-radius:var(--r-ovl);
+  overflow:hidden;
+  box-shadow:inset 0 0 0 1px var(--spara),inset 0 2px 6px rgba(0,0,0,.7);
+}
+.j-okno img{width:100%;aspect-ratio:16/10.4;object-fit:cover;object-position:top left;opacity:.92;transition:opacity .3s var(--out)}
+.jednotka:hover .j-okno img{opacity:1}
+
+.j-hlava{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}
+.jednotka h3{font-size:clamp(1.2rem,1.9vw,1.5rem);font-weight:700;letter-spacing:-.025em;text-shadow:0 -1px 0 var(--rez)}
+.j-oznaceni{
+  font-size:.72rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--ryt-3);
+  padding:4px 10px;border-radius:var(--r-kulat);
+  box-shadow:inset 0 0 0 1px var(--spara);
+}
+.j-popis{color:var(--ryt-2);font-size:.92rem;margin-bottom:16px;max-width:64ch}
+
+.j-tech{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:20px}
+.j-tech li{
+  padding:6px 12px;border-radius:var(--r-ovl);
+  box-shadow:inset 0 0 0 1px var(--spara);
+  font-size:.82rem;font-weight:500;letter-spacing:.05em;color:var(--ryt-2);
+}
+.j-akce{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+
+/* Jedna jednotka v držení. Bez najetí zůstávají všechny plné. */
+@media (hover:hover){
+  .rám:hover .jednotka{opacity:.52}
+  .rám .jednotka:hover,.rám .jednotka:focus-within{
+    opacity:1;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.09),
+      inset 0 0 0 1px rgba(255,45,63,.38),
+      0 -14px 28px -20px rgba(0,0,0,1);
+  }
+}
+
+.volna-pozice{
+  margin-top:16px;padding:18px 20px;
+  border-radius:var(--r-deska);
+  box-shadow:inset 0 0 0 1px var(--spara);
+  font-size:.82rem;color:var(--ryt-3);letter-spacing:.04em;
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   KONTAKT · OVLÁDACÍ MODUL
+══════════════════════════════════════════════════════════════ */
+
+#contact{padding-block:var(--sec)}
+
+.kontakt{
+  display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);
+  gap:clamp(24px,3.4vw,56px);
+  align-items:stretch;
+}
+.kontakt > *{min-width:0}
+
+.kt-levy{display:flex;flex-direction:column;height:100%}
+.kt-uvod{color:var(--ryt-2);font-size:1.02rem;max-width:34ch}
+
+.kt-linky{margin-top:clamp(22px,2.6vw,32px)}
+.kt-link{
+  display:grid;grid-template-columns:96px 1fr auto;align-items:center;gap:14px;
+  padding:14px 4px;
+  border-top:1px solid var(--spara);
+  transition:translate .28s var(--mech);
+}
+.kt-linky .kt-link:last-child{border-bottom:1px solid var(--spara)}
+.kt-kdo{font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ryt-3)}
+.kt-co{font-size:.92rem;color:var(--ryt-2);overflow-wrap:anywhere;transition:color .24s var(--out)}
+.kt-link i{opacity:0;transition:opacity .24s var(--out),translate .28s var(--mech)}
+.kt-link i svg{width:14px;height:14px;stroke:var(--zar);fill:none;stroke-width:16}
+a.kt-link:hover{translate:9px 0}
+a.kt-link:hover .kt-co{color:var(--ryt)}
+a.kt-link:hover i{opacity:1;translate:3px -3px}
+.kt-link-tichy{cursor:default}
+.doutnavka-kt{margin-top:auto;padding-top:clamp(20px,2.4vw,28px);align-self:flex-start}
+
+/* Formulář je deska s gravírovanými popisky a zapuštěnými poli.
+   Pole je jamka, ne obdélník s rámečkem; zaostření rozsvítí její
+   okraj stejně jako u tlačítka. */
+.kt-form{
+  position:relative;
+  padding:clamp(22px,2.8vw,34px);
+  border-radius:var(--r-deska);
+  background:linear-gradient(168deg,var(--deska-2),var(--deska) 74%);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.07),
+    inset 0 0 0 1px var(--spara),
+    0 24px 46px -34px rgba(0,0,0,1);
+}
+.kt-form::before,.kt-form::after{
+  content:'';position:absolute;top:10px;width:9px;height:9px;border-radius:50%;
+  background:radial-gradient(circle at 34% 30%,#4a4952,#232228 62%,#141317);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22);
+}
+.kt-form::before{left:10px}
+.kt-form::after{right:10px}
+
+.fg{margin-bottom:18px}
+.fg label{
+  display:block;margin-bottom:8px;
+  font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ryt-2);
+}
+.fg input,.fg textarea{
+  width:100%;padding:13px 15px;
+  border:none;border-radius:var(--r-ovl);
+  background:var(--jamka);
+  color:var(--ryt);font:inherit;font-size:1rem;
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.75),inset 0 0 0 1px var(--spara);
+  transition:box-shadow .24s var(--out);
+}
+.fg textarea{min-height:122px;resize:vertical}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--ryt-3)}
+.fg input:hover,.fg textarea:hover{box-shadow:inset 0 2px 5px rgba(0,0,0,.75),inset 0 0 0 1px var(--spara-2)}
+.fg input:focus,.fg textarea:focus{
+  outline:none;
+  box-shadow:inset 0 2px 5px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,45,63,.85),0 0 0 3px rgba(255,45,63,.13);
+}
+.fg-napoveda{margin-top:7px;font-size:.82rem;color:var(--ryt-3)}
+.fg-err{
+  display:flex;align-items:center;gap:8px;
+  margin-top:8px;font-size:.82rem;color:var(--zar);font-weight:500;
+}
+.fg-err::before{
+  content:'';width:6px;height:6px;border-radius:50%;flex:none;
+  background:var(--zar);box-shadow:0 0 7px rgba(255,45,63,.9);
+}
+.fg.chyba input,.fg.chyba textarea{box-shadow:inset 0 2px 5px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,45,63,.8)}
+
+#btn-send{margin-top:4px}
+.form-feedback{min-height:1.4em;margin-top:12px;font-size:.92rem;color:var(--ryt-3)}
+.form-feedback.ok{color:var(--ryt)}
+.form-feedback.err{color:var(--zar)}
+
+
+/* ══════════════════════════════════════════════════════════════
+   PATIČKA
+══════════════════════════════════════════════════════════════ */
+
+footer{border-top:1px solid var(--spara);padding-block:24px}
+.foot-in{
+  display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ryt-3);
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   DIALOG S DETAILEM
+══════════════════════════════════════════════════════════════ */
+
+.dlg{
+  width:min(92vw,680px);margin:auto;
+  border-radius:var(--r-deska);
+  background:linear-gradient(168deg,var(--deska-2),var(--deska) 76%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 0 1px var(--spara-2);
+  overflow:hidden;
+}
+.dlg::backdrop{background:rgba(4,4,5,.86);backdrop-filter:blur(5px)}
+.dlg-in{position:relative;padding:clamp(18px,2.6vw,28px);max-height:88vh;overflow-y:auto}
+.dlg-close{
+  position:absolute;top:clamp(18px,2.6vw,28px);right:clamp(18px,2.6vw,28px);z-index:2;
+  width:38px;height:38px;
+  display:grid;place-items:center;
+  border-radius:var(--r-ovl);
+  background:linear-gradient(180deg,#26252c,#191820);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 0 1px var(--spara-2);
+  color:var(--ryt);
+  transition:box-shadow .24s var(--out)}
+.dlg-close svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:18}
+.dlg-close:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.12),inset 0 0 0 1px rgba(255,45,63,.8),inset 0 0 12px rgba(255,45,63,.18)}
+.dlg-shot{border-radius:var(--r-ovl);overflow:hidden;box-shadow:inset 0 0 0 1px var(--spara);margin-bottom:20px}
+.dlg-shot img{width:100%;aspect-ratio:16/9.4;object-fit:cover;object-position:top center}
+.dlg-in h3{font-size:clamp(1.3rem,2.4vw,1.75rem);font-weight:700;letter-spacing:-.025em;margin-bottom:12px}
+.dlg-in > p{color:var(--ryt-2);font-size:.92rem;margin-bottom:18px}
+.dlg-in .j-tech{margin-bottom:22px}
+
+@media (prefers-reduced-motion:no-preference){
+  .dlg[open]{animation:dlgIn .3s var(--out)}
+}
+@keyframes dlgIn{from{opacity:0;translate:0 12px;scale:.985}}
+
+
+/* ══════════════════════════════════════════════════════════════
+   NAČÍTACÍ VRSTVA
+
+   Jediný proužek, který doběhne. Když je stránka v mezipaměti,
+   návštěvník ji neuvidí.
+══════════════════════════════════════════════════════════════ */
+
+#loader{
+  position:fixed;inset:0;z-index:500;
+  background:var(--sasi);
+  display:grid;place-content:center;
+  opacity:0;
+}
+#loader i{
+  display:block;width:120px;height:2px;border-radius:var(--r-kulat);
+  background:var(--zar);box-shadow:0 0 10px rgba(255,45,63,.7);
+  transform-origin:left center;scale:var(--load,0) 1;
+  transition:scale .3s var(--out);
+}
+@media (prefers-reduced-motion:no-preference){
+  #loader{animation:ldIn .22s .12s var(--out) forwards}
+}
+@keyframes ldIn{to{opacity:1}}
+html.ready #loader{opacity:0;visibility:hidden;transition:opacity .4s var(--out),visibility 0s .4s}
+html.ready-hned #loader{transition:none}
+
+
+/* ══════════════════════════════════════════════════════════════
+   NÁBĚH ÚVODU
+
+   Jediný autorský okamžik při načtení: deska se rozsvítí odshora
+   dolů, jako když se panel zapne. Sekce níž nenaskakují vůbec.
+══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion:no-preference){
+  .stitek-ryt{animation:zapni .8s var(--out) backwards}
+  .stitek-ryt:nth-child(2){animation-delay:.07s}
+  .prouzek{animation:zapni .8s .14s var(--out) backwards}
+  .uvod-text{animation:zapni .8s .2s var(--out) backwards}
+  .uvod-akce{animation:zapni .8s .26s var(--out) backwards}
+  .typstitek{animation:zapni .9s .1s var(--out) backwards}
+  .doutnavka{animation:zapni .8s .3s var(--out) backwards}
+}
+@keyframes zapni{from{opacity:0;translate:0 10px}}
+
+
+/* ══════════════════════════════════════════════════════════════
+   PŘIZPŮSOBENÍ ŠÍŘCE OKNA
+
+   Dva zlomy a každý má důvod:
+
+     900 px  popisky v liště se sbalí pod tlačítko, čelní deska
+             a kontakt jdou pod sebe
+     560 px  moduly do jednoho sloupce, akce na celou šířku
+══════════════════════════════════════════════════════════════ */
+
+@media (min-width:901px){
+  .jednotka{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,.82fr);
+    grid-template-areas:"hlava okno" "popis okno" "tech okno" "akce okno";
+    column-gap:clamp(20px,2.4vw,32px);
+    align-content:start;
+  }
+  .j-okno{display:block;align-self:center}
+  .j-hlava{grid-area:hlava}
+  .j-popis{grid-area:popis}
+  .j-tech{grid-area:tech}
+  .j-akce{grid-area:akce;align-self:end}
+}
+
+@media (max-width:900px){
+  .hdr-nav{display:none}
+  .hdr-menu{display:block}
+
+  .celo{grid-template-columns:1fr;gap:clamp(26px,4vw,36px);padding:clamp(24px,5vw,40px) clamp(18px,4vw,32px)}
+  #hero{min-height:0;padding-top:calc(var(--nav) + var(--sat) + clamp(26px,5vh,48px))}
+  .deska-pravy{align-items:stretch}
+  .uvod-text{max-width:56ch}
+
+  .kontakt{grid-template-columns:1fr;gap:32px}
+
+  .pas{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .pas li:nth-child(5n+1){border-left:none}
+  .pas li:nth-child(n+6){border-top:1px solid var(--spara)}
+
+  /* Jednotky se stohují dál, jen s menším odstupem hřbetů. */
+  .jednotka:nth-child(2){top:calc(var(--nav) + var(--sat) + 22px)}
+  .jednotka:nth-child(3){top:calc(var(--nav) + var(--sat) + 30px)}
+  .jednotka:nth-child(4){top:calc(var(--nav) + var(--sat) + 38px)}
+}
+
+@media (max-width:560px){
+  :root{--sec:clamp(58px,12vw,88px);--nav:58px}
+
+  .moduly{grid-template-columns:1fr}
+  .pas{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pas li:nth-child(n){border-left:1px solid var(--spara)}
+  .pas li:nth-child(3n+1){border-left:none}
+  .pas li:nth-child(n+4){border-top:1px solid var(--spara)}
+
+  .uvod-akce{width:100%}
+  .uvod-akce .btn,.uvod-akce .btn-ghost{flex:1 1 150px}
+
+  .kt-link{grid-template-columns:1fr auto;row-gap:3px}
+  .kt-kdo{grid-column:1}
+  .kt-co{grid-column:1}
+  .kt-link i{grid-row:1 / span 2;grid-column:2}
+
+  .j-akce{gap:14px}
+  .hdr-akce .btn-sm{padding:8px 12px;font-size:.82rem;gap:7px}
+  .hdr-akce .btn-sm svg{width:13px;height:13px}
+  .hdr-in{gap:10px}
+}
+
+/* Dotykové ovládání: stavy vázané na najetí by se spouštěly
+   klepnutím, takže se z nich nechá jen stisk. */
+/* Pod 400 px se dvě tlačítka vedle sebe nevejdou ani po zúžení,
+   takže každé dostane vlastní řádek. */
+@media (max-width:400px){
+  .uvod-akce .btn,.uvod-akce .btn-ghost{flex:1 1 100%}
+  .kt-link{grid-template-columns:1fr auto}
+}
+
+@media (hover:none){
+  .btn:hover,.btn-ghost:hover,.btn-plate:hover{box-shadow:inherit}
+  .btn:hover svg,.btn-ghost:hover svg,.btn-plate:hover svg{translate:none}
+  a.kt-link:hover{translate:none}
+  .pas li:hover{background:none;color:var(--ryt-3)}
+}
+
+
+/* ══════════════════════════════════════════════════════════════
+   OMEZENÝ POHYB
+
+   Mizí posuny a jednotky se přestanou stohovat. Zůstane čitelný,
+   klidný panel.
+══════════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+  }
+  #loader{animation:none;opacity:0;visibility:hidden}
+  .jednotka{position:static}
+  .rám:hover .jednotka{opacity:1}
+  .btn,.btn-ghost,.btn-plate,.kt-link,.jednotka{transition:none}
+  a.kt-link:hover{translate:none}
+}

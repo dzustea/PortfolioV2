@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "lighthouse": "^13.4.1",
+    "puppeteer-core": "^25.11.0",
+    "sharp": "^0.35.4"
+  }
+}

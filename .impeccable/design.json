@@ -1,0 +1,181 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-19T00:00:00Z",
+  "title": "Design System: Filip Lochman · Rozvaděč",
+  "extensions": {
+    "colorMeta": {
+      "sasi": { "role": "neutral", "displayName": "Šasi", "canonical": "#0c0b0d", "tonalRamp": ["#040305", "#0c0b0d", "#17161a", "#1e1d22", "#2a2930", "#3d3c45", "#6a6875", "#a8a49b"] },
+      "deska": { "role": "neutral", "displayName": "Čelní deska", "canonical": "#17161a", "tonalRamp": ["#08080a", "#0f0e11", "#17161a", "#1e1d22", "#2a2930", "#3d3c45", "#8d8982", "#e4dfd4"] },
+      "deska-2": { "role": "neutral", "displayName": "Vyvýšená deska", "canonical": "#1e1d22", "tonalRamp": ["#0a090c", "#131218", "#1e1d22", "#26252c", "#33323a", "#4a4953", "#8d8982", "#e4dfd4"] },
+      "jamka": { "role": "neutral", "displayName": "Jamka", "canonical": "#080709", "tonalRamp": ["#030203", "#080709", "#0d0c10", "#131218", "#1e1d22", "#2a2930", "#55545f", "#a8a49b"] },
+      "ryt": { "role": "neutral", "displayName": "Rytina, slonovina laminátu", "canonical": "#e4dfd4", "tonalRamp": ["#2b2a26", "#454339", "#5f5c52", "#79756b", "#8d8982", "#a8a49b", "#c6c2b8", "#e4dfd4"] },
+      "ryt-2": { "role": "neutral", "displayName": "Rytina, druhý stupeň", "canonical": "#a8a49b", "tonalRamp": ["#232220", "#39372f", "#4f4d45", "#65625a", "#7b786f", "#8d8982", "#a8a49b", "#cbc8c0"] },
+      "ryt-3": { "role": "neutral", "displayName": "Rytina, třetí stupeň", "canonical": "#8d8982", "tonalRamp": ["#1e1d1b", "#302f2b", "#43413c", "#57544e", "#6b6862", "#8d8982", "#aba79f", "#cfccc5"] },
+      "zar": { "role": "primary", "displayName": "Doutnavka", "canonical": "#ff2d3f", "tonalRamp": ["#3a0208", "#5c050e", "#8c0d19", "#b8091a", "#e01228", "#ff2d3f", "#ff6470", "#ff8a7e"] },
+      "zar-vypln": { "role": "primary", "displayName": "Doutnavka, výplň", "canonical": "#b8091a", "tonalRamp": ["#2c0106", "#4a030c", "#6d0512", "#8c0d19", "#b8091a", "#dd1526", "#ff2d3f", "#ff7a86"] },
+      "zar-jadro": { "role": "primary", "displayName": "Žhavé jádro", "canonical": "#ff8a7e", "tonalRamp": ["#43110d", "#661a14", "#8c241c", "#b32f25", "#d94b3f", "#ff6a5c", "#ff8a7e", "#ffb5ad"] },
+      "spara": { "role": "neutral", "displayName": "Vlasová spára", "canonical": "rgba(255,255,255,.07)" },
+      "spara-2": { "role": "neutral", "displayName": "Spára, silnější", "canonical": "rgba(255,255,255,.14)" },
+      "rez": { "role": "neutral", "displayName": "Stín řezu", "canonical": "rgba(0,0,0,.85)" },
+      "hrana": { "role": "neutral", "displayName": "Odlesk hrany", "canonical": "rgba(255,255,255,.07)" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Štítek se jménem", "purpose": "Jediný výskyt: jméno na gravírovaném názevníku, zalomené do dvou řádků." },
+      "headline": { "displayName": "Nadpis sekce", "purpose": "Nadpisy sekcí. Bez popisku nad sebou." },
+      "title": { "displayName": "Název modulu", "purpose": "Názvy modulů zaměření a projektových jednotek." },
+      "body": { "displayName": "Text", "purpose": "Běžný text. Řádka 34–64 ch podle místa." },
+      "body-tlumeny": { "displayName": "Text, tlumený", "purpose": "Popisy uvnitř modulů a dialogů, druhý stupeň rytiny." },
+      "label": { "displayName": "Gravírovaný popisek", "purpose": "Verzálky s prostrkáním 0.14–0.24em: hlavy štítků, doutnavka, označení, patička." },
+      "hodnota": { "displayName": "Hodnota štítku", "purpose": "Pravý sloupec typového štítku, tabulkové číslice." }
+    },
+    "shadows": [
+      { "name": "hrana-desky", "value": "inset 0 1px 0 rgba(255,255,255,.085), inset 0 -1px 0 rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.07)", "purpose": "Každá deska a modul: světlo na horní hraně, tma na spodní, spára kolem." },
+      { "name": "ukotveni", "value": "0 40px 70px -50px rgba(0,0,0,1)", "purpose": "Ukotvení úvodní desky ke stěně. Není to zvednutí karty." },
+      { "name": "ukotveni-slabe", "value": "0 24px 46px -34px rgba(0,0,0,1)", "purpose": "Totéž pod kontaktním formulářem." },
+      { "name": "jamka", "value": "inset 0 2px 5px rgba(0,0,0,.75), inset 0 0 0 1px rgba(255,255,255,.07)", "purpose": "Zapuštěná plocha: vstupní pole a gravírovaný názevník." },
+      { "name": "ovladac-klid", "value": "inset 0 1px 0 rgba(255,255,255,.1), inset 0 0 0 1px rgba(255,255,255,.14), 0 2px 5px rgba(0,0,0,.6)", "purpose": "Klidové tlačítko zapuštěné do desky." },
+      { "name": "ovladac-svit", "value": "inset 0 1px 0 rgba(255,255,255,.14), inset 0 0 0 1px rgba(255,45,63,.85), inset 0 0 14px rgba(255,45,63,.2), 0 3px 14px -4px rgba(255,45,63,.45)", "purpose": "Najetí a zaostření: rozsvítí se rámeček, ne plocha." },
+      { "name": "ovladac-stisk", "value": "inset 0 2px 6px rgba(0,0,0,.8), inset 0 0 0 1px rgba(255,45,63,.7)", "purpose": "Stisk: tlačítko se zamáčkne, cvaknutí spínače." },
+      { "name": "hrbet-modulu", "value": "0 -14px 28px -20px rgba(0,0,0,1)", "purpose": "Stín nahoru pod zasunutou jednotkou v rámu." },
+      { "name": "svit-kontrolky", "value": "0 0 9px 1px rgba(255,45,63,.8), inset 0 0 0 1px rgba(255,255,255,.25)", "purpose": "Jádro doutnavky: bloom a skleněný kroužek." }
+    ],
+    "motion": [
+      { "name": "out", "value": "cubic-bezier(.16,1,.3,1)", "purpose": "Výchozí křivka: exponenciální doběh. Nikde ease-in." },
+      { "name": "mech", "value": "cubic-bezier(.3,.9,.2,1)", "purpose": "Cvaknutí spínače: posuny tlačítek, šipek a řádků." },
+      { "name": "stav", "value": "0.22–0.32s", "purpose": "Trvání přechodů barvy, stínu a rámečku." },
+      { "name": "stisk", "value": "0.12s", "purpose": "Zamáčknutí ovladače." },
+      { "name": "zapni", "value": "0.8s var(--out) backwards, kaskáda 0 / .07 / .1 / .14 / .2 / .26 / .3s", "purpose": "Jediný náběh při načtení: úvodní deska se rozsvítí odshora dolů. Sekce níž nenaskakují." },
+      { "name": "stohovani", "value": "position:sticky, top: calc(var(--nav) + var(--sat) + 14/26/38/50px)", "purpose": "Autorský okamžik stránky. Bez posluchače scrollu; při omezeném pohybu position:static." }
+    ],
+    "breakpoints": [
+      { "name": "kompakt", "value": "900px" },
+      { "name": "telefon", "value": "560px" },
+      { "name": "uzky", "value": "400px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Zapuštěné tlačítko",
+      "kind": "button",
+      "refersTo": "btn",
+      "description": "Hlavní ovladač. Při najetí se rozsvítí rámeček, při stisku se zamáčkne.",
+      "html": "<a class=\"ds-btn\" href=\"#\">Projekty<i aria-hidden=\"true\"><svg viewBox=\"0 0 256 256\"><path d=\"M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z\"/></svg></i></a>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:14px 24px;border-radius:var(--r-ovl,8px);background:linear-gradient(180deg,#26252c,#191820);color:var(--ryt,#e4dfd4);font-family:'Saira',system-ui,sans-serif;font-size:1rem;font-weight:600;letter-spacing:.01em;text-decoration:none;white-space:nowrap;box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 0 1px rgba(255,255,255,.14),0 2px 5px rgba(0,0,0,.6);transition:box-shadow .26s cubic-bezier(.16,1,.3,1),translate .12s cubic-bezier(.3,.9,.2,1),color .26s cubic-bezier(.16,1,.3,1)}.ds-btn svg{width:16px;height:16px;stroke:currentColor;fill:currentColor;transition:translate .28s cubic-bezier(.3,.9,.2,1)}.ds-btn:hover,.ds-btn:focus-visible{color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.14),inset 0 0 0 1px rgba(255,45,63,.85),inset 0 0 14px rgba(255,45,63,.2),0 3px 14px -4px rgba(255,45,63,.45)}.ds-btn:hover svg{translate:4px 0}.ds-btn:active{translate:0 1px;box-shadow:inset 0 2px 6px rgba(0,0,0,.8),inset 0 0 0 1px rgba(255,45,63,.7)}"
+    },
+    {
+      "name": "Svítící východ",
+      "kind": "button",
+      "refersTo": "btn-ghost",
+      "description": "Jediná akce na stránce, která nese doutnavku i v klidu: napsat zprávu.",
+      "html": "<a class=\"ds-btn-lampa\" href=\"#\">Napsat zprávu<i aria-hidden=\"true\"><svg viewBox=\"0 0 256 256\"><path d=\"M198,64V168a6,6,0,0,1-12,0V78.48L68.24,196.24a6,6,0,0,1-8.48-8.48L177.52,70H88a6,6,0,0,1,0-12H192A6,6,0,0,1,198,64Z\"/></svg></i></a>",
+      "css": ".ds-btn-lampa{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:14px 22px;border-radius:var(--r-ovl,8px);color:var(--ryt,#e4dfd4);font-family:'Saira',system-ui,sans-serif;font-size:1rem;font-weight:600;text-decoration:none;white-space:nowrap;box-shadow:inset 0 0 0 1px rgba(255,45,63,.45),inset 0 0 10px rgba(255,45,63,.08);transition:box-shadow .32s cubic-bezier(.16,1,.3,1),color .26s cubic-bezier(.16,1,.3,1),translate .12s cubic-bezier(.3,.9,.2,1)}.ds-btn-lampa svg{width:14px;height:14px;stroke:currentColor;fill:currentColor;transition:translate .28s cubic-bezier(.3,.9,.2,1)}.ds-btn-lampa:hover,.ds-btn-lampa:focus-visible{box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 1px rgba(255,45,63,1),inset 0 0 20px rgba(255,45,63,.3),0 4px 18px -4px rgba(255,45,63,.55)}.ds-btn-lampa:hover svg{translate:3px -3px}.ds-btn-lampa:active{translate:0 1px}"
+    },
+    {
+      "name": "Tlačítko na desce modulu",
+      "kind": "button",
+      "refersTo": "btn-plate",
+      "description": "Menší, plošší ovladač pro akci uvnitř modulu. Stejné cvaknutí.",
+      "html": "<button class=\"ds-btn-plate\" type=\"button\">Detail<i aria-hidden=\"true\"><svg viewBox=\"0 0 256 256\"><path d=\"M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z\"/></svg></i></button>",
+      "css": ".ds-btn-plate{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:none;cursor:pointer;border-radius:var(--r-ovl,8px);background:linear-gradient(180deg,#232229,#17161c);color:var(--ryt,#e4dfd4);font-family:'Saira',system-ui,sans-serif;font-size:.92rem;font-weight:600;box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 0 1px rgba(255,255,255,.14);transition:box-shadow .26s cubic-bezier(.16,1,.3,1),translate .12s cubic-bezier(.3,.9,.2,1)}.ds-btn-plate svg{width:13px;height:13px;fill:currentColor;transition:translate .28s cubic-bezier(.3,.9,.2,1)}.ds-btn-plate:hover,.ds-btn-plate:focus-visible{box-shadow:inset 0 1px 0 rgba(255,255,255,.1),inset 0 0 0 1px rgba(255,45,63,.75),inset 0 0 10px rgba(255,45,63,.15)}.ds-btn-plate:hover svg{translate:3px 0}.ds-btn-plate:active{translate:0 1px;box-shadow:inset 0 2px 5px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,45,63,.6)}"
+    },
+    {
+      "name": "Doutnavka",
+      "kind": "chip",
+      "refersTo": "doutnavka",
+      "description": "Kontrolka za sklem. Jediná rudá plocha v klidu; nebliká.",
+      "html": "<p class=\"ds-doutnavka\"><i aria-hidden=\"true\"></i>Otevřen nabídkám</p>",
+      "css": ".ds-doutnavka{display:inline-flex;align-items:center;gap:11px;padding:9px 18px 9px 13px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);background:rgba(255,45,63,.05);font-family:'Saira',system-ui,sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--ryt,#e4dfd4)}.ds-doutnavka i{position:relative;width:8px;height:8px;border-radius:50%;flex:none;background:radial-gradient(circle at 40% 36%,#ff8a7e,#ff2d3f 58%,#8c0d19);box-shadow:0 0 9px 1px rgba(255,45,63,.8),inset 0 0 0 1px rgba(255,255,255,.25)}"
+    },
+    {
+      "name": "Zapuštěné pole",
+      "kind": "input",
+      "refersTo": "pole",
+      "description": "Pole je jamka, ne obdélník s rámečkem. Zaostření rozsvítí okraj jako u tlačítka.",
+      "html": "<div class=\"ds-fg\"><label for=\"ds-fn\">Jméno</label><input id=\"ds-fn\" type=\"text\" placeholder=\"Jan Novák\"/></div>",
+      "css": ".ds-fg label{display:block;margin-bottom:8px;font-family:'Saira',system-ui,sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ryt-2,#a8a49b)}.ds-fg input{width:100%;padding:13px 15px;border:none;border-radius:var(--r-ovl,8px);background:var(--jamka,#080709);color:var(--ryt,#e4dfd4);font-family:'Saira',system-ui,sans-serif;font-size:1rem;box-shadow:inset 0 2px 5px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,255,255,.07);transition:box-shadow .24s cubic-bezier(.16,1,.3,1)}.ds-fg input::placeholder{color:var(--ryt-3,#8d8982)}.ds-fg input:hover{box-shadow:inset 0 2px 5px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,255,255,.14)}.ds-fg input:focus{outline:none;box-shadow:inset 0 2px 5px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,45,63,.85),0 0 0 3px rgba(255,45,63,.13)}"
+    },
+    {
+      "name": "Lišta rozvaděče",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Aktivní sekci drží doutnavka pod popiskem, ne posuvná pilulka.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Hlavní\"><a href=\"#\">Zaměření</a><a href=\"#\" class=\"active\">Projekty</a><a href=\"#\">Kontakt</a></nav>",
+      "css": ".ds-nav{display:flex;gap:4px;font-family:'Saira',system-ui,sans-serif}.ds-nav a{position:relative;padding:8px 14px;border-radius:var(--r-ovl,8px);font-size:.92rem;font-weight:500;color:var(--ryt-2,#a8a49b);text-decoration:none;transition:color .22s cubic-bezier(.16,1,.3,1),background .22s cubic-bezier(.16,1,.3,1)}.ds-nav a:hover,.ds-nav a:focus-visible{color:var(--ryt,#e4dfd4);background:rgba(255,255,255,.05)}.ds-nav a.active{color:var(--ryt,#e4dfd4)}.ds-nav a.active::after{content:'';position:absolute;left:14px;right:14px;bottom:2px;height:2px;border-radius:999px;background:#ff2d3f;box-shadow:0 0 8px rgba(255,45,63,.8)}"
+    },
+    {
+      "name": "Typový štítek",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Deska s nýty, hodnoty v řádcích o stejné velikosti. Žádné hrdinské číslo.",
+      "html": "<div class=\"ds-typstitek\"><p class=\"ds-ts-hlava\">Typový štítek</p><dl class=\"ds-ts-radky\"><div><dt>Nasazené projekty</dt><dd>4</dd></div><div><dt>Cizí skripty</dt><dd>0</dd></div><div><dt>Lighthouse, počítač</dt><dd>100</dd></div></dl></div>",
+      "css": ".ds-typstitek{position:relative;width:100%;padding:20px 22px 18px;border-radius:14px;background:linear-gradient(168deg,#1e1d22,#17161a 72%);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(255,255,255,.07);font-family:'Saira',system-ui,sans-serif}.ds-typstitek::before,.ds-typstitek::after{content:'';position:absolute;top:9px;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 34% 30%,#4a4952,#232228 62%,#141317);box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}.ds-typstitek::before{left:9px}.ds-typstitek::after{right:9px}.ds-ts-hlava{margin:0 0 14px;padding-bottom:11px;border-bottom:1px solid rgba(255,255,255,.07);font-size:.72rem;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--ryt-3,#8d8982);text-align:center}.ds-ts-radky{margin:0;font-variant-numeric:tabular-nums}.ds-ts-radky>div{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:7px 0}.ds-ts-radky>div+div{border-top:1px solid rgba(255,255,255,.04)}.ds-ts-radky dt{font-size:.82rem;color:var(--ryt-3,#8d8982);letter-spacing:.02em}.ds-ts-radky dd{margin:0;font-size:.92rem;font-weight:700;color:var(--ryt,#e4dfd4)}"
+    },
+    {
+      "name": "Jednotka v rámu",
+      "kind": "card",
+      "refersTo": "modul",
+      "description": "Projektový modul s hřbetem na levé hraně. V rámu se při scrollu stohuje přes position:sticky.",
+      "html": "<article class=\"ds-jednotka\"><div class=\"ds-j-hlava\"><h3>Vyhlídkář</h3><span class=\"ds-j-oznaceni\">Web a mobilní aplikace</span></div><p class=\"ds-j-popis\">Objevování skrytých vyhlídek a míst, která znají hlavně místní.</p><ul class=\"ds-j-tech\"><li>Next.js</li><li>TypeScript</li><li>PostGIS</li></ul></article>",
+      "css": ".ds-jednotka{position:relative;padding:24px 24px 24px 34px;border-radius:14px;background:linear-gradient(170deg,#1b1a20,#17161a 70%);box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(255,255,255,.07),0 -14px 28px -20px rgba(0,0,0,1);font-family:'Saira',system-ui,sans-serif;transition:opacity .3s cubic-bezier(.16,1,.3,1),box-shadow .3s cubic-bezier(.16,1,.3,1)}.ds-jednotka::before{content:'';position:absolute;left:12px;top:22px;bottom:22px;width:3px;border-radius:999px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.03));box-shadow:0 1px 0 rgba(0,0,0,.7)}.ds-j-hlava{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:10px}.ds-jednotka h3{margin:0;font-size:1.4rem;font-weight:700;letter-spacing:-.025em;color:var(--ryt,#e4dfd4);text-shadow:0 -1px 0 rgba(0,0,0,.85)}.ds-j-oznaceni{font-size:.72rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ryt-3,#8d8982);padding:4px 10px;border-radius:999px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}.ds-j-popis{margin:0 0 16px;color:var(--ryt-2,#a8a49b);font-size:.92rem;max-width:64ch}.ds-j-tech{display:flex;flex-wrap:wrap;gap:7px;margin:0;padding:0;list-style:none}.ds-j-tech li{padding:6px 12px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.07);font-size:.82rem;font-weight:500;letter-spacing:.05em;color:var(--ryt-2,#a8a49b)}.ds-jednotka:hover{box-shadow:inset 0 1px 0 rgba(255,255,255,.09),inset 0 0 0 1px rgba(255,45,63,.38),0 -14px 28px -20px rgba(0,0,0,1)}"
+    },
+    {
+      "name": "Čelní deska",
+      "kind": "card",
+      "refersTo": "deska",
+      "description": "Plocha, na které celá stránka stojí: broušený elox, šrouby v rozích.",
+      "html": "<div class=\"ds-celo\"><span class=\"ds-sroub\" style=\"top:14px;left:14px\"></span><span class=\"ds-sroub\" style=\"top:14px;right:14px\"></span><span class=\"ds-sroub\" style=\"bottom:14px;left:14px\"></span><span class=\"ds-sroub\" style=\"bottom:14px;right:14px\"></span><p>Deska</p></div>",
+      "css": ".ds-celo{position:relative;padding:44px 38px;border-radius:14px;background-color:#17161a;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.055) 0 1px,rgba(0,0,0,.065) 1px 2px,transparent 2px 5px);background-size:5px 100%;box-shadow:inset 0 1px 0 rgba(255,255,255,.085),inset 0 -1px 0 rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.07),0 40px 70px -50px rgba(0,0,0,1);font-family:'Saira',system-ui,sans-serif;color:var(--ryt,#e4dfd4)}.ds-sroub{position:absolute;width:11px;height:11px;border-radius:50%;background:radial-gradient(circle at 34% 28%,#55545f,#26252c 58%,#111014);box-shadow:inset 0 1px 0 rgba(255,255,255,.3),inset 0 -1px 0 rgba(0,0,0,.6),0 1px 2px rgba(0,0,0,.9);pointer-events:none}.ds-sroub::after{content:'';position:absolute;inset:0;margin:auto;width:6px;height:1.5px;border-radius:1px;background:rgba(0,0,0,.75);box-shadow:0 1px 0 rgba(255,255,255,.12);transform:rotate(38deg)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Rozvaděč",
+    "overview": "Stránka je čelní panel stroje. Není to tmavé portfolio s přechodem, velkým jménem a mřížkou dlaždic; je to deska, na kterou se šroubují štítky a do které jsou zapuštěná pole a tlačítka. Kdo přijde, čte hodnoty ze štítku, ne přídavná jména. Panel má být poznatelný i bez obsahu: podle brusu eloxu, šroubů v rozích, vlasových spár a jediné rudé kontrolky.\n\nMateriály jsou tři a každý má jednu práci. Eloxovaný grafit s jemným brusem je jediná plocha. Gravírovaný laminátový štítek — světlé písmo vyříznuté do tmavé desky — je jediný nosič textu; hloubku bere z řezu, ne ze záře. Doutnavka za sklem je jediná rudá. Žádný čtvrtý materiál se nepřidává.\n\nHustota je klidná: velké svislé rozestupy mezi sekcemi, těsné řádky uvnitř štítků. Tmavý režim není volba uživatele, je to jediný režim. Celá stránka je vanilla HTML, CSS a jeden skript; nic se nenačítá z cizí domény.",
+    "keyCharacteristics": [
+      "Tři materiály, žádný čtvrtý: brus, gravírování, doutnavka.",
+      "Jediné písmo (Saira 300–800), rozdíly dělá řez, prostrkání a verzálky.",
+      "Rudá je stav, nikdy běžný text.",
+      "Hloubka z řezu a spáry, ne z vržených stínů karet.",
+      "Jediný autorský pohyb: stohování modulů přes position:sticky.",
+      "Tmavý režim zamčený; světlé téma neexistuje."
+    ],
+    "rules": [
+      { "name": "Pravidlo jedné doutnavky", "body": "Na jedné obrazovce svítí v klidu jedna jediná věc: východ ze stránky. Dokud je vidět úvod, tlačítko v liště zůstává klidnou deskou; teprve když úvod zmizí, přebírá světlo ono.", "section": "colors" },
+      { "name": "Pravidlo rudé jako stavu", "body": "Rudá hlásí stav nebo to, co právě reaguje: aktivní sekce, najetí, zaostření, chyba, dostupnost. Nikdy není barvou textu, nadpisu ani dekorativní plochy.", "section": "colors" },
+      { "name": "Pravidlo kovu", "body": "Barvy jsou pojmenované po materiálu, ne po roli. Nová barva se přidává jen tehdy, když vznikne nový materiál — a nový materiál nevzniká.", "section": "colors" },
+      { "name": "Pravidlo gravírování", "body": "Každý text, který má působit vyříznutě do desky, nese text-shadow řez nad tahem a odlesk hrany pod ním. Text nikdy nesvítí sám od sebe.", "section": "typography" },
+      { "name": "Pravidlo jednoho písma", "body": "Nepřidává se druhá rodina ani na kód, ani na číslice. Když je potřeba technický dojem, použije se prostrkání a verzálky.", "section": "typography" },
+      { "name": "Pravidlo štítku bez hrdiny", "body": "Hodnoty na typovém štítku mají všechny stejnou velikost. Žádné jedno velké číslo; je to výrobní štítek, ne dashboard.", "section": "typography" },
+      { "name": "Pravidlo vlasové spáry", "body": "Sousední moduly v rámu dělí 2px spára, ne mezera. Odstup patří mezi sekce, ne mezi díly jedné sestavy.", "section": "layout" },
+      { "name": "Pravidlo bezpečné zóny", "body": "Vnitřní okraje a pevné prvky počítají s env(safe-area-inset-*). Na telefonu s výřezem nesmí nic vjet pod hranu.", "section": "layout" },
+      { "name": "Pravidlo rozsvíceného rámečku", "body": "Reakce na najetí je rámeček, ne přelití plochy barvou. Tlačítko se při stisku zamáčkne — je to cvaknutí spínače.", "section": "elevation" },
+      { "name": "Pravidlo světla shora", "body": "Všechny vnitřní odlesky jsou na horní hraně, všechny řezy na spodní. Obrácený odlesk čte oko jako chybu odlitku.", "section": "elevation" },
+      { "name": "Pravidlo jediného východu", "body": "Na stránce je jedna akce, která smí svítit: napsat zprávu. Všechno ostatní je klidná deska.", "section": "components" },
+      { "name": "Pravidlo kreslené geometrie", "body": "Šrouby, nýty, doutnavka, šipky — všechno vzniká v CSS a v inline SVG s currentColor. Žádná ikona z fontu, žádné cizí logo, žádný obrázek místo tvaru.", "section": "components" }
+    ],
+    "dos": [
+      "Do stavět novou plochu ze tří materiálů, které už existují: brus, gravírování, doutnavka.",
+      "Do používat přesně tři zaoblení — 14px deska, 8px ovladač, 999px kontrolka a drobný štítek.",
+      "Do kreslit obrysy vnitřním stínem inset 0 0 0 1px var(--spara), ne vlastností border.",
+      "Do dávat gravírovaným textům dvojici text-shadow řez + hrana.",
+      "Do nechat rudou jen stavu: aktivní sekce, najetí, zaostření, chyba, dostupnost.",
+      "Do psát pohyb na křivky --out a --mech — exponenciální doběh, nikde ease-in.",
+      "Do sledovat pozici pomocí IntersectionObserver; posluchač scrollu se na téhle stránce nepoužívá vůbec.",
+      "Do vázat stavy najetí na @media (hover:hover) a nabízet u každého z nich odpovídající chování pro zaostření z klávesnice.",
+      "Do držet prefers-reduced-motion: jednotky přejdou na position:static, animace se zkrátí na nulu, loader zmizí.",
+      "Do držet nejnižší stupeň rytiny na --ryt-3; níž se s kontrastem nejde."
+    ],
+    "donts": [
+      "Don't přidávat druhou rodinu písma, zvlášť ne monospace. Saira nese displej, text i číslice.",
+      "Don't zavádět světlé téma ani přepínač; tmavý režim je zamčený.",
+      "Don't svítit dvěma věcmi na jedné obrazovce. Východ v liště zůstává klidný, dokud je vidět ten v úvodu.",
+      "Don't psát rudou běžný text ani nadpis.",
+      "Don't přelévat tlačítko barvou při najetí. Rozsvítí se rámeček.",
+      "Don't používat vržené stíny jako zvednutí karty; hloubka je z řezu, spáry a zapuštění.",
+      "Don't vkládat cizí loga ani ikonové fonty. Technologie jsou gravírované popisky, ikony jsou inline SVG s currentColor.",
+      "Don't nechávat sekce naskakovat při scrollu. Jediný autorský okamžik pohybu je stohování jednotek; obsah je vidět od začátku.",
+      "Don't zavádět čtvrté zaoblení nebo mezistupeň mezi 8px a 14px.",
+      "Don't pojmenovávat novou barvu podle role. Token se jmenuje po materiálu.",
+      "Don't nechat doutnavku blikat nebo pulzovat."
+    ]
+  }
+}
