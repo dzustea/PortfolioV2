@@ -45,15 +45,115 @@ Postaveno podle skillu `design-taste-frontend`, dialy **8 / 6 / 4**
   pseudoprvky, jeden transform. Platí i pro tlačítko v liště a ve
   formuláři. Tři dřívější varianty (prolnutí barvy, vyjíždějící výplň
   s výměnou popisku, dělená buňka s ikonou) byly zamítnuty.
-- **Úvod:** sazba vlevo (štítky, pozdrav, jméno, věta, dvě tlačítka),
-  rýsovaný obraz vpravo v rámu. Předchozí podoby úvodu: věta jako nadpis,
-  jméno vedle 3D sestavy, jméno přes celou šířku okna s razítkem. Všechny
-  zamítnuty.
-- **Obraz v úvodu** je rozložený drátěný model webové stránky ve třech
-  patrech: nahoře rozvržení, které návštěvník vidí, uprostřed konstrukce
-  bloků, dole tabulka dat. Rudá linka vede od zvýrazněné karty dolů
-  k řádku, ze kterého karta čerpá. Vzniká v nastroje-v6/kresba.js
-  a váží **2 kB**. Předchozí pokus, vlnová plocha, byl zamítnut.
+- **Úvod: jméno, jedna věta a malá konzole o dvou sloupcích. Bez obrázku.**
+  Vlevo výpis tří voleb, vpravo náhled té vybrané, jako v souborovém
+  správci v terminálu: šipka tím dostane okamžitou odezvu, protože se
+  vpravo přepíše popis dřív, než člověk stiskne enter. Text náhledu jde
+  z atributu data-popis na řádku a vkládá se přes textContent. Kdo si vybrat nechce, jde prostě dál dolů. Sedm dřívějších podob
+  úvodu bylo zamítnuto: věta jako nadpis, jméno vedle 3D sestavy, jméno
+  přes celou šířku okna s razítkem, štítky s obrázkem, číslovaný pruh jako
+  v editoru, list čtyř údajů vedle jména a velký prostorový rozcestník
+  s deskami, které vyjížděly dopředu.
+
+- **Opička na liánách.** Ukazatel postupu ve stránce. Visí pod lištou,
+  jedna liána je jedna zastávka a opička na ně skáče, jak člověk šipkami
+  postupuje. Hrazda ale neměří zastávky, nýbrž místa ve stránce: volby
+  v konzoli se nepočítají (rozcestník je nabídka, ne cesta) a celá historie
+  projektů je jedno místo, takže opička k ní doskáče, uvnitř ní počká
+  a vyrazí zase, až z ní člověk odejde. Do té doby visí na začátku hrazdy.
+
+  Pohyb je ve třech vrstvách, aby si transformace nepřekážely: vnější
+  prvek jede do strany, prostřední se pořád houpe a vnitřní dělá skok
+  v oblouku i s náklonem a výměnou polohy těla (visící a letící), jako
+  sprite ve staré hře. Liány jsou provazy s uzlem a každá se houpe
+  o kousek jinak; ta držená je rudá, delší a houpe se víc.
+
+- **Řádky konzole.** U práce, projektů a kontaktu stojí pod odstavcem drobný
+  řádek: vlevo příkaz, kterým se ta věc doopravdy dělá (npm run build,
+  ls projekty/, git push), vpravo česky, co dělá. Příkaz je ozdoba, proto je
+  schovaný čtečce obrazovky; význam vedle něj si přečte každý. Jen u kontaktu
+  za příkazem bliká kurzor.
+
+- **Vzkaz v konzoli prohlížeče.** Kdo si otevře nástroje vývojáře, najde
+  tam česky psaný pozdrav.
+
+- **Opona: sestavení v terminálu.** První obrazovka je tentýž terminál,
+  jaký pak stojí v úvodu, jen přes celé okno. Řádky výpisu přibývají podle
+  skutečných událostí (styl a skript, písma, obsah, hotovo) a čísla vedle
+  nich nejsou pro efekt: kilobajty bere skript z měření prohlížeče, počet
+  projektů z dokumentu a čas z hodin, které běží od prvního bajtu.
+
+  Za oknem se přitom staví svět: s každým hotovým řádkem sílí mřížka
+  i rudá záře, tedy totéž pozadí, jaké má pak stránka, takže opona není
+  černá plocha, ale rozestavěný web. Okno samo naskočí jako stará
+  obrazovka (dvakrát blikne), leží na něm skenovací linky a jednou za
+  čas přes ně přejede světlejší pruh.
+
+  Pod výpisem čeká příkaz. Nikdo ho nepíše, dokud člověk nestiskne šipku
+  dolů (na telefonu nešvihne prstem); pak se ./start dopíše sám znak po
+  znaku, obraz škubne, okno se rozletí přes celou obrazovku a pod ním
+  zůstane hotová stránka. Terminál se promění ve web. Zamítnutý byl
+  výjezd z tunelu, tedy rudé světlo rostoucí ze středu obrazovky.
+
+- **Za oponou se stránka posouvá jen po zastávkách.** Vlastní posun
+  prohlížeče je vypnutý: kolečko, prst, mezerník ani page down s ní
+  nehnou. Vede ji šipka nahoru a dolů, enter otevře to, na čem ukazatel
+  stojí. Na telefonu, kde žádné šipky nejsou, dělá totéž švihnutí prstem;
+  práh je čtyřicet bodů, aby klepnutí nic neposunulo. Zastávek je
+  jedenáct (tři volby v úvodu, tři obory, čtyři projekty, kontakt) a jsou
+  označené atributem data-stanice, takže přidat další znamená přidat
+  atribut. Skok obstará jedno volání scrollTo, plynulost scroll-behavior
+  ve stylu; mezi dvěma skoky je krátká uzávěra, aby držená šipka stránku
+  nerozjela. Ve formulářových polích patří šipky tomu, kdo píše, a textové
+  pole zprávy si posun uvnitř sebe nechává. Odkazy v liště vede tentýž
+  skok na první zastávku uvnitř cílové sekce.
+
+- **Kurzor myši je schovaný na celé stránce.** Stránka se ovládá šipkami,
+  ukazatel myši by jen mátl. Zároveň je schovaný posuvník, protože nikam
+  nevede.
+
+- **Brány mezi úrovněmi.** Místo holé dělicí linky stojí mezi sekcemi
+  cedule „Úroveň 2 ze 4, Co pro vás udělám". Cedule projíždí do strany
+  podle posunu (view timeline), takže se zastaví, když člověk zastaví.
+
+- **Ukazatel stavu.** Vpravo dole nad zemí, jeden řádek: úroveň, její
+  název a věta „Ovládá se šipkami, enter otevře". Úroveň přepisuje týž
+  sledovač, který zvýrazňuje odkaz v liště. Na úzké obrazovce zbude
+  číslo a název, věta o ovládání se ukáže jen tam, kde klávesnice je.
+
+- **Projekty jako historie, ne seznam.** Vlevo svislá větev s body, jako
+  když si vývojář vypíše, co se kdy dodělalo: nahoře rozdělaná práce
+  s prázdným bodem na přerušované větvi, pod ní čtyři hotové s plnými
+  body. Každý řádek nese jméno souboru projektu (herni-akademie),
+  název, k čemu to je, a stav. Ukazatel po historii jenom jezdí; enter
+  rozbalí panel, enter podruhé otevře živý web, esc zavře. Panel visí na
+  téže větvi a uvnitř je výpis souboru: cat nazev.md, popis a pod ním to,
+  co projekt přibyl, řádek po řádku se znaménkem plus. Snímky projektů
+  byly zrušeny úplně, takže se při načtení ani při procházení nestahuje
+  jediný obrázek. Zamítnuté podoby: obrázkový rejstřík s náhledy
+  a výběr úrovně s rohovými značkami a rudým polem pořadí.
+
+- **Kontaktní formulář a hra.** Do formuláře se šipkami psát nedá, proto
+  má stránka dva režimy. Enter na zastávce kontaktu (nebo klepnutí do
+  pole, nebo tabulátor) přepne stránku do režimu formuláře: šipky patří
+  psaní, kolečko a prst zase posouvají a v ukazateli stavu stojí, jak se
+  vrátit do hry. Ven vede esc nebo prostě odchod pozornosti z formuláře.
+  Kurzor myši je schovaný na celé stránce kromě dvou míst: v kontaktu je
+  obyčejný, jinak by do políčka nešlo trefit, a v liště je vlastní, tmavá
+  šipka s kostěným obrysem a rudou špičkou, kreslená v SVG rovnou ve
+  stylu. Lišta se tím dá ovládat myší jako na každém jiném webu. Pole,
+  ve kterém se píše, drží rudou hranu.
+
+- **Výběr vede jen šipka.** Najetí myší do výběru nemluví: když ukazatel
+  stál jinde než myš, svítily dvě položky naráz a nebylo poznat, co enter
+  otevře. Zvýrazněná je vždy nejvýš jedna zastávka.
+
+- **Ukazatel stavu u paty mizí.** Je to plovoucí lišta v pravém dolním
+  rohu a v patě stojí text na stejném místě; na užším okně se přes sebe
+  položily. Hlídá to IntersectionObserver na patě.
+
+- **Blikající kurzory zmizely.** Ani v úvodu, ani u kontaktu. Nápovědu
+  k ovládání nese opona a potom ukazatel stavu vpravo dole.
 - **Sekce:** úvod, práce (nesouměrné dva sloupce se stojícím
   nadpisem), rejstřík projektů, kontakt. Žádné karty, žádné tři stejné
   sloupce vedle sebe, žádné číslované popisky nad každým nadpisem.
@@ -91,7 +191,7 @@ souboru, nic s lomítkem ani protokolem.
 | Lighthouse výkon | **99** | **100** |
 | Přístupnost / Zásady / SEO | 100 / 100 / 100 | 100 / 100 / 100 |
 
-Při načtení se nestahuje ani jeden snímek projektu. Nula chyb v konzoli,
+Při načtení se nestahuje **ani jeden obrázek**, jen ikona do záložky. Nula chyb v konzoli,
 nula porušení obsahové politiky, jeden `h1`, pořadí nadpisů bez přeskoku,
 všechny obrázky mají `alt`, **nula pomlček em a en** v celém zdrojáku.
 
@@ -113,7 +213,20 @@ všechny obrázky mají `alt`, **nula pomlček em a en** v celém zdrojáku.
 
 ## Co zbývá
 
-- **Nic není commitnuté ani nasazené.**
+- **Commitnuto a pushnuto** jako `967ed76` do větve `redesign`
+  (github.com/dzustea/PortfolioV2). Do hlavní větve zatím nic nejde.
+- **Texty prošly pročištěním.** Ven šla tvrzení, která nejdou doložit:
+  server a aplikace v úvodu, weby, které prý někdo denně používá, odpověď
+  do jednoho pracovního dne, čtyři weby v provozu i rychlost 100 ze 100.
+  Stav u projektů je teď „hotovo", ne „v provozu". Stejně tak zmizelo,
+  že si texty půjde měnit samostatně, a technologie pod obory.
+- **Dva popisy projektů zůstaly nedotčené**, protože o nich rozhodne jen
+  Filip: Vyhlídkář se hlásí jako „web i aplikace do telefonu" a Hrabalová
+  jako objednávkový systém. Obojí je tvrzení o jeho vlastní práci.
+- **og-image.png je ještě ze starého světa** a nese nápis full-stack
+  developer, který na stránce už nikde není.
+- **Čtyři soubory *.webp** (bývalé snímky projektů) v repu zůstaly, ale
+  nic na ně neodkazuje.
 - `DESIGN.md` a `.impeccable/` popisují **zahozený** svět Rozvaděče.
   Neplatí to; buď přepsat, nebo smazat.
 

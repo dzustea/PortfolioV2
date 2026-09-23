@@ -24,7 +24,7 @@ const nazev = process.argv[3] || 'shots/stranka-' + sirka + '.png';
   // stránky se prostě zapnou všechny najednou, jinak by dolní
   // polovina byla průhledná.
   await page.evaluate(() => {
-    document.documentElement.classList.add('ready', 'ready-hned');
+    document.documentElement.classList.add('ready', 'ready-hned', 'je-odhrnuto');
     document.querySelectorAll('.rv').forEach(p => p.classList.add('bez-prechodu', 'in'));
   });
   await new Promise(r => setTimeout(r, 400));
