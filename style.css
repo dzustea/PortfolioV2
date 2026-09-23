@@ -1,34 +1,43 @@
 /* ══════════════════════════════════════════════════════════════
    FILIP LOCHMAN · styl webu
 
-   Styl: tmavý minimalismus. Stránku nedrží efekty, ale sazba,
-   přesné zarovnání a vlasové linky. Žádná perspektiva, žádné
-   naklánění, žádné stíny pod kartami.
+   Svět: TMAVÝ TECHNICKÝ. Uhlově černý podklad, kostěná bílá
+   sazba a jedna rudá. Hloubku drží tři pevné vrstvy pod stránkou
+   (mřížka do perspektivy, rudá záře, zrno) a prostorová sestava
+   desek v úvodu. Sekce dělí vlasová linka, která se dokresluje.
 
-   Barva je vzácná. Devadesát procent plochy tvoří tři odstíny
-   od nejtmavší po nejsvětlejší, víno se objeví jen tam, kde má
-   něco znamenat: aktivní projekt, hlavní tlačítko, značka
-   dostupnosti.
+   Pravidla, která tady platí bez výjimky:
 
-   Pohyb má být neviditelný. Prvky se prolnou a posunou o dvanáct
-   pixelů, nic víc. Odezva rozhraní se vejde do dvou set
-   milisekund, protože delší už působí líně.
-══════════════════════════════════════════════════════════════ */
+     · Tvar: všechno má ostré rohy. Nikde ani jeden poloměr.
+       Zaoblené tlačítko v hranaté sazbě je rozbitý návrh.
+     · Barva: rudá je jedna na celé stránce a znamená vždycky
+       totéž, tedy „tady se dá kliknout" nebo „tohle je důležité".
+     · Karty se nepoužívají. Skupiny drží vlasová linka a mezera.
+     · Pohyb má důvod: buď ukazuje pořadí čtení, nebo potvrzuje
+       dotek. Nic neposkakuje samo pro sebe.
+     · Výkon: žádná knihovna, žádné plátno, pohyb výhradně přes
+       transform a opacity, vrstvený posun přes animation-timeline,
+       tedy prací prohlížeče. Při prefers-reduced-motion stojí vše.
+   ══════════════════════════════════════════════════════════════ */
 
 
 /* ── PÍSMA ─────────────────────────────────────────────────────
-   Geist a Geist Mono ve variabilní podobě, rozsah tloušťky
-   200 až 800. Soubory leží na vlastní doméně, takže odpadá
-   požadavek na cizí server, IP adresa návštěvníka se nikam
-   neodesílá a obsahová politika může zůstat přísná.
-   Znakové sady latin a latin-ext kvůli české diakritice.
-   Licence: SIL Open Font License 1.1.
+   Archivo na všechno čtené a Space Mono na drobné popisky.
+   Archivo je proměnné v celém rozsahu tloušťky 100 až 900, takže
+   jméno v úvodu může být opravdu těžké, aniž by se stahoval
+   druhý řez. Space Mono má patky na číslicích a dává štítkům
+   technický ráz, který sám grotesk neudělá.
+
+   Soubory leží na vlastní doméně, takže odpadá požadavek na cizí
+   server a IP adresa návštěvníka se nikam neodesílá. Latin
+   i latin-ext, bez latin-ext by v češtině chyběly háčky.
+   Licence obojího: SIL Open Font License 1.1.
    ───────────────────────────────────────────────────────────── */
 
-@font-face{font-family:'Geist';font-style:normal;font-weight:200 800;font-display:swap;src:url(fonts/geist-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Geist';font-style:normal;font-weight:200 800;font-display:swap;src:url(fonts/geist-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Geist Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/geist-mono-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Geist Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/geist-mono-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/archivo-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/archivo-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/spacemono-400-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/spacemono-400-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
 
 /* ── VÝCHOZÍ NASTAVENÍ PRVKŮ ─────────────────────────────────── */
@@ -38,770 +47,1644 @@ img{display:block;max-width:100%}
 button{font:inherit;background:none;border:none;cursor:pointer;padding:0;color:inherit;text-align:left}
 a{color:inherit;text-decoration:none}
 ul,ol{list-style:none}
+dl,dt,dd{margin:0}
 
 
 /* ── PROMĚNNÉ ──────────────────────────────────────────────────
-   Paleta má čtyři barvy. Pátá, --wine-tx, je z vína odvozená:
-   samotné víno má na tmavém podkladu kontrast 2,6 : 1, což na
-   text nestačí. Světlejší odstín dává 4,6 : 1 a normu splní.
-   Víno zůstává na výplně, značky a linky.
+   Rudá má dvě podoby. --rud je výplň a linka; na drobný text má
+   na černé 4,2 : 1, což na normu nestačí. --rud-tx je o stupeň
+   světlejší a dává 5,0 : 1. Bílý text na rudé výplni má 4,7 : 1.
    ───────────────────────────────────────────────────────────── */
 
 :root{
-  /* podklad a jediná vystouplá plocha */
-  --ink:   #060e13;
-  --ink-2: #0a1218;
+  /* písmo */
+  --sans: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
 
-  /* text: hlavní, doplňkový */
-  --bone: #eadfd9;   /* 16,6 : 1 */
-  --sage: #a6aba4;   /*  8,3 : 1 */
+  /* papír */
+  --noc:   #0b0b0c;
+  --noc-2: #121214;
 
-  /* akcent */
-  --wine:    #963041;
-  --wine-tx: #c4566b;
-  --wine-df: rgba(150,48,65,.16);
+  /* sazba: hlavní, doplňková, potlačená */
+  --kost:  #f2efe9;   /* 16,9 : 1 */
+  --sed:   #a5a29b;   /*  7,6 : 1 */
+  --sed-2: #8b8882;   /*  5,3 : 1 */
 
-  /* linky. Tónované do kosti, ne do bílé, aby zůstaly teplé. */
-  --hair:   rgba(234,223,217,.11);
-  --hair-2: rgba(234,223,217,.22);
+  /* jediný akcent */
+  --rud:    #e0242c;
+  --rud-tx: #ef3a3a;
 
-  /* zaoblení: kontejnery 8, ovládací prvky 6, štítky 4 */
-  --r-lg: 8px;
-  --r-md: 6px;
-  --r-sm: 4px;
+  /* linky */
+  --linka:   rgba(242,239,233,.12);
+  --linka-2: rgba(242,239,233,.26);
 
-  /* rozestupy a šířky */
-  --pad:  clamp(20px,5vw,64px);
-  --sec:  clamp(76px,9vw,132px);
-  --nav:  60px;
-  --wrap: 1180px;
+  /* rozměry */
+  --nav:  64px;
+  --wrap: 1240px;
+  --pad:  clamp(20px, 5vw, 56px);
+  --sec:  clamp(64px, 9vw, 132px);
 
-  /* Křivka pro všechno. Ostřejší náběh než vestavěné easings.
-     Nikde není ease-in: začíná pomalu, tedy přesně ve chvíli,
-     kdy se uživatel dívá nejpozorněji. */
-  --out: cubic-bezier(.16,1,.3,1);
+  /* poloha ukazatele, plní ji skript; bez něj zůstane nula */
+  --mx: 0;
+  --my: 0;
 
-  /* bezpečné zóny telefonu, na počítači vycházejí nulové */
-  --sat: env(safe-area-inset-top,0px);
-  --sab: env(safe-area-inset-bottom,0px);
-  --ph:  max(var(--pad), env(safe-area-inset-left,0px), env(safe-area-inset-right,0px));
+  color-scheme: dark;
 }
-
-
-/* ── ZÁKLAD STRÁNKY ──────────────────────────────────────────── */
 
 html{
-  scroll-behavior:smooth;
-  /* Vlastní posuvník. Standardní vlastnosti zvládne Firefox,
-     Chrome od verze 121 i novější Safari; pravidla s předponou
-     -webkit- níž doplňují starší prohlížeče. */
-  scrollbar-width:thin;
-  scrollbar-color:rgba(234,223,217,.18) transparent;
+  /* Posuvník nikam nevede: stránku posouvají šipky. */
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav) + 16px);
+  -webkit-text-size-adjust: 100%;
 }
-::-webkit-scrollbar{width:10px;height:10px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{
-  background:rgba(234,223,217,.18);
-  border-radius:999px;
-  /* rámeček v barvě podkladu odsadí táhlo od okraje okna */
-  border:3px solid var(--ink);
-}
-::-webkit-scrollbar-thumb:hover{background:rgba(234,223,217,.3)}
-
-/* Výběr textu v barvě značky. */
-::selection{background:var(--wine);color:var(--bone)}
-
-/* Kotva sekce se musí zastavit pod lištou, ne pod ní zmizet. */
-section[id]{scroll-margin-top:calc(var(--nav) + var(--sat) + 16px)}
 
 body{
-  background:var(--ink);
-  color:var(--bone);
-  font-family:'Geist',system-ui,-apple-system,'Segoe UI',sans-serif;
-  font-weight:400;
-  font-size:16px;
-  line-height:1.65;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-  -moz-osx-font-smoothing:grayscale;
+  background: var(--noc);
+  color: var(--kost);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  letter-spacing: -.005em;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
-/* Jediná ozdoba pozadí: velmi slabá vínová skvrna vpravo nahoře,
-   aby plocha nebyla úplně mrtvá. Fixní vrstva bez reakce na myš,
-   takže se při scrollování nepřekresluje. */
-.glow{
-  position:fixed;
-  top:-30vh;right:-18vw;
-  width:min(90vw,1000px);aspect-ratio:1;
-  border-radius:50%;
-  background:radial-gradient(circle,rgba(150,48,65,.15),transparent 60%);
-  z-index:-1;pointer-events:none;
-}
-@media (prefers-reduced-motion:no-preference){
-  .glow{animation:glowDrift 34s ease-in-out infinite alternate}
-}
-@keyframes glowDrift{to{translate:-6vw 5vh}}
+::selection{background: var(--rud); color: #fff}
 
-.wrap{width:100%;max-width:var(--wrap);margin-inline:auto;padding-inline:var(--ph)}
+:focus-visible{outline: 2px solid var(--rud-tx); outline-offset: 3px}
 
-:focus-visible{outline:2px solid var(--wine-tx);outline-offset:3px;border-radius:2px}
+.wrap{
+  width: 100%; max-width: var(--wrap);
+  margin-inline: auto; padding-inline: var(--pad);
+}
+.sec{padding-block: var(--sec)}
 
 .skip{
-  position:fixed;top:-100px;left:var(--ph);z-index:600;
-  padding:10px 16px;border-radius:var(--r-md);
-  background:var(--wine);color:var(--bone);
-  font-weight:500;font-size:.85rem;
-  transition:top .16s var(--out);
+  position: fixed; top: 8px; left: 8px; z-index: 200;
+  padding: 10px 18px; background: var(--rud); color: #fff; font-weight: 500;
+  transform: translateY(-180%); transition: transform .2s ease;
 }
-.skip:focus{top:calc(var(--sat) + 10px)}
+.skip:focus-visible{transform: none}
+
+/* Zásoba ikon není vidět, jen se na ni odkazuje. */
+.vzorky{position: absolute; width: 0; height: 0; overflow: hidden}
 
 
-/* ══════════════════════════════════════════════════════════════
-   NAČÍTACÍ VRSTVA
+/* ══ OPONA ═════════════════════════════════════════════════════
+   Terminál, ve kterém se stránka sestavuje. Řádky přibývají
+   podle toho, co je doopravdy hotové, a čísla v nich jsou
+   skutečná: přenesené kilobajty z měření prohlížeče, počet
+   projektů v dokumentu a čas od prvního bajtu.
 
-   Zobrazí se jen tehdy, když má co překrývat. Ve výchozím stavu
-   je průhledná a naplno se rozsvítí až po 120 ms, takže při
-   načtení z mezipaměti ji nikdo neuvidí ani zábleskem.
+   Pod výpisem čeká příkaz. Jakmile člověk stiskne šipku dolů,
+   příkaz se dopíše, okno se rozletí přes celou obrazovku a pod
+   ním zůstane hotová stránka. Terminál se promění ve web.
 
-   Nezdrží stránku ani o milisekundu navíc: mizí ve chvíli, kdy
-   jsou opravdu připravená písma, ne po uplynutí nějakého času.
-   Proužek postupuje podle skutečných událostí, ne podle stopek.
-══════════════════════════════════════════════════════════════ */
+   Je to tentýž terminál, jaký stojí v úvodu stránky, jen přes
+   celou obrazovku: opona není cizí předsíň, ale první obrazovka
+   téhož světa.
 
-#loader{
-  position:fixed;inset:0;z-index:500;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
-  background:var(--ink);
-  opacity:0;
-  animation:ldShow .18s .12s forwards;
+   Bez skriptu není na dokumentu třída js a opona se vůbec
+   nevykreslí; stránka se pak chová jako obyčejná stránka.
+   ══════════════════════════════════════════════════════════════ */
+
+#opona{display: none}
+
+.js #opona{
+  display: block;
+  position: fixed; inset: 0; z-index: 300;
+  overflow: hidden;
 }
-@keyframes ldShow{to{opacity:1}}
+.je-odhrnuto #opona{display: none}
 
-.ld-mark{font-size:1rem;font-weight:500;letter-spacing:.02em}
-.ld-mark span{color:var(--wine-tx)}
+.op-tma{position: absolute; inset: 0; background: var(--noc)}
 
-.ld-bar{width:104px;height:1px;background:var(--hair)}
-.ld-bar i{
-  display:block;height:100%;
-  background:var(--wine-tx);
-  transform:scaleX(var(--load,.25));
-  transform-origin:left;
-  transition:transform .22s var(--out);
-}
+/* ── SVĚT, KTERÝ SE STAVÍ ──────────────────────────────────────
+   Za terminálem se s každým hotovým řádkem výpisu o kus vynoří
+   totéž pozadí, jaké má stránka: mřížka do hloubky a rudá záře.
+   Sílu drží proměnná --staveno, kterou zapisuje skript podle
+   skutečného postupu, takže je při načítání vidět, jak stránka
+   vzniká, a opona není jen černá plocha.
+   ─────────────────────────────────────────────────────────── */
 
-/* Hotovo: vrstva se odkryje. Visibility ji zároveň vyřadí
-   z pořadí tabulátoru i ze čtečky obrazovky. */
-html.ready #loader{
-  opacity:0;visibility:hidden;
-  animation:none;
-  transition:opacity .22s var(--out),visibility 0s linear .22s;
-}
-/* Když bylo hotovo dřív, než se vrstva stihla rozsvítit,
-   nemá co blednout a zmizí rovnou. */
-html.ready-hned #loader{transition:none}
+.op-svet{position: absolute; inset: 0; overflow: hidden}
 
-/* Kdyby skript selhal, vrstva se po třech vteřinách odkryje sama
-   a stránka zůstane použitelná. */
-@media (prefers-reduced-motion:no-preference){
-  #loader{animation:ldShow .18s .12s forwards,ldFailsafe 0s 3s forwards}
-}
-@keyframes ldFailsafe{to{opacity:0;visibility:hidden}}
-
-
-/* ── SAZBA ─────────────────────────────────────────────────────
-   Hierarchii nedělá velikost sama o sobě, ale rozdíl tloušťky.
-   Nadpisy jsou lehké a velké, popisky drobné a prostrkané.
-   ───────────────────────────────────────────────────────────── */
-
-.mono,.label{
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.7rem;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-}
-.label{color:var(--sage)}
-
-.sec-head{
-  display:flex;align-items:baseline;justify-content:space-between;
-  gap:20px;flex-wrap:wrap;
-  padding-bottom:18px;
-  margin-bottom:clamp(34px,4vw,56px);
-  border-bottom:1px solid var(--hair);
-}
-.sec-title{
-  font-size:clamp(1.9rem,4vw,2.7rem);
-  font-weight:300;
-  letter-spacing:-.03em;
-  line-height:1.05;
+.op-mrizka{
+  position: absolute; inset: -30% -20% 0;
+  background-image:
+    linear-gradient(to right, rgba(242,239,233,.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(242,239,233,.07) 1px, transparent 1px);
+  background-size: 76px 76px;
+  mask-image: radial-gradient(128% 84% at 50% 4%, #000 0%, transparent 74%);
+  opacity: calc(var(--staveno, 0) * .9);
+  transform: scale(calc(1.14 - var(--staveno, 0) * .14));
+  transition: opacity .7s ease, transform .9s cubic-bezier(.22,1,.36,1);
 }
 
+.op-zar{
+  position: absolute; top: -26%; right: -14%;
+  width: min(74vw, 820px); aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(224,36,44,.34), transparent 66%);
+  filter: blur(84px);
+  opacity: calc(var(--staveno, 0) * .85);
+  transition: opacity .9s ease;
+}
 
-/* ══════════════════════════════════════════════════════════════
-   NAVIGACE
+.op-okno{
+  position: absolute; left: 50%; top: 50%;
+  width: min(540px, 92vw);
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--linka-2);
+  background: rgba(7,7,8,.94);
+  box-shadow: 0 0 0 1px rgba(224,36,44,.16), 0 30px 90px rgba(0,0,0,.75), 0 0 120px rgba(224,36,44,.14);
+  overflow: hidden;
+  will-change: transform;
+  /* Okno naskočí jako stará obrazovka: dvakrát blikne a pak
+     se rozsvítí napevno. */
+  animation: oknoNaskoci .5s steps(1) both;
+}
+@keyframes oknoNaskoci{
+  0%  {opacity: 0}
+  20% {opacity: .5}
+  35% {opacity: 0}
+  55% {opacity: 1}
+  70% {opacity: .7}
+  100%{opacity: 1}
+}
 
-   Průhledná, dokud stránka stojí na začátku. Po popojetí dostane
-   podklad, aby text pod ní nesnižoval čitelnost odkazů.
-══════════════════════════════════════════════════════════════ */
+/* Skenovací linky přes celé okno. Jsou to dva body průhledného
+   pruhu, takže kreslení stojí jeden přechod a nic víc. */
+.op-crt{
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: repeating-linear-gradient(180deg,
+    rgba(0,0,0,.28) 0 1px, transparent 1px 3px);
+  opacity: .5;
+}
+/* Po obrazovce jednou za čas přejede světlejší pruh, jako když
+   se překresluje obraz. */
+.op-crt::after{
+  content: ""; position: absolute; left: 0; right: 0; height: 34%;
+  background: linear-gradient(180deg, transparent, rgba(242,239,233,.055), transparent);
+  animation: crtPrejezd 4.2s linear infinite;
+}
+@keyframes crtPrejezd{
+  from{transform: translateY(-120%)}
+  to  {transform: translateY(420%)}
+}
+
+.op-hl{
+  display: flex; align-items: center; gap: 7px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--linka);
+  font-family: var(--mono);
+  font-size: .62rem; letter-spacing: .1em;
+  color: var(--sed-2);
+}
+.op-z{width: 7px; height: 7px; background: var(--linka-2)}
+.op-z:first-child{background: var(--rud)}
+.op-n{margin-left: 6px}
+.op-t{margin-left: auto}
+
+.op-telo{padding: 14px 12px 12px}
+
+/* ── VÝPIS SESTAVENÍ ─────────────────────────────────────────
+   Řádek se rozsvítí teprve ve chvíli, kdy je ta věc doopravdy
+   hotová. Dokud se čeká, není tam prázdné místo: řádky přibývají
+   zdola, takže je vidět, že se něco děje.
+   ─────────────────────────────────────────────────────────── */
+
+.op-log{font-family: var(--mono); font-size: .72rem; letter-spacing: .02em}
+
+.op-r{
+  display: grid; grid-template-columns: 12px minmax(0, 1fr) auto;
+  align-items: center; gap: 10px;
+  padding: 3px 0;
+  color: var(--sed-2);
+  opacity: 0; transform: translateY(5px);
+  transition: opacity .28s ease, transform .28s cubic-bezier(.22,1,.36,1);
+}
+.op-r.je-hotovo{opacity: 1; transform: none}
+
+/* Fajfka kreslená dvěma hranami: strojopis ji v podmnožině
+   znaků mít nemusí a čtvereček místo ní by vypadal jako chyba. */
+.op-fajfka{
+  width: 9px; height: 5px;
+  border-left: 1px solid var(--rud);
+  border-bottom: 1px solid var(--rud);
+  transform: rotate(-45deg) translate(1px, -1px);
+}
+.op-co{color: var(--kost)}
+.op-hod{color: var(--sed-2)}
+
+/* ── PŘÍKAZ ──────────────────────────────────────────────────
+   Nikdo ho nepíše, dokud člověk nestiskne šipku. Pak se dopíše
+   sám, znak po znaku, a okno se rozletí.
+   ─────────────────────────────────────────────────────────── */
+
+.op-prikaz{
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px solid var(--linka);
+  font-family: var(--mono);
+  font-size: .78rem; letter-spacing: .02em;
+  color: var(--kost);
+}
+.op-prikaz b{
+  width: 0; height: 0;
+  border-left: 6px solid var(--rud);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+}
+.op-psano{white-space: pre}
+.op-kurzor{
+  width: .5em; height: 1.05em;
+  background: var(--rud);
+  animation: kurzorBlika 1.05s steps(1) infinite;
+}
+@keyframes kurzorBlika{0%,50%{opacity: 1} 51%,100%{opacity: 0}}
+
+/* Výzva svítí pořád stejně; bliká jen čtvereček před ní.
+   Kdyby blikal text, byl by půlku času nečitelný. */
+.op-vyzva{
+  display: flex; align-items: center; gap: 9px;
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: .64rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--rud-tx);
+}
+.op-vyzva::before{
+  content: ""; width: 6px; height: 6px; flex: none;
+  background: var(--rud);
+  animation: vyzvaBlika 1.05s steps(1) infinite;
+}
+@keyframes vyzvaBlika{0%,50%{opacity: 1} 51%,100%{opacity: .15}}
+.op-vyzva b, .op-vyzva i{font-weight: inherit; font-style: normal}
+.op-vyzva i{display: none}
+@media (hover: none), (pointer: coarse){
+  .op-vyzva b{display: none}
+  .op-vyzva i{display: inline}
+}
+/* Než je sestaveno, není k čemu vyzývat. */
+.op-nacita .op-vyzva{visibility: hidden}
+
+/* ── SPUŠTĚNÍ ────────────────────────────────────────────────
+   Okno se rozletí přes celou obrazovku a zhasne; pod ním
+   zůstane hotová stránka, která mezitím dojede na své místo.
+   Všechno jsou posuny, měřítka a průhlednost.
+   ─────────────────────────────────────────────────────────── */
+
+.je-vyjezd .op-log,
+.je-vyjezd .op-vyzva{opacity: 0; transition: opacity .14s ease; animation: none}
+
+.je-vyjezd .op-okno{
+  animation: oknoSkubne .16s steps(2) 1, oknoRoste .66s cubic-bezier(.55,0,.9,.35) .16s forwards;
+}
+/* Škubnutí obrazu, jako když se přepne signál. */
+@keyframes oknoSkubne{
+  0%  {transform: translate(-50%, -50%)}
+  50% {transform: translate(calc(-50% + 7px), calc(-50% - 3px))}
+  100%{transform: translate(-50%, -50%)}
+}
+@keyframes oknoRoste{
+  0%  {transform: translate(-50%, -50%) scale(1);   opacity: 1}
+  40% {transform: translate(-50%, -50%) scale(1.5); opacity: 1}
+  100%{transform: translate(-50%, -50%) scale(9);   opacity: 0}
+}
+
+.je-vyjezd .op-svet{animation: svetDostaven .7s ease forwards}
+@keyframes svetDostaven{to{opacity: 0}}
+.je-vyjezd .op-tma{animation: tmaMizi .42s ease .46s forwards}
+@keyframes tmaMizi{to{opacity: 0}}
+
+/* Stránka pod oponou dojede na své místo. Ztlumená být nesmí:
+   pod neprůhlednou oponou ji stejně nikdo nevidí, ale kontrolám
+   přístupnosti by se jevila jako nečitelný text. */
+.js #main, .js #hdr{transform: scale(.965)}
+.je-vyjezd #main, .je-vyjezd #hdr{
+  animation: prijezdStranky .9s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes prijezdStranky{to{transform: none}}
+.je-odhrnuto #main, .je-odhrnuto #hdr{transform: none; animation: none}
+
+@media (prefers-reduced-motion: reduce){
+  .op-kurzor, .op-vyzva::before, .op-okno, .op-crt::after{animation: none}
+  .op-okno{opacity: 1}
+  .je-vyjezd .op-okno, .je-vyjezd .op-tma{animation: none; opacity: 0}
+  .js #main, .js #hdr{transform: none}
+}
+
+
+/* ══ OPIČKA NA LIÁNÁCH ═════════════════════════════════════════
+   Ukazatel postupu ve stránce. Visí pod lištou, každá liána je
+   jedna zastávka a opička na ně skáče, jak člověk šipkami
+   postupuje. Vpravo od poslední liány už nic není, takže je
+   vidět i to, kolik zbývá.
+
+   Volby v konzoli se nepočítají: rozcestník v úvodu je nabídka,
+   ne cesta. Dokud je člověk v úvodu, visí opička na začátku
+   hrazdy, před první liánou.
+
+   Pohyb je rozdělený do tří vrstev, aby si transformace
+   nepřekážely: vnější prvek jede do strany, prostřední se
+   houpe pořád dokola a vnitřní dělá vlastní skok.
+   ══════════════════════════════════════════════════════════════ */
+
+/* Dokud visí opona, opička nemá kde viset. */
+.hrazda{opacity: 0; transition: opacity .5s ease}
+.je-odhrnuto .hrazda{opacity: 1}
+
+.hrazda{
+  position: fixed; left: 0; right: 0; top: var(--nav);
+  height: 58px; z-index: 95; pointer-events: none;
+  padding-inline: clamp(18px, 4vw, 48px);
+}
+/* Větev, ze které liány visí. */
+.hrazda::before{
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--linka-2) 12%, var(--linka-2) 88%, transparent);
+}
+
+/* ── LIÁNA ─────────────────────────────────────────────────────
+   Provaz s uzlem na konci. Houpe se kolem svého úchytu, každá
+   o kousek jinak, takže hrazda nikdy nestojí úplně na místě.
+   ─────────────────────────────────────────────────────────── */
+
+.liana{
+  position: absolute; top: 0; left: var(--x, 0);
+  width: 1px; height: 15px;
+  background: linear-gradient(180deg, rgba(242,239,233,.28), rgba(242,239,233,.1));
+  transform-origin: 50% 0;
+  animation: lianaSeHoupe 5.5s ease-in-out infinite;
+}
+/* Uzel na konci provazu. */
+.liana::after{
+  content: ""; position: absolute; left: -1px; bottom: -1px;
+  width: 3px; height: 3px;
+  background: rgba(242,239,233,.28);
+}
+.liana:nth-child(2n){animation-duration: 6.4s; animation-delay: -1.4s}
+.liana:nth-child(3n){animation-duration: 7.1s; animation-delay: -2.9s}
+.liana:nth-child(5n){animation-duration: 5.9s; animation-delay: -4.2s}
+
+@keyframes lianaSeHoupe{
+  0%,100%{transform: rotate(-2.5deg)}
+  50%    {transform: rotate(2.5deg)}
+}
+
+/* Liána, na které opička právě visí, je rudá, delší a houpe se
+   víc: drží váhu. */
+.liana.je-drzena{
+  height: 24px;
+  background: linear-gradient(180deg, var(--rud), rgba(224,36,44,.45));
+  animation-duration: 2.6s;
+}
+.liana.je-drzena::after{background: var(--rud); width: 4px; height: 4px; left: -1px}
+
+/* ── OPIČKA ───────────────────────────────────────────────────
+   Tři vrstvy: posun do strany, houpání, skok. Tělo je jeden
+   prvek, tvar mu dělají stíny rozložené po čtyřech bodech,
+   takže se nestahuje žádný obrázek.
+   ─────────────────────────────────────────────────────────── */
+
+/* Posun je v levé hraně, ne v transformaci: procento v posunu
+   se počítá z vlastní velikosti prvku, a ta je čtyři body. */
+.opicka{
+  position: absolute; top: 0; left: var(--x, 0);
+  transition: left .46s cubic-bezier(.34,1.24,.5,1);
+}
+
+/* Houpání kolem ruky. Běží pořád, takže opička nikdy nestojí
+   jako přilepená. */
+.op-ruka{
+  display: block;
+  transform-origin: 50% 0;
+  animation: opickaSeHoupe 3.4s ease-in-out infinite;
+}
+@keyframes opickaSeHoupe{
+  0%,100%{transform: rotate(-4deg)}
+  50%    {transform: rotate(4deg)}
+}
+/* Při skoku houpání ustoupí: ve vzduchu se není čeho držet. */
+.opicka.skace .op-ruka{animation: none}
+
+.opicka i{
+  display: block; width: 4px; height: 4px;
+  margin-top: 20px;
+  transform: scaleX(var(--smer, 1));
+  box-shadow: var(--visi);
+}
+
+/* Dvě polohy těla. Visící má ruku nahoře u liány, letící má
+   obě ruce rozpažené a nohy pokrčené. Je to týž trik jako
+   u sprite ve staré hře: mezi snímky se skáče, neprolíná se. */
+.opicka i{
+  --visi:
+    12px 0    var(--rud),
+     8px 4px  var(--rud), 12px 4px  var(--rud), 16px 4px  var(--rud), 20px 4px  var(--rud),
+     0   8px  var(--rud),  4px 8px  var(--rud),  8px 8px  var(--rud), 12px 8px  var(--rud), 16px 8px var(--rud), 20px 8px var(--rud), 24px 8px var(--rud),
+     0  12px  var(--rud),  4px 12px var(--rud), 12px 12px var(--rud), 20px 12px var(--rud), 24px 12px var(--rud),
+     4px 16px var(--rud),  8px 16px var(--rud), 12px 16px var(--rud), 16px 16px var(--rud), 20px 16px var(--rud),
+     8px 20px var(--rud), 12px 20px var(--rud), 16px 20px var(--rud), 24px 20px var(--rud),
+     8px 24px var(--rud), 12px 24px var(--rud), 16px 24px var(--rud), 24px 24px var(--rud),
+     4px 28px var(--rud), 20px 28px var(--rud);
+
+  --leti:
+     0   0    var(--rud), 24px 0    var(--rud),
+     4px 4px  var(--rud),  8px 4px  var(--rud), 12px 4px var(--rud), 16px 4px var(--rud), 20px 4px var(--rud),
+     0   8px  var(--rud),  4px 8px  var(--rud),  8px 8px var(--rud), 12px 8px var(--rud), 16px 8px var(--rud), 20px 8px var(--rud), 24px 8px var(--rud),
+     0  12px  var(--rud),  4px 12px var(--rud), 12px 12px var(--rud), 20px 12px var(--rud), 24px 12px var(--rud),
+     4px 16px var(--rud),  8px 16px var(--rud), 12px 16px var(--rud), 16px 16px var(--rud), 20px 16px var(--rud),
+     8px 20px var(--rud), 12px 20px var(--rud), 16px 20px var(--rud), 28px 20px var(--rud),
+     4px 24px var(--rud), 20px 24px var(--rud), 28px 24px var(--rud),
+     0  28px  var(--rud), 24px 28px var(--rud);
+}
+
+/* Skok. Oblouk nahoru, náklon po směru letu a v půlce výměna
+   polohy těla. Přehraje se při každé změně liány. */
+.opicka.skace i{animation: opickaSkace .46s cubic-bezier(.3,.7,.4,1)}
+@keyframes opickaSkace{
+  0%  {transform: scaleX(var(--smer, 1)) translateY(0) rotate(0);
+       box-shadow: var(--visi)}
+  20% {box-shadow: var(--leti)}
+  50% {transform: scaleX(var(--smer, 1)) translateY(-16px) rotate(-10deg)}
+  80% {box-shadow: var(--leti)}
+  81% {box-shadow: var(--visi)}
+  100%{transform: scaleX(var(--smer, 1)) translateY(0) rotate(0);
+       box-shadow: var(--visi)}
+}
+
+@media (max-width: 560px){
+  .hrazda{height: 52px; padding-inline: 10px}
+  .opicka i{margin-top: 15px}
+  .liana{height: 12px}
+  .liana.je-drzena{height: 19px}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .liana, .op-ruka{animation: none}
+  .opicka.skace i{animation: none}
+}
+
+
+/* ══ KURZOR A REŽIM FORMULÁŘE ══════════════════════════════════
+   Stránka se ovládá šipkami, ukazatel myši tu nemá co dělat
+   a jen by mátl. Schová se všude.
+
+   Jedna výjimka: kontaktní formulář. Do políčka se musí dát
+   trefit a text se musí dát označit, takže v kontaktu kurzor
+   je, a jakmile v něm někdo stojí, přepne se stránka do režimu
+   formuláře: šipky patří psaní, kolečko a prst zase posouvají
+   a v ukazateli stavu stojí, jak se vrátit do hry.
+   ══════════════════════════════════════════════════════════════ */
+
+html, body, a, button, input, textarea, label, select, summary{cursor: none}
+*, *::before, *::after{cursor: inherit}
+
+/* Lišta se ovládá myší, takže v ní ukazatel je. Je to vlastní
+   šipka: tmavá s kostěným obrysem a rudou špičkou, aby byla
+   vidět na černé a zároveň patřila do téhož světa jako zbytek
+   stránky. Kreslí se v SVG rovnou ve stylu, nestahuje se
+   žádný soubor.
+
+   Obrázek ukazatele spadá v obsahové politice pod img-src,
+   a ta data: adresy povoluje. */
+#hdr, #hdr a, .skip, .skip:focus-visible{cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M3 2v16l4-4 2.6 5.4 3-1.4L10 13h6z' fill='%230b0b0c' stroke='%23f2efe9' stroke-width='1.6' stroke-linejoin='miter'/><path d='M3 2v4l3-1z' fill='%23e0242c'/></svg>") 3 2, auto}
+
+/* V kontaktu kurzor je, jinak by nešlo do formuláře trefit. */
+#kontakt, #kontakt *{cursor: auto}
+#kontakt input, #kontakt textarea{cursor: text}
+
+/* V režimu formuláře mluví ukazatel stavu jinak. */
+.uk-f{display: none}
+.rezim-formular .uk-k{display: none}
+.rezim-formular .uk-f{display: inline; color: var(--rud-tx)}
+
+/* Pole, ve kterém se právě píše, drží rudou hranu: je to
+   tentýž ukazatel jako jinde ve hře, jen v poli. */
+#kontakt input:focus, #kontakt textarea:focus{
+  border-color: var(--rud);
+  box-shadow: inset 3px 0 0 var(--rud);
+}
+
+
+
+/* ══ LIŠTA ═════════════════════════════════════════════════════ */
+
+#nav-sentinel{position: absolute; top: 0; width: 1px; height: 1px}
 
 #hdr{
-  position:fixed;inset:0 0 auto 0;z-index:100;
-  /* výška lišty plus bezpečná zóna: podklad tak sahá až pod
-     stavový řádek telefonu a nad lištou se nic neprosvítá */
-  height:calc(var(--nav) + var(--sat));
-  padding:var(--sat) var(--ph) 0;
-  display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid transparent;
-  transition:background .2s var(--out),border-color .2s var(--out);
+  position: fixed; inset: 0 0 auto; z-index: 100; height: var(--nav);
+  display: flex; align-items: center;
+  border-bottom: 1px solid transparent;
+  transition: background-color .3s ease, border-color .3s ease;
 }
 #hdr.solid{
-  background:rgba(6,14,19,.78);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  border-bottom-color:var(--hair);
+  background: rgba(11,11,12,.86);
+  border-bottom-color: var(--linka);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
+.hdr-in{
+  width: 100%; max-width: var(--wrap); margin-inline: auto;
+  padding-inline: var(--pad);
+  display: flex; align-items: center; gap: 24px;
+}
+.logo{font-size: 1.1rem; font-weight: 600; letter-spacing: -.05em; margin-right: auto}
+.logo span{color: var(--rud-tx)}
 
-.logo{font-size:1rem;font-weight:500;letter-spacing:.02em}
-.logo span{color:var(--wine-tx)}
-
-#hdr nav{display:flex;gap:clamp(16px,2.4vw,32px)}
+#hdr nav{display: flex; gap: 26px}
 #hdr nav a{
-  position:relative;
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--sage);
-  padding-block:6px;
-  transition:color .16s var(--out);
+  position: relative; font-size: .92rem; color: var(--sed);
+  transition: color .2s ease;
 }
-/* Podtržení roste ze zvětšení, ne ze změny šířky, takže si
-   prohlížeč nemusí přepočítávat rozvržení. */
 #hdr nav a::after{
-  content:'';
-  position:absolute;left:0;right:0;bottom:2px;height:1px;
-  background:var(--wine-tx);
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .22s var(--out);
+  content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 1px;
+  background: var(--rud); transform: scaleX(0); transform-origin: right;
+  transition: transform .3s cubic-bezier(.22,1,.36,1);
 }
-#hdr nav a:hover,#hdr nav a.active{color:var(--bone)}
-#hdr nav a.active::after{transform:scaleX(1)}
+#hdr nav a:hover{color: var(--kost)}
+#hdr nav a:hover::after, #hdr nav a.aktivni::after{transform: scaleX(1); transform-origin: left}
+#hdr nav a.aktivni{color: var(--kost)}
 
-
-/* ══════════════════════════════════════════════════════════════
-   ÚVOD
-
-   Jméno je velké a lehké. Kontrast mezi tenkým nadpisem
-   a drobnými prostrkanými popisky nese celou stránku, takže
-   tu není potřeba žádný efekt navíc.
-══════════════════════════════════════════════════════════════ */
-
-#hero{
-  min-height:min(88svh,780px);
-  padding-top:calc(var(--nav) + var(--sat) + clamp(48px,11vh,110px));
-  padding-bottom:clamp(40px,6vh,72px);
-  display:flex;flex-direction:column;justify-content:center;
+.hdr-cta{
+  position: relative;
+  padding: 9px 18px; border: 1px solid var(--linka-2);
+  font-size: .88rem; color: var(--kost);
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
 }
+/* Značky jsou tu menší a odskočí míň: lišta je těsná. */
+.hdr-cta::before, .hdr-cta::after{width: 9px; height: 9px; border-color: var(--rud)}
+.hdr-cta:hover::before, .hdr-cta:focus-visible::before{opacity: 1; transform: translate(-5px, -5px)}
+.hdr-cta:hover::after, .hdr-cta:focus-visible::after{opacity: 1; transform: translate(5px, 5px)}
+.hdr-cta:hover{border-color: var(--kost)}
 
-.hero-kicker{display:flex;align-items:center;gap:12px;margin-bottom:clamp(20px,2.6vw,30px)}
-.hk-rule{width:clamp(24px,3vw,44px);height:1px;background:var(--wine-tx)}
+/* ══ SPOLEČNÉ PRVKY ════════════════════════════════════════════ */
 
-.hero-name{
-  font-size:clamp(3.4rem,11.5vw,8.6rem);
-  font-weight:250;
-  letter-spacing:-.045em;
-  line-height:.94;
-  margin-bottom:clamp(26px,3vw,38px);
+.nadpis{
+  font-size: clamp(2.1rem, 4.8vw, 3.6rem);
+  font-weight: 600; line-height: 1.02; letter-spacing: -.045em;
 }
-.hero-name em{font-style:normal;display:block}
-/* Příjmení je o stupeň silnější. Rozdíl tloušťky uvnitř jednoho
-   nadpisu dělá víc než jakékoli zvětšení. */
-.hero-name em:last-child{font-weight:500}
+.nadpis b{font-weight: 500; color: var(--rud-tx)}
+.nadpis-p{margin-top: 18px; max-width: 46ch; color: var(--sed)}
 
-.hero-desc{
-  color:var(--sage);
-  font-size:clamp(1rem,1.25vw,1.12rem);
-  max-width:46ch;
-  margin-bottom:clamp(28px,3.4vw,40px);
-}
+/* ── TLAČÍTKA ──────────────────────────────────────────────────
+   Při najetí kolem tlačítka odskočí dvě rohové značky, jaké má
+   vybraný prvek v nástrojích vývojáře. Je to rychlá narážka na
+   řemeslo a nic to nestojí: dva pseudoprvky a jeden transform.
+   Při stisku se značky přitáhnou zpátky, takže je dotek cítit.
 
-.hero-act{display:flex;align-items:center;gap:clamp(16px,2.4vw,28px);flex-wrap:wrap}
-
-/* Fakta v jednom řádku pod linkou. Drží se tak hodně informací
-   na malé ploše, aniž by vznikly čtyři krabice. */
-.hero-facts{
-  margin-top:clamp(44px,6vw,78px);
-  padding-top:20px;
-  border-top:1px solid var(--hair);
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,auto));
-  justify-content:start;
-  gap:clamp(18px,4vw,56px);
-}
-.fact-val{display:block;font-size:clamp(.98rem,1.4vw,1.22rem);font-weight:400;letter-spacing:-.02em}
-.fact-key{
-  display:block;margin-top:2px;
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--sage);
-}
-
-
-/* ── AKCE ──────────────────────────────────────────────────────
-   Jedno plné tlačítko a jeden textový odkaz. Stisk je znát
-   zmenšením, které proběhne do 140 ms.
+   Stejné chování mají všechna tlačítka na stránce včetně toho
+   v liště a v kontaktním formuláři.
    ───────────────────────────────────────────────────────────── */
 
 .btn{
-  display:inline-flex;align-items:center;gap:9px;
-  padding:12px 20px;
-  border-radius:var(--r-md);
-  background:var(--wine);color:var(--bone);
-  font-size:.88rem;font-weight:500;
-  white-space:nowrap;
-  transition:transform .14s var(--out),background .16s var(--out);
+  position: relative;
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 15px 28px;
+  background: var(--rud); color: #fff;
+  font-size: .95rem; font-weight: 500; white-space: nowrap;
+  border: 1px solid var(--rud);
+  transition: background-color .2s ease, border-color .2s ease, color .2s ease;
 }
-.btn svg{width:15px;height:15px;transition:transform .18s var(--out)}
-.btn:hover{background:#a8374a}
-.btn:hover svg{transform:translateX(3px)}
-.btn:active{transform:scale(.97)}
-
-/* Textový odkaz s linkou, která vyjede zleva. */
-.lnk{
-  position:relative;
-  font-size:.88rem;color:var(--sage);
-  padding-bottom:3px;
-  transition:color .16s var(--out);
+.btn-t{display: block}
+.btn .ik{
+  width: 17px; height: 17px;
+  transition: transform .25s cubic-bezier(.22,1,.36,1);
 }
-.lnk::after{
-  content:'';
-  position:absolute;left:0;right:0;bottom:0;height:1px;
-  background:currentColor;
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .22s var(--out);
+.btn:hover .ik{transform: translateX(4px)}
+
+/* Rohové značky. Leží přesně na rozích a při najetí odskočí ven. */
+.btn::before, .btn::after,
+.hdr-cta::before, .hdr-cta::after{
+  content: ''; position: absolute; width: 12px; height: 12px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .2s ease, transform .3s cubic-bezier(.22,1,.36,1);
 }
-.lnk:hover{color:var(--bone)}
-.lnk:hover::after{transform:scaleX(1)}
-
-
-/* ══════════════════════════════════════════════════════════════
-   ZAMĚŘENÍ
-
-   Dva sloupce textu oddělené linkou, pod nimi výčet technologií.
-   Žádné karty: v minimalismu odděluje obsah mezera a linka,
-   ne rámeček.
-══════════════════════════════════════════════════════════════ */
-
-#expertise{padding-block:var(--sec)}
-
-/* Nadpis v postranním sloupci, obsah vedle. Klasické editorialní
-   členění: oko najde nadpis vlevo a čte doprava, místo aby
-   přejíždělo přes celou šířku. */
-.exp-layout{
-  display:grid;
-  grid-template-columns:minmax(0,.26fr) minmax(0,.74fr);
-  gap:clamp(26px,4vw,56px);
-  padding-top:22px;
-  border-top:1px solid var(--hair);
+.btn::before, .hdr-cta::before{
+  top: -1px; left: -1px;
+  border-top: 2px solid currentColor; border-left: 2px solid currentColor;
 }
-.side-title{
-  font-size:clamp(1.6rem,2.8vw,2.2rem);
-  font-weight:300;letter-spacing:-.03em;line-height:1.05;
-  position:sticky;
-  top:calc(var(--nav) + var(--sat) + 28px);
+.btn::after, .hdr-cta::after{
+  bottom: -1px; right: -1px;
+  border-bottom: 2px solid currentColor; border-right: 2px solid currentColor;
 }
+.btn:hover::before, .btn:focus-visible::before{opacity: 1; transform: translate(-7px, -7px)}
+.btn:hover::after, .btn:focus-visible::after{opacity: 1; transform: translate(7px, 7px)}
+.btn:active::before, .hdr-cta:active::before{transform: translate(-3px, -3px)}
+.btn:active::after, .hdr-cta:active::after{transform: translate(3px, 3px)}
 
-.exp-grid{
-  display:grid;
-  /* záměrně nestejné sloupce */
-  grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
-  gap:clamp(26px,4vw,56px);
-}
-/* Druhý sloupec sjíždí o kousek níž, aby dvojice nebyla zarovnaná
-   do jedné linky. */
-.exp-col:nth-child(2){padding-top:clamp(0px,3vw,42px)}
-.exp-col{display:flex;flex-direction:column}
-.exp-num{color:var(--wine-tx);font-family:'Geist Mono',ui-monospace,monospace;font-size:.68rem;letter-spacing:.14em}
-.exp-col h3{
-  margin:12px 0 14px;
-  font-size:clamp(1.25rem,2.2vw,1.6rem);
-  font-weight:400;letter-spacing:-.025em;line-height:1.15;
-}
-.exp-desc{color:var(--sage);font-size:.94rem;margin-bottom:20px}
+/* Na rudém tlačítku jsou značky kostěné, aby byly vidět. */
+.btn::before, .btn::after{border-color: var(--kost)}
+.btn:hover{background: #f03038; border-color: #f03038}
+.btn[disabled]{opacity: .6; cursor: progress}
+.btn[disabled]::before, .btn[disabled]::after{opacity: 0}
 
-/* Dovednosti jako řádky oddělené linkou. Přehlednější než
-   shluk štítků a zabere to míň místa. */
-.exp-skills{border-top:1px solid var(--hair)}
-.exp-skills li{
-  padding:8px 0;
-  border-bottom:1px solid var(--hair);
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.72rem;letter-spacing:.04em;
-  color:var(--sage);
-}
+/* Obrysová varianta: značky rudé, výplň se při najetí jen naznačí. */
+.btn-lin{background: none; color: var(--kost); border-color: var(--linka-2)}
+.btn-lin::before, .btn-lin::after{border-color: var(--rud)}
+.btn-lin:hover{background: rgba(242,239,233,.05); border-color: var(--kost)}
 
-/* Výčet technologií. Prostý zalomený seznam, bez pohybu:
-   posouvající se pás by v tomhle stylu působil jako cizí prvek. */
-.stack{
-  margin-top:clamp(40px,5vw,72px);
-  padding-top:22px;
-  border-top:1px solid var(--hair);
-  display:flex;flex-wrap:wrap;
-  gap:8px;
-}
-.stack span{
-  padding:6px 11px;
-  border:1px solid var(--hair);
-  border-radius:var(--r-sm);
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.68rem;letter-spacing:.06em;
-  color:var(--sage);
-  transition:border-color .16s var(--out),color .16s var(--out);
-}
-.stack span:hover{border-color:var(--hair-2);color:var(--bone)}
+/* Tlačítko formuláře drží celou šířku sloupce a popisek je na střed. */
+.btn-sir{width: 100%; justify-content: center}
 
 
-/* ══════════════════════════════════════════════════════════════
-   PROJEKTY
-
-   Rejstřík, ve kterém se řádek rozbalí. Zavřený stav drží celou
-   sekci na pár set pixelech, takže se na telefonu nescrolluje
-   donekonečna, a přitom se nic neschovává natrvalo: rozbalený
-   řádek ukáže náhled i celý popis.
-
-   Otevřený je vždy jen jeden projekt. Výška se animuje přes
-   grid-template-rows, což je jediný způsob, jak plynule přejít
-   z nulové výšky na výšku obsahu bez toho, aby se musela předem
-   změřit v skriptu.
-══════════════════════════════════════════════════════════════ */
-
-#projects{padding-block:var(--sec)}
-
-.px{border-top:1px solid var(--hair);padding-left:16px}
-.px-item{border-bottom:1px solid var(--hair)}
-
-.px-row{
-  width:100%;
-  display:grid;
-  grid-template-columns:auto minmax(0,1fr) auto auto;
-  align-items:center;
-  gap:clamp(14px,2vw,26px);
-  padding:clamp(17px,2vw,23px) 0;
-  transition:padding-left .22s var(--out);
-}
-.px-row:hover{padding-left:10px}
-
-.px-num{
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.68rem;letter-spacing:.12em;
-  color:var(--sage);
-  transition:color .16s var(--out);
-}
-.px-name{
-  font-size:clamp(1.05rem,1.9vw,1.45rem);
-  font-weight:400;letter-spacing:-.025em;line-height:1.2;
-  transition:color .16s var(--out);
-}
-.px-tech{
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.66rem;letter-spacing:.05em;
-  color:var(--sage);
-  white-space:nowrap;
-}
-
-/* Značka rozbalení. Svislá čárka se při otevření otočí do
-   vodorovné, takže z plusu vznikne minus. */
-.px-sign{position:relative;width:11px;height:11px;flex:none}
-.px-sign::before,.px-sign::after{
-  content:'';position:absolute;left:0;top:5px;
-  width:11px;height:1px;background:var(--sage);
-  transition:transform .24s var(--out),background .16s var(--out);
-}
-.px-sign::after{transform:rotate(90deg)}
-
-.px-row:hover .px-num{color:var(--wine-tx)}
-.px-row[aria-expanded="true"] .px-num{color:var(--wine-tx)}
-.px-row[aria-expanded="true"] .px-sign::after{transform:rotate(0deg)}
-.px-row[aria-expanded="true"] .px-sign::before,
-.px-row[aria-expanded="true"] .px-sign::after{background:var(--wine-tx)}
-
-/* Vínová značka u otevřeného projektu. */
-.px-item{position:relative}
-.px-item::before{
-  content:'';
-  /* stojí v levém žlábku seznamu, mimo text řádku */
-  position:absolute;left:-16px;top:0;width:2px;height:100%;
-  background:var(--wine);
-  transform:scaleY(0);transform-origin:50% 0;
-  transition:transform .26s var(--out);
-}
-.px-item.is-open::before{transform:scaleY(1)}
-
-/* Rozbalovací část. Vnější prvek mění výšku, vnitřní se jen
-   prolne, takže text nenaskakuje s poskočením. */
-.px-body{
-  display:grid;
-  grid-template-rows:0fr;
-  transition:grid-template-rows .28s var(--out);
-}
-.px-item.is-open .px-body{grid-template-rows:1fr}
-.px-inner{
-  overflow:hidden;
-  opacity:0;
-  transition:opacity .2s var(--out);
-}
-.px-item.is-open .px-inner{opacity:1;transition:opacity .3s var(--out) .06s}
-
-.px-grid{
-  display:grid;
-  grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);
-  gap:clamp(20px,3vw,44px);
-  padding-bottom:clamp(26px,3vw,40px);
-}
-.px-shot{
-  border:1px solid var(--hair);
-  border-radius:var(--r-lg);
-  overflow:hidden;
-  background:var(--ink-2);
-}
-.px-shot img{width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top center}
-
-.px-text{color:var(--sage);font-size:.92rem;margin-bottom:20px}
-.px-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px}
-.px-chips span{
-  padding:5px 10px;
-  border:1px solid var(--hair);
-  border-radius:var(--r-sm);
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.65rem;letter-spacing:.05em;
-  color:var(--sage);
-}
-.px-link{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:.86rem;font-weight:500;color:var(--bone);
-  padding-bottom:3px;
-  border-bottom:1px solid var(--wine);
-  transition:gap .18s var(--out);
-}
-.px-link:hover{gap:12px}
-.px-link svg{width:14px;height:14px}
-
-/* Připravovaný projekt: místo náhledu prázdná plocha s linkou. */
-.px-blank{
-  border:1px dashed var(--hair-2);
-  border-radius:var(--r-lg);
-  aspect-ratio:16/10;
-  display:grid;place-items:center;
-  color:var(--sage);
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
-}
-
-
-/* ══════════════════════════════════════════════════════════════
-   KONTAKT
-══════════════════════════════════════════════════════════════ */
-
-#contact{padding-block:var(--sec)}
-
-.ct-grid{
-  display:grid;
-  grid-template-columns:minmax(0,.44fr) minmax(0,.56fr);
-  gap:clamp(34px,5vw,72px);
-  align-items:start;
-}
-.ct-label{display:block;margin-bottom:14px}
-.ct-head{
-  font-size:clamp(1.9rem,3.6vw,2.7rem);
-  font-weight:300;letter-spacing:-.03em;line-height:1.08;
-  margin-bottom:14px;
-}
-.ct-head em{font-style:normal;font-weight:500}
-.ct-sub{color:var(--sage);margin-bottom:22px;max-width:32ch;font-size:.95rem}
-
-.avail{
-  display:inline-flex;align-items:center;gap:9px;
-  padding:7px 13px;
-  border:1px solid var(--wine);
-  border-radius:var(--r-sm);
-  background:var(--wine-df);
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;
-  color:var(--bone);
-  margin-bottom:clamp(28px,3.4vw,40px);
-}
-.avail i{width:5px;height:5px;border-radius:50%;background:var(--wine-tx);flex:none}
-@media (prefers-reduced-motion:no-preference){.avail i{animation:pulse 2.6s ease-in-out infinite}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
-
-.ct-links{border-top:1px solid var(--hair)}
-.ct-link{
-  display:grid;grid-template-columns:80px minmax(0,1fr) auto;
-  align-items:center;gap:14px;
-  padding:13px 0;
-  border-bottom:1px solid var(--hair);
-  transition:padding-left .22s var(--out);
-}
-a.ct-link:hover{padding-left:10px}
-.cll-label{
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--sage);
-}
-.cll-val{font-size:.92rem;color:var(--sage);overflow-wrap:anywhere;transition:color .16s var(--out)}
-a.ct-link:hover .cll-val{color:var(--bone)}
-.cll-arr{color:var(--sage);font-size:.85rem;transition:color .16s var(--out),transform .2s var(--out)}
-a.ct-link:hover .cll-arr{color:var(--wine-tx);transform:translate(2px,-2px)}
-
-/* Formulář bez rámečků. Pole odděluje jen spodní linka, která
-   se při zaostření obarví. */
-.fg{margin-bottom:17px}
-.fg label{
-  display:block;margin-bottom:8px;
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.63rem;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--sage);
-}
-.fg input,.fg textarea{
-  width:100%;
-  padding:9px 0;
-  background:none;
-  border:none;
-  border-bottom:1px solid var(--hair-2);
-  color:var(--bone);font:inherit;font-size:.95rem;
-  transition:border-color .16s var(--out);
-}
-.fg textarea{min-height:84px;resize:vertical}
-.fg input::placeholder,.fg textarea::placeholder{color:var(--sage);opacity:.55}
-.fg input:focus,.fg textarea:focus{outline:none;border-bottom-color:var(--wine-tx)}
-.fg input:focus-visible,.fg textarea:focus-visible{outline:2px solid var(--wine-tx);outline-offset:4px}
-
-#btn-send{
-  width:100%;justify-content:center;
-  margin-top:6px;
-  padding:14px 20px;
-}
-#btn-send:disabled{opacity:.55;cursor:progress}
-
-.form-feedback{min-height:1.4em;margin-top:12px;font-size:.84rem;color:var(--sage)}
-.form-feedback.ok{color:#8fbf9f}
-.form-feedback.err{color:var(--wine-tx)}
-
-
-/* ── PATIČKA ───────────────────────────────────────────────────
-   Spodní odsazení počítá s bezpečnou zónou telefonu, aby text
-   nekončil pod ovládacím proužkem systému.
+/* ── POZADÍ ────────────────────────────────────────────────────
+   Tři pevné vrstvy pod stránkou. Mřížka se sbíhá do hloubky,
+   záře drží pravou horní část, zrno sjednotí plochy. Všechno
+   jsou přechody, nestahuje se ani jeden obrázek, a protože je
+   vrstva fixed, při posunu se nepřekresluje.
    ───────────────────────────────────────────────────────────── */
 
-footer{border-top:1px solid var(--hair)}
+.pozadi{position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none}
+
+.poz-mrizka{
+  position: absolute; inset: -30% -20% 0;
+  background-image:
+    linear-gradient(to right, rgba(242,239,233,.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(242,239,233,.07) 1px, transparent 1px);
+  background-size: 76px 76px;
+  mask-image: radial-gradient(128% 84% at 50% 4%, #000 0%, transparent 74%);
+}
+
+/* Světlo, které pomalu přejede po mřížce. Je to jeden pruh
+   přechodu, který se posouvá; mřížka pod ním se nepřekresluje,
+   jen se přes ni kreslí. Jednou za osmnáct vteřin, takže si ho
+   člověk všimne spíš koutkem oka. */
+.poz-svit{
+  position: absolute; inset: -30% -20% 0;
+  background: linear-gradient(104deg,
+    transparent 42%, rgba(242,239,233,.055) 50%, transparent 58%);
+  mask-image: radial-gradient(128% 84% at 50% 4%, #000 0%, transparent 74%);
+  transform: translateX(-60%);
+}
+
+.poz-zar{
+  position: absolute; top: -26%; right: -14%;
+  width: min(74vw, 820px); aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(224,36,44,.34), transparent 66%);
+  filter: blur(84px);
+}
+
+/* Druhá záře dole vlevo. Plave po stejné dráze pořád dokola,
+   takže pozadí nikdy nestojí úplně na místě. */
+.poz-zar2{
+  position: absolute; bottom: -22%; left: -18%;
+  width: min(62vw, 660px); aspect-ratio: 1;
+  background: radial-gradient(circle, rgba(224,36,44,.2), transparent 68%);
+  filter: blur(96px);
+}
+
+/* Ztmavení k okrajům. Drží pozornost uprostřed a schová hrany
+   mřížky, aby nekončila rovným řezem. */
+.poz-vineta{
+  position: absolute; inset: 0;
+  background: radial-gradient(118% 88% at 50% 44%, transparent 52%, rgba(0,0,0,.72));
+}
+
+/* Zrno leží na pevné vrstvě a nikdy na posouvaném obsahu:
+   jinak by se přepočítávalo při každém snímku posunu. */
+.poz-zrno{
+  position: absolute; inset: 0; opacity: .04; mix-blend-mode: overlay;
+  background-image: repeating-linear-gradient(31deg,
+    #fff 0 1px, transparent 1px 2px, #000 2px 3px, transparent 3px 4px);
+  background-size: 5px 5px;
+}
+
+/* Hranice sekcí. Vlasová linka, která se na obou koncích
+   rozplyne a při najetí do okna se roztáhne do stran.
+
+   Odhaluje ji tentýž sledovač jako zbytek obsahu, proto má
+   třídu rv; dvojice pravidel níž jen přebije posun nahoru
+   za roztažení. */
+/* Brána mezi úrovněmi se při odhalení rozjede do stran. */
+.brana.rv{opacity: 0; transform: scaleX(.3)}
+.brana.rv.in{opacity: 1; transform: scaleX(1)}
+
+/* ── IKONY ─────────────────────────────────────────────────────
+   Phosphor, tenký řez. Velikost se řídí písmem, barvu dědí
+   z okolí, takže se ikona chová jako znak v textu.
+   ───────────────────────────────────────────────────────────── */
+
+.ik{
+  width: 1em; height: 1em; flex: none;
+  fill: currentColor;
+  transition: transform .2s cubic-bezier(.22,1,.36,1), color .2s ease;
+}
+/* Linka, která se pod nadpisem dokreslí, jakmile nadpis najede
+   do okna. Rytina se dopisuje sama. */
+.nadpis::after{
+  content: ''; display: block;
+  width: 72px; height: 1px; margin-top: 22px;
+  background: var(--rud);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .9s cubic-bezier(.22,1,.36,1) .15s;
+}
+.in .nadpis::after, .nadpis.in::after{transform: scaleX(1)}
+
+
+/* ══ ODHALOVÁNÍ PŘI POSUNU ═════════════════════════════════════ */
+
+.rv{
+  opacity: 0; transform: translateY(20px);
+  transition: opacity .65s cubic-bezier(.22,1,.36,1), transform .65s cubic-bezier(.22,1,.36,1);
+}
+.rv.in{opacity: 1; transform: none}
+/* Prvek, přes který stránka přeskočila, se objeví bez přechodu. */
+.rv.bez-prechodu{transition: none}
+
+/* Úvod se odhalí shora dolů: hlavička, věta, konzole, lišta. */
+.hero-veta.rv{transition-delay: .08s}
+.konz.rv{transition-delay: .16s}
+.hero-pata.rv{transition-delay: .26s}
+.obory .rv:nth-child(2){transition-delay: .08s}
+.obory .rv:nth-child(3){transition-delay: .16s}
+
+
+/* ══ ÚVOD ══════════════════════════════════════════════════════
+   Jméno, jedna věta a malá konzole. Rozcestník v ní je vysázený
+   drobně, jako výpis v terminálu: tři řádky, mezi kterými se
+   vybírá šipkami a potvrzuje enterem. Kdo si vybrat nechce, jde
+   dál dolů; konzole nikomu nestojí v cestě.
+
+   Stav drží jediná třída je-vybrana, kterou zapisuje skript.
+   Vedle ní platí i najetí a zaostření, aby výběr fungoval
+   i ve chvíli, kdy se skript nenačte.
+   ══════════════════════════════════════════════════════════════ */
+
+#hero{
+  position: relative;
+  min-height: 100svh;
+  display: flex; align-items: center;
+  padding-block: calc(var(--nav) + 64px) 56px;
+}
+
+/* Úvod drží levý okraj stránky jako každá jiná sekce. Šířku
+   krotí jednotlivé kusy, ne obal, jinak by se celý úvod ve
+   volném místě odsunul doprostřed. */
+.hero-in{display: block}
+.hero-hl, .hero-veta, .hero-pata{max-width: 720px}
+
+/* ── HLAVIČKA ÚVODU ─────────────────────────────────────────── */
+
+.hero-hl{
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: 8px 22px;
+}
+
+.jmeno{
+  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
+  font-weight: 700; letter-spacing: -.035em; line-height: 1.05;
+}
+.jmeno span{
+  display: block; margin-top: 6px;
+  font-family: var(--mono);
+  font-size: .72rem; font-weight: 400; letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--sed-2);
+}
+
+.stav{
+  display: flex; align-items: center; gap: 10px;
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: .66rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--sed);
+}
+
+.hero-veta{
+  margin-top: clamp(20px, 2.6vw, 30px);
+  max-width: 46ch;
+  font-size: 1.02rem; line-height: 1.6; color: var(--sed);
+}
+
+/* ── KONZOLE ────────────────────────────────────────────────────
+   Okno s hlavičkou a tělem. Je schválně malé: rozcestník je
+   nabídka, ne plakát. Sazba v něm je celá strojopisná, takže
+   vypadá jako výpis, a ne jako tlačítka.
+   ─────────────────────────────────────────────────────────── */
+
+
+.konz{
+  margin-top: clamp(24px, 3vw, 34px);
+  max-width: 660px;
+  border: 1px solid var(--linka-2);
+  background: rgba(7,7,8,.72);
+}
+
+.konz-hl{
+  display: flex; align-items: center; gap: 7px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--linka);
+  font-family: var(--mono);
+  font-size: .62rem; letter-spacing: .1em;
+  color: var(--sed-2);
+}
+/* Tři značky v rohu okna. Ostré, ne kolečka: na téhle stránce
+   není zaoblený ani jeden roh. */
+.konz-z{width: 7px; height: 7px; background: var(--linka-2)}
+.konz-z:first-child{background: var(--rud)}
+.konz-n{margin-left: 6px}
+.konz-t{margin-left: auto; color: var(--sed-2)}
+
+/* Vlevo výpis voleb, vpravo náhled té vybrané, jako v souborovém
+   správci v terminálu. Šipka tím dostane okamžitou odezvu: něco
+   se vpravo přepíše dřív, než člověk stihne stisknout enter. */
+.konz-telo{
+  display: grid; grid-template-columns: minmax(0, 1fr) 210px;
+  padding: 14px 12px 12px;
+}
+.konz-l{min-width: 0}
+
+.konz-dotaz{
+  display: flex; align-items: baseline; gap: 8px;
+  font-family: var(--mono);
+  font-size: .74rem; letter-spacing: .04em;
+  color: var(--kost);
+}
+.konz-dotaz b{
+  width: 0; height: 0; align-self: center;
+  border-left: 6px solid var(--rud);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+}
+
+.konz-v{margin-top: 10px}
+
+/* ── JEDEN ŘÁDEK ROZCESTNÍKU ──────────────────────────────── */
+
+.volba{
+  position: relative;
+  display: grid;
+  grid-template-columns: 14px auto minmax(0, 1fr) auto;
+  align-items: center; gap: 10px;
+  padding: 7px 8px;
+  font-family: var(--mono);
+  font-size: .8rem; letter-spacing: .01em;
+  color: var(--sed);
+  transition: background-color .2s ease, color .2s ease;
+}
+
+/* Ukazatel na začátku řádku. Klínek se objeví jen u vybraného. */
+.volba-u{
+  width: 0; height: 0;
+  border-left: 6px solid var(--rud);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  opacity: 0; transform: translateX(-4px);
+  transition: opacity .2s ease, transform .25s cubic-bezier(.22,1,.36,1);
+}
+.volba-c{color: var(--sed-2)}
+.volba-n{color: inherit}
+.volba-m{
+  font-size: .68rem; color: var(--sed-2);
+  opacity: 0; transform: translateX(-6px);
+  transition: opacity .2s ease, transform .25s cubic-bezier(.22,1,.36,1);
+  white-space: nowrap;
+}
+
+.volba:is(:focus-visible, .je-vybrana){
+  background: rgba(224,36,44,.1);
+  color: var(--kost);
+}
+.volba:is(:focus-visible, .je-vybrana) .volba-u{opacity: 1; transform: none}
+.volba:is(:focus-visible, .je-vybrana) .volba-c{color: var(--rud-tx)}
+.volba:is(:focus-visible, .je-vybrana) .volba-m{opacity: 1; transform: none}
+.volba:focus-visible{outline: none}
+
+/* Potvrzení klávesou blikne, teprve pak stránka popojede.
+   Stisk tak nezůstane bez odezvy. */
+.volba.je-spustena{animation: zablesk .18s steps(2) 2}
+@keyframes zablesk{
+  0%,100%{background: rgba(224,36,44,.1)}
+  50%    {background: rgba(224,36,44,.42)}
+}
+
+.konz-pata{
+  grid-column: 1 / -1;
+  display: flex; flex-wrap: wrap; gap: 4px 14px;
+  margin: 12px 0 0; padding-top: 10px;
+  border-top: 1px solid var(--linka);
+  font-family: var(--mono);
+  font-size: .62rem; letter-spacing: .06em;
+  color: var(--sed-2);
+}
+.konz-pata span + span::before{content: "· "; color: var(--linka-2)}
+
+/* Náhled. Oddělený vlasovou linkou, aby bylo poznat, že to je
+   druhý sloupec, ne pokračování výpisu. */
+.konz-nah{
+  min-width: 0;
+  padding-left: clamp(12px, 1.6vw, 18px);
+  margin-left: clamp(12px, 1.6vw, 18px);
+  border-left: 1px solid var(--linka);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.nahled-hl{
+  font-family: var(--mono);
+  font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--sed-2);
+}
+.nahled-t{
+  font-size: .82rem; line-height: 1.55; color: var(--sed);
+  /* Text se při přepnutí neprolne: ve výpisu se řádky přepisují,
+     ne rozplývají. Jen krátce blikne, jako když se překreslí. */
+  animation: nahledPreblik .22s ease;
+}
+@keyframes nahledPreblik{
+  0%  {opacity: .15; transform: translateY(3px)}
+  100%{opacity: 1;  transform: none}
+}
+.nahled-a{
+  margin-top: auto;
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono);
+  font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--sed-2);
+  opacity: 0; transition: opacity .25s ease;
+}
+.konz.ma-vyber .nahled-a{opacity: 1}
+.nahled-a b{
+  width: 0; height: 0;
+  border-left: 5px solid var(--rud);
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+}
+
+.konz-pata{
+  grid-column: 1 / -1;
+  display: flex; flex-wrap: wrap; gap: 4px 14px;
+  margin: 12px 0 0; padding-top: 10px;
+  border-top: 1px solid var(--linka);
+  font-family: var(--mono);
+  font-size: .62rem; letter-spacing: .06em;
+  color: var(--sed-2);
+}
+.konz-pata span + span::before{content: "· "; color: var(--linka-2)}
+
+@media (max-width: 720px){
+  /* Na úzké obrazovce jde náhled pod výpis; vedle sebe by se ani
+     jeden sloupec nedal přečíst. */
+  .konz-telo{grid-template-columns: minmax(0, 1fr)}
+  .konz-nah{
+    padding: 12px 0 0; margin: 12px 0 0;
+    border-left: 0; border-top: 1px solid var(--linka);
+  }
+  .nahled-a{margin-top: 6px}
+}
+
+
+/* ── PATA ÚVODU ────────────────────────────────────────────── */
+
+.hero-pata{
+  margin-top: clamp(22px, 3vw, 32px);
+  display: flex; flex-wrap: wrap; gap: 6px 22px;
+  font-family: var(--mono);
+  font-size: .66rem; letter-spacing: .05em; color: var(--sed-2);
+}
+.hero-pata span{display: flex; align-items: center; gap: 10px}
+.hero-pata span + span::before{
+  content: ""; width: 3px; height: 3px; background: var(--rud); flex: none;
+}
+
+/* Jediný barevný puntík na stránce. Nese skutečný stav,
+   proto smí i dýchat. */
+.dot{
+  width: 6px; height: 6px; background: var(--rud); flex: none;
+  animation: dychani 2.8s ease-in-out infinite;
+}
+@keyframes dychani{
+  0%,100%{opacity: 1; box-shadow: 0 0 0 0 rgba(224,36,44,.45)}
+  50%    {opacity: .75; box-shadow: 0 0 0 5px rgba(224,36,44,0)}
+}
+
+/* Rozdělený název byl v dřívější podobě úvodu; třída zůstává,
+   protože ji používají popisky pro čtečku obrazovky jinde. */
+.jen-ctecka{
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  clip-path: inset(50%); overflow: hidden; white-space: nowrap;
+}
+
+@media (max-width: 560px){
+  .konz{max-width: none}
+  .volba{grid-template-columns: 12px auto minmax(0, 1fr); gap: 8px; font-size: .76rem}
+  .volba-m{display: none}
+  .stav{margin-left: 0}
+}
+
+
+/* ══ PRÁCE ═════════════════════════════════════════════════════
+   Nesouměrné dva sloupce. Nadpis vlevo stojí, obory vpravo jedou.
+   ══════════════════════════════════════════════════════════════ */
+
+.prace-in{
+  display: grid; grid-template-columns: minmax(0, .78fr) minmax(0, 1.22fr);
+  gap: clamp(28px, 5vw, 80px);
+}
+.prace-nad{position: sticky; top: calc(var(--nav) + 40px); align-self: start}
+
+.obor{
+  padding: 26px 0 30px;
+  border-top: 1px solid var(--linka);
+  display: grid; grid-template-columns: 56px 1fr; gap: 4px 12px;
+  transition: border-color .3s ease;
+}
+.obor:hover{border-top-color: var(--linka-2)}
+/* Značka oboru: ikona a pod ní číslo. Sloupec i řádek má
+   určený, jinak by se prvek s určeným řádkem umístil dřív
+   než ostatní a rozhodil celou mřížku. */
+.obor-zn{
+  grid-column: 1; grid-row: 1 / span 3;
+  display: flex; flex-direction: column; gap: 12px;
+  padding-top: .2em;
+}
+.obor-zn .ik{width: 24px; height: 24px; color: var(--rud-tx)}
+.obor:hover .obor-zn .ik{transform: translateY(-2px)}
+.obor-c{
+  font-family: var(--mono);
+  font-size: .72rem; letter-spacing: .1em; color: var(--sed-2);
+}
+.obor h3{font-size: 1.35rem; font-weight: 500; letter-spacing: -.03em}
+.obor > p{color: var(--sed); max-width: 52ch}
+.obor-tech{
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: .72rem; letter-spacing: .04em; color: var(--sed-2);
+}
+
+/* Pás technologií. Nekonečné popojíždění bez skriptu: seznam je
+   v masce a posune se přesně o svou šířku, takže návrat na
+   začátek není vidět. Stojí při najetí i při potlačeném pohybu. */
+.pas{
+  margin-top: clamp(40px, 5vw, 72px);
+  overflow: hidden; padding-block: 16px;
+  border-block: 1px solid var(--linka);
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.pas-stopa{display: flex; gap: 40px; width: max-content; animation: pas 36s linear infinite}
+.pas:hover .pas-stopa{animation-play-state: paused}
+.pas-stopa li{
+  font-family: var(--mono);
+  font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--sed-2); white-space: nowrap;
+}
+@keyframes pas{to{transform: translateX(-50%)}}
+
+
+/* ══ HISTORIE PROJEKTŮ ═════════════════════════════════════════
+   Ne seznam, ale historie. Vlevo svislá větev s body, jako když
+   si vývojář vypíše, co se kdy dodělalo: nahoře rozdělaná práce
+   s prázdným bodem a přerušovanou větví, pod ní hotové projekty
+   s plnými body.
+
+   Ukazatel po historii jenom jezdí. Enter rozbalí, co je uvnitř,
+   enter podruhé otevře živý web, esc zavře. Žádný obrázek tu
+   není, takže se při procházení nic nestahuje.
+   ══════════════════════════════════════════════════════════════ */
+
+.rejstrik{
+  margin-top: clamp(30px, 4vw, 52px);
+  padding-left: clamp(6px, 1.4vw, 16px);
+}
+
+.polozka{position: relative}
+
+/* Větev. Vede středem bodů a končí u posledního projektu. */
+.polozka::before{
+  content: ""; position: absolute;
+  left: calc(clamp(6px, 1.4vw, 16px) + 4px);
+  top: 0; bottom: 0; width: 1px;
+  background: var(--linka-2);
+}
+.polozka:first-child::before{top: 26px}
+.polozka:last-child::before{bottom: auto; height: 26px}
+/* Rozdělaná práce visí na přerušované větvi: ještě nedrží. */
+.polozka-chysta::before{
+  background: repeating-linear-gradient(180deg,
+    var(--linka-2) 0 3px, transparent 3px 7px);
+}
+
+.radek{
+  position: relative; width: 100%;
+  display: grid; align-items: center;
+  grid-template-columns: 10px auto minmax(0, 1fr) auto auto 34px;
+  gap: 0 clamp(10px, 1.6vw, 20px);
+  padding: clamp(14px, 1.8vw, 20px) clamp(10px, 1.4vw, 18px) clamp(14px, 1.8vw, 20px) clamp(4px, 1vw, 10px);
+  text-align: left;
+}
+[data-stanice]:focus-visible{outline: none}
+
+/* Bod na větvi. Hotový projekt má plný, rozdělaný prázdný. */
+.radek-b{
+  position: relative; z-index: 1;
+  width: 9px; height: 9px;
+  background: var(--sed-2);
+  box-shadow: 0 0 0 4px var(--noc);
+}
+.polozka-chysta .radek-b{
+  background: none;
+  box-shadow: 0 0 0 4px var(--noc), inset 0 0 0 1px var(--sed-2);
+}
+.radek.je-na-rade .radek-b{background: var(--rud); box-shadow: 0 0 0 4px var(--noc), 0 0 0 7px rgba(224,36,44,.2)}
+.polozka-chysta .radek.je-na-rade .radek-b{background: none; box-shadow: 0 0 0 4px var(--noc), inset 0 0 0 2px var(--rud)}
+
+/* Jméno souboru projektu. Zastupuje otisk commitu a zároveň
+   říká, co se otevře v panelu níž. */
+.radek-c{
+  font-family: var(--mono);
+  font-size: .68rem; letter-spacing: .04em; color: var(--sed-2);
+  transition: color .25s ease;
+}
+.radek.je-na-rade .radek-c{color: var(--rud-tx)}
+
+.radek-n{
+  font-size: clamp(1.1rem, 2.2vw, 1.55rem);
+  font-weight: 500; letter-spacing: -.03em; line-height: 1.15;
+  transition: transform .3s cubic-bezier(.22,1,.36,1);
+}
+.radek.je-na-rade .radek-n{transform: translateX(6px)}
+.polozka-chysta .radek-n{color: var(--sed-2)}
+
+.radek-s{
+  font-family: var(--mono);
+  font-size: .68rem; letter-spacing: .06em; color: var(--sed-2);
+  text-align: right;
+}
+
+.radek-t{
+  padding: 3px 8px;
+  border: 1px solid var(--linka);
+  font-family: var(--mono);
+  font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--sed-2);
+  white-space: nowrap;
+  transition: border-color .25s ease, color .25s ease;
+}
+.radek.je-na-rade .radek-t{border-color: var(--rud); color: var(--rud-tx)}
+
+/* Podklad vybraného commitu. Vyjede zleva jako zvýrazněný řádek
+   ve výpisu. */
+.radek::before{
+  content: ""; position: absolute; inset: 0 0 0 -4px;
+  background: linear-gradient(90deg, rgba(224,36,44,.14), transparent 70%);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .34s cubic-bezier(.22,1,.36,1);
+  pointer-events: none;
+}
+.radek.je-na-rade::before, .je-otevrena .radek::before{transform: scaleX(1)}
+
+/* Značka otevření: kříž, který se po otevření srovná. */
+.radek-z{position: relative; width: 14px; height: 14px; justify-self: end}
+.radek-z::before, .radek-z::after{
+  content: ""; position: absolute; inset: 50% 0 auto; height: 1px;
+  background: var(--sed-2); transition: transform .35s cubic-bezier(.22,1,.36,1), background-color .25s ease;
+}
+.radek-z::after{transform: rotate(90deg)}
+.radek.je-na-rade .radek-z::before, .radek.je-na-rade .radek-z::after{background: var(--kost)}
+.je-otevrena .radek-z::after{transform: rotate(0)}
+.je-otevrena .radek-z::before, .je-otevrena .radek-z::after{background: var(--rud-tx)}
+.polozka-chysta .radek-z{display: none}
+
+/* Trhnutí, když někdo zkusí otevřít rozdělanou práci. */
+.radek.je-zamceno{animation: trhnuti .3s ease}
+@keyframes trhnuti{
+  0%,100%{transform: translateX(0)}
+  25%    {transform: translateX(-6px)}
+  75%    {transform: translateX(6px)}
+}
+
+/* ── ROZBALENÝ COMMIT ───────────────────────────────────────────
+   Panel visí na téže větvi jako body, takže je vidět, ke kterému
+   commitu patří. Uvnitř je výpis souboru: popis a pod ním to, co
+   projekt přibyl, řádek po řádku se znaménkem plus.
+   ─────────────────────────────────────────────────────────── */
+
+.telo{display: grid; grid-template-rows: 0fr; transition: grid-template-rows .45s cubic-bezier(.22,1,.36,1)}
+.telo > .telo-in{overflow: hidden; min-height: 0}
+.je-otevrena .telo{grid-template-rows: 1fr}
+
+.telo-in{padding-left: calc(clamp(4px, 1vw, 10px) + 10px + clamp(10px, 1.6vw, 20px))}
+.telo-txt{padding: 2px 0 26px; border-left: 1px solid var(--linka); padding-left: clamp(14px, 2vw, 24px); margin-left: -1px}
+
+.telo-cat{
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px;
+  font-family: var(--mono);
+  font-size: .68rem; letter-spacing: .04em; color: var(--sed-2);
+}
+.telo-cat b{
+  width: 0; height: 0;
+  border-left: 5px solid var(--rud);
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+}
+.telo-txt > p{color: var(--sed); max-width: 52ch}
+
+/* Co projekt umí, vypsané jako přírůstky. */
+.znacky{margin-top: 16px; display: grid; gap: 3px}
+.znacky li{
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono);
+  font-size: .7rem; letter-spacing: .03em; color: var(--sed);
+  opacity: 0; transform: translateX(-6px);
+  transition: opacity .3s ease, transform .3s cubic-bezier(.22,1,.36,1);
+}
+.znacky li::before{content: "+"; color: var(--rud-tx)}
+.je-otevrena .znacky li{opacity: 1; transform: none}
+.je-otevrena .znacky li:nth-child(2){transition-delay: .05s}
+.je-otevrena .znacky li:nth-child(3){transition-delay: .1s}
+.je-otevrena .znacky li:nth-child(4){transition-delay: .15s}
+
+.odkaz{
+  margin-top: 20px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: .92rem; font-weight: 500; color: var(--rud-tx);
+  padding-bottom: 3px; border-bottom: 1px solid var(--rud);
+  transition: color .2s ease, border-color .2s ease;
+}
+.odkaz::after{
+  content: "enter";
+  margin-left: 6px; padding: 2px 7px;
+  border: 1px solid var(--linka-2);
+  font-family: var(--mono);
+  font-size: .56rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--sed-2);
+}
+
+/* Na telefonu se commit skládá pod sebe: bod drží levý sloupec,
+   vedle něj jméno souboru, název a k čemu to je, vpravo stav
+   a značka pro rozbalení. Každý kus má určenou svou plochu,
+   jinak by se prvky umístily samy a přetekly za okraj. */
+@media (max-width: 760px){
+  .rejstrik{padding-left: 0}
+
+  .radek{
+    grid-template-columns: 10px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "bod slug  stav"
+      "bod nazev znacka"
+      "bod typ   znacka";
+    align-items: start;
+    gap: 3px clamp(10px, 3vw, 16px);
+    padding: 14px 4px 16px 0;
+  }
+  .radek-b{grid-area: bod; align-self: center}
+  .radek-c{grid-area: slug; align-self: center}
+  .radek-n{grid-area: nazev; font-size: 1.2rem}
+  .radek-s{grid-area: typ; text-align: left}
+  .radek-t{grid-area: stav; align-self: center; justify-self: end}
+  .radek-z{grid-area: znacka; align-self: center; justify-self: end}
+
+  .polozka::before{left: 4px}
+  .telo-in{padding-left: calc(10px + clamp(10px, 3vw, 16px))}
+}
+
+
+/* ── ŘÁDEK KONZOLE ─────────────────────────────────────────────
+   Drobnost pro toho, kdo čte. Vlevo příkaz, kterým se ta věc
+   doopravdy dělá, vpravo česky, co dělá. Příkaz je ozdoba, proto
+   je schovaný čtečce obrazovky; význam vedle něj je obyčejný
+   text, který si přečte každý.
+   ─────────────────────────────────────────────────────────── */
+
+.konzole{
+  margin-top: 16px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
+  font-family: var(--mono);
+  font-size: .72rem; letter-spacing: .02em;
+}
+.konzole b{
+  position: relative;
+  padding: 4px 10px 4px 22px;
+  border: 1px solid var(--linka);
+  font-weight: 400; color: var(--kost);
+  white-space: nowrap;
+}
+/* Pobídka konzole. Klínek kreslený dvěma hranami, aby se
+   nespoléhal na to, že písmo má zrovna šipku. */
+.konzole b::before{
+  content: ""; position: absolute; left: 9px; top: 50%;
+  width: 0; height: 0;
+  border-left: 5px solid var(--rud);
+  border-top: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  transform: translateY(-50%);
+}
+.konzole span{color: var(--sed-2)}
+/* Před vysvětlením stojí mřížka, jako když si programátor napíše
+   poznámku do kódu. */
+.konzole span::before{content: "# "; color: var(--linka-2)}
+
+
+/* ══ KONTAKT ═══════════════════════════════════════════════════ */
+
+.kont{
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .82fr);
+  gap: clamp(32px, 5vw, 80px); align-items: start;
+}
+
+.spojeni{margin-top: 40px; border-top: 1px solid var(--linka)}
+.spojeni a{
+  display: grid; grid-template-columns: 20px 112px 1fr; align-items: center;
+  gap: 14px; padding: 16px 0;
+  border-bottom: 1px solid var(--linka);
+  transition: padding-left .25s ease, color .2s ease;
+}
+.spojeni a .ik{width: 17px; height: 17px; color: var(--sed-2)}
+.spojeni a:hover .ik{color: var(--rud-tx); transform: scale(1.12)}
+.spojeni a > span:first-of-type{
+  font-family: var(--mono);
+  font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--sed-2);
+}
+.spoj-v{overflow-wrap: anywhere}
+.spojeni a:hover{padding-left: 10px; color: var(--rud-tx)}
+
+#cform{display: grid; gap: 16px}
+.fg{display: grid; gap: 7px}
+.fg label{
+  font-family: var(--mono);
+  font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--sed);
+}
+.fg input, .fg textarea{
+  width: 100%; padding: 13px 14px; font: inherit; font-size: .95rem;
+  color: var(--kost); background: var(--noc-2);
+  border: 1px solid var(--linka);
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.fg textarea{resize: vertical; min-height: 104px}
+.fg input::placeholder, .fg textarea::placeholder{color: #6f6c67}
+.fg input:focus, .fg textarea:focus{
+  outline: none; border-color: var(--rud); background: #17171a;
+}
+.fg input[aria-invalid="true"], .fg textarea[aria-invalid="true"]{border-color: var(--rud-tx)}
+
+.hlaska{min-height: 1.4em; font-size: .88rem; color: var(--sed)}
+.hlaska.ok{color: #6cd08f}
+.hlaska.err{color: var(--rud-tx)}
+
+
+/* ══ PATA ══════════════════════════════════════════════════════ */
+
+/* Pata má dole místo navíc: v pravém dolním rohu okna stojí
+   ukazatel stavu a kryl by jí text. */
+footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
 .foot-in{
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:10px;
-  padding-block:22px calc(22px + var(--sab));
-  font-family:'Geist Mono',ui-monospace,monospace;
-  font-size:.65rem;letter-spacing:.1em;
-  color:var(--sage);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 26px;
+  font-family: var(--mono);
+  font-size: .7rem; letter-spacing: .08em; color: var(--sed-2);
 }
-
-
-/* ══════════════════════════════════════════════════════════════
-   ODHALOVÁNÍ PŘI SCROLLU
-
-   Dvanáct pixelů a prolnutí. Nic víc: v minimalismu má být
-   pohyb znát až zpětně, ne během čtení.
-══════════════════════════════════════════════════════════════ */
-
-.rv{opacity:0;translate:0 12px}
-.rv.in{
-  opacity:1;translate:none;
-  transition:opacity .6s var(--out),translate .6s var(--out);
+.foot-mark{
+  margin-right: auto; font-family: var(--sans);
+  font-size: .98rem; font-weight: 600; letter-spacing: -.05em; color: var(--kost);
 }
-
-/* Postupné naskakování uvnitř skupiny, krok 80 ms. */
-.rv-stagger.in>*{animation:rise .55s var(--out) backwards}
-.rv-stagger.in>*:nth-child(1){animation-delay:0ms}
-.rv-stagger.in>*:nth-child(2){animation-delay:80ms}
-.rv-stagger.in>*:nth-child(3){animation-delay:160ms}
-.rv-stagger.in>*:nth-child(4){animation-delay:240ms}
-.rv-stagger.in>*:nth-child(5){animation-delay:320ms}
-@keyframes rise{from{opacity:0;translate:0 10px}}
+.foot-mark span{color: var(--rud-tx)}
 
 
-/* ══════════════════════════════════════════════════════════════
-   PŘIZPŮSOBENÍ ŠÍŘCE OKNA
-══════════════════════════════════════════════════════════════ */
+/* ══ VRSTVENÝ POSUN ════════════════════════════════════════════
+   Rytá pole jdou při posunu jinou rychlostí než sazba, takže
+   úvod má hloubku. Dělá to prohlížeč přes animation-timeline,
+   tedy mimo hlavní vlákno. Kde to prohlížeč neumí, je úvod
+   jen plošší a nic se nerozbije.
+   ══════════════════════════════════════════════════════════════ */
 
-@media (max-width:900px){
-  .exp-layout{grid-template-columns:1fr;gap:22px}
-  .side-title{position:static}
-  .exp-grid{grid-template-columns:1fr;gap:clamp(30px,5vw,44px)}
-  .exp-col:nth-child(2){padding-top:0}
-  .ct-grid{grid-template-columns:1fr;gap:44px}
-  .px-grid{grid-template-columns:1fr;gap:22px}
-}
-
-@media (max-width:620px){
-  :root{--nav:54px;--sec:56px}
-
-  .exp-skills{display:flex;flex-wrap:wrap;gap:6px;border-top:none}
-  .exp-skills li{
-    padding:5px 9px;
-    border:1px solid var(--hair);
-    border-radius:var(--r-sm);
-    font-size:.66rem;
+/* Pomalý život pozadí. Obojí je čistý transform, takže se nic
+   nepřepočítává a práci odvede grafika. Při potlačeném pohybu
+   se obě animace níž zastaví. */
+@media (prefers-reduced-motion: no-preference){
+  .poz-zar2{animation: plouti 38s ease-in-out infinite alternate}
+  @keyframes plouti{
+    from{transform: translate3d(0, 0, 0)}
+    to  {transform: translate3d(14vw, -12vh, 0)}
   }
-  .stack{margin-top:30px;padding-top:18px;gap:6px}
-  .stack span{padding:5px 9px;font-size:.64rem}
-  .sec-head{padding-bottom:14px;margin-bottom:26px}
-  .hero-facts{margin-top:34px;padding-top:16px}
-  .px-grid{padding-bottom:22px}
-  .px-text{margin-bottom:16px}
-  .px-chips{margin-bottom:18px}
-  #hdr nav{gap:14px}
-  #hdr nav a{font-size:.62rem;letter-spacing:.1em}
 
-  #hero{min-height:0;padding-top:calc(var(--nav) + var(--sat) + clamp(40px,9vh,72px))}
-  .hero-name{line-height:1}
-  .hero-act{width:100%}
-  .btn{flex:1 1 auto;justify-content:center}
-
-  /* Fakta do dvou sloupců: čtyři vedle sebe by se na šířku
-     telefonu nevešla čitelně. */
-  .hero-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px}
-
-  /* Řádek projektu se zúží na číslo, jméno a značku. Výčet
-     technologií se objeví až po rozbalení, kde je stejně celý. */
-  .px{padding-left:12px}
-  .px-item::before{left:-12px}
-  .px-row{grid-template-columns:auto minmax(0,1fr) auto;gap:14px}
-  .px-tech{display:none}
-  .px-tech--stav{display:block;font-size:.6rem}
-
-  .hero-facts{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px;justify-content:stretch}
-  .ct-link{grid-template-columns:minmax(0,1fr) auto;gap:2px 12px}
-  .cll-label{grid-column:1/-1}
+  .poz-svit{animation: prejezd 18s linear infinite}
+  @keyframes prejezd{
+    0%      {transform: translateX(-60%)}
+    70%,100%{transform: translateX(160%)}
+  }
 }
 
-/* Dotykové ovládání: odsazení při najetí by se spouštělo
-   klepnutím a řádek by poskočil. */
-@media (hover:none){
-  .px-row:hover,a.ct-link:hover{padding-left:0}
+@supports (animation-timeline: scroll()){
+
+  @media (prefers-reduced-motion: no-preference){
+    .poz-mrizka{
+      animation: posunMrizky linear both;
+      animation-timeline: scroll(root);
+    }
+    @keyframes posunMrizky{to{transform: translate3d(0, -13%, 0)}}
+
+    .poz-zar{
+      animation: posunZare linear both;
+      animation-timeline: scroll(root);
+    }
+    @keyframes posunZare{to{transform: translate3d(-6%, 46vh, 0)}}
+
+    /* Konzole při odchodu ze stránky odjede nahoru a ztlumí se,
+       takže úvod nezmizí naráz, ale odejde. */
+    .konz{
+      animation: odchodKonzole linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100svh;
+    }
+    @keyframes odchodKonzole{to{transform: translateY(-26px); opacity: .4}}
+  }
 }
 
 
-/* ══════════════════════════════════════════════════════════════
-   OMEZENÝ POHYB
+/* ══ BRÁNA MEZI ÚROVNĚMI ═══════════════════════════════════════
+   Místo holé dělicí linky stojí mezi sekcemi brána: dvě linky,
+   které se při odhalení rozjedou do stran, a mezi nimi cedule
+   s číslem úrovně a s tím, kam člověk vstupuje.
+   ══════════════════════════════════════════════════════════════ */
 
-   Prolínání zůstává, protože pomáhá pochopit, že se obsah
-   změnil. Mizí posuny, otáčení a plíživá animace pozadí.
-══════════════════════════════════════════════════════════════ */
+.brana{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center; gap: clamp(12px, 2vw, 24px);
+  width: 100%; max-width: var(--wrap);
+  margin-inline: auto; padding-inline: var(--pad);
+}
+.brana-l{
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--linka-2));
+}
+.brana-l:last-child{background: linear-gradient(90deg, var(--linka-2), transparent)}
 
-@media (prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
+.brana-t{
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--mono);
+  font-size: .68rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--sed-2);
+  white-space: nowrap;
+}
+.brana-t b{
+  padding: 4px 9px;
+  border: 1px solid var(--rud);
+  font-weight: 400; color: var(--rud-tx);
+}
+
+/* Cedule dojede zleva, zatímco brána prochází oknem. Je to
+   pohyb řízený posunem, ne časem: když člověk zastaví,
+   zastaví se i cedule. */
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
+    .brana-t{
+      animation: prujezdBranou linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+    @keyframes prujezdBranou{
+      from{transform: translateX(-26px)}
+      to  {transform: translateX(26px)}
+    }
+  }
+}
+
+
+/* ══ UKAZATEL STAVU ════════════════════════════════════════════
+   Vpravo dole, nad zemí. Drží úroveň, ve které člověk právě je,
+   a jednu větu o tom, čím se stránka ovládá. Číslo i název
+   přepisuje skript podle toho, která sekce je v okně.
+   ══════════════════════════════════════════════════════════════ */
+
+.ukazatel{opacity: 0; transition: opacity .5s ease .2s}
+.je-odhrnuto .ukazatel{opacity: 1}
+/* U paty ukazatel uhne: tam už stojí text na stejném místě
+   a hlásit není co. */
+.je-odhrnuto.pata-na-ocich .ukazatel{opacity: 0; transform: translateY(10px)}
+.ukazatel{transition: opacity .35s ease, transform .35s cubic-bezier(.22,1,.36,1)}
+
+.ukazatel{
+  position: fixed; right: clamp(10px, 3vw, 30px); bottom: 50px;
+  z-index: 91; pointer-events: none;
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 12px;
+  border: 1px solid var(--linka);
+  background: rgba(11,11,12,.82);
+  font-family: var(--mono);
+  font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--sed-2);
+  white-space: nowrap;
+}
+.ukazatel b{font-weight: 400; color: var(--rud-tx)}
+/* Mezi údaji stojí rudý puntík, stejný jako ve spodní liště
+   úvodu. Je to táž lišta, jen zmenšená a přilepená k rohu. */
+.uk-k::before{
+  content: ""; display: inline-block; vertical-align: middle;
+  width: 3px; height: 3px; margin-right: 10px;
+  background: var(--rud);
+}
+/* Věta o ovládání stojí jen tam, kde klávesnice je a kde se
+   na ni vejde místo. */
+.uk-k{display: none}
+@media (hover: hover) and (pointer: fine) and (min-width: 900px){
+  .uk-k{display: inline}
+}
+@media (max-width: 560px){
+  .ukazatel{right: 8px; bottom: 46px; padding: 5px 9px; font-size: .55rem; gap: 7px}
+}
+
+
+/* ══ STANICE ═══════════════════════════════════════════════════
+   Prvek, na kterém šipky právě stojí. Dostane rudou hranu
+   zleva, stejnou, jakou má zaměřovač v úvodu, aby bylo vidět,
+   že je to pořád tentýž ukazatel, jen jinde ve stránce.
+   ══════════════════════════════════════════════════════════════ */
+
+[data-stanice]{transition: box-shadow .3s ease}
+.je-na-rade{box-shadow: inset 3px 0 0 var(--rud)}
+/* Úroveň v rejstříku má vlastní podobu, hranu zleva nepotřebuje. */
+.radek.je-na-rade{box-shadow: none}
+.obor.je-na-rade, .kont-l.je-na-rade{padding-left: 14px}
+.obor, .kont-l{transition: padding-left .3s cubic-bezier(.22,1,.36,1)}
+
+
+/* ══ POHYB ŘÍZENÝ POSUNEM ══════════════════════════════════════
+   Drobné posuny, které běží podle toho, kde ve stránce prvek
+   je. Nic se nepočítá skriptem, dráhu odměřuje prohlížeč sám.
+   ══════════════════════════════════════════════════════════════ */
+
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion: no-preference){
+
+    /* Značka oboru plave o kus pomaleji než text vedle ní. */
+    .obor-zn{
+      animation: plovouciZnacka linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+    @keyframes plovouciZnacka{
+      from{transform: translateY(18px)}
+      to  {transform: translateY(-18px)}
+    }
+
+  }
+}
+
+/* ══ ŠÍŘKY OBRAZOVKY ═══════════════════════════════════════════
+   Telefon není zmenšený počítač. Sazba se zmenší, sloupce se
+   složí a hlavně se zkrátí: na úzké obrazovce nemá nikdo
+   trpělivost scrollovat přes prázdné plochy.
+   ══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1000px){
+  .prace-in{grid-template-columns: 1fr}
+  .prace-nad{position: static}
+  .obory{margin-top: 34px}
+  .kont{grid-template-columns: 1fr}
+  .telo-in{grid-template-columns: 1fr}
+  .telo-txt{padding-bottom: 30px}
+}
+
+@media (max-width: 760px){
+  :root{--sec: clamp(52px, 11vw, 76px)}
+
+  #hdr nav{display: none}
+  .hdr-cta{margin-left: auto}
+
+  /* Dole je zem a nad ní ukazatel stavu. Úvod jim uhne, aby
+     poslední řádek nezůstal schovaný pod nimi. */
+  /* Nahoře visí opička na liánách, dole stojí ukazatel stavu.
+     Úvod jim uhne, aby se ani jméno, ani poslední řádek
+     neschovaly pod ně. */
+  #hero{min-height: 0; padding-top: calc(var(--nav) + 86px); padding-bottom: 76px}
+
+  .hero-pata{gap: 6px 16px}
+
+  .obor{grid-template-columns: 40px 1fr; padding: 20px 0 22px}
+  .obor h3{font-size: 1.2rem}
+
+  /* Ikona zůstane vedle popisku, hodnota jde pod něj. Tři řádky
+     pod sebou by z kontaktu udělaly zbytečně dlouhý sloupec. */
+  .spojeni a{grid-template-columns: 20px 1fr; gap: 2px 12px; padding: 14px 0}
+  .spojeni a .ik{grid-row: 1 / span 2; align-self: center}
+  .spojeni a > span:first-of-type{grid-column: 2; grid-row: 1}
+  .spoj-v{grid-column: 2; grid-row: 2}
+}
+
+@media (max-width: 420px){
+}
+
+@media (hover: none), (pointer: coarse){
+  /* Stisk je jediná zpětná vazba, kterou prst dostane. */
+  .volba:active{background: rgba(224,36,44,.2)}
+  .volba:active .volba-c{color: var(--rud-tx)}
+}
+
+
+/* ══ POTLAČENÝ POHYB ═══════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce){
   *,*::before,*::after{
-    animation-duration:.01ms!important;
-    animation-iteration-count:1!important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
   }
-  .rv{opacity:1;translate:none}
-  #loader{animation:none;opacity:0;visibility:hidden}
-  .px-body{transition:none}
-  .px-row,a.ct-link{transition:none}
-  .px-row:hover,a.ct-link:hover{padding-left:0}
+  html{scroll-behavior: auto}
+  .rv{opacity: 1; transform: none}
+  .pas-stopa{animation: none}
+  .konz{transform: none}
 }

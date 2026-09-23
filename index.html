@@ -3,52 +3,132 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>Filip Lochman — Full-stack Developer</title>
-<meta name="description" content="Filip Lochman — full-stack developer z Kroměříže. Responzivní a bezpečné webové aplikace: HTML, CSS, JavaScript, PHP, MySQL."/>
+<title>Filip Lochman, webový vývojář</title>
+<meta name="description" content="Filip Lochman, webový vývojář z Kroměříže. Weby na míru: návrh, sazba, spuštění. HTML, CSS, JavaScript."/>
 <meta name="author" content="Filip Lochman"/>
 <meta name="robots" content="index, follow, max-image-preview:large"/>
-<meta name="theme-color" content="#060e13"/>
+<meta name="theme-color" content="#0b0b0c"/>
 <link rel="canonical" href="https://www.filiplochman.cz/"/>
 <link rel="icon" href="favicon.svg" type="image/svg+xml"/>
 
 <!-- Písma leží na vlastní doméně, viz @font-face ve style.css.
      Přednačítají se obě podmnožiny základního řezu: měřením vyšlo,
      že přednačíst jen latinku první vykreslení zpomalí. -->
-<link rel="preload" href="fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin/>
-<link rel="preload" href="fonts/geist-latin-ext.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="fonts/archivo-latin-ext.woff2" as="font" type="font/woff2" crossorigin/>
 
 <!-- Náhled odkazu při sdílení na Instagramu, Facebooku, WhatsAppu a LinkedInu -->
 <meta property="og:type" content="website"/>
 <meta property="og:site_name" content="Filip Lochman"/>
 <meta property="og:locale" content="cs_CZ"/>
 <meta property="og:url" content="https://www.filiplochman.cz/"/>
-<meta property="og:title" content="Filip Lochman — Full-stack Developer"/>
-<meta property="og:description" content="Responzivní a bezpečné webové aplikace. Frontend, backend i databáze — Kroměříž / Zlín, remote OK."/>
+<meta property="og:title" content="Filip Lochman, webový vývojář"/>
+<meta property="og:description" content="Weby na míru: návrh, sazba, spuštění. Kroměříž a Zlín, na dálku taky."/>
 <meta property="og:image" content="https://www.filiplochman.cz/og-image.png"/>
 <meta property="og:image:secure_url" content="https://www.filiplochman.cz/og-image.png"/>
 <meta property="og:image:type" content="image/png"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
-<meta property="og:image:alt" content="FL — Filip Lochman, Full-stack Developer"/>
+<meta property="og:image:alt" content="Filip Lochman, webový vývojář"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Filip Lochman — Full-stack Developer"/>
-<meta name="twitter:description" content="Responzivní a bezpečné webové aplikace. Frontend, backend i databáze — Kroměříž / Zlín, remote OK."/>
+<meta name="twitter:title" content="Filip Lochman, webový vývojář"/>
+<meta name="twitter:description" content="Weby na míru: návrh, sazba, spuštění. Kroměříž a Zlín, na dálku taky."/>
 <meta name="twitter:image" content="https://www.filiplochman.cz/og-image.png"/>
-<meta name="twitter:image:alt" content="FL — Filip Lochman, Full-stack Developer"/>
+<meta name="twitter:image:alt" content="Filip Lochman, webový vývojář"/>
 
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
+<!-- ══ OPONA ═════════════════════════════════════════════════════
+     První, co člověk uvidí: terminál, ve kterém se stránka
+     sestavuje. Řádky přibývají podle toho, co je doopravdy
+     hotové, a čísla v nich jsou skutečná, ne pro efekt:
+     přenesené kilobajty z měření prohlížeče, počet projektů
+     v dokumentu a čas od prvního bajtu.
 
-<!-- Načítací vrstva. Mizí podle skutečné připravenosti stránky,
-     ne po uplynutí nastaveného času. -->
-<div id="loader" aria-hidden="true">
-  <div class="ld-mark">FL<span>.</span></div>
-  <div class="ld-bar"><i></i></div>
+     Pod výpisem čeká příkaz ./start. Opona se neodhrne sama:
+     čeká, dokud člověk nestiskne šipku dolů (na telefonu
+     nešvihne prstem). Teprve pak se příkaz dopíše, okno se
+     rozletí přes celou obrazovku a pod ním zůstane hotová
+     stránka. Terminál se tím doslova promění ve web.
+
+     Je to tentýž terminál, jaký stojí v úvodu stránky, takže
+     opona není cizí předsíň, ale první obrazovka téhož světa.
+
+     Bez skriptu se opona vůbec nevykreslí: třídu js přidává na
+     dokument skript hned na začátku, takže když neběží, není
+     co odhrnovat a stránka se chová jako obyčejná stránka.
+══════════════════════════════════════════════════════════════════ -->
+<div id="opona" aria-hidden="true">
+  <div class="op-tma"></div>
+
+  <!-- Svět, který se za terminálem staví. Mřížka a záře sílí
+       s každým hotovým řádkem výpisu, takže je při načítání
+       vidět, jak stránka vzniká. -->
+  <div class="op-svet"><i class="op-mrizka"></i><i class="op-zar"></i></div>
+
+  <div class="op-okno"><i class="op-crt" aria-hidden="true"></i>
+    <div class="op-hl">
+      <span class="op-z"></span><span class="op-z"></span><span class="op-z"></span>
+      <span class="op-n">filip / portfolio</span>
+      <span class="op-t">sestavení</span>
+    </div>
+
+    <div class="op-telo">
+      <ol class="op-log">
+        <li class="op-r"><b class="op-fajfka"></b><span class="op-co">styl a skript</span><span class="op-hod"></span></li>
+        <li class="op-r"><b class="op-fajfka"></b><span class="op-co">písma</span><span class="op-hod"></span></li>
+        <li class="op-r"><b class="op-fajfka"></b><span class="op-co">obsah</span><span class="op-hod"></span></li>
+        <li class="op-r"><b class="op-fajfka"></b><span class="op-co">hotovo</span><span class="op-hod"></span></li>
+      </ol>
+
+      <p class="op-prikaz"><b></b><span class="op-psano"></span><i class="op-kurzor"></i></p>
+
+      <p class="op-vyzva"><b>Stiskněte šipku dolů</b><i>Švihněte prstem nahoru</i></p>
+    </div>
+  </div>
 </div>
 
-<!-- Jediná ozdoba pozadí. Fixní vrstva bez reakce na myš. -->
-<div class="glow" aria-hidden="true"></div>
+
+<!-- ══ IKONY ═══════════════════════════════════════════════════
+     Každá ikona je v dokumentu jednou jako symbol a odkazuje se
+     na ni přes <use>, takže třináct ikon na stránce stojí deset
+     tvarů, ne třináct kopií.
+══════════════════════════════════════════════════════════════════ -->
+<svg class="vzorky" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Ikony: Phosphor Icons, tenký řez, licence MIT. Každá je
+         v dokumentu jednou jako symbol a odkazuje se na ni přes
+         <use>, takže deset ikon na stránce stojí deset tvarů,
+         ne deset kopií. Obsah symbolu dědí barvu z místa odkazu,
+         proto stačí fill:currentColor ve stylu. -->
+    <symbol id="i-kod" viewBox="0 0 256 256"><path d="M67.84,92.61,25.37,128l42.47,35.39a6,6,0,1,1-7.68,9.22l-48-40a6,6,0,0,1,0-9.22l48-40a6,6,0,0,1,7.68,9.22Zm176,30.78-48-40a6,6,0,1,0-7.68,9.22L230.63,128l-42.47,35.39a6,6,0,1,0,7.68,9.22l48-40a6,6,0,0,0,0-9.22Zm-81.79-89A6,6,0,0,0,154.36,38l-64,176A6,6,0,0,0,94,221.64a6.15,6.15,0,0,0,2,.36,6,6,0,0,0,5.64-3.95l64-176A6,6,0,0,0,162.05,34.36Z"/></symbol>
+    <symbol id="i-data" viewBox="0 0 256 256"><path d="M128,26C75.29,26,34,49.72,34,80v96c0,30.28,41.29,54,94,54s94-23.72,94-54V80C222,49.72,180.71,26,128,26Zm0,12c44.45,0,82,19.23,82,42s-37.55,42-82,42S46,102.77,46,80,83.55,38,128,38Zm82,138c0,22.77-37.55,42-82,42s-82-19.23-82-42V154.79C62,171.16,92.37,182,128,182s66-10.84,82-27.21Zm0-48c0,22.77-37.55,42-82,42s-82-19.23-82-42V106.79C62,123.16,92.37,134,128,134s66-10.84,82-27.21Z"/></symbol>
+    <symbol id="i-stit" viewBox="0 0 256 256"><path d="M208,42H48A14,14,0,0,0,34,56v56c0,51.94,25.12,83.4,46.2,100.64,22.73,18.6,45.27,24.89,46.22,25.15a6,6,0,0,0,3.16,0c.95-.26,23.49-6.55,46.22-25.15C196.88,195.4,222,163.94,222,112V56A14,14,0,0,0,208,42Zm2,70c0,37.76-13.94,68.39-41.44,91.06A131.17,131.17,0,0,1,128,225.72a130.94,130.94,0,0,1-40.56-22.66C59.94,180.39,46,149.76,46,112V56a2,2,0,0,1,2-2H208a2,2,0,0,1,2,2ZM172.24,99.76a6,6,0,0,1,0,8.48l-56,56a6,6,0,0,1-8.48,0l-24-24a6,6,0,0,1,8.48-8.48L112,151.51l51.76-51.75A6,6,0,0,1,172.24,99.76Z"/></symbol>
+    <symbol id="i-obalka" viewBox="0 0 256 256"><path d="M224,50H32a6,6,0,0,0-6,6V192a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V56A6,6,0,0,0,224,50ZM208.58,62,128,135.86,47.42,62ZM216,194H40a2,2,0,0,1-2-2V69.64l86,78.78a6,6,0,0,0,8.1,0L218,69.64V192A2,2,0,0,1,216,194Z"/></symbol>
+    <symbol id="i-linkedin" viewBox="0 0 256 256"><path d="M216,26H40A14,14,0,0,0,26,40V216a14,14,0,0,0,14,14H216a14,14,0,0,0,14-14V40A14,14,0,0,0,216,26Zm2,190a2,2,0,0,1-2,2H40a2,2,0,0,1-2-2V40a2,2,0,0,1,2-2H216a2,2,0,0,1,2,2ZM94,112v64a6,6,0,0,1-12,0V112a6,6,0,0,1,12,0Zm88,28v36a6,6,0,0,1-12,0V140a22,22,0,0,0-44,0v36a6,6,0,0,1-12,0V112a6,6,0,0,1,12,0v2.11A34,34,0,0,1,182,140ZM98,84A10,10,0,1,1,88,74,10,10,0,0,1,98,84Z"/></symbol>
+    <symbol id="i-instagram" viewBox="0 0 256 256"><path d="M128,82a46,46,0,1,0,46,46A46.06,46.06,0,0,0,128,82Zm0,80a34,34,0,1,1,34-34A34,34,0,0,1,128,162ZM176,26H80A54.06,54.06,0,0,0,26,80v96a54.06,54.06,0,0,0,54,54h96a54.06,54.06,0,0,0,54-54V80A54.06,54.06,0,0,0,176,26Zm42,150a42,42,0,0,1-42,42H80a42,42,0,0,1-42-42V80A42,42,0,0,1,80,38h96a42,42,0,0,1,42,42ZM190,76a10,10,0,1,1-10-10A10,10,0,0,1,190,76Z"/></symbol>
+    <symbol id="i-sipka" viewBox="0 0 256 256"><path d="M220.24,132.24l-72,72a6,6,0,0,1-8.48-8.48L201.51,134H40a6,6,0,0,1,0-12H201.51L139.76,60.24a6,6,0,0,1,8.48-8.48l72,72A6,6,0,0,1,220.24,132.24Z"/></symbol>
+    <symbol id="i-sipka-ven" viewBox="0 0 256 256"><path d="M198,64V168a6,6,0,0,1-12,0V78.48L68.24,196.24a6,6,0,0,1-8.48-8.48L177.52,70H88a6,6,0,0,1,0-12H192A6,6,0,0,1,198,64Z"/></symbol>
+    <symbol id="i-vlastovka" viewBox="0 0 256 256"><path d="M225.88,30.12a13.83,13.83,0,0,0-13.7-3.58l-.11,0L20.14,84.77A14,14,0,0,0,18,110.85l85.56,41.64L145.12,238a13.87,13.87,0,0,0,12.61,8c.4,0,.81,0,1.21-.05a13.9,13.9,0,0,0,12.29-10.09l58.2-191.93,0-.11A13.83,13.83,0,0,0,225.88,30.12Zm-8,10.4L159.73,232.43l0,.11a2,2,0,0,1-3.76.26l-40.68-83.58,49-49a6,6,0,1,0-8.49-8.49l-49,49L23.15,100a2,2,0,0,1,.31-3.74l.11,0L215.48,38.08a1.94,1.94,0,0,1,1.92.52A2,2,0,0,1,217.92,40.52Z"/></symbol>
+    <symbol id="i-spendlik" viewBox="0 0 256 256"><path d="M128,66a38,38,0,1,0,38,38A38,38,0,0,0,128,66Zm0,64a26,26,0,1,1,26-26A26,26,0,0,1,128,130Zm0-112a86.1,86.1,0,0,0-86,86c0,30.91,14.34,63.74,41.47,94.94a252.32,252.32,0,0,0,41.09,38,6,6,0,0,0,6.88,0,252.32,252.32,0,0,0,41.09-38c27.13-31.2,41.47-64,41.47-94.94A86.1,86.1,0,0,0,128,18Zm0,206.51C113,212.93,54,163.62,54,104a74,74,0,0,1,148,0C202,163.62,143,212.93,128,224.51Z"/></symbol>
+  </defs>
+</svg>
+
+<!-- ══ POZADÍ ════════════════════════════════════════════════════
+     Tři pevné vrstvy pod celou stránkou: mřížka utíkající do
+     hloubky, rudá záře a zrno. Nic z toho není obrázek, všechno
+     jsou přechody. Vrstva je fixed, takže se při posunu
+     nepřekresluje a nestojí výkon.
+══════════════════════════════════════════════════════════════════ -->
+<div class="pozadi" aria-hidden="true">
+  <div class="poz-mrizka"></div>
+  <div class="poz-svit"></div>
+  <div class="poz-zar"></div>
+  <div class="poz-zar2"></div>
+  <div class="poz-zrno"></div>
+  <div class="poz-vineta"></div>
+</div>
 
 <!-- Podle tohoto proužku skript pozná, že stránka popojela -->
 <div id="nav-sentinel" aria-hidden="true"></div>
@@ -56,320 +136,345 @@
 <a class="skip" href="#main">Přeskočit na obsah</a>
 
 <header id="hdr">
-  <a class="logo" href="#hero">FL<span>.</span></a>
-  <nav aria-label="Hlavní">
-    <a href="#expertise">Expertise</a>
-    <a href="#projects">Projects</a>
-    <a href="#contact">Contact</a>
-  </nav>
+  <div class="hdr-in">
+    <a class="logo" href="#hero">FL<span>.</span></a>
+    <nav aria-label="Hlavní">
+      <a href="#prace">Práce</a>
+      <a href="#projekty">Projekty</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a href="#kontakt" class="hdr-cta">Napsat zprávu</a>
+  </div>
+
+  <!-- Hrazda s liánami. Visí pod lištou přes celou šířku okna
+       a místo ukazatele postupu po ní skáče opička: jedna liána
+       je jedna zastávka ve stránce, takže je na první pohled
+       vidět, kde člověk je a kolik mu zbývá. Liány dodělá
+       skript, aby jich bylo přesně tolik co zastávek. -->
+  <div class="hrazda" aria-hidden="true">
+    <span class="opicka"><span class="op-ruka"><i></i></span></span>
+  </div>
 </header>
 
 <main id="main">
 
 <!-- ══ ÚVOD ══════════════════════════════════════════════════════
-     Hierarchii nese rozdíl tloušťky písma: křestní jméno lehké,
-     příjmení silnější. Fakta jsou v jednom pruhu pod linkou.
+     Jméno, jedna věta a malá konzole. Rozcestník v ní je vysázený
+     drobně, jako výpis v terminálu: tři řádky, mezi kterými se
+     vybírá šipkami a potvrzuje enterem. Kdo si vybrat nechce,
+     jde prostě dál dolů; konzole nikomu nestojí v cestě.
+
+     Bez obrázku, bez fotky.
 ══════════════════════════════════════════════════════════════════ -->
-<section id="hero" class="wrap">
+<section id="hero">
+  <div class="wrap hero-in">
 
-  <p class="hero-kicker rv">
-    <span class="hk-rule" aria-hidden="true"></span>
-    <span class="label">Full-stack Developer</span>
-  </p>
+    <div class="hero-hl rv">
+      <h1 class="jmeno">Filip Lochman<span>vývojář z Kroměříže</span></h1>
+      <p class="stav"><i class="dot" aria-hidden="true"></i>Volný pro nové projekty</p>
+    </div>
 
-  <h1 class="hero-name rv">
-    <em>Filip</em>
-    <em>Lochman</em>
-  </h1>
+    <p class="hero-veta rv">Dělám weby. Navrhnu je a postavím tak, aby se rychle
+      načetly a dobře četly na telefonu i na počítači.</p>
 
-  <p class="hero-desc rv">
-    Proměňuji komplexní nápady v responzivní a bezpečné webové aplikace s &nbsp;důrazem na detail a výkon.
-  </p>
+    <div class="konz rv">
+      <div class="konz-hl" aria-hidden="true">
+        <span class="konz-z"></span><span class="konz-z"></span><span class="konz-z"></span>
+        <span class="konz-n">filip / portfolio</span>
+        <span class="konz-t">úvod</span>
+      </div>
 
-  <div class="hero-act rv">
-    <a href="#projects" class="btn">
-      Projekty
-      <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-        <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-      </svg>
-    </a>
-    <a href="#contact" class="lnk">Napsat zprávu</a>
+      <div class="konz-telo">
+        <div class="konz-l">
+        <p class="konz-dotaz"><b aria-hidden="true"></b>s čím jdete?</p>
+
+        <ul class="konz-v">
+          <li>
+            <a class="volba" href="#kontakt" data-stanice data-popis="Napíšete mi, co potřebujete, a já web navrhnu a postavím. Od rozvržení a sazby po spuštění.">
+              <span class="volba-u" aria-hidden="true"></span>
+              <span class="volba-c" aria-hidden="true">01</span>
+              <span class="volba-n">Potřebuju nový web</span>
+              <span class="volba-m" aria-hidden="true">napsat zprávu</span>
+            </a>
+          </li>
+          <li>
+            <a class="volba" href="#kontakt" data-stanice data-popis="Podívám se, co je s ním špatně, řeknu vám to česky a co půjde, spravím.">
+              <span class="volba-u" aria-hidden="true"></span>
+              <span class="volba-c" aria-hidden="true">02</span>
+              <span class="volba-n">Mám web a nefunguje</span>
+              <span class="volba-m" aria-hidden="true">napsat zprávu</span>
+            </a>
+          </li>
+          <li>
+            <a class="volba" href="#projekty" data-stanice data-popis="Čtyři weby, které jsem postavil, i s tím, co na každém z nich stálo za řeč.">
+              <span class="volba-u" aria-hidden="true"></span>
+              <span class="volba-c" aria-hidden="true">03</span>
+              <span class="volba-n">Chci jen vidět práci</span>
+              <span class="volba-m" aria-hidden="true">rejstřík projektů</span>
+            </a>
+          </li>
+        </ul>
+        </div>
+
+        <!-- Náhled vybrané volby. Text do něj zapisuje skript
+             z atributu data-popis na řádku, přes textContent. -->
+        <div class="konz-nah" aria-hidden="true">
+          <p class="nahled-hl">náhled</p>
+          <p class="nahled-t">Vyberte šipkami, s čím jdete. Tady se ukáže, co to znamená.</p>
+          <p class="nahled-a"><b></b><span>enter potvrdí</span></p>
+        </div>
+
+        <p class="konz-pata" aria-hidden="true">
+          <span>šipky vybírají</span>
+          <span>enter potvrdí</span>
+          <span>nebo pokračujte dolů</span>
+        </p>
+      </div>
+    </div>
+
+    <p class="hero-pata rv">
+      <span>Psáno ručně, bez šablony</span>
+      <span>Čtyři hotové weby</span>
+      <span>Kroměříž a Zlín</span>
+    </p>
+
   </div>
-
-  <div class="hero-facts rv rv-stagger">
-    <div>
-      <span class="fact-val">20</span>
-      <span class="fact-key">Let</span>
-    </div>
-    <div>
-      <span class="fact-val">6+</span>
-      <span class="fact-key">Jazyků</span>
-    </div>
-    <div>
-      <span class="fact-val">Full-stack</span>
-      <span class="fact-key">Frontend + Backend</span>
-    </div>
-    <div>
-      <span class="fact-val">Remote OK</span>
-      <span class="fact-key">Kroměříž / Zlín</span>
-    </div>
-  </div>
-
 </section>
 
-<!-- ══ ZAMĚŘENÍ ══════════════════════════════════════════════════ -->
-<section id="expertise" class="wrap">
+<!-- Brána mezi úrovněmi. Linka se při odhalení dokreslí
+     do stran a mezi jejími konci stojí, kam člověk vstupuje. -->
+<div class="brana rv" aria-hidden="true">
+  <span class="brana-l"></span>
+  <span class="brana-t"><b>Úroveň 2 ze 4</b>Co pro vás udělám</span>
+  <span class="brana-l"></span>
+</div>
 
-  <div class="exp-layout">
+<!-- ══ PRÁCE ═════════════════════════════════════════════════════
+     Nesouměrné dva sloupce: nadpis vlevo zůstává stát, zatímco
+     tři obory projedou vpravo. Žádné karty, jen vlasové linky.
+══════════════════════════════════════════════════════════════════ -->
+<section id="prace" class="wrap sec">
+  <div class="prace-in">
 
-    <h2 class="side-title rv">Expertise</h2>
-
-    <div class="exp-grid">
-
-    <div class="exp-col rv">
-      <span class="exp-num">01</span>
-      <h3>Frontend</h3>
-      <p class="exp-desc">Vývoj vysoce výkonných a plně responzivních uživatelských rozhraní. Zaměřeno na špičkovou optimalizaci a intuitivní digitální zážitek na všech typech zařízení.</p>
-      <ul class="exp-skills">
-        <li>HTML5 · CSS3 · JavaScript</li>
-        <li>Responzivní design &amp; Přehlednost</li>
-        <li>Výkon &amp; Přístupnost</li>
-        <li>Vanilla JS bez frameworků</li>
-      </ul>
+    <div class="prace-nad">
+      <h2 class="nadpis rv">Co pro vás<br><b>udělám</b></h2>
+      <p class="nadpis-p rv">Nekupujete šablonu. Web vzniká podle toho, co potřebujete, a já na něm dělám od prvního návrhu až po spuštění.</p>
+      <!-- Řádek konzole. Vlevo příkaz, kterým se to doopravdy
+           dělá, vpravo česky, co dělá. Kdo příkazy zná, usměje
+           se; kdo je nezná, dočte se totéž vedle. -->
+      <p class="konzole rv"><b aria-hidden="true">npm run build</b><span>z návrhu se stane web</span></p>
     </div>
 
-    <div class="exp-col rv">
-      <span class="exp-num">02</span>
-      <h3>Backend &amp; Databáze</h3>
-      <p class="exp-desc">Návrh a implementace robustní serverové logiky a bezpečné správy dat. Vývoj škálovatelných systémů, které zajišťují bezchybný chod, stabilitu a vysokou úroveň zabezpečení aplikace.</p>
-      <ul class="exp-skills">
-        <li>PHP · MySQL</li>
-        <li>Java SE · Kotlin</li>
-        <li>Android Studio</li>
-        <li>C# · Unity 2D / 3D</li>
-      </ul>
-    </div>
+    <ol class="obory">
+      <li class="obor rv" data-stanice>
+        <span class="obor-zn"><svg class="ik ik-v" aria-hidden="true"><use href="#i-kod"/></svg><span class="obor-c">01</span></span>
+        <h3>Web na míru, ne šablona</h3>
+        <p>Rozvržení, sazbu i chování stránky stavím podle toho, co má web říkat. Načte se rychle a čte se stejně dobře na telefonu i na počítači.</p>
+      </li>
+      <li class="obor rv" data-stanice>
+        <span class="obor-zn"><svg class="ik ik-v" aria-hidden="true"><use href="#i-data"/></svg><span class="obor-c">02</span></span>
+        <h3>Když web nefunguje</h3>
+        <p>Máte web a něco na něm nesedí? Podívám se, co s ním je, vysvětlím to bez odborných slov a co půjde, spravím.</p>
+      </li>
+      <li class="obor rv" data-stanice>
+        <span class="obor-zn"><svg class="ik ik-v" aria-hidden="true"><use href="#i-stit"/></svg><span class="obor-c">03</span></span>
+        <h3>Spuštění a co potom</h3>
+        <p>Web dostanu online a projdu s vámi, co kde je. Když se pak objeví drobnost k doladění, nezmizím.</p>
+      </li>
+    </ol>
 
-    </div>
   </div>
 
-  <div class="stack rv" aria-label="Tech stack">
-    <span>HTML</span><span>CSS</span><span>JavaScript</span><span>PHP</span>
-    <span>MySQL</span><span>Vanilla Java</span><span>Kotlin</span>
-    <span>C#</span><span>C++</span>
+  <div class="pas rv" aria-label="Technologie, které používám">
+    <ul class="pas-stopa">
+      <li>HTML</li><li>CSS</li><li>JavaScript</li><li>TypeScript</li>
+      <li>PHP</li><li>MySQL</li><li>PostgreSQL</li><li>Next.js</li>
+      <li>Tailwind</li><li>Java</li><li>Kotlin</li><li>C#</li><li>C++</li>
+    </ul>
   </div>
-
 </section>
+
+<!-- Brána mezi úrovněmi. Linka se při odhalení dokreslí
+     do stran a mezi jejími konci stojí, kam člověk vstupuje. -->
+<div class="brana rv" aria-hidden="true">
+  <span class="brana-l"></span>
+  <span class="brana-t"><b>Úroveň 3 ze 4</b>Hotové weby</span>
+  <span class="brana-l"></span>
+</div>
 
 <!-- ══ PROJEKTY ══════════════════════════════════════════════════
-     Rejstřík s rozbalovacími řádky. Otevřený je vždy jen jeden,
-     takže zavřená sekce zabere pár set pixelů a na telefonu se
-     nescrolluje donekonečna.
+     Rejstřík, ne galerie. Zavřený řádek je jen sazba, takže je
+     seznam krátký i na telefonu. Snímek se odkrývá až tomu,
+     kdo o projekt projeví zájem:
+
+       · na počítači se při najetí ukáže výřez u ukazatele,
+       · po otevření řádku snímek vyjede zpod linky.
+
+     Obrázek se stahuje teprve v tu chvíli. Než na projekt někdo
+     sáhne, nestojí seznam ani bajt navíc.
 ══════════════════════════════════════════════════════════════════ -->
-<section id="projects" class="wrap">
+<section id="projekty" class="sec">
 
-  <div class="sec-head rv">
-    <h2 class="sec-title">Projekty</h2>
+  <div class="wrap">
+    <h2 class="nadpis rv">Hotové weby,<br><b>ne obrázky v šuplíku</b></h2>
+    <p class="nadpis-p rv">Čtyři weby, které jsem postavil, vypsané jako historie: nahoře rozdělaná práce, pod ní hotové. Enter rozbalí, co je uvnitř, druhý enter web otevře.</p>
+    <p class="konzole rv"><b aria-hidden="true">git log --oneline</b><span>vypiš, co už je hotové</span></p>
   </div>
 
-  <div class="px rv">
+  <ol class="rejstrik wrap rv">
 
-    <div class="px-item is-open">
-      <button class="px-row" id="prow-1" aria-expanded="true" aria-controls="pbody-1">
-        <span class="px-num">01</span>
-        <span class="px-name">Herní akademie</span>
-        <span class="px-tech">HTML · CSS</span>
-        <span class="px-sign" aria-hidden="true"></span>
+    <li class="polozka polozka-chysta">
+      <div class="radek" data-stanice tabindex="0">
+        <span class="radek-b" aria-hidden="true"></span>
+        <span class="radek-c">paty-projekt</span>
+        <span class="radek-n">Pátý projekt</span>
+        <span class="radek-s">Právě se staví</span>
+        <span class="radek-t" aria-hidden="true">zamčeno</span>
+        <span class="jen-ctecka">zamčeno, projekt se teprve staví</span>
+      </div>
+    </li>
+
+    <li class="polozka">
+      <button class="radek" data-stanice id="r1" aria-expanded="false" aria-controls="t1">
+        <span class="radek-b" aria-hidden="true"></span>
+        <span class="radek-c">herni-akademie</span>
+        <span class="radek-n">Herní akademie</span>
+        <span class="radek-s">Web pro komunitu</span>
+        <span class="radek-t" aria-hidden="true">hotovo</span>
+        <span class="jen-ctecka">otevřít web v novém okně</span>
+        <span class="radek-z" aria-hidden="true"></span>
       </button>
-      <div class="px-body" id="pbody-1" role="region" aria-labelledby="prow-1">
-        <div class="px-inner">
-          <div class="px-grid">
-            <div class="px-shot">
-              <img src="motivo.webp" alt="Náhled projektu Herní akademie" width="1200" height="786" decoding="async"/>
-            </div>
-            <div>
-              <p class="px-text">Motivo je full-stack sociální platforma spojující vzdělávání s herní komunitou. Obsahuje systém úkolů, XP, žebříčky, chat a interakce jako follow či komentáře. Díky pokročilé roli uživatelů (RBAC) a vlastnímu zabezpečenému backendu (PHP/MySQL) nabízí komplexní správu obsahu. Projekt je postaven na robustní architektuře pro maximální uživatelskou angažovanost.</p>
-              <div class="px-chips">
-                <span>HTML</span><span>CSS</span><span>JS</span><span>PHP</span><span>MySQL</span>
-              </div>
-              <a href="https://motivo.free.nf" target="_blank" rel="noopener noreferrer" class="px-link">
-                Zobrazit projekt
-                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-                </svg>
-              </a>
-            </div>
+      <div class="telo" id="t1" role="region" aria-labelledby="r1">
+        <div class="telo-in">
+          <div class="telo-txt">
+            <p class="telo-cat" aria-hidden="true"><b></b>cat herni-akademie.md</p>
+            <p>Komunitní web, kde členové plní úkoly, sbírají body a měří se v žebříčku. Je tu chat, profily i administrace, ze které správce řídí obsah z jednoho místa.</p>
+            <ul class="znacky"><li>Uživatelské účty</li><li>Vlastní databáze</li><li>Administrace</li><li>Chat</li></ul>
+            <a href="https://motivo.free.nf" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
           </div>
         </div>
       </div>
-    </div>
+    </li>
 
-    <div class="px-item">
-      <button class="px-row" id="prow-2" aria-expanded="false" aria-controls="pbody-2">
-        <span class="px-num">02</span>
-        <span class="px-name">Restovski Webový Koncept</span>
-        <span class="px-tech">HTML · Tailwind CSS</span>
-        <span class="px-sign" aria-hidden="true"></span>
+    <li class="polozka">
+      <button class="radek" data-stanice id="r2" aria-expanded="false" aria-controls="t2">
+        <span class="radek-b" aria-hidden="true"></span>
+        <span class="radek-c">restovski</span>
+        <span class="radek-n">Restovski</span>
+        <span class="radek-s">Prezentace interpreta</span>
+        <span class="radek-t" aria-hidden="true">hotovo</span>
+        <span class="jen-ctecka">otevřít web v novém okně</span>
+        <span class="radek-z" aria-hidden="true"></span>
       </button>
-      <div class="px-body" id="pbody-2" role="region" aria-labelledby="prow-2">
-        <div class="px-inner">
-          <div class="px-grid">
-            <div class="px-shot">
-              <img src="restovski.webp" alt="Náhled projektu Restovski Webový Koncept" width="1200" height="547" loading="lazy" decoding="async"/>
-            </div>
-            <div>
-              <p class="px-text">Fanouškovský redesign webové prezentace českého rappera Resta (Restovski), vytvořený jako moderní koncept s důrazem na minimalistický vizuální styl, přehlednou navigaci a plnou responzivitu. Stránka obsahuje biografii, diskografii, koncerty, galerii, informace o spolupracovnících, merch i kontaktní sekci. Součástí je také dynamické filtrování koncertů, světlý a tmavý režim a plynulé animační prvky pro příjemnější uživatelský zážitek.</p>
-              <div class="px-chips">
-                <span>HTML</span><span>Tailwind CSS</span><span>JS</span><span>JSON</span>
-              </div>
-              <a href="https://restovski.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
-                Zobrazit projekt
-                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-                </svg>
-              </a>
-            </div>
+      <div class="telo" id="t2" role="region" aria-labelledby="r2">
+        <div class="telo-in">
+          <div class="telo-txt">
+            <p class="telo-cat" aria-hidden="true"><b></b>cat restovski.md</p>
+            <p>Web českého rappera. Koncerty, které se dají filtrovat podle data a místa, diskografie, galerie a obchod. Návštěvník si přepne světlý nebo tmavý vzhled.</p>
+            <ul class="znacky"><li>Filtrování koncertů</li><li>Galerie</li><li>Světlý i tmavý režim</li></ul>
+            <a href="https://restovski.vercel.app/" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
           </div>
         </div>
       </div>
-    </div>
+    </li>
 
-    <div class="px-item">
-      <button class="px-row" id="prow-3" aria-expanded="false" aria-controls="pbody-3">
-        <span class="px-num">03</span>
-        <span class="px-name">Vyhlídkář web/app</span>
-        <span class="px-tech">Next.js · TypeScript</span>
-        <span class="px-sign" aria-hidden="true"></span>
+    <li class="polozka">
+      <button class="radek" data-stanice id="r3" aria-expanded="false" aria-controls="t3">
+        <span class="radek-b" aria-hidden="true"></span>
+        <span class="radek-c">vyhlidkar</span>
+        <span class="radek-n">Vyhlídkář</span>
+        <span class="radek-s">Web i aplikace do telefonu</span>
+        <span class="radek-t" aria-hidden="true">hotovo</span>
+        <span class="jen-ctecka">otevřít web v novém okně</span>
+        <span class="radek-z" aria-hidden="true"></span>
       </button>
-      <div class="px-body" id="pbody-3" role="region" aria-labelledby="prow-3">
-        <div class="px-inner">
-          <div class="px-grid">
-            <div class="px-shot">
-              <img src="vyhlidkar.webp" alt="Náhled projektu Vyhlídkář web/app" width="1459" height="864" loading="lazy" decoding="async"/>
-            </div>
-            <div>
-              <p class="px-text">Vyhlídkář je full-stack webová a mobilní aplikace zaměřená na objevování skrytých vyhlídek, laviček, car spotů a dalších jedinečných míst, která znají především místní. Uživatelé mohou přidávat vlastní lokality, fotografie, hodnocení i komentáře a společně budovat komunitní mapu autentických míst mimo přeplněné turistické atrakce. Projekt využívá interaktivní mapy, geolokaci, vlastní REST API, PostgreSQL s PostGIS pro práci s geodaty, Cloudflare R2 pro ukládání fotografií a OpenAI API pro automatickou moderaci nahraného obsahu. Součástí je také mobilní aplikace postavená pomocí Capacitoru se sdíleným backendem.</p>
-              <div class="px-chips">
-                <span>Next.js</span><span>TypeScript</span><span>Tailwind CSS</span><span>Leaflet</span><span>PostGIS</span><span>Drizzle ORM</span><span>OpenAI API</span><span>Cloudflare R2</span><span>Capacitor</span>
-              </div>
-              <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
-                Zobrazit projekt
-                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-                </svg>
-              </a>
-            </div>
+      <div class="telo" id="t3" role="region" aria-labelledby="r3">
+        <div class="telo-in">
+          <div class="telo-txt">
+            <p class="telo-cat" aria-hidden="true"><b></b>cat vyhlidkar.md</p>
+            <p>Mapa vyhlídek, laviček a klidných míst v okolí. Lidé sem přidávají vlastní tipy s fotkou a hodnocením. Běží na webu i jako aplikace v telefonu, obojí nad stejnými daty.</p>
+            <ul class="znacky"><li>Mapa a poloha</li><li>Fotky od uživatelů</li><li>Aplikace do telefonu</li></ul>
+            <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
           </div>
         </div>
       </div>
-    </div>
+    </li>
 
-    <div class="px-item">
-      <button class="px-row" id="prow-4" aria-expanded="false" aria-controls="pbody-4">
-        <span class="px-num">04</span>
-        <span class="px-name">Kadeřnictví Hrabalová</span>
-        <span class="px-tech">PHP · MySQL / TiDB Cloud</span>
-        <span class="px-sign" aria-hidden="true"></span>
+    <li class="polozka">
+      <button class="radek" data-stanice id="r4" aria-expanded="false" aria-controls="t4">
+        <span class="radek-b" aria-hidden="true"></span>
+        <span class="radek-c">kadernictvi-hrabalova</span>
+        <span class="radek-n">Kadeřnictví Hrabalová</span>
+        <span class="radek-s">Objednávkový systém</span>
+        <span class="radek-t" aria-hidden="true">hotovo</span>
+        <span class="jen-ctecka">otevřít web v novém okně</span>
+        <span class="radek-z" aria-hidden="true"></span>
       </button>
-      <div class="px-body" id="pbody-4" role="region" aria-labelledby="prow-4">
-        <div class="px-inner">
-          <div class="px-grid">
-            <div class="px-shot">
-              <img src="hrabalova.webp" alt="Náhled projektu Kadeřnictví Hrabalová" width="1459" height="864" loading="lazy" decoding="async"/>
-            </div>
-            <div>
-              <p class="px-text">Denisa Hair je moderní web a rezervační systém na míru pro kadeřnický salon. Zákazníkům nabízí přehledný online kalendář s výběrem volných časů a automatickým e-mailovým potvrzením. Součástí je blesková administrace, ve které kadeřnice snadno spravuje termíny, mění jejich stavy a ručně zapisuje telefonické objednávky. Celý systém je navržený s důrazem na bleskové načítání, perfektní zobrazení na telefonu i počítači (se světlým i tmavým režimem) a absolutní spolehlivost, která garantuje, že se dva zákazníci nikdy nezarezervují na stejný čas.</p>
-              <div class="px-chips">
-                <span>PHP</span><span>MySQL / TiDB Cloud</span><span>JS</span><span>CSS</span><span>REST API</span><span>Resend API</span>
-              </div>
-              <a href="https://denisa-hair.vercel.app/" target="_blank" rel="noopener noreferrer" class="px-link">
-                Zobrazit projekt
-                <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                  <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-                </svg>
-              </a>
-            </div>
+      <div class="telo" id="t4" role="region" aria-labelledby="r4">
+        <div class="telo-in">
+          <div class="telo-txt">
+            <p class="telo-cat" aria-hidden="true"><b></b>cat kadernictvi-hrabalova.md</p>
+            <p>Zákaznice si vybere volný termín a potvrzení jí přijde e-mailem. Kadeřnice vidí celý kalendář a přepisuje termíny za pochodu. Dva lidé se nikdy neobjednají na stejný čas.</p>
+            <ul class="znacky"><li>Online objednávky</li><li>Potvrzení e-mailem</li><li>Administrace</li></ul>
+            <a href="https://denisa-hair.vercel.app/" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
           </div>
         </div>
       </div>
-    </div>
+    </li>
 
-    <!-- Připravovaný projekt se nerozbaluje, není co ukázat. -->
-    <div class="px-item">
-      <div class="px-row">
-        <span class="px-num">05</span>
-        <span class="px-name">Projekt #5</span>
-        <span class="px-tech px-tech--stav">V přípravě</span>
-      </div>
-    </div>
 
-  </div>
+  </ol>
 </section>
 
+<!-- Brána mezi úrovněmi. Linka se při odhalení dokreslí
+     do stran a mezi jejími konci stojí, kam člověk vstupuje. -->
+<div class="brana rv" aria-hidden="true">
+  <span class="brana-l"></span>
+  <span class="brana-t"><b>Úroveň 4 ze 4</b>Napište mi</span>
+  <span class="brana-l"></span>
+</div>
+
 <!-- ══ KONTAKT ═══════════════════════════════════════════════════ -->
-<section id="contact" class="wrap">
+<section id="kontakt" class="wrap sec">
+  <div class="kont">
 
-  <div class="ct-grid">
+    <div class="kont-l rv" data-stanice>
+      <h2 class="nadpis">Máte nápad?<br><b>Napište mi.</b></h2>
+      <p class="nadpis-p">Stačí pár vět o tom, co potřebujete. Ozvu se, jakmile si zprávu přečtu, a řekneme si, co to obnáší.</p>
+      <p class="konzole"><b aria-hidden="true">git push</b><span>odsud se hotová práce dostane ven</span></p>
 
-    <div class="rv">
-      <p class="label ct-label">Kontakt</p>
-      <h2 class="ct-head">Pojďme<br><em>spolupracovat.</em></h2>
-      <p class="ct-sub">Jsem otevřen novým projektům a příležitostem.</p>
-
-      <p class="avail"><i aria-hidden="true"></i>Otevřen nabídkám</p>
-
-      <div class="ct-links">
-        <a href="mailto:filda.lochman12@gmail.com" class="ct-link">
-          <span class="cll-label">Email</span>
-          <span class="cll-val">filda.lochman12@gmail.com</span>
-          <span class="cll-arr" aria-hidden="true">↗</span>
+      <div class="spojeni">
+        <a href="mailto:filda.lochman12@gmail.com">
+          <svg class="ik" aria-hidden="true"><use href="#i-obalka"/></svg><span>Email</span><span class="spoj-v">filda.lochman12@gmail.com</span>
         </a>
-        <a href="https://linkedin.com/in/filip-lochman-a313a9301" target="_blank" rel="noopener noreferrer" class="ct-link">
-          <span class="cll-label">LinkedIn</span>
-          <span class="cll-val">Filip Lochman</span>
-          <span class="cll-arr" aria-hidden="true">↗</span>
+        <a href="https://linkedin.com/in/filip-lochman-a313a9301" target="_blank" rel="noopener noreferrer">
+          <svg class="ik" aria-hidden="true"><use href="#i-linkedin"/></svg><span>LinkedIn</span><span class="spoj-v">Filip Lochman</span>
         </a>
-        <a href="https://instagram.com/imdzustea" rel="noopener noreferrer" class="ct-link">
-          <span class="cll-label">Instagram</span>
-          <span class="cll-val">Filip Lochman</span>
-          <span class="cll-arr" aria-hidden="true">↗</span>
+        <a href="https://instagram.com/imdzustea" target="_blank" rel="noopener noreferrer">
+          <svg class="ik" aria-hidden="true"><use href="#i-instagram"/></svg><span>Instagram</span><span class="spoj-v">imdzustea</span>
         </a>
-        <div class="ct-link">
-          <span class="cll-label">Lokace</span>
-          <span class="cll-val">Kroměříž / Zlín · Remote OK</span>
-        </div>
       </div>
     </div>
 
-    <div class="rv">
-      <form id="cform" novalidate>
-
-        <div class="fg">
-          <label for="fn">Jméno</label>
-          <input id="fn" name="name" type="text"
-                 placeholder="Jan Novák" autocomplete="name" required/>
-        </div>
-        <div class="fg">
-          <label for="fe">Email</label>
-          <input id="fe" name="email" type="email"
-                 placeholder="jan@firma.cz" autocomplete="email" required/>
-        </div>
-        <div class="fg">
-          <label for="fm">Zpráva</label>
-          <textarea id="fm" name="message"
-                    placeholder="Dobrý den, mám dotaz..." required></textarea>
-        </div>
-
-        <button id="btn-send" class="btn" type="submit">
-          <span id="btn-txt">Odeslat zprávu</span>
-          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-            <line x1="3" y1="9" x2="15" y2="9"/><polyline points="9 3 15 9 9 15"/>
-          </svg>
-        </button>
-
-        <p class="form-feedback" id="fmsg" aria-live="polite"></p>
-      </form>
-    </div>
+    <form id="cform" class="rv" novalidate>
+      <div class="fg">
+        <label for="fn">Jméno</label>
+        <input id="fn" name="name" type="text" placeholder="Jan Novák" autocomplete="name" required/>
+      </div>
+      <div class="fg">
+        <label for="fe">Email</label>
+        <input id="fe" name="email" type="email" placeholder="jan@firma.cz" autocomplete="email" required/>
+      </div>
+      <div class="fg">
+        <label for="fm">Zpráva</label>
+        <textarea id="fm" name="message" rows="4" placeholder="Co potřebujete postavit?" required></textarea>
+      </div>
+      <button id="btn-send" class="btn btn-sir" type="submit">
+        <span class="btn-t" id="btn-txt">Odeslat zprávu</span>
+        <svg class="ik" aria-hidden="true"><use href="#i-vlastovka"/></svg>
+      </button>
+      <p class="hlaska" id="fmsg" aria-live="polite"></p>
+    </form>
 
   </div>
 </section>
@@ -378,10 +483,22 @@
 
 <footer>
   <div class="wrap foot-in">
-    <span>© Filip Lochman · 2026</span>
-    <span>Kroměříž / Zlín, CZ</span>
+    <span class="foot-mark">FL<span>.</span></span>
+    <span>Filip Lochman, 2026</span>
+    <span class="foot-misto"><svg class="ik" aria-hidden="true"><use href="#i-spendlik"/></svg>Kroměříž a Zlín, CZ</span>
   </div>
 </footer>
+
+<!-- Ukazatel stavu. Drží úroveň, ve které člověk právě je,
+     a jednu větu o tom, čím se stránka ovládá. Je to ozdoba
+     nad obsahem, který už v dokumentu jednou stojí, proto ho
+     čtečka obrazovky přeskočí. -->
+<div class="ukazatel" aria-hidden="true">
+  <span class="uk-u">Úroveň <b>1</b> ze 4</span>
+  <span class="uk-k">Ovládá se šipkami, enter otevře</span>
+  <span class="uk-f">Režim formuláře, esc zpátky do hry</span>
+</div>
+
 
 <script src="script.js"></script>
 </body>
