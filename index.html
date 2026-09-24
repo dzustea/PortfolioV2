@@ -213,7 +213,9 @@
     <p class="hero-veta rv">Dělám weby. Navrhnu je a postavím tak, aby se rychle
       načetly a dobře četly na telefonu i na počítači.</p>
 
-    <div class="konz rv">
+    <div class="konz-sloupce rv">
+
+    <div class="konz">
       <div class="konz-hl" aria-hidden="true">
         <span class="konz-z"></span><span class="konz-z"></span><span class="konz-z"></span>
         <span class="konz-n">filip / portfolio</span>
@@ -252,14 +254,6 @@
         </ul>
         </div>
 
-        <!-- Náhled vybrané volby. Text do něj zapisuje skript
-             z atributu data-popis na řádku, přes textContent. -->
-        <div class="konz-nah" aria-hidden="true">
-          <p class="nahled-hl">náhled</p>
-          <p class="nahled-t">Vyberte šipkami, s čím jdete. Tady se ukáže, co to znamená.</p>
-          <p class="nahled-a"><b></b><span>enter potvrdí</span></p>
-        </div>
-
         <p class="konz-pata" aria-hidden="true">
           <span class="jen-klavesy">šipky vybírají</span>
           <span class="jen-klavesy">enter potvrdí</span>
@@ -267,6 +261,18 @@
           <span>nebo pokračujte dolů</span>
         </p>
       </div>
+    </div>
+
+    <!-- Odpověď na vybranou volbu. Stojí vedle okna, ne v něm:
+         terminál se ptá, tohle je jeho odpověď. Text do ní
+         zapisuje skript z atributu data-popis na řádku, znak po
+         znaku a přes textContent. -->
+    <div class="odpoved" aria-hidden="true">
+      <p class="odp-hl"><b></b>odpověď</p>
+      <p class="odp-t">Vyberte šipkami, s čím jdete.</p>
+      <p class="odp-a"><b></b><span>enter potvrdí</span></p>
+    </div>
+
     </div>
 
     <p class="hero-pata rv">

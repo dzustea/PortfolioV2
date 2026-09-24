@@ -982,13 +982,9 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 .konz-n{margin-left: 6px}
 .konz-t{margin-left: auto; color: var(--sed-2)}
 
-/* Vlevo výpis voleb, vpravo náhled té vybrané, jako v souborovém
-   správci v terminálu. Šipka tím dostane okamžitou odezvu: něco
-   se vpravo přepíše dřív, než člověk stihne stisknout enter. */
-.konz-telo{
-  display: grid; grid-template-columns: minmax(0, 1fr) 210px;
-  padding: 14px 12px 12px;
-}
+/* Okno drží jen výpis voleb; odpověď na vybranou stojí vedle
+   něj, ne v něm. */
+.konz-telo{padding: 14px 12px 12px}
 .konz-l{min-width: 0}
 
 .konz-dotaz{
@@ -1059,7 +1055,6 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 }
 
 .konz-pata{
-  grid-column: 1 / -1;
   display: flex; flex-wrap: wrap; gap: 4px 14px;
   margin: 12px 0 0; padding-top: 10px;
   border-top: 1px solid var(--linka);
@@ -1069,68 +1064,105 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 }
 .konz-pata span + span::before{content: "· "; color: var(--linka-2)}
 
-/* Náhled. Oddělený vlasovou linkou, aby bylo poznat, že to je
-   druhý sloupec, ne pokračování výpisu. */
-.konz-nah{
-  min-width: 0;
-  padding-left: clamp(12px, 1.6vw, 18px);
-  margin-left: clamp(12px, 1.6vw, 18px);
-  border-left: 1px solid var(--linka);
-  display: flex; flex-direction: column; gap: 10px;
+/* ── ODPOVĚĎ NA VOLBU ──────────────────────────────────────────
+   Stojí vedle okna, ne v něm: terminál se ptá, tohle je jeho
+   odpověď. Drží ji rudá hrana zleva, nad ní je štítek a pod ní
+   pobídka k enteru. Text se vypisuje znak po znaku a na konci
+   za ním bliká kurzor, takže je vidět, že to právě dopsal
+   stroj, který stojí vlevo.
+   ─────────────────────────────────────────────────────────── */
+
+.konz-sloupce{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, .82fr);
+  align-items: start;
+  gap: clamp(18px, 2.6vw, 34px);
+  margin-top: clamp(24px, 3vw, 34px);
+  max-width: 860px;
 }
-.nahled-hl{
+
+.konz{margin-top: 0; max-width: none}
+
+.odpoved{
+  position: relative;
+  padding: 2px 0 2px clamp(14px, 1.8vw, 22px);
+  display: grid; gap: 12px;
+  opacity: .55;
+  transition: opacity .3s ease;
+}
+/* Rudá hrana není rámeček, ale vlastní prvek: při každé nové
+   odpovědi se dokreslí shora dolů, takže je vidět, že tohle
+   právě přibylo. */
+.odpoved::before{
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 2px; background: var(--rud);
+  transform-origin: 50% 0;
+}
+.odpoved.pise::before{animation: odpovedLinka .45s cubic-bezier(.22,1,.36,1)}
+@keyframes odpovedLinka{from{transform: scaleY(0)} to{transform: scaleY(1)}}
+/* Dokud si člověk nevybere, odpověď jen tiše čeká. */
+.konz-sloupce.ma-vyber .odpoved{opacity: 1}
+
+.odp-hl{
+  display: flex; align-items: center; gap: 8px;
   font-family: var(--mono);
-  font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
-  color: var(--sed-2);
+  font-size: .58rem; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--rud-tx);
 }
-.nahled-t{
-  font-size: .82rem; line-height: 1.55; color: var(--sed);
-  /* Text se při přepnutí neprolne: ve výpisu se řádky přepisují,
-     ne rozplývají. Jen krátce blikne, jako když se překreslí. */
-  animation: nahledPreblik .22s ease;
+.odp-hl b{
+  width: 5px; height: 5px; background: var(--rud);
+  animation: odpovedTepe 2.4s ease-in-out infinite;
 }
-@keyframes nahledPreblik{
-  0%  {opacity: .15; transform: translateY(3px)}
-  100%{opacity: 1;  transform: none}
+@keyframes odpovedTepe{
+  0%,100%{opacity: 1}
+  50%    {opacity: .25}
 }
-.nahled-a{
-  margin-top: auto;
+
+.odp-t{
+  font-size: clamp(.94rem, 1.1vw, 1.04rem);
+  line-height: 1.55; color: var(--kost);
+  text-wrap: pretty;
+}
+/* Kurzor na konci vypisovaného textu. Zmizí, jakmile je text
+   dopsaný, aby po sobě nenechával blikat prázdno. */
+.odp-t::after{
+  content: ""; display: inline-block;
+  width: .5em; height: 1.05em; margin-left: .18em;
+  vertical-align: -2px;
+  background: var(--rud);
+  opacity: 0;
+}
+.odpoved.pise .odp-t::after{
+  opacity: 1;
+  animation: odpovedKurzor 1s steps(1) infinite;
+}
+@keyframes odpovedKurzor{0%,50%{opacity: 1} 51%,100%{opacity: 0}}
+
+.odp-a{
   display: flex; align-items: center; gap: 8px;
   font-family: var(--mono);
   font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
   color: var(--sed-2);
-  opacity: 0; transition: opacity .25s ease;
+  opacity: 0; transform: translateY(4px);
+  transition: opacity .3s ease, transform .3s cubic-bezier(.22,1,.36,1);
 }
-.konz.ma-vyber .nahled-a{opacity: 1}
-.nahled-a b{
+.konz-sloupce.ma-vyber .odp-a{opacity: 1; transform: none}
+.odp-a b{
   width: 0; height: 0;
   border-left: 5px solid var(--rud);
   border-top: 3px solid transparent;
   border-bottom: 3px solid transparent;
 }
 
-.konz-pata{
-  grid-column: 1 / -1;
-  display: flex; flex-wrap: wrap; gap: 4px 14px;
-  margin: 12px 0 0; padding-top: 10px;
-  border-top: 1px solid var(--linka);
-  font-family: var(--mono);
-  font-size: .62rem; letter-spacing: .06em;
-  color: var(--sed-2);
-}
-.konz-pata span + span::before{content: "· "; color: var(--linka-2)}
-
-@media (max-width: 720px){
-  /* Na úzké obrazovce jde náhled pod výpis; vedle sebe by se ani
-     jeden sloupec nedal přečíst. */
-  .konz-telo{grid-template-columns: minmax(0, 1fr)}
-  .konz-nah{
-    padding: 12px 0 0; margin: 12px 0 0;
-    border-left: 0; border-top: 1px solid var(--linka);
-  }
-  .nahled-a{margin-top: 6px}
+/* Na užší okno jde odpověď pod konzoli; vedle sebe by se ani
+   jeden sloupec nedal přečíst. */
+@media (max-width: 860px){
+  .konz-sloupce{grid-template-columns: minmax(0, 1fr); max-width: 560px}
 }
 
+@media (prefers-reduced-motion: reduce){
+  .odp-hl b, .odpoved.pise .odp-t::after, .odpoved.pise::before{animation: none}
+}
 
 /* ── PATA ÚVODU ────────────────────────────────────────────── */
 
@@ -1287,9 +1319,9 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   }
   .volba:active{background: rgba(224,36,44,.18); border-color: var(--rud)}
 
-  /* Náhled nemá na dotyku co ukazovat: vybírá se klepnutím,
-     ne šipkami, takže by v něm pořád stála tatáž věta. */
-  .konz-nah{display: none}
+  /* Odpověď nemá na dotyku co ukazovat: vybírá se klepnutím,
+     ne šipkami, takže by v ní pořád stála tatáž věta. */
+  .odpoved{display: none}
 
   /* Nápověda pod tlačítky je drobnost, ne další nabídka. */
   .konz-pata{

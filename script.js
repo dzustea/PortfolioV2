@@ -579,24 +579,47 @@
 
   var jedeme = false;
 
-  var konzole = document.querySelector('.konz');
-  var nahled = konzole ? konzole.querySelector('.nahled-t') : null;
-  var NAHLED_VYCHOZI = nahled ? nahled.textContent : '';
+  var sloupce = document.querySelector('.konz-sloupce');
+  var odpoved = document.querySelector('.odpoved');
+  var odpovedText = odpoved ? odpoved.querySelector('.odp-t') : null;
+  var ODPOVED_VYCHOZI = odpovedText ? odpovedText.textContent : '';
+  var pise = 0;
 
-  /* Náhled vpravo v konzoli. Text se bere z atributu na řádku
-     a vkládá se přes textContent, takže se do stránky nedostane
-     žádné značkování. Překreslení se přehraje znovu i při druhém
-     výběru téže volby, proto se animace nejdřív sundá. */
-  var zapisNahled = function (prvek) {
-    if (!nahled) return;
+  /* Odpověď vedle konzole. Text se bere z atributu na řádku
+     a vypisuje se znak po znaku, jako by ho stroj vlevo právě
+     psal; vkládá se přes textContent, takže se do stránky
+     nedostane žádné značkování.
+
+     Při potlačeném pohybu se nic nevypisuje, text prostě stojí. */
+  var zapisOdpoved = function (prvek) {
+    if (!odpovedText) return;
     var popis = prvek && prvek.getAttribute ? prvek.getAttribute('data-popis') : null;
+    var text = popis || ODPOVED_VYCHOZI;
 
-    if (konzole) konzole.classList.toggle('ma-vyber', !!popis);
-    nahled.textContent = popis || NAHLED_VYCHOZI;
+    if (sloupce) sloupce.classList.toggle('ma-vyber', !!popis);
 
-    nahled.style.animation = 'none';
-    void nahled.offsetWidth;
-    nahled.style.animation = '';
+    clearInterval(pise);
+
+    if (!popis || tlumenyPohyb.matches) {
+      odpoved.classList.remove('pise');
+      odpovedText.textContent = text;
+      return;
+    }
+
+    var znak = 0;
+    odpoved.classList.add('pise');
+    odpovedText.textContent = '';
+
+    pise = setInterval(function () {
+      /* Po dvou znacích naráz: dost rychle na to, aby to nikoho
+         nezdržovalo, a dost pomalu na to, aby bylo vidět psaní. */
+      znak += 2;
+      odpovedText.textContent = text.slice(0, znak);
+      if (znak >= text.length) {
+        clearInterval(pise);
+        odpoved.classList.remove('pise');
+      }
+    }, 14);
   };
 
   var oznacStanici = function (index) {
@@ -610,7 +633,7 @@
     var jeVolba = deska.classList.contains('volba');
     deska.classList.add(jeVolba ? 'je-vybrana' : 'je-na-rade');
 
-    zapisNahled(jeVolba ? deska : null);
+    zapisOdpoved(jeVolba ? deska : null);
 
     /* Odchod z historie zavře, co v ní zůstalo rozbalené. */
     if (otevriUroven) otevriUroven(deska);
