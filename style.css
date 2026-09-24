@@ -410,17 +410,19 @@ body{
 
 /* ══ OPIČKA NA LIÁNÁCH ═════════════════════════════════════════
    Ukazatel postupu ve stránce. Visí pod lištou, každá liána je
-   jedna zastávka a opička na ně skáče, jak člověk šipkami
+   jedno místo ve stránce a opička na ně skáče, jak člověk
    postupuje. Vpravo od poslední liány už nic není, takže je
    vidět i to, kolik zbývá.
 
-   Volby v konzoli se nepočítají: rozcestník v úvodu je nabídka,
-   ne cesta. Dokud je člověk v úvodu, visí opička na začátku
-   hrazdy, před první liánou.
+   Hrazda neměří zastávky, ale místa: volby v konzoli se
+   nepočítají (rozcestník je nabídka, ne cesta) a celá historie
+   projektů je jedno místo. Na dotyku vede opičku to, co je
+   zrovna uprostřed okna, na počítači ukazatel šipek; v obou
+   případech visí a čeká, dokud se člověk neposune dál.
 
    Pohyb je rozdělený do tří vrstev, aby si transformace
-   nepřekážely: vnější prvek jede do strany, prostřední se
-   houpe pořád dokola a vnitřní dělá vlastní skok.
+   nepřekážely: vnější prvek jede do strany, prostřední se houpe
+   pořád dokola a vnitřní dělá vlastní skok.
    ══════════════════════════════════════════════════════════════ */
 
 /* Dokud visí opona, opička nemá kde viset. */
@@ -439,40 +441,61 @@ body{
 }
 
 /* ── LIÁNA ─────────────────────────────────────────────────────
-   Provaz s uzlem na konci. Houpe se kolem svého úchytu, každá
-   o kousek jinak, takže hrazda nikdy nestojí úplně na místě.
+   Provaz, ne čára: dva body světla a tmy nad sebou dělají
+   zkroucení, na konci je uzel. Každá visí jinak dlouho a houpe
+   se jinak rychle, takže hrazda nikdy nestojí na místě a přitom
+   se nic neopakuje na oko pravidelně.
    ─────────────────────────────────────────────────────────── */
 
 .liana{
   position: absolute; top: 0; left: var(--x, 0);
-  width: 1px; height: 15px;
-  background: linear-gradient(180deg, rgba(242,239,233,.28), rgba(242,239,233,.1));
+  width: 2px; height: 16px;
+  background:
+    repeating-linear-gradient(180deg,
+      rgba(242,239,233,.30) 0 2px,
+      rgba(242,239,233,.12) 2px 4px);
   transform-origin: 50% 0;
   animation: lianaSeHoupe 5.5s ease-in-out infinite;
 }
 /* Uzel na konci provazu. */
 .liana::after{
-  content: ""; position: absolute; left: -1px; bottom: -1px;
-  width: 3px; height: 3px;
-  background: rgba(242,239,233,.28);
+  content: ""; position: absolute; left: -1px; bottom: -2px;
+  width: 4px; height: 3px;
+  background: rgba(242,239,233,.24);
 }
-.liana:nth-child(2n){animation-duration: 6.4s; animation-delay: -1.4s}
-.liana:nth-child(3n){animation-duration: 7.1s; animation-delay: -2.9s}
-.liana:nth-child(5n){animation-duration: 5.9s; animation-delay: -4.2s}
+
+/* Liány nevisí stejně dlouho; rozdíl je pár bodů, ale hrazda
+   tím přestane vypadat jako hřeben. */
+.liana:nth-child(2n){height: 21px; animation-duration: 6.4s; animation-delay: -1.4s}
+.liana:nth-child(3n){height: 13px; animation-duration: 7.1s; animation-delay: -2.9s}
+.liana:nth-child(5n){height: 24px; animation-duration: 5.9s; animation-delay: -4.2s}
 
 @keyframes lianaSeHoupe{
   0%,100%{transform: rotate(-2.5deg)}
   50%    {transform: rotate(2.5deg)}
 }
 
-/* Liána, na které opička právě visí, je rudá, delší a houpe se
-   víc: drží váhu. */
+/* Liána, na které opička právě visí: rudá, delší, s výraznějším
+   uzlem a rozhoupaná. Doskok ji nejdřív protáhne a pak se
+   ustálí, takže je vidět, že na ni něco dosedlo. */
 .liana.je-drzena{
-  height: 24px;
-  background: linear-gradient(180deg, var(--rud), rgba(224,36,44,.45));
-  animation-duration: 2.6s;
+  height: 30px;
+  background:
+    repeating-linear-gradient(180deg,
+      var(--rud) 0 2px,
+      rgba(224,36,44,.42) 2px 4px);
+  animation: lianaDoskok .62s cubic-bezier(.3,1.4,.5,1), lianaSeHoupe 2.6s ease-in-out .62s infinite;
 }
-.liana.je-drzena::after{background: var(--rud); width: 4px; height: 4px; left: -1px}
+.liana.je-drzena::after{
+  background: var(--rud);
+  width: 6px; height: 4px; left: -2px; bottom: -3px;
+}
+@keyframes lianaDoskok{
+  0%  {transform: scaleY(.72) rotate(0)}
+  45% {transform: scaleY(1.14) rotate(3deg)}
+  75% {transform: scaleY(.95) rotate(-2deg)}
+  100%{transform: scaleY(1) rotate(0)}
+}
 
 /* ── OPIČKA ───────────────────────────────────────────────────
    Tři vrstvy: posun do strany, houpání, skok. Tělo je jeden
@@ -481,7 +504,7 @@ body{
    ─────────────────────────────────────────────────────────── */
 
 /* Posun je v levé hraně, ne v transformaci: procento v posunu
-   se počítá z vlastní velikosti prvku, a ta je čtyři body. */
+   se počítá z vlastní velikosti prvku, a ta jsou čtyři body. */
 .opicka{
   position: absolute; top: 0; left: var(--x, 0);
   transition: left .46s cubic-bezier(.34,1.24,.5,1);
@@ -502,7 +525,8 @@ body{
 .opicka.skace .op-ruka{animation: none}
 
 .opicka i{
-  display: block; width: 4px; height: 4px;
+  display: block; position: relative;
+  width: 4px; height: 4px;
   margin-top: 20px;
   transform: scaleX(var(--smer, 1));
   box-shadow: var(--visi);
@@ -533,17 +557,35 @@ body{
      0  28px  var(--rud), 24px 28px var(--rud);
 }
 
-/* Skok. Oblouk nahoru, náklon po směru letu a v půlce výměna
-   polohy těla. Přehraje se při každé změně liány. */
-.opicka.skace i{animation: opickaSkace .46s cubic-bezier(.3,.7,.4,1)}
+/* Oči. V kresbě jsou to dvě mezery, takže zamrkat znamená je na
+   okamžik zaplnit. Je to vlastní vrstva, aby se mrkání nepralo
+   s výměnou polohy těla při skoku. */
+.opicka i::before{
+  content: ""; position: absolute; left: 0; top: 0;
+  width: 4px; height: 4px;
+  box-shadow: 8px 12px var(--rud), 16px 12px var(--rud);
+  opacity: 0;
+  animation: opickaMrka 6.2s steps(1) infinite;
+}
+@keyframes opickaMrka{
+  0%,95%  {opacity: 0}
+  96%,98% {opacity: 1}
+  99%,100%{opacity: 0}
+}
+
+/* Skok. Oblouk nahoru, náklon po směru letu, v půlce výměna
+   polohy těla a na konci dosed, při kterém se opička o kousek
+   stlačí. Přehraje se při každé změně liány. */
+.opicka.skace i{animation: opickaSkace .52s cubic-bezier(.3,.7,.4,1)}
 @keyframes opickaSkace{
   0%  {transform: scaleX(var(--smer, 1)) translateY(0) rotate(0);
        box-shadow: var(--visi)}
-  20% {box-shadow: var(--leti)}
-  50% {transform: scaleX(var(--smer, 1)) translateY(-16px) rotate(-10deg)}
-  80% {box-shadow: var(--leti)}
-  81% {box-shadow: var(--visi)}
-  100%{transform: scaleX(var(--smer, 1)) translateY(0) rotate(0);
+  18% {box-shadow: var(--leti)}
+  45% {transform: scaleX(var(--smer, 1)) translateY(-17px) rotate(-10deg)}
+  78% {box-shadow: var(--leti)}
+  79% {box-shadow: var(--visi)}
+  88% {transform: scaleX(calc(var(--smer, 1) * 1.14)) scaleY(.84) translateY(2px) rotate(0)}
+  100%{transform: scaleX(var(--smer, 1)) scaleY(1) translateY(0) rotate(0);
        box-shadow: var(--visi)}
 }
 
@@ -552,18 +594,22 @@ body{
    teprve skočí. Kterou liánu drží, pozná skript podle toho, co
    je zrovna uprostřed okna. */
 @media (hover: none), (pointer: coarse){
-  .liana{opacity: .6}
+  .liana{opacity: .7}
 }
 
 @media (max-width: 560px){
   .hrazda{height: 52px; padding-inline: 10px}
   .opicka i{margin-top: 15px}
-  .liana{height: 12px}
-  .liana.je-drzena{height: 19px}
+  .liana{height: 13px}
+  .liana:nth-child(2n){height: 17px}
+  .liana:nth-child(3n){height: 11px}
+  .liana:nth-child(5n){height: 19px}
+  .liana.je-drzena{height: 24px}
 }
 
 @media (prefers-reduced-motion: reduce){
-  .liana, .op-ruka{animation: none}
+  .liana, .op-ruka, .opicka i::before{animation: none}
+  .liana.je-drzena{animation: none}
   .opicka.skace i{animation: none}
 }
 
@@ -1728,6 +1774,41 @@ footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
   /* Stisk je jediná zpětná vazba, kterou prst dostane. */
   .volba:active{background: rgba(224,36,44,.2)}
   .volba:active .volba-c{color: var(--rud-tx)}
+}
+
+
+/* ══ POSUN PO SEKCÍCH NA TELEFONU ══════════════════════════════
+   Na dotyku se stránka posouvá prstem jako každá jiná, ale sama
+   od sebe dosedá na začátky sekcí: když člověk dojede někam do
+   jejich blízkosti a pustí, doklouže na hranu. Dělá to prohlížeč
+   (scroll-snap), takže posun zůstává plynulý a nic se mu nebere.
+
+   Schválně proximity, ne mandatory: povinné dosedání by v dlouhé
+   sekci, jako je kontakt s formulářem, člověka tahalo zpátky
+   a nedalo mu dojet, kam potřebuje. Takhle se sekce chovají jako
+   zarážky, ne jako mříže.
+   ══════════════════════════════════════════════════════════════ */
+
+@media (hover: none), (pointer: coarse){
+  html{
+    scroll-snap-type: y proximity;
+    /* Zarážka sedí pod lištou i pod hrazdou s liánami, aby po
+       dosednutí nebyl nadpis schovaný za nimi. */
+    scroll-padding-top: calc(var(--nav) + 52px);
+  }
+
+  #hero, #prace, #projekty, #kontakt{
+    scroll-snap-align: start;
+    scroll-margin-top: calc(var(--nav) + 52px);
+  }
+
+  /* Pata je konec cesty, ne zarážka: dosedat na ni by znamenalo
+     přeskočit konec formuláře. */
+  footer{scroll-snap-align: none}
+}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-snap-type: none}
 }
 
 
