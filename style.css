@@ -306,6 +306,46 @@ body{
 
 /* Výzva svítí pořád stejně; bliká jen čtvereček před ní.
    Kdyby blikal text, byl by půlku času nečitelný. */
+/* ── NÁVOD K OVLÁDÁNÍ ──────────────────────────────────────────
+   Vlevo klávesy pro počítač, vpravo telefon se švihnutím. Ukáže
+   se vždycky jen ten, který dává na daném zařízení smysl: na
+   dotyku klávesy nikdo nemá, na počítači zase prst.
+   ─────────────────────────────────────────────────────────── */
+
+.op-navod{
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(18px, 4vw, 34px);
+  margin: 16px 0 14px;
+  color: var(--sed-2);
+}
+.nav-p{display: grid; justify-items: center; gap: 9px}
+.nav-p svg{width: clamp(64px, 11vw, 88px); height: auto}
+.nav-p span{
+  font-family: var(--mono);
+  font-size: .58rem; letter-spacing: .12em; text-transform: uppercase;
+}
+
+/* Klávesa, o kterou jde, svítí rudě a celý návod pomalu tepe,
+   aby bylo vidět, že se na něj má sáhnout. */
+.nav-klavesy svg rect:last-of-type{stroke: var(--rud)}
+.nav-klavesy svg path:last-of-type{fill: var(--rud-tx)}
+.nav-prst svg path:last-of-type{fill: var(--rud-tx)}
+.nav-p svg{animation: navodTepe 2.6s ease-in-out infinite}
+.nav-prst svg{animation-delay: 1.3s}
+@keyframes navodTepe{
+  0%,100%{transform: translateY(0)}
+  50%    {transform: translateY(4px)}
+}
+.op-nacita .nav-p svg{animation: none}
+
+/* Na dotyku nemá kdo mačkat klávesy, na počítači zase nikdo
+   nešvihne prstem. */
+.nav-prst{display: none}
+@media (hover: none), (pointer: coarse){
+  .nav-klavesy{display: none}
+  .nav-prst{display: grid}
+}
+
 .op-vyzva{
   display: flex; align-items: center; gap: 9px;
   margin-top: 12px;
@@ -368,7 +408,7 @@ body{
 .je-odhrnuto #main, .je-odhrnuto #hdr{transform: none; animation: none}
 
 @media (prefers-reduced-motion: reduce){
-  .op-kurzor, .op-vyzva::before, .op-okno, .op-crt::after{animation: none}
+  .op-kurzor, .op-vyzva::before, .op-okno, .op-crt::after, .nav-p svg{animation: none}
   .op-okno{opacity: 1}
   .je-vyjezd .op-okno, .je-vyjezd .op-tma{animation: none; opacity: 0}
   .js #main, .js #hdr{transform: none}
@@ -512,6 +552,26 @@ body{
   81% {box-shadow: var(--visi)}
   100%{transform: scaleX(var(--smer, 1)) translateY(0) rotate(0);
        box-shadow: var(--visi)}
+}
+
+/* Na dotyku se stránka posouvá obyčejně, takže opičku nevede
+   ukazatel, ale skutečný posun: hrazdu přejede přesně tak, jak
+   daleko je člověk ve stránce. Dráhu odměřuje prohlížeč sám,
+   skript do toho nemluví. */
+@media (hover: none), (pointer: coarse){
+  .liana{opacity: .5}
+
+  @supports (animation-timeline: scroll()){
+    .opicka{
+      transition: none;
+      animation: opickaPodlePosunu linear both;
+      animation-timeline: scroll(root);
+    }
+    @keyframes opickaPodlePosunu{
+      from{transform: translateX(0)}
+      to  {transform: translateX(calc(100vw - 86px))}
+    }
+  }
 }
 
 @media (max-width: 560px){

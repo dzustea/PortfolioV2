@@ -95,13 +95,24 @@
        k dispozici, řádek prostě hodnotu nemá. */
     var preneseno = function (pripony) {
       if (!window.performance || !performance.getEntriesByType) return '';
+
       var bajtu = 0;
+      var nasel = false;
+
       performance.getEntriesByType('resource').forEach(function (z) {
         for (var i = 0; i < pripony.length; i++) {
-          if (z.name.indexOf(pripony[i]) > -1) { bajtu += z.transferSize || 0; return; }
+          if (z.name.indexOf(pripony[i]) > -1) {
+            bajtu += z.transferSize || 0;
+            nasel = true;
+            return;
+          }
         }
       });
-      if (!bajtu) return '';
+
+      if (!nasel) return '';
+      /* Nula bajtů neznamená, že se nic nestahovalo: soubor byl
+         v mezipaměti. Říct to je poctivější než prázdný řádek. */
+      if (!bajtu) return 'z mezipaměti';
       return Math.round(bajtu / 1024) + ' kB';
     };
 
@@ -424,38 +435,31 @@
     return false;
   };
 
+  /* Hra po zastávkách platí jen tam, kde je klávesnice. Na dotyku
+     se stránka posouvá úplně obyčejně, prstem: posouvání po
+     zastávkách je na telefonu boj s tím, co prst umí sám, a šipky,
+     kterými se to ovládá pohodlně, tam nikdo nemá.
+
+     Opona zůstává i na dotyku, jen ji odhrne švihnutí. */
+  var dotyk = matchMedia('(hover: none), (pointer: coarse)').matches;
+
   var zadrz = function (udalost) {
-    /* V režimu formuláře se stránka posouvat smí: na telefonu ji
-       nadzvedne klávesnice a člověk musí vidět, do čeho píše. */
+    /* V režimu formuláře se stránka posouvat smí: nadzvedne ji
+       klávesnice a člověk musí vidět, do čeho píše. */
     if (document.documentElement.classList.contains('rezim-formular')) return;
     if (vlastniPosun(udalost.target)) return;
     udalost.preventDefault();
   };
 
-  window.addEventListener('wheel', zadrz, { passive: false });
-  window.addEventListener('touchmove', zadrz, { passive: false });
+  if (!dotyk) window.addEventListener('wheel', zadrz, { passive: false });
 
-  /* Na telefonu žádné šipky nejsou, a prstem se stránka
-     posouvat nemá. Švihnutí proto dělá totéž co šipka: jedno
-     švihnutí je jedna zastávka. Práh je čtyřicet bodů, aby
-     obyčejné klepnutí ještě nic neposunulo. */
-  var zacatekPrstu = 0;
-
-  window.addEventListener('touchstart', function (udalost) {
-    zacatekPrstu = udalost.touches[0].clientY;
-  }, { passive: true });
-
-  window.addEventListener('touchend', function (udalost) {
-    if (!odhrnuto) return;
-    if (vlastniPosun(udalost.target)) return;
-
-    var konec = udalost.changedTouches[0].clientY;
-    var drahaPrstu = zacatekPrstu - konec;
-    if (Math.abs(drahaPrstu) < 40) return;
-
-    var kam = drahaPrstu > 0 ? 1 : -1;
-    skoc(kde < 0 ? (kam > 0 ? 0 : stanice.length - 1) : kde + kam);
-  }, { passive: true });
+  /* Dokud visí opona, nemá se stránka kam posouvat ani na dotyku:
+     švihnutí ji odhrne a nic víc. Jakmile je odhrnutá, prst
+     posouvá stránku úplně normálně. */
+  window.addEventListener('touchmove', function (udalost) {
+    if (odhrnuto && dotyk) return;
+    zadrz(udalost);
+  }, { passive: false });
 
   /* ── OPIČKA NA LIÁNÁCH ────────────────────────────────────────
      Ukazatel postupu. Jedna liána je jedna zastávka, opička na ni
@@ -510,6 +514,9 @@
   }
 
   var presunOpicku = function (index) {
+    /* Na dotyku opičku nevede ukazatel, ale skutečný posun
+       stránky; dráhu jí odměřuje prohlížeč sám ve stylu. */
+    if (dotyk) return;
     if (!opicka || !liany.length) return;
     var byloKde = kde;
     var poradi = liceni[index];
@@ -610,7 +617,7 @@
   };
 
   window.addEventListener('keydown', function (udalost) {
-    if (!odhrnuto) return;
+    if (!odhrnuto || dotyk) return;
     if (udalost.metaKey || udalost.ctrlKey || udalost.altKey) return;
 
     var k = udalost.key;

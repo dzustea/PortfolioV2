@@ -84,6 +84,37 @@
 
       <p class="op-prikaz"><b></b><span class="op-psano"></span><i class="op-kurzor"></i></p>
 
+
+      <!-- Návod k ovládání. Vlevo klávesy pro počítač, vpravo
+           telefon se švihnutím. Kreslené v SVG, takže se
+           nestahuje žádný obrázek a je to ostré na každé
+           obrazovce. Ukáže se vždycky jen ten, který dává na
+           daném zařízení smysl. -->
+      <div class="op-navod">
+        <div class="nav-p nav-klavesy">
+          <svg viewBox="0 0 108 76" width="108" height="76" role="img" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="36" y="2" width="36" height="34"/>
+              <rect x="36" y="40" width="36" height="34"/>
+            </g>
+            <path d="M54 11l9 14H45z" fill="currentColor"/>
+            <path d="M54 65l-9-14h18z" fill="currentColor"/>
+          </svg>
+          <span>šipky nahoru a dolů</span>
+        </div>
+
+        <div class="nav-p nav-prst">
+          <svg viewBox="0 0 108 76" width="108" height="76" role="img" aria-hidden="true">
+            <g fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="36" y="2" width="36" height="72"/>
+              <path d="M54 56V30"/>
+            </g>
+            <circle cx="54" cy="62" r="4" fill="currentColor"/>
+            <path d="M54 18l9 14H45z" fill="currentColor"/>
+          </svg>
+          <span>prstem nahoru</span>
+        </div>
+      </div>
       <p class="op-vyzva"><b>Stiskněte šipku dolů</b><i>Švihněte prstem nahoru</i></p>
     </div>
   </div>
