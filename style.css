@@ -1377,7 +1377,10 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
    a značka pro rozbalení. Každý kus má určenou svou plochu,
    jinak by se prvky umístily samy a přetekly za okraj. */
 @media (max-width: 760px){
-  .rejstrik{padding-left: 0}
+  /* Historie drží tentýž levý okraj jako text nad ní. Větev
+     s body stojí uvnitř toho okraje, ne za ním: přilepená ke
+     hraně obrazovky vypadala, jako by z ní seznam vypadával. */
+  .rejstrik{padding-left: var(--pad)}
 
   .radek{
     grid-template-columns: 10px minmax(0, 1fr) auto;
@@ -1386,8 +1389,8 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
       "bod nazev znacka"
       "bod typ   znacka";
     align-items: start;
-    gap: 3px clamp(10px, 3vw, 16px);
-    padding: 14px 4px 16px 0;
+    gap: 3px clamp(12px, 3.4vw, 18px);
+    padding: 15px 2px 17px 0;
   }
   .radek-b{grid-area: bod; align-self: center}
   .radek-c{grid-area: slug; align-self: center}
@@ -1396,8 +1399,12 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .radek-t{grid-area: stav; align-self: center; justify-self: end}
   .radek-z{grid-area: znacka; align-self: center; justify-self: end}
 
+  /* Podbarvení vybraného commitu smí přetéct až k hraně okna,
+     aby řádek nevypadal jako utržená karta. */
+  .radek::before{inset: 0 calc(var(--pad) * -1)}
+
   .polozka::before{left: 4px}
-  .telo-in{padding-left: calc(10px + clamp(10px, 3vw, 16px))}
+  .telo-in{padding-left: calc(10px + clamp(12px, 3.4vw, 18px))}
 }
 
 
