@@ -22,22 +22,36 @@
 
 
 /* ── PÍSMA ─────────────────────────────────────────────────────
-   Archivo na všechno čtené a Space Mono na drobné popisky.
-   Archivo je proměnné v celém rozsahu tloušťky 100 až 900, takže
-   jméno v úvodu může být opravdu těžké, aniž by se stahoval
-   druhý řez. Space Mono má patky na číslicích a dává štítkům
-   technický ráz, který sám grotesk neudělá.
+   Tři písma, každé na svou práci:
+
+     Archivo         všechno, co se čte v odstavcích
+     JetBrains Mono  terminál, štítky, ukazatele, čísla
+     Chakra Petch    nadpisy, jména projektů, volby
+
+   Archivo je proměnné v rozsahu tloušťky 100 až 900, takže
+   pokryje celou sazbu jediným souborem. JetBrains Mono je
+   strojopis psaný pro kód: má velké střední písmo a rozliší
+   nulu od O i jedničku od l, takže drobné popisky jdou přečíst
+   i v šesti bodech. Chakra Petch je hranatá a úzká, takže nadpis
+   vypadá jako popis v rozhraní, ne jako text k četbě; proměnná
+   není, v repu leží jediná váha a všude, kde se používá, je
+   napsaná natvrdo.
+
+   Odstavce zůstávají v Archivu schválně: dlouhý text se má číst,
+   ne vypadat.
 
    Soubory leží na vlastní doméně, takže odpadá požadavek na cizí
    server a IP adresa návštěvníka se nikam neodesílá. Latin
    i latin-ext, bez latin-ext by v češtině chyběly háčky.
-   Licence obojího: SIL Open Font License 1.1.
+   Licence všech tří: SIL Open Font License 1.1.
    ───────────────────────────────────────────────────────────── */
 
 @font-face{font-family:'Archivo';font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/archivo-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
 @font-face{font-family:'Archivo';font-style:normal;font-weight:100 900;font-display:swap;src:url(fonts/archivo-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
-@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/spacemono-400-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
-@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url(fonts/spacemono-400-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/jetbrains-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'JetBrains Mono';font-style:normal;font-weight:400 700;font-display:swap;src:url(fonts/jetbrains-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Chakra Petch';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/chakra-600-latin-ext.woff2) format('woff2');unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Chakra Petch';font-style:normal;font-weight:600;font-display:swap;src:url(fonts/chakra-600-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
 
 
 /* ── VÝCHOZÍ NASTAVENÍ PRVKŮ ─────────────────────────────────── */
@@ -59,7 +73,14 @@ dl,dt,dd{margin:0}
 :root{
   /* písmo */
   --sans: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --mono: 'Space Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  /* Nadpisy a volby. Chakra Petch má hranaté tvary a úzké oko,
+     takže vypadá jako popis v rozhraní, ne jako text k četbě.
+     Proměnná není, v repu leží jediná váha, a proto je všude,
+     kde se používá, napsaná natvrdo: kdyby si o jinou prohlížeč
+     řekl, dopočítal by si ji sám a tučné by se rozmazalo. */
+  --nadpis: 'Chakra Petch', var(--sans);
 
   /* papír */
   --noc:   #0b0b0c;
@@ -709,10 +730,13 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 /* ══ SPOLEČNÉ PRVKY ════════════════════════════════════════════ */
 
 .nadpis{
-  font-size: clamp(2.1rem, 4.8vw, 3.6rem);
-  font-weight: 600; line-height: 1.02; letter-spacing: -.045em;
+  font-family: var(--nadpis);
+  font-size: clamp(2.05rem, 4.7vw, 3.5rem);
+  font-weight: 600; line-height: 1.05; letter-spacing: -.01em;
 }
-.nadpis b{font-weight: 500; color: var(--rud-tx)}
+/* Rozdíl mezi bílou a rudou půlkou nadpisu dělá barva, ne váha:
+   Chakra leží v repu v jediné tloušťce. */
+.nadpis b{font-weight: 600; color: var(--rud-tx)}
 .nadpis-p{margin-top: 18px; max-width: 46ch; color: var(--sed)}
 
 /* ── TLAČÍTKA ──────────────────────────────────────────────────
@@ -928,8 +952,9 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 }
 
 .jmeno{
-  font-size: clamp(1.7rem, 3.4vw, 2.6rem);
-  font-weight: 700; letter-spacing: -.035em; line-height: 1.05;
+  font-family: var(--nadpis);
+  font-size: clamp(1.75rem, 3.5vw, 2.7rem);
+  font-weight: 600; letter-spacing: -.005em; line-height: 1.05;
 }
 .jmeno span{
   display: block; margin-top: 6px;
@@ -1029,7 +1054,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   transition: opacity .2s ease, transform .25s cubic-bezier(.22,1,.36,1);
 }
 .volba-c{color: var(--sed-2)}
-.volba-n{color: inherit}
+.volba-n{font-family: var(--nadpis); font-weight: 600; letter-spacing: .01em; color: inherit}
 .volba-m{
   font-size: .68rem; color: var(--sed-2);
   opacity: 0; transform: translateX(-6px);
@@ -1268,9 +1293,9 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
      po konzoli, jen menší a odsazený. */
   .konz-dotaz{
     text-transform: none;
-    font-family: var(--sans);
+    font-family: var(--nadpis);
     font-size: clamp(1.25rem, 5.6vw, 1.5rem);
-    font-weight: 600; letter-spacing: -.025em;
+    font-weight: 600; letter-spacing: -.005em;
     color: var(--kost);
     gap: 10px;
     margin-bottom: 14px;
@@ -1304,7 +1329,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
     color: var(--sed-2);
   }
   .volba-n{
-    font-weight: 500; letter-spacing: -.015em; line-height: 1.25;
+    font-weight: 600; letter-spacing: 0; line-height: 1.25;
     color: var(--kost);
   }
 
@@ -1373,7 +1398,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   font-family: var(--mono);
   font-size: .72rem; letter-spacing: .1em; color: var(--sed-2);
 }
-.obor h3{font-size: 1.35rem; font-weight: 500; letter-spacing: -.03em}
+.obor h3{font-family: var(--nadpis); font-size: 1.3rem; font-weight: 600; letter-spacing: -.005em}
 .obor > p{color: var(--sed); max-width: 52ch}
 .obor-tech{
   margin-top: 10px;
@@ -1467,8 +1492,9 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 .radek.je-na-rade .radek-c{color: var(--rud-tx)}
 
 .radek-n{
+  font-family: var(--nadpis);
   font-size: clamp(1.1rem, 2.2vw, 1.55rem);
-  font-weight: 500; letter-spacing: -.03em; line-height: 1.15;
+  font-weight: 600; letter-spacing: -.005em; line-height: 1.2;
   transition: transform .3s cubic-bezier(.22,1,.36,1);
 }
 .radek.je-na-rade .radek-n{transform: translateX(6px)}

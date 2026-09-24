@@ -12,10 +12,14 @@
 <link rel="icon" href="favicon.svg" type="image/svg+xml"/>
 
 <!-- Písma leží na vlastní doméně, viz @font-face ve style.css.
-     Přednačítají se obě podmnožiny základního řezu: měřením vyšlo,
-     že přednačíst jen latinku první vykreslení zpomalí. -->
+     Přednačítá se Archivo v obou podmnožinách (měřením vyšlo, že
+     přednačíst jen latinku první vykreslení zpomalí) a latinka
+     nadpisového písma, protože jméno v úvodu je první věc, kterou
+     člověk za oponou uvidí. Strojopis se nepřednačítá: drobné
+     popisky snesou náhradní řez o chvíli déle. -->
 <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="fonts/archivo-latin-ext.woff2" as="font" type="font/woff2" crossorigin/>
+<link rel="preload" href="fonts/chakra-600-latin.woff2" as="font" type="font/woff2" crossorigin/>
 
 <!-- Náhled odkazu při sdílení na Instagramu, Facebooku, WhatsAppu a LinkedInu -->
 <meta property="og:type" content="website"/>

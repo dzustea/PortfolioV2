@@ -118,10 +118,15 @@
 
     zapisRadek(0, '');
 
+    /* Čeká se na písma, která jsou pod oponou hned vidět: text
+       v Archivu a jméno s nadpisy v Chakře. Strojopis se
+       nedoprošuje, drobné popisky snesou náhradní řez o chvíli
+       déle. */
     var pripravaPisem = document.fonts && document.fonts.load
       ? Promise.all([
           document.fonts.load('600 1rem Archivo'),
-          document.fonts.load('400 1rem Archivo')
+          document.fonts.load('400 1rem Archivo'),
+          document.fonts.load('600 1rem "Chakra Petch"')
         ])
       : Promise.resolve();
 
