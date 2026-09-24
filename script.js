@@ -514,9 +514,6 @@
   }
 
   var presunOpicku = function (index) {
-    /* Na dotyku opičku nevede ukazatel, ale skutečný posun
-       stránky; dráhu jí odměřuje prohlížeč sám ve stylu. */
-    if (dotyk) return;
     if (!opicka || !liany.length) return;
     var byloKde = kde;
     var poradi = liceni[index];
@@ -547,6 +544,36 @@
     void opicka.offsetWidth;
     opicka.classList.add('skace');
   };
+
+  /* Na dotyku stránku nevede ukazatel, ale prst. Opička proto
+     hlídá, co je zrovna uprostřed okna: dokud je to táž liána,
+     visí a čeká, a teprve když se objeví další sekce, skočí. Po
+     hrazdě tím pádem neklouže ani na telefonu.
+
+     Měří to prohlížeč sám přes IntersectionObserver, takže se
+     při posunu nic nepočítá. Pás uprostřed okna je úzký
+     schválně: rozhoduje, co má člověk před očima. */
+  if (dotyk && 'IntersectionObserver' in window && stanice.length) {
+    var vidim = Object.create(null);
+
+    var sledovacZastavek = new IntersectionObserver(function (zaznamy) {
+      zaznamy.forEach(function (z) {
+        vidim[stanice.indexOf(z.target)] = z.isIntersecting;
+      });
+
+      /* Když do pásu zasahuje víc zastávek, vyhrává ta výš:
+         k té člověk právě dorazil. */
+      for (var i = 0; i < stanice.length; i++) {
+        if (vidim[i]) {
+          if (i !== kde) { presunOpicku(i); kde = i; }
+          return;
+        }
+      }
+    }, { rootMargin: '-42% 0px -42% 0px' });
+
+    stanice.forEach(function (prvek) { sledovacZastavek.observe(prvek); });
+  }
+
 
   /* ── SKOK NA ZASTÁVKU ─────────────────────────────────────── */
 

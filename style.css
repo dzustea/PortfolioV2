@@ -547,24 +547,12 @@ body{
        box-shadow: var(--visi)}
 }
 
-/* Na dotyku se stránka posouvá obyčejně, takže opičku nevede
-   ukazatel, ale skutečný posun: hrazdu přejede přesně tak, jak
-   daleko je člověk ve stránce. Dráhu odměřuje prohlížeč sám,
-   skript do toho nemluví. */
+/* Na dotyku opička po hrazdě neklouže. Visí na téže liáně jako
+   na počítači a čeká, dokud člověk nedojede k další sekci; pak
+   teprve skočí. Kterou liánu drží, pozná skript podle toho, co
+   je zrovna uprostřed okna. */
 @media (hover: none), (pointer: coarse){
-  .liana{opacity: .5}
-
-  @supports (animation-timeline: scroll()){
-    .opicka{
-      transition: none;
-      animation: opickaPodlePosunu linear both;
-      animation-timeline: scroll(root);
-    }
-    @keyframes opickaPodlePosunu{
-      from{transform: translateX(0)}
-      to  {transform: translateX(calc(100vw - 86px))}
-    }
-  }
+  .liana{opacity: .6}
 }
 
 @media (max-width: 560px){
@@ -796,12 +784,20 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 }
 
 /* Zrno leží na pevné vrstvě a nikdy na posouvaném obsahu:
-   jinak by se přepočítávalo při každém snímku posunu. */
+   jinak by se přepočítávalo při každém snímku posunu.
+
+   Dřív to byla šikmá šrafa, jenže ta má směr, a cokoli má na
+   ploše směr, začne vypadat jako broušený kov. Teď je to síť
+   drobných bodů: žádný směr nemá, takže povrch jen ztratí
+   plochost a nepřipomíná plech. Je o polovinu slabší a body
+   jsou řidší, aby se na obrazovku nelepil rastr. */
 .poz-zrno{
-  position: absolute; inset: 0; opacity: .04; mix-blend-mode: overlay;
-  background-image: repeating-linear-gradient(31deg,
-    #fff 0 1px, transparent 1px 2px, #000 2px 3px, transparent 3px 4px);
-  background-size: 5px 5px;
+  position: absolute; inset: 0; opacity: .5;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(242,239,233,.05) 0 .6px, transparent .7px),
+    radial-gradient(circle at 50% 50%, rgba(0,0,0,.22) 0 .6px, transparent .7px);
+  background-size: 7px 7px, 11px 11px;
+  background-position: 0 0, 3px 4px;
 }
 
 /* Hranice sekcí. Vlasová linka, která se na obou koncích
