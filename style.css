@@ -996,6 +996,9 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   font-family: var(--mono);
   font-size: .74rem; letter-spacing: .04em;
   color: var(--kost);
+  /* Ve výpisu terminálu se píše malými písmeny; na telefonu je
+     z téže věty nadpis, a ten velké písmeno mít má. */
+  text-transform: lowercase;
 }
 .konz-dotaz b{
   width: 0; height: 0; align-self: center;
@@ -1171,17 +1174,26 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 
 
 /* ══ ÚVOD NA TELEFONU ══════════════════════════════════════════
-   Na počítači zůstává úvod tak, jak je. Na telefonu se ale
-   sešly čtyři strojopisné řádky pod sebou, každý o něčem jiném,
-   a nešlo poznat, co je co: podtitul, stav, výpis voleb, údaje.
+   Na počítači zůstává úvod tak, jak je: okno terminálu, vlevo
+   výpis voleb, vpravo náhled. Na telefonu to ale nefungovalo,
+   a ne kvůli drobnostem.
 
-   Tady se proto liší tři věci:
+   Strojopis znamená „tohle je výpis stroje". Na velké obrazovce
+   to nevadí, protože vedle stojí náhled a nápověda ke klávesám
+   a je vidět, že se v tom vybírá. Na telefonu zbyl jen sloupec
+   drobného strojopisu v rámečku s titulkem okna, a ten nikomu
+   neřekl, že jsou to tlačítka, na která se dá sáhnout.
 
-     * stav je štítek s rámečkem, ne další řádek textu,
-     * volby jsou opravdové řádky k poklepání: vysoké na palec,
-       oddělené linkou a se šipkou na konci,
-     * náhled vedle výpisu mizí, protože na dotyku není čím
-       vybírat, a tak by ukazoval pořád tutéž větu.
+   Proto se tady liší tři věci:
+
+     * rám okna s titulkem mizí. Titulek „filip / portfolio"
+       návštěvníkovi nic neříká a na úzké obrazovce jen ubírá
+       místo.
+     * otázka je nadpis, ne pobídka konzole: čtená sazba, velká
+       a světlá, aby bylo jasné, že se ptá na něco člověka.
+     * volby jsou tlačítka: rámeček, podklad, název čtenou
+       sazbou a rudá šipka. Číslo a strojopis zůstaly jen tam,
+       kde nesou drobnost, ne tam, kde nesou akci.
    ══════════════════════════════════════════════════════════════ */
 
 /* Nápověda mluví podle toho, čím se stránka ovládá. */
@@ -1192,8 +1204,14 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 }
 
 @media (hover: none), (pointer: coarse){
-  /* Stav je štítek, ne věta. Hned je vidět, že to je údaj
-     o dostupnosti, a ne pokračování podtitulu. */
+  /* Podtitul je čtená sazba, ne další strojopisný řádek. */
+  .jmeno span{
+    font-family: var(--sans);
+    font-size: .95rem; letter-spacing: 0; text-transform: none;
+    color: var(--sed); margin-top: 6px;
+  }
+
+  /* Stav je štítek, ne věta. */
   .stav{
     margin-left: 0;
     padding: 5px 10px;
@@ -1201,55 +1219,92 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
     font-size: .6rem;
   }
   .hero-hl{gap: 12px 16px}
-  .jmeno span{margin-top: 8px; color: var(--sed)}
 
-  /* Konzole: větší dech a jasná hlava. */
-  .konz-telo{padding: 12px 10px 10px}
-  .konz-dotaz{font-size: .8rem}
-  .konz-v{margin-top: 4px}
+  .hero-veta{font-size: 1rem; max-width: none}
 
-  /* Volba je řádek k poklepání. Vysoký na palec, oddělený od
-     sousedů linkou a se šipkou na konci, aby bylo vidět, že
-     někam vede. */
+  /* ── KONZOLE BEZ RÁMU ────────────────────────────────────── */
+
+  .konz{
+    max-width: none;
+    margin-top: clamp(26px, 6vw, 36px);
+    border: 0; background: none;
+  }
+  .konz-hl{display: none}
+  .konz-telo{display: block; padding: 0}
+
+  /* Otázka je nadpis. Klínek před ní zůstal jako jediná stopa
+     po konzoli, jen menší a odsazený. */
+  .konz-dotaz{
+    text-transform: none;
+    font-family: var(--sans);
+    font-size: clamp(1.25rem, 5.6vw, 1.5rem);
+    font-weight: 600; letter-spacing: -.025em;
+    color: var(--kost);
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .konz-dotaz b{
+    border-left-width: 7px;
+    border-top-width: 5px;
+    border-bottom-width: 5px;
+    align-self: center;
+  }
+
+  /* ── VOLBA JE TLAČÍTKO ───────────────────────────────────── */
+
+  .konz-v{display: grid; gap: 8px; margin-top: 0}
+
   .volba{
-    grid-template-columns: 14px auto minmax(0, 1fr) auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
     gap: 12px;
-    padding: 14px 6px;
-    min-height: 48px;
-    border-top: 1px solid var(--linka);
-    font-size: .82rem;
+    min-height: 58px;
+    padding: 14px 14px;
+    border: 1px solid var(--linka-2);
+    background: rgba(242,239,233,.035);
+    font-family: var(--sans);
+    font-size: 1rem;
   }
-  .konz-v li:first-child .volba{border-top: 0}
-  .volba-n{color: var(--kost)}
+  .volba-u{display: none}
+  .volba-c{
+    font-family: var(--mono);
+    font-size: .6rem; letter-spacing: .1em;
+    color: var(--sed-2);
+  }
+  .volba-n{
+    font-weight: 500; letter-spacing: -.015em; line-height: 1.25;
+    color: var(--kost);
+  }
 
-  /* Šipka na konci řádku. Kreslená dvěma hranami, aby se
-     nespoléhala na znak v písmu. */
+  /* Šipka je rudá a kreslená dvěma hranami, aby se nespoléhala
+     na znak v písmu. */
   .volba::after{
     content: ""; justify-self: end;
-    width: 7px; height: 7px;
-    border-top: 1px solid var(--sed-2);
-    border-right: 1px solid var(--sed-2);
+    width: 8px; height: 8px;
+    border-top: 2px solid var(--rud);
+    border-right: 2px solid var(--rud);
     transform: rotate(45deg);
   }
-  .volba:active{background: rgba(224,36,44,.16)}
-  .volba:active::after{border-color: var(--rud-tx)}
+  .volba:active{background: rgba(224,36,44,.18); border-color: var(--rud)}
 
   /* Náhled nemá na dotyku co ukazovat: vybírá se klepnutím,
      ne šipkami, takže by v něm pořád stála tatáž věta. */
   .konz-nah{display: none}
 
-  .konz-pata{margin-top: 10px; padding-top: 9px}
-  /* Oddělovač patří mezi dva údaje; první v řadě ho mít nesmí,
-     a na dotyku je první ten o klepnutí. */
+  /* Nápověda pod tlačítky je drobnost, ne další nabídka. */
+  .konz-pata{
+    margin-top: 12px; padding-top: 0; border-top: 0;
+    font-size: .62rem; color: var(--sed-2);
+  }
   .konz-pata .jen-dotyk::before{content: none}
 
-  /* Údaje pod konzolí jsou poznámka pod čarou, ne další nabídka:
-     drobnější, tlumené a každý na svém řádku. */
+  /* Údaje jsou poznámka pod čarou: drobné, tlumené, pod sebou. */
   .hero-pata{
     display: grid; gap: 5px;
-    margin-top: clamp(18px, 4vw, 26px);
-    font-size: .62rem; color: var(--sed-2); opacity: .85;
+    margin-top: clamp(20px, 5vw, 30px);
+    padding-top: 14px;
+    border-top: 1px solid var(--linka);
+    font-size: .62rem; color: var(--sed-2);
   }
   .hero-pata span + span::before{width: 3px; height: 3px}
 }
