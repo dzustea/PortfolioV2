@@ -1163,9 +1163,95 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 
 @media (max-width: 560px){
   .konz{max-width: none}
-  .volba{grid-template-columns: 12px auto minmax(0, 1fr); gap: 8px; font-size: .76rem}
+  /* Kam volba vede, se na úzkou obrazovku nevejde; na dotyku to
+     místo toho říká šipka na konci řádku. */
   .volba-m{display: none}
   .stav{margin-left: 0}
+}
+
+
+/* ══ ÚVOD NA TELEFONU ══════════════════════════════════════════
+   Na počítači zůstává úvod tak, jak je. Na telefonu se ale
+   sešly čtyři strojopisné řádky pod sebou, každý o něčem jiném,
+   a nešlo poznat, co je co: podtitul, stav, výpis voleb, údaje.
+
+   Tady se proto liší tři věci:
+
+     * stav je štítek s rámečkem, ne další řádek textu,
+     * volby jsou opravdové řádky k poklepání: vysoké na palec,
+       oddělené linkou a se šipkou na konci,
+     * náhled vedle výpisu mizí, protože na dotyku není čím
+       vybírat, a tak by ukazoval pořád tutéž větu.
+   ══════════════════════════════════════════════════════════════ */
+
+/* Nápověda mluví podle toho, čím se stránka ovládá. */
+.jen-dotyk{display: none}
+@media (hover: none), (pointer: coarse){
+  .jen-klavesy{display: none}
+  .jen-dotyk{display: inline}
+}
+
+@media (hover: none), (pointer: coarse){
+  /* Stav je štítek, ne věta. Hned je vidět, že to je údaj
+     o dostupnosti, a ne pokračování podtitulu. */
+  .stav{
+    margin-left: 0;
+    padding: 5px 10px;
+    border: 1px solid var(--linka-2);
+    font-size: .6rem;
+  }
+  .hero-hl{gap: 12px 16px}
+  .jmeno span{margin-top: 8px; color: var(--sed)}
+
+  /* Konzole: větší dech a jasná hlava. */
+  .konz-telo{padding: 12px 10px 10px}
+  .konz-dotaz{font-size: .8rem}
+  .konz-v{margin-top: 4px}
+
+  /* Volba je řádek k poklepání. Vysoký na palec, oddělený od
+     sousedů linkou a se šipkou na konci, aby bylo vidět, že
+     někam vede. */
+  .volba{
+    grid-template-columns: 14px auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 6px;
+    min-height: 48px;
+    border-top: 1px solid var(--linka);
+    font-size: .82rem;
+  }
+  .konz-v li:first-child .volba{border-top: 0}
+  .volba-n{color: var(--kost)}
+
+  /* Šipka na konci řádku. Kreslená dvěma hranami, aby se
+     nespoléhala na znak v písmu. */
+  .volba::after{
+    content: ""; justify-self: end;
+    width: 7px; height: 7px;
+    border-top: 1px solid var(--sed-2);
+    border-right: 1px solid var(--sed-2);
+    transform: rotate(45deg);
+  }
+  .volba:active{background: rgba(224,36,44,.16)}
+  .volba:active::after{border-color: var(--rud-tx)}
+
+  /* Náhled nemá na dotyku co ukazovat: vybírá se klepnutím,
+     ne šipkami, takže by v něm pořád stála tatáž věta. */
+  .konz-nah{display: none}
+
+  .konz-pata{margin-top: 10px; padding-top: 9px}
+  /* Oddělovač patří mezi dva údaje; první v řadě ho mít nesmí,
+     a na dotyku je první ten o klepnutí. */
+  .konz-pata .jen-dotyk::before{content: none}
+
+  /* Údaje pod konzolí jsou poznámka pod čarou, ne další nabídka:
+     drobnější, tlumené a každý na svém řádku. */
+  .hero-pata{
+    display: grid; gap: 5px;
+    margin-top: clamp(18px, 4vw, 26px);
+    font-size: .62rem; color: var(--sed-2); opacity: .85;
+  }
+  .hero-pata span + span::before{width: 3px; height: 3px}
 }
 
 
