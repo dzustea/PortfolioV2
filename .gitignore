@@ -1,3 +1,18 @@
 .vercel
 .env*
-.claude/ 
+.claude/
+
+# Zavisloci nastroju. Stahnou se z package-lock.json, do repa nepatri.
+node_modules/
+
+# Kontrolni snimky z vyvoje. Vznikaji znovu spustenim nastroju.
+nastroje-v5/shots/
+nastroje-v6/shots/
+.impeccable/
+
+# Vystupy mereni.
+det.json
+det.err
+
+# Obsahuje heslo v citelne podobe. Do repa nikdy.
+email.txt
