@@ -1471,6 +1471,8 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   font-size: .72rem; letter-spacing: .1em; color: var(--sed-2);
 }
 .obor h3{font-family: var(--nadpis); font-size: 1.3rem; font-weight: 600; letter-spacing: -.005em}
+/* Druhá půlka nadpisu je rudá, stejně jako u velkých nadpisů sekcí. */
+.obor h3 b{font-weight: inherit; color: var(--rud-tx)}
 .obor > p{color: var(--sed); max-width: 52ch}
 .obor-tech{
   margin-top: 10px;
@@ -1744,7 +1746,10 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   border-bottom: 3px solid transparent;
   transform: translateY(-50%);
 }
-.konzole span{color: var(--sed-2)}
+/* Poznámka za mřížkou je jediné místo, kde na stránce mluvím
+   já, a ne rozhraní. Proto je rudá jako všechno ostatní, co
+   má člověk zaznamenat. */
+.konzole span{color: var(--rud-tx)}
 /* Před vysvětlením stojí mřížka, jako když si programátor napíše
    poznámku do kódu. */
 .konzole span::before{content: "# "; color: var(--linka-2)}

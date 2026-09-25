@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-<title>Filip Lochman, webový vývojář</title>
-<meta name="description" content="Filip Lochman, webový vývojář z Kroměříže. Weby na míru: návrh, sazba, spuštění. HTML, CSS, JavaScript."/>
+<title>Tvorba webů na míru — Filip Lochman, Kroměříž a Zlín</title>
+<meta name="description" content="Webový vývojář z Kroměříže. Postavím web na míru od návrhu po spuštění a opravím i ten, který nefunguje. Psáno ručně, bez šablon. Kroměříž, Zlín i na dálku."/>
 <meta name="author" content="Filip Lochman"/>
 <meta name="robots" content="index, follow, max-image-preview:large"/>
 <meta name="theme-color" content="#0b0b0c"/>
@@ -22,8 +22,14 @@
      Přednačítá se Archivo v obou podmnožinách (měřením vyšlo, že
      přednačíst jen latinku první vykreslení zpomalí) a latinka
      nadpisového písma, protože jméno v úvodu je první věc, kterou
-     člověk za oponou uvidí. Strojopis se nepřednačítá: drobné
-     popisky snesou náhradní řez o chvíli déle. -->
+     člověk za oponou uvidí.
+
+     Úplně první v řadě je ale strojopis. Opona je terminál a je
+     celá v něm, takže je to jediné písmo, které člověk uvidí
+     dřív, než oponu odhrne. Dokud se nepřednačítal, prohlížeč
+     se o něm dozvěděl až z rozpisu stylu a první obrazovka se
+     stihla vykreslit náhradním řezem, který se pak přepsal. -->
+<link rel="preload" href="fonts/jetbrains-latin.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="fonts/archivo-latin-ext.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="preload" href="fonts/chakra-600-latin.woff2" as="font" type="font/woff2" crossorigin/>
@@ -33,7 +39,7 @@
 <meta property="og:site_name" content="Filip Lochman"/>
 <meta property="og:locale" content="cs_CZ"/>
 <meta property="og:url" content="https://www.filiplochman.cz/"/>
-<meta property="og:title" content="Filip Lochman, webový vývojář"/>
+<meta property="og:title" content="Tvorba webů na míru — Filip Lochman"/>
 <meta property="og:description" content="Weby na míru: návrh, sazba, spuštění. Kroměříž a Zlín, na dálku taky."/>
 <meta property="og:image" content="https://www.filiplochman.cz/og-image.png"/>
 <meta property="og:image:secure_url" content="https://www.filiplochman.cz/og-image.png"/>
@@ -42,7 +48,7 @@
 <meta property="og:image:height" content="630"/>
 <meta property="og:image:alt" content="Filip Lochman, webový vývojář"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<meta name="twitter:title" content="Filip Lochman, webový vývojář"/>
+<meta name="twitter:title" content="Tvorba webů na míru — Filip Lochman"/>
 <meta name="twitter:description" content="Weby na míru: návrh, sazba, spuštění. Kroměříž a Zlín, na dálku taky."/>
 <meta name="twitter:image" content="https://www.filiplochman.cz/og-image.png"/>
 <meta name="twitter:image:alt" content="Filip Lochman, webový vývojář"/>
@@ -71,7 +77,9 @@
       "name": "Filip Lochman, webový vývojář",
       "isPartOf": { "@id": "https://www.filiplochman.cz/#web" },
       "inLanguage": "cs-CZ",
-      "mainEntity": { "@id": "https://www.filiplochman.cz/#filip" }
+      "mainEntity": { "@id": "https://www.filiplochman.cz/#filip" },
+      "about": { "@id": "https://www.filiplochman.cz/#sluzba" },
+      "mentions": { "@id": "https://www.filiplochman.cz/#projekty" }
     },
     {
       "@type": "Person",
@@ -102,12 +110,123 @@
         "https://www.linkedin.com/in/filip-lochman-a313a9301",
         "https://www.instagram.com/imdzustea"
       ]
+    },
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://www.filiplochman.cz/#sluzba",
+      "name": "Filip Lochman — tvorba webů na míru",
+      "url": "https://www.filiplochman.cz/",
+      "image": "https://www.filiplochman.cz/og-image.png",
+      "description": "Weby na míru od návrhu po spuštění, oprava webů, které nefungují, a péče po spuštění.",
+      "provider": { "@id": "https://www.filiplochman.cz/#filip" },
+      "email": "mailto:filda.lochman12@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kroměříž",
+        "addressRegion": "Zlínský kraj",
+        "addressCountry": "CZ"
+      },
+      "areaServed": [
+        { "@type": "City", "name": "Kroměříž" },
+        { "@type": "City", "name": "Zlín" },
+        { "@type": "AdministrativeArea", "name": "Zlínský kraj" },
+        { "@type": "Country", "name": "Česko" }
+      ],
+      "availableLanguage": { "@type": "Language", "name": "čeština" },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Co dělám",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Web na míru",
+              "description": "Rozvržení, sazba i chování stránky podle toho, co má web říkat. Ne šablona."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Oprava webu, který nefunguje",
+              "description": "Najdu, co je se stávajícím webem špatně, vysvětlím to bez odborných slov a spravím."
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Spuštění a péče po něm",
+              "description": "Dostanu web online, projdu ho s vámi a zůstanu k dispozici na doladění."
+            }
+          }
+        ]
+      }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://www.filiplochman.cz/#projekty",
+      "name": "Hotové weby",
+      "numberOfItems": 4,
+      "itemListOrder": "https://schema.org/ItemListUnordered",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "item": {
+            "@type": "WebSite",
+            "name": "Herní akademie",
+            "description": "Web pro komunitu: úkoly, body, žebříček, chat a administrace.",
+            "url": "https://motivo.free.nf",
+            "creator": { "@id": "https://www.filiplochman.cz/#filip" }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "item": {
+            "@type": "WebSite",
+            "name": "Restovski",
+            "description": "Prezentace interpreta: koncerty s filtrováním, diskografie, galerie a obchod.",
+            "url": "https://restovski.vercel.app/",
+            "creator": { "@id": "https://www.filiplochman.cz/#filip" }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "item": {
+            "@type": "WebSite",
+            "name": "Vyhlídkář",
+            "description": "Web i aplikace do telefonu.",
+            "url": "https://vyhlidkar.vercel.app/",
+            "creator": { "@id": "https://www.filiplochman.cz/#filip" }
+          }
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "item": {
+            "@type": "WebSite",
+            "name": "Kadeřnictví Hrabalová",
+            "description": "Objednávkový systém.",
+            "url": "https://denisa-hair.vercel.app/",
+            "creator": { "@id": "https://www.filiplochman.cz/#filip" }
+          }
+        }
+      ]
     }
   ]
 }
 </script>
 
 <link rel="stylesheet" href="style.css"/>
+
+<!-- Skript se stahuje souběžně s rozborem dokumentu a spustí se,
+     až je dokument hotový. Je to totéž pořadí, jaké měl na konci
+     těla, jen se o něm prohlížeč dozví hned na začátku. -->
+<script src="script.js" defer></script>
 </head>
 <body>
 <!-- ══ OPONA ═════════════════════════════════════════════════════
@@ -371,28 +490,28 @@
   <div class="prace-in">
 
     <div class="prace-nad">
-      <h2 class="nadpis rv">Co pro vás<br><b>udělám</b></h2>
+      <h2 class="nadpis rv">Co pro vás udělám<br><b>a zůstanu u toho</b></h2>
       <p class="nadpis-p rv">Nekupujete šablonu. Web vzniká podle toho, co potřebujete, a já na něm dělám od prvního návrhu až po spuštění.</p>
       <!-- Řádek konzole. Vlevo příkaz, kterým se to doopravdy
            dělá, vpravo česky, co dělá. Kdo příkazy zná, usměje
            se; kdo je nezná, dočte se totéž vedle. -->
-      <p class="konzole rv"><b aria-hidden="true">npm run build</b><span>z návrhu se stane web</span></p>
+      <p class="konzole rv"><b aria-hidden="true">npm run build</b><span>tady návrh přestane být obrázkem</span></p>
     </div>
 
     <ol class="obory">
       <li class="obor rv" data-stanice>
         <span class="obor-zn"><svg class="ik ik-v" aria-hidden="true"><use href="#i-kod"/></svg><span class="obor-c">01</span></span>
-        <h3>Web na míru, ne šablona</h3>
+        <h3>Web na míru, <b>ne šablona</b></h3>
         <p>Rozvržení, sazbu i chování stránky stavím podle toho, co má web říkat. Načte se rychle a čte se stejně dobře na telefonu i na počítači.</p>
       </li>
       <li class="obor rv" data-stanice>
         <span class="obor-zn"><svg class="ik ik-v" aria-hidden="true"><use href="#i-data"/></svg><span class="obor-c">02</span></span>
-        <h3>Když web nefunguje</h3>
+        <h3>Když web <b>zlobí</b></h3>
         <p>Máte web a něco na něm nesedí? Podívám se, co s ním je, vysvětlím to bez odborných slov a co půjde, spravím.</p>
       </li>
       <li class="obor rv" data-stanice>
         <span class="obor-zn"><svg class="ik ik-v" aria-hidden="true"><use href="#i-stit"/></svg><span class="obor-c">03</span></span>
-        <h3>Spuštění a co potom</h3>
+        <h3>Spuštění <b>a co potom</b></h3>
         <p>Web dostanu online a projdu s vámi, co kde je. Když se pak objeví drobnost k doladění, nezmizím.</p>
       </li>
     </ol>
@@ -432,7 +551,7 @@
   <div class="wrap">
     <h2 class="nadpis rv">Hotové weby,<br><b>ne obrázky v šuplíku</b></h2>
     <p class="nadpis-p rv">Čtyři weby, které jsem postavil, vypsané jako historie: nahoře rozdělaná práce, pod ní hotové. Enter rozbalí, co je uvnitř, druhý enter web otevře.</p>
-    <p class="konzole rv"><b aria-hidden="true">git log --oneline</b><span>vypiš, co už je hotové</span></p>
+    <p class="konzole rv"><b aria-hidden="true">git log --oneline</b><span>žádné sliby, jen hotové věci</span></p>
   </div>
 
   <ol class="rejstrik wrap rv">
@@ -563,9 +682,9 @@
   <div class="kont">
 
     <div class="kont-l rv" data-stanice>
-      <h2 class="nadpis">Máte nápad?<br><b>Napište mi.</b></h2>
+      <h2 class="nadpis">Máte nápad?<br><b>Nebo aspoň problém?</b></h2>
       <p class="nadpis-p">Stačí pár vět o tom, co potřebujete. Ozvu se, jakmile si zprávu přečtu, a řekneme si, co to obnáší.</p>
-      <p class="konzole"><b aria-hidden="true">git push</b><span>odsud se hotová práce dostane ven</span></p>
+      <p class="konzole"><b aria-hidden="true">git push</b><span>odsud jde práce ven a zpátky ne</span></p>
 
       <div class="spojeni">
         <a href="mailto:filda.lochman12@gmail.com">
@@ -640,6 +759,5 @@
   <span class="uk-k">Ovládá se šipkami, enter otevře</span>
 </div>
 
-<script src="script.js"></script>
 </body>
 </html>
