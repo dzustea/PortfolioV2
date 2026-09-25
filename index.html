@@ -9,7 +9,14 @@
 <meta name="robots" content="index, follow, max-image-preview:large"/>
 <meta name="theme-color" content="#0b0b0c"/>
 <link rel="canonical" href="https://www.filiplochman.cz/"/>
-<link rel="icon" href="favicon.svg" type="image/svg+xml"/>
+<!-- Ikony. SVG pro prohlížeče, které ho umí, ICO kvůli tomu, že si
+     ho roboti stahují z kořene sami od sebe, a PNG proto, že Google
+     chce pro ikonu ve výsledcích hledání čtverec o straně v násobku
+     48 px a samotné SVG mu nestačí. Všechny vycházejí z jedné značky. -->
+<link rel="icon" href="/favicon.ico" sizes="48x48"/>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" sizes="any"/>
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+<link rel="manifest" href="/site.webmanifest"/>
 
 <!-- Písma leží na vlastní doméně, viz @font-face ve style.css.
      Přednačítá se Archivo v obou podmnožinách (měřením vyšlo, že
@@ -39,6 +46,66 @@
 <meta name="twitter:description" content="Weby na míru: návrh, sazba, spuštění. Kroměříž a Zlín, na dálku taky."/>
 <meta name="twitter:image" content="https://www.filiplochman.cz/og-image.png"/>
 <meta name="twitter:image:alt" content="Filip Lochman, webový vývojář"/>
+
+<!-- Strukturovaná data. Popisují vyhledávači totéž, co je na stránce
+     vidět, jen ve tvaru, kterému rozumí stroj: kdo jsem, kde jsem
+     a kde jinde mě najde. Není to skript, prohlížeč to nespouští,
+     je to jen datový blok; proto projde i přes přísné CSP.
+     Jediné, co tu smí stát, je pravda ze stránky samotné. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://www.filiplochman.cz/#web",
+      "url": "https://www.filiplochman.cz/",
+      "name": "Filip Lochman",
+      "inLanguage": "cs-CZ",
+      "publisher": { "@id": "https://www.filiplochman.cz/#filip" }
+    },
+    {
+      "@type": "ProfilePage",
+      "@id": "https://www.filiplochman.cz/#stranka",
+      "url": "https://www.filiplochman.cz/",
+      "name": "Filip Lochman, webový vývojář",
+      "isPartOf": { "@id": "https://www.filiplochman.cz/#web" },
+      "inLanguage": "cs-CZ",
+      "mainEntity": { "@id": "https://www.filiplochman.cz/#filip" }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.filiplochman.cz/#filip",
+      "name": "Filip Lochman",
+      "givenName": "Filip",
+      "familyName": "Lochman",
+      "url": "https://www.filiplochman.cz/",
+      "image": "https://www.filiplochman.cz/og-image.png",
+      "jobTitle": "Webový vývojář",
+      "description": "Webový vývojář z Kroměříže. Weby na míru: návrh, sazba, spuštění.",
+      "email": "mailto:filda.lochman12@gmail.com",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kroměříž",
+        "addressRegion": "Zlínský kraj",
+        "addressCountry": "CZ"
+      },
+      "knowsAbout": [
+        "Tvorba webových stránek",
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "Responzivní design",
+        "Webové aplikace"
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/filip-lochman-a313a9301",
+        "https://www.instagram.com/imdzustea"
+      ]
+    }
+  ]
+}
+</script>
 
 <link rel="stylesheet" href="style.css"/>
 </head>
@@ -371,26 +438,30 @@
   <ol class="rejstrik wrap rv">
 
     <li class="polozka polozka-chysta">
-      <div class="radek" data-stanice tabindex="0">
-        <span class="radek-b" aria-hidden="true"></span>
-        <span class="radek-c">paty-projekt</span>
-        <span class="radek-n">Pátý projekt</span>
-        <span class="radek-s">Právě se staví</span>
-        <span class="radek-t" aria-hidden="true">zamčeno</span>
-        <span class="jen-ctecka">zamčeno, projekt se teprve staví</span>
-      </div>
+      <h3 class="rejstrik-h">
+        <span class="radek" data-stanice tabindex="0">
+          <span class="radek-b" aria-hidden="true"></span>
+          <span class="radek-c">paty-projekt</span>
+          <span class="radek-n">Pátý projekt</span>
+          <span class="radek-s">Právě se staví</span>
+          <span class="radek-t" aria-hidden="true">zamčeno</span>
+          <span class="jen-ctecka">zamčeno, projekt se teprve staví</span>
+        </span>
+      </h3>
     </li>
 
     <li class="polozka">
-      <button class="radek" data-stanice id="r1" aria-expanded="false" aria-controls="t1">
-        <span class="radek-b" aria-hidden="true"></span>
-        <span class="radek-c">herni-akademie</span>
-        <span class="radek-n">Herní akademie</span>
-        <span class="radek-s">Web pro komunitu</span>
-        <span class="radek-t" aria-hidden="true">hotovo</span>
-        <span class="jen-ctecka">otevřít web v novém okně</span>
-        <span class="radek-z" aria-hidden="true"></span>
-      </button>
+      <h3 class="rejstrik-h">
+        <button class="radek" data-stanice id="r1" aria-expanded="false" aria-controls="t1">
+          <span class="radek-b" aria-hidden="true"></span>
+          <span class="radek-c">herni-akademie</span>
+          <span class="radek-n">Herní akademie</span>
+          <span class="radek-s">Web pro komunitu</span>
+          <span class="radek-t" aria-hidden="true">hotovo</span>
+          <span class="jen-ctecka">otevřít web v novém okně</span>
+          <span class="radek-z" aria-hidden="true"></span>
+        </button>
+      </h3>
       <div class="telo" id="t1" role="region" aria-labelledby="r1">
         <div class="telo-in">
           <div class="telo-txt">
@@ -404,15 +475,17 @@
     </li>
 
     <li class="polozka">
-      <button class="radek" data-stanice id="r2" aria-expanded="false" aria-controls="t2">
-        <span class="radek-b" aria-hidden="true"></span>
-        <span class="radek-c">restovski</span>
-        <span class="radek-n">Restovski</span>
-        <span class="radek-s">Prezentace interpreta</span>
-        <span class="radek-t" aria-hidden="true">hotovo</span>
-        <span class="jen-ctecka">otevřít web v novém okně</span>
-        <span class="radek-z" aria-hidden="true"></span>
-      </button>
+      <h3 class="rejstrik-h">
+        <button class="radek" data-stanice id="r2" aria-expanded="false" aria-controls="t2">
+          <span class="radek-b" aria-hidden="true"></span>
+          <span class="radek-c">restovski</span>
+          <span class="radek-n">Restovski</span>
+          <span class="radek-s">Prezentace interpreta</span>
+          <span class="radek-t" aria-hidden="true">hotovo</span>
+          <span class="jen-ctecka">otevřít web v novém okně</span>
+          <span class="radek-z" aria-hidden="true"></span>
+        </button>
+      </h3>
       <div class="telo" id="t2" role="region" aria-labelledby="r2">
         <div class="telo-in">
           <div class="telo-txt">
@@ -426,15 +499,17 @@
     </li>
 
     <li class="polozka">
-      <button class="radek" data-stanice id="r3" aria-expanded="false" aria-controls="t3">
-        <span class="radek-b" aria-hidden="true"></span>
-        <span class="radek-c">vyhlidkar</span>
-        <span class="radek-n">Vyhlídkář</span>
-        <span class="radek-s">Web i aplikace do telefonu</span>
-        <span class="radek-t" aria-hidden="true">hotovo</span>
-        <span class="jen-ctecka">otevřít web v novém okně</span>
-        <span class="radek-z" aria-hidden="true"></span>
-      </button>
+      <h3 class="rejstrik-h">
+        <button class="radek" data-stanice id="r3" aria-expanded="false" aria-controls="t3">
+          <span class="radek-b" aria-hidden="true"></span>
+          <span class="radek-c">vyhlidkar</span>
+          <span class="radek-n">Vyhlídkář</span>
+          <span class="radek-s">Web i aplikace do telefonu</span>
+          <span class="radek-t" aria-hidden="true">hotovo</span>
+          <span class="jen-ctecka">otevřít web v novém okně</span>
+          <span class="radek-z" aria-hidden="true"></span>
+        </button>
+      </h3>
       <div class="telo" id="t3" role="region" aria-labelledby="r3">
         <div class="telo-in">
           <div class="telo-txt">
@@ -448,15 +523,17 @@
     </li>
 
     <li class="polozka">
-      <button class="radek" data-stanice id="r4" aria-expanded="false" aria-controls="t4">
-        <span class="radek-b" aria-hidden="true"></span>
-        <span class="radek-c">kadernictvi-hrabalova</span>
-        <span class="radek-n">Kadeřnictví Hrabalová</span>
-        <span class="radek-s">Objednávkový systém</span>
-        <span class="radek-t" aria-hidden="true">hotovo</span>
-        <span class="jen-ctecka">otevřít web v novém okně</span>
-        <span class="radek-z" aria-hidden="true"></span>
-      </button>
+      <h3 class="rejstrik-h">
+        <button class="radek" data-stanice id="r4" aria-expanded="false" aria-controls="t4">
+          <span class="radek-b" aria-hidden="true"></span>
+          <span class="radek-c">kadernictvi-hrabalova</span>
+          <span class="radek-n">Kadeřnictví Hrabalová</span>
+          <span class="radek-s">Objednávkový systém</span>
+          <span class="radek-t" aria-hidden="true">hotovo</span>
+          <span class="jen-ctecka">otevřít web v novém okně</span>
+          <span class="radek-z" aria-hidden="true"></span>
+        </button>
+      </h3>
       <div class="telo" id="t4" role="region" aria-labelledby="r4">
         <div class="telo-in">
           <div class="telo-txt">
@@ -508,9 +585,23 @@
         <label for="fn">Jméno</label>
         <input id="fn" name="name" type="text" placeholder="Jan Novák" autocomplete="name" required/>
       </div>
-      <div class="fg">
+      <div class="fg fg-adresa">
         <label for="fe">Email</label>
-        <input id="fe" name="email" type="email" placeholder="jan@firma.cz" autocomplete="email" required/>
+        <input id="fe" name="email" type="email" placeholder="jan@firma.cz" autocomplete="email"
+               inputmode="email" spellcheck="false" autocapitalize="off" required aria-describedby="fe-pozn"/>
+        <!-- Místo pod polem. Drží buď návrh opravy (tlačítko na jeden dotek),
+             nebo krátkou poznámku. Prázdné nezabírá nic: obal má nulovou
+             výšku a rozevře se, teprve když je co ukázat. Plní to skript. -->
+        <div class="pozn" id="fe-pozn" aria-live="polite">
+          <div class="pozn-in">
+            <button class="navrh" type="button" hidden>
+              <span class="navrh-k" aria-hidden="true">&#8627;</span>
+              <span class="navrh-t">Mysleli jste <b></b>?</span>
+              <span class="navrh-a">Použít</span>
+            </button>
+            <p class="pozn-c" hidden></p>
+          </div>
+        </div>
       </div>
       <div class="fg">
         <label for="fm">Zpráva</label>

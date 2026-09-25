@@ -887,6 +887,283 @@
       return chybne;
     };
 
+    /* ── ADRESA: TVAR A NÁVRH OPRAVY ────────────────────────────
+       Jestli schránka doopravdy existuje, se z prohlížeče zjistit
+       nedá. Šlo by se zeptat cizí služby, jenže klíč k ní by ležel
+       tady v souboru, viděl by ho každý, kdo si ho otevře, a adresa
+       návštěvníka by odešla někam pryč. Šlo by se taky doptat
+       poštovních serverů domény, jenže to chce vlastní server,
+       a ten tu schválně žádný není.
+
+       Za ztracenými odpověďmi ale nestojí podvodník, nýbrž překlep.
+       Proto se odsud nikam nevolá a adresa se jen porovná s poštami,
+       na které lidé doopravdy píšou. Když je o úhoz vedle, web
+       nabídne opravu. Nabídne, nepřepíše: rozhodnutí zůstává
+       člověku, protože seznam níž se taky může mýlit.
+       ─────────────────────────────────────────────────────────── */
+
+    /* Pošty, na které se v Česku a na Slovensku píše. Seznam nemá
+       být úplný, má stačit na rozpoznání překlepu: cizí doména,
+       která na něm není, projde bez řečí. */
+    var POSTY = [
+      'seznam.cz', 'email.cz', 'centrum.cz', 'post.cz', 'volny.cz',
+      'atlas.cz', 'tiscali.cz', 'quick.cz', 'chello.cz', 'mail.cz',
+      'azet.sk', 'zoznam.sk', 'centrum.sk', 'post.sk',
+      'gmail.com', 'googlemail.com', 'outlook.com', 'outlook.cz',
+      'hotmail.com', 'hotmail.cz', 'live.com', 'live.cz', 'msn.com',
+      'icloud.com', 'me.com', 'mac.com', 'yahoo.com', 'yahoo.cz',
+      'proton.me', 'protonmail.com', 'pm.me', 'aol.com',
+      'gmx.com', 'gmx.net', 'web.de', 'zoho.com', 'fastmail.com',
+      'duck.com', 'tuta.io', 'tutanota.com'
+    ];
+
+    /* Konce domén pro druhou kontrolu. Firemní doména na seznamu
+       výše být nemůže, ale její konec ano, a právě tam se chybuje
+       nejčastěji: .czz, .con, .comm. Pořadí rozhoduje při shodě,
+       proto stojí .cz první. */
+    var KONCE = [
+      'cz', 'sk', 'com', 'net', 'org', 'eu', 'io', 'dev', 'me',
+      'info', 'biz', 'at', 'de', 'pl', 'co', 'uk', 'app', 'cloud',
+      'tech', 'email', 'online', 'store', 'ai'
+    ];
+
+    /* Schránky, které se samy po chvíli smažou. Nejde o překlep,
+       jen o adresu, na kterou nemá smysl odpovídat, a proto z toho
+       bude upozornění, ne chyba. Adresy, které jen skrývají tu
+       pravou (proton, icloud, duck), sem nepatří: ty poštu doručí
+       a používá je spousta lidí schválně. */
+    var JEDNORAZOVE = [
+      'mailinator.com', 'yopmail.com', 'guerrillamail.com',
+      'guerrillamail.info', 'sharklasers.com', 'grr.la',
+      '10minutemail.com', '10minutemail.net', 'tempmail.com',
+      'temp-mail.org', 'tempr.email', 'trashmail.com', 'getnada.com',
+      'dispostable.com', 'maildrop.cc', 'throwawaymail.com',
+      'mailnesia.com', 'discard.email', 'mohmal.com', 'moakt.com',
+      'emailondeck.com', 'mytemp.email', 'fakemail.net',
+      'inboxkitten.com', 'mailcatch.com', 'harakirimail.com'
+    ];
+
+    /* Tvar adresy. Přísnější než type="email" v prohlížeči, kterému
+       stačí i "a@b": tady musí být za zavináčem tečka a za ní aspoň
+       dvě písmena, jinak to není adresa, na kterou jde odepsat. */
+    var TVAR = /^[^\s@,;:<>()\[\]\\"]+@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/i;
+
+    /* Vzdálenost dvou řetězců: kolik nejméně úhozů dělí jeden od
+       druhého. Prohození dvou sousedních písmen se počítá za jednu
+       chybu, ne za dvě, protože přesně tak vzniká gmial z gmail. */
+    var vzdalenost = function (a, b) {
+      var m = a.length, n = b.length, i, j;
+      if (!m) return n;
+      if (!n) return m;
+
+      var t = [];
+      for (i = 0; i <= m; i++) t[i] = [i];
+      for (j = 0; j <= n; j++) t[0][j] = j;
+
+      for (i = 1; i <= m; i++) {
+        for (j = 1; j <= n; j++) {
+          var cena = a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1;
+          t[i][j] = Math.min(t[i - 1][j] + 1, t[i][j - 1] + 1, t[i - 1][j - 1] + cena);
+          if (i > 1 && j > 1 &&
+              a.charAt(i - 1) === b.charAt(j - 2) &&
+              a.charAt(i - 2) === b.charAt(j - 1)) {
+            t[i][j] = Math.min(t[i][j], t[i - 2][j - 2] + 1);
+          }
+        }
+      }
+      return t[m][n];
+    };
+
+    /* Nejbližší položka seznamu, je-li dost blízko. U krátkých
+       řetězců smí být vedle jediný úhoz, u delších dva: v
+       protonmail.com se dá minout víckrát než v post.cz, aniž by
+       šlo o docela jinou doménu. Když něco sedí přesně, není co
+       navrhovat a vrací se rovnou nic. */
+    var nejblizsi = function (co, seznam) {
+      var dovoleno = co.length > 7 ? 2 : 1;
+      var nejlepsi = null;
+      var nejmensi = dovoleno + 1;
+
+      for (var i = 0; i < seznam.length; i++) {
+        if (seznam[i] === co) return null;
+        var d = vzdalenost(co, seznam[i]);
+        if (d < nejmensi) { nejmensi = d; nejlepsi = seznam[i]; }
+      }
+      return nejlepsi;
+    };
+
+    /* Rozbor adresy. Vrací stav a případně adresu, kterou nabídnout. */
+    var rozeber = function (psane) {
+      var text = psane.trim();
+      if (!text) return { stav: 'prazdno' };
+
+      /* Nejdřív mechanické opravy: mezery z kopírování, čárka místo
+         tečky (na české klávesnici leží vedle sebe), zdvojená tečka
+         a tečka navíc na konci. Spraví-li se tím adresa, je to
+         návrh, a ne výtka. Velikost písmen se schválně nemění:
+         PEPA@Seznam.cz je v pořádku a opravovat se nemá. */
+      var uhlazene = text
+        .replace(/\s+/g, '')
+        .replace(/,/g, '.')
+        .replace(/\.{2,}/g, '.')
+        .replace(/\.+$/, '');
+
+      if (uhlazene !== text && TVAR.test(uhlazene)) {
+        return { stav: 'navrh', navrh: uhlazene };
+      }
+
+      if (!TVAR.test(text)) return { stav: 'tvar' };
+
+      var zavinac = text.lastIndexOf('@');
+      var zacatek = text.slice(0, zavinac);
+      var domena = text.slice(zavinac + 1).toLowerCase();
+
+      /* Jednorázová schránka: adresa je v pořádku, jen na ni
+         nejspíš nikdo odpověď nepřečte. Bere se i poddoména. */
+      for (var i = 0; i < JEDNORAZOVE.length; i++) {
+        if (domena === JEDNORAZOVE[i] ||
+            domena.slice(-(JEDNORAZOVE[i].length + 1)) === '.' + JEDNORAZOVE[i]) {
+          return { stav: 'jednorazova' };
+        }
+      }
+
+      /* Nejdřív celá doména proti známým poštám. */
+      var jina = nejblizsi(domena, POSTY);
+      if (jina) return { stav: 'navrh', navrh: zacatek + '@' + jina };
+
+      /* Pak aspoň konec domény, kvůli firemním adresám. Dvoupísmenné
+         konce se přeskakují: .es, .it, .fr a spol. jsou od sebe
+         navzájem na jeden úhoz, takže by z pravdy dělaly překlep. */
+      var tecka = domena.lastIndexOf('.');
+      var konec = domena.slice(tecka + 1);
+      if (konec.length >= 3) {
+        var jinyKonec = nejblizsi(konec, KONCE);
+        if (jinyKonec) {
+          return { stav: 'navrh', navrh: zacatek + '@' + domena.slice(0, tecka + 1) + jinyKonec };
+        }
+      }
+
+      return { stav: 'ok' };
+    };
+
+    /* ── MÍSTO POD POLEM ────────────────────────────────────────
+       Drží buď návrh (tlačítko na jeden dotek), nebo poznámku.
+       Nikdy obojí, a prázdné nezabírá žádnou výšku.
+       ─────────────────────────────────────────────────────────── */
+
+    var poznamka = document.getElementById('fe-pozn');
+    var navrhTl = poznamka ? poznamka.querySelector('.navrh') : null;
+    var navrhKam = navrhTl ? navrhTl.querySelector('b') : null;
+    var poznText = poznamka ? poznamka.querySelector('.pozn-c') : null;
+
+    var nabizeno = '';   /* adresa, kterou návrh právě nabízí */
+    var trvaNa = '';     /* adresa, na které člověk trvá i přes návrh */
+
+    var zavriPozn = function () {
+      if (!poznamka) return;
+      poznamka.classList.remove('je');
+      navrhTl.hidden = true;
+      poznText.hidden = true;
+      nabizeno = '';
+    };
+
+    var ukazNavrh = function (adresa) {
+      if (!poznamka) return;
+      poznText.hidden = true;
+      /* textContent, ne innerHTML: je to text od návštěvníka a do
+         stránky se nesmí dostat jako značky. */
+      navrhKam.textContent = adresa;
+      navrhTl.hidden = false;
+      poznamka.classList.add('je');
+      nabizeno = adresa;
+    };
+
+    var ukazPozn = function (text, mirne) {
+      if (!poznamka) return;
+      navrhTl.hidden = true;
+      poznText.textContent = text;
+      poznText.className = mirne ? 'pozn-c mirne' : 'pozn-c';
+      poznText.hidden = false;
+      poznamka.classList.add('je');
+      nabizeno = '';
+    };
+
+    /* Kontrola po opuštění pole. Během psaní se nenadává: kdo je na
+       třetím písmenu adresy, ještě chybu neudělal. */
+    var zkontrolujAdresu = function () {
+      var vysledek = rozeber(poleEmail.value);
+
+      if (vysledek.stav === 'prazdno') {
+        oznac(poleEmail, false);
+        zavriPozn();
+        return vysledek;
+      }
+
+      if (vysledek.stav === 'tvar') {
+        oznac(poleEmail, true);
+        ukazPozn('Tohle není platná adresa: chybí zavináč nebo tečka v doméně.');
+        return vysledek;
+      }
+
+      oznac(poleEmail, false);
+
+      if (vysledek.stav === 'jednorazova') {
+        ukazPozn('Jednorázová schránka. Odeslat to půjde, ale odpověď si tam nejspíš nepřečtete.', true);
+        return vysledek;
+      }
+
+      if (vysledek.stav === 'navrh' && poleEmail.value.trim() !== trvaNa) {
+        ukazNavrh(vysledek.navrh);
+        return vysledek;
+      }
+
+      zavriPozn();
+      return vysledek;
+    };
+
+    /* Klepnutí na Odeslat rozostří pole s adresou dřív, než klik
+       dopadne. Kdyby se v tu chvíli otevřel návrh, odsune tlačítko
+       o svou výšku dolů a prst nebo kurzor mine: člověk zmáčkne
+       Odeslat a nestane se nic. Proto se po dobu stisku nad
+       tlačítkem kontrola po rozostření přeskočí. O nic se nepřijde,
+       stejnou kontrolu vzápětí udělá samo odesílání. */
+    var mirenoNaOdeslat = false;
+
+    if (poznamka) {
+      var tlacitkoOdeslat = document.getElementById('btn-send');
+      if (tlacitkoOdeslat) {
+        tlacitkoOdeslat.addEventListener('pointerdown', function () {
+          mirenoNaOdeslat = true;
+        });
+        window.addEventListener('pointerup', function () {
+          mirenoNaOdeslat = false;
+        });
+      }
+
+      poleEmail.addEventListener('blur', function () {
+        if (mirenoNaOdeslat) return;
+        zkontrolujAdresu();
+      });
+
+      /* Při psaní se místo jen uklidí. Vytýkat chybu někomu, kdo
+         adresu teprve píše, k ničemu nevede. */
+      poleEmail.addEventListener('input', function () {
+        oznac(poleEmail, false);
+        zavriPozn();
+        trvaNa = '';
+      });
+
+      navrhTl.addEventListener('click', function () {
+        if (!nabizeno) return;
+        poleEmail.value = nabizeno;
+        oznac(poleEmail, false);
+        trvaNa = '';
+        zavriPozn();
+        /* Zpátky do pole, ať je vidět, co v něm teď stojí. */
+        poleEmail.focus();
+      });
+    }
+
     formular.addEventListener('submit', function (udalost) {
       udalost.preventDefault();
 
@@ -894,18 +1171,35 @@
       var popisek = document.getElementById('btn-txt');
       var hlaska = document.getElementById('fmsg');
 
+      var adresa = rozeber(poleEmail.value);
+
       var chybi = [
         oznac(poleJmeno, !poleJmeno.value.trim()),
-        /* Tvar adresy hlídá prohlížeč sám podle type="email". */
-        oznac(poleEmail, !poleEmail.value.trim() || !poleEmail.checkValidity()),
+        /* Tvar adresy hlídá rozbor výše, ne prohlížeč: tomu stačí
+           i "a@b", což je adresa, na kterou se odepsat nedá. */
+        oznac(poleEmail, adresa.stav === 'prazdno' || adresa.stav === 'tvar'),
         oznac(poleZprava, !poleZprava.value.trim())
       ].indexOf(true) !== -1;
 
       if (chybi) {
+        if (adresa.stav === 'tvar') zkontrolujAdresu();
         hlaska.textContent = 'Vyplňte prosím všechna pole platnými údaji.';
         hlaska.className = 'hlaska err';
         var prvniChyba = formular.querySelector('[aria-invalid="true"]');
         if (prvniChyba) prvniChyba.focus();
+        return;
+      }
+
+      /* Návrh opravy zastaví odeslání jednou jedinkrát. Kdo na své
+         adrese trvá, odešle podruhé a projde. Je to práh, ne závora:
+         mýlit se může i seznam pošt, a přijít kvůli tomu o zprávu
+         by bylo horší než překlep. */
+      if (adresa.stav === 'navrh' && poleEmail.value.trim() !== trvaNa) {
+        trvaNa = poleEmail.value.trim();
+        ukazNavrh(adresa.navrh);
+        hlaska.textContent = 'Zkontrolujte adresu, ať odpověď dojde. Odesláním znovu ji potvrdíte.';
+        hlaska.className = 'hlaska err';
+        navrhTl.focus();
         return;
       }
 
@@ -926,6 +1220,8 @@
           hlaska.textContent = 'Zpráva odeslána. Ozvu se co nejdřív.';
           hlaska.className = 'hlaska ok';
           formular.reset();
+          trvaNa = '';
+          zavriPozn();
         })
         .catch(function () {
           /* Podrobnost chyby se ven nedostane. Uživateli nepomůže

@@ -1726,6 +1726,120 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 .hlaska.ok{color: #6cd08f}
 .hlaska.err{color: var(--rud-tx)}
 
+/* ── NÁVRH OPRAVY ADRESY ───────────────────────────────────────
+   Pod polem s adresou je jedno místo, které drží buď návrh
+   opravy, nebo poznámku. Zavřené má nulovou výšku, otevřené
+   dorůstá přesně do výšky obsahu. Dělá to jediná řádka mřížky,
+   takže se nikde nepočítají pixely a text se smí zalomit, jak
+   potřebuje. Kde prohlížeč přechod mezi 0fr a 1fr neumí, místo
+   se prostě objeví bez rozevření a nic se nerozbije.
+   ────────────────────────────────────────────────────────────── */
+
+/* Skupina s adresou nese pod polem místo pro návrh. Kdyby odstupy
+   uvnitř držel gap mřížky, přičetl by se i k prázdnému místu a celý
+   formulář by o těch pár pixelů narostl, i když není co ukazovat.
+   Proto tu gap není a odstup popisku od pole drží okraj. */
+.fg-adresa{gap: 0}
+.fg-adresa input{margin-top: 7px}
+
+.pozn{
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows .24s cubic-bezier(.22,1,.36,1);
+}
+.pozn.je{grid-template-rows: 1fr}
+.pozn-in{overflow: hidden; min-height: 0}
+
+/* Skryté se musí schovat i proti display z pravidel níž. */
+.pozn [hidden]{display: none}
+
+/* Odstup od pole je menší než mezera mezi řádky formuláře (16 px):
+   návrh patří k poli nad sebou, ne k dalšímu řádku. Obsah se jen
+   prolne, pohyb obstará samo rozevření místa. */
+.pozn-in > *{
+  margin-top: 8px;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.pozn.je .pozn-in > *{opacity: 1}
+
+.navrh{
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center; gap: 0 10px;
+  width: 100%; text-align: left;
+  padding: 10px 12px;
+  background: #17171a;
+  border: 1px solid var(--linka);
+  border-left: 2px solid var(--rud);
+  color: var(--sed);
+  font-family: var(--mono);
+  font-size: .74rem; line-height: 1.5;
+  cursor: pointer;
+  transition: background-color .2s ease, border-color .2s ease,
+              transform .16s cubic-bezier(.22,1,.36,1);
+}
+.navrh b{color: var(--kost); font-weight: 400; overflow-wrap: anywhere}
+.navrh-k{color: var(--rud-tx); transition: transform .25s cubic-bezier(.22,1,.36,1)}
+.navrh-a{
+  font-family: var(--mono);
+  font-size: .6rem; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--rud-tx); white-space: nowrap;
+}
+
+/* Najetí myší jen na zařízeních, která myš mají: na dotyku by
+   stav zůstal viset po klepnutí. */
+@media (hover: hover) and (pointer: fine){
+  .navrh:hover{background: #1d1d21; border-color: var(--linka-2); border-left-color: var(--rud)}
+  .navrh:hover .navrh-k{transform: translateX(2px)}
+}
+.navrh:active{transform: scale(.99)}
+.navrh:focus-visible{outline: 2px solid var(--rud); outline-offset: 2px}
+
+/* Poznámka bez akce: jen řekne, co je špatně. */
+.pozn-c{
+  padding-left: 12px;
+  border-left: 2px solid var(--rud);
+  font-family: var(--mono);
+  font-size: .72rem; line-height: 1.5;
+  color: var(--rud-tx);
+}
+/* Mírnější odstín pro upozornění, které odeslání nebrání. */
+.pozn-c.mirne{color: var(--sed); border-left-color: var(--linka-2)}
+
+/* Na úzké obrazovce jde popisek akce pod text a celé tlačítko
+   povyroste, aby se do něj dalo trefit prstem. Obě řádky k sobě
+   patří, proto je mezi nimi jen pár pixelů; od pole nad nimi je
+   odstup naopak o dva větší než na stolním počítači. */
+@media (max-width: 560px){
+  .pozn-in > *{margin-top: 10px}
+  .navrh{
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 3px 10px;
+    padding: 12px 14px; min-height: 48px;
+    font-size: .78rem;
+  }
+  .navrh-a{grid-column: 2}
+  .pozn-c{font-size: .75rem; line-height: 1.55}
+}
+
+/* Potlačený pohyb: místo se objeví rovnou, prolnutí zůstane,
+   protože pomáhá pochopit, že přibylo. */
+@media (prefers-reduced-motion: reduce){
+  .pozn{transition: none}
+  .navrh{transition: background-color .2s ease, border-color .2s ease}
+  .navrh:active{transform: none}
+}
+
+
+/* ── NADPIS V REJSTŘÍKU ────────────────────────────────────────
+   Řádek projektu drží nadpis třetí úrovně, jak to pro rozbalovací
+   seznamy doporučuje ARIA. Obal nesmí být vidět ani cítit: nemá
+   vlastní sazbu ani odsazení, veškerý vzhled zůstal na .radek.
+   ────────────────────────────────────────────────────────────── */
+.rejstrik-h{
+  margin: 0; padding: 0;
+  font: inherit; letter-spacing: inherit; color: inherit;
+}
+
 
 /* ══ PATA ══════════════════════════════════════════════════════ */
 
