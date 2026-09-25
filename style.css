@@ -1950,6 +1950,17 @@ footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
 }
 .foot-mark span{color: var(--rud-tx)}
 
+/* Na úzké okno se pata neláme hezky: značka si drží levý kraj,
+   zbytek ji odsune doprava a poslední údaj spadne sám na druhou
+   řádku pod ni. Obsah pary je 489 bodů plus mezery, takze pod
+   zhruba 640 body se to nevejde. Od 700 proto stoji vsechno pod
+   sebou u leveho kraje a cte se to jako seznam, ne jako rozsypana
+   radka. */
+@media (max-width: 700px){
+  .foot-in{flex-direction: column; align-items: flex-start; gap: 11px}
+  .foot-mark{margin-right: 0}
+}
+
 
 /* ══ VRSTVENÝ POSUN ════════════════════════════════════════════
    Rytá pole jdou při posunu jinou rychlostí než sazba, takže
