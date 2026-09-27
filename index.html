@@ -549,16 +549,130 @@
 <section id="projekty" class="sec">
 
   <div class="wrap">
-    <h2 class="nadpis rv">Hotové weby,<br><b>a jde na ně kliknout</b></h2>
+    <h2 class="nadpis rv">Projekty k náhledu,<br><b>některé v procesu</b></h2>
     <p class="nadpis-p rv">Čtyři weby, které jsem postavil, vypsané jako historie: nahoře rozdělaná práce, pod ní hotové. Enter rozbalí, co je uvnitř, druhý enter web otevře.</p>
     <p class="konzole rv"><b aria-hidden="true">git log --oneline</b><span>žádné sliby, jen hotové věci</span></p>
+  </div>
+
+  <div class="wrap">
+  <!-- ══ MAPA PROJEKTŮ ═══════════════════════════════════════════
+       Na velkém okně nahrazuje výpis projektů strom, jaký mívají
+       hry u dovedností. Weby jsou uzly, čáry mezi nimi je pořadí,
+       ve kterém vznikaly, a slepé větve dávají mapě rozsah do stran,
+       aby nevypadala jako jedna čára přes obrazovku.
+
+       Mapa se neposouvá ani nepřibližuje: celá se vejde do jedné
+       plochy a jediné, co s ní jde dělat, je vybrat si web. Výpis
+       pod ní zůstává v dokumentu, drží texty a na telefonu se
+       vrací na jeho místo.
+
+       Souřadnice uzlů i dílků leží ve stylopisu, ne v atributu
+       style. Stránka má style-src 'self' bez unsafe-inline, takže
+       by prohlížeč polohu z atributu zahodil a mapa by se sesypala
+       na jednu hromadu. -->
+  <div class="mapa rv" role="group" aria-label="Mapa projektů">
+    <svg class="mapa-cary" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      <line class="mapa-cara" data-retez="r2" x1="13" y1="72" x2="21.97" y2="60.42" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r2" x1="21.97" y1="60.42" x2="25.03" y2="45.58" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r2" x1="25.03" y1="45.58" x2="34" y2="34" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r3" x1="34" y1="34" x2="47.16" y2="26.5" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r3" x1="47.16" y1="26.5" x2="57" y2="15" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r4" x1="34" y1="34" x2="40.92" y2="46.09" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r4" x1="40.92" y1="46.09" x2="53.08" y2="53.91" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r4" x1="53.08" y1="53.91" x2="60" y2="66" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r5" x1="57" y1="15" x2="64.77" y2="25.62" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r5" x1="64.77" y1="25.62" x2="77.23" y2="31.38" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r5" x1="77.23" y1="31.38" x2="85" y2="42" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r5" x1="60" y1="66" x2="69.89" y2="59.62" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r5" x1="69.89" y1="59.62" x2="75.11" y2="48.38" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara" data-retez="r5" x1="75.11" y1="48.38" x2="85" y2="42" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="13" y1="72" x2="6" y2="52" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="6" y1="52" x2="10" y2="38" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="10" y1="38" x2="4" y2="26" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="13" y1="72" x2="20" y2="88" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="20" y1="88" x2="33" y2="92" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="34" y1="34" x2="28" y2="14" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="28" y1="14" x2="38" y2="5" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="57" y1="15" x2="46" y2="4" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="46" y1="4" x2="36" y2="2" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="57" y1="15" x2="72" y2="6" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="72" y1="6" x2="84" y2="10" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="60" y1="66" x2="52" y2="86" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="52" y1="86" x2="64" y2="93" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="85" y1="42" x2="94" y2="22" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="94" y1="22" x2="97" y2="12" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="85" y1="42" x2="93" y2="64" pathLength="1" vector-effect="non-scaling-stroke"/>
+      <line class="mapa-cara mapa-cara--slepa" x1="93" y1="64" x2="88" y2="78" pathLength="1" vector-effect="non-scaling-stroke"/>
+    </svg>
+    <i class="mapa-pip" data-retez="r2" data-p="0" aria-hidden="true"></i>
+    <i class="mapa-pip" data-retez="r2" data-p="1" aria-hidden="true"></i>
+    <i class="mapa-pip" data-retez="r3" data-p="2" aria-hidden="true"></i>
+    <i class="mapa-pip" data-retez="r4" data-p="3" aria-hidden="true"></i>
+    <i class="mapa-pip" data-retez="r4" data-p="4" aria-hidden="true"></i>
+    <i class="mapa-pip" data-retez="r5" data-p="5" aria-hidden="true"></i>
+    <i class="mapa-pip" data-retez="r5" data-p="6" aria-hidden="true"></i>
+    <i class="mapa-pip" data-retez="r5" data-p="7" aria-hidden="true"></i>
+    <i class="mapa-pip" data-retez="r5" data-p="8" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="9" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="10" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="11" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="12" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="13" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="14" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="15" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="16" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="17" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="18" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="19" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="20" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="21" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="22" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="23" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="24" aria-hidden="true"></i>
+    <i class="mapa-pip mapa-pip--slepy" data-p="25" aria-hidden="true"></i>
+    <button class="mapa-uzel" type="button" data-cil="r1" aria-expanded="false">
+      <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-data"/></svg></span>
+      <span class="mapa-popis">
+        <span class="mapa-jm">Herní akademie</span>
+        <span class="mapa-st">Web pro komunitu</span>
+      </span>
+    </button>
+    <button class="mapa-uzel" type="button" data-cil="r2" aria-expanded="false">
+      <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-kod"/></svg></span>
+      <span class="mapa-popis">
+        <span class="mapa-jm">Restovski</span>
+        <span class="mapa-st">Prezentace interpreta</span>
+      </span>
+    </button>
+    <button class="mapa-uzel" type="button" data-cil="r3" aria-expanded="false">
+      <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-spendlik"/></svg></span>
+      <span class="mapa-popis">
+        <span class="mapa-jm">Vyhlídkář</span>
+        <span class="mapa-st">Web i aplikace</span>
+      </span>
+    </button>
+    <button class="mapa-uzel" type="button" data-cil="r4" aria-expanded="false">
+      <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-obalka"/></svg></span>
+      <span class="mapa-popis">
+        <span class="mapa-jm">Kadeřnictví Hrabalová</span>
+        <span class="mapa-st">Objednávkový systém</span>
+      </span>
+    </button>
+    <button class="mapa-uzel mapa-uzel--zamceny" type="button" data-cil="r5" aria-expanded="false">
+      <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-stit"/></svg></span>
+      <span class="mapa-popis">
+        <span class="mapa-jm">Pátý projekt</span>
+        <span class="mapa-st">Právě se staví</span>
+      </span>
+    </button>
+  </div>
   </div>
 
   <ol class="rejstrik wrap rv">
 
     <li class="polozka polozka-chysta">
       <h3 class="rejstrik-h">
-        <span class="radek" data-stanice tabindex="0">
+        <span class="radek" id="r5" data-stanice tabindex="0">
           <span class="radek-b" aria-hidden="true"></span>
           <span class="radek-c">paty-projekt</span>
           <span class="radek-n">Pátý projekt</span>
@@ -682,7 +796,7 @@
   <div class="kont">
 
     <div class="kont-l rv" data-stanice>
-      <h2 class="nadpis">Máte nápad?<br><b>Nebo aspoň problém?</b></h2>
+      <h2 class="nadpis">Máte nápad?<br><b>Pojďme ho postavit.</b></h2>
       <p class="nadpis-p">Stačí pár vět o tom, co potřebujete. Ozvu se, jakmile si zprávu přečtu, a řekneme si, co to obnáší.</p>
       <p class="konzole"><b aria-hidden="true">git push</b><span>odsud jde práce ven a zpátky ne</span></p>
 

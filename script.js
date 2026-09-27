@@ -401,6 +401,26 @@
        * Ve formulářových polích patří šipky tomu, kdo píše.
      ──────────────────────────────────────────────────────────── */
 
+  /* ── MAPA MÍSTO VÝPISU ────────────────────────────────────────
+     Na velkém okně nahrazuje výpis projektů mapa a zastávkou je
+     pak uzel na ní, ne řádek výpisu. Řádky jsou schované a skok
+     na schovaný prvek by stránku poslal na nulovou výšku, takže
+     by ukazatel uprostřed historie zamrzl.
+
+     Přehazuje se to tady, dřív než se zastávky vůbec seberou.
+     Pořadí zůstane správné samo: mapa stojí v dokumentu před
+     výpisem a uzly v ní jsou v tom pořadí, ve kterém weby
+     vznikaly. */
+  var mapaPlati = matchMedia('(min-width: 1000px)').matches &&
+                  !!document.querySelector('.mapa-uzel');
+
+  if (mapaPlati) {
+    Array.prototype.slice.call(document.querySelectorAll('.rejstrik .radek[data-stanice]'))
+      .forEach(function (radek) { radek.removeAttribute('data-stanice'); });
+    Array.prototype.slice.call(document.querySelectorAll('.mapa-uzel'))
+      .forEach(function (uzel) { uzel.setAttribute('data-stanice', ''); });
+  }
+
   var stanice = Array.prototype.slice.call(document.querySelectorAll('[data-stanice]'));
   var kde = -1;
 
@@ -490,7 +510,7 @@
   stanice.forEach(function (prvek) {
     if (prvek.classList.contains('volba')) { liceni.push(-1); return; }
 
-    if (prvek.closest('.rejstrik')) {
+    if (prvek.closest('.rejstrik') || prvek.closest('.mapa')) {
       if (rejstrikMa < 0) { rejstrikMa = lian; lian += 1; }
       liceni.push(rejstrikMa);
       return;
@@ -798,6 +818,40 @@
 
   var urovne2 = Array.prototype.slice.call(document.querySelectorAll('.polozka .radek'));
 
+  /* Cesta, po které se k webu došlo. Rozsvítí se celá, aby bylo
+     vidět, co bylo dřív; u prvního webu není co svítit, ten je
+     začátek. K rozdělané práci vedou obě větve. */
+  var cesty = {
+    r1: [],
+    r2: ['r2'],
+    r3: ['r2', 'r3'],
+    r4: ['r2', 'r4'],
+    r5: ['r2', 'r3', 'r4', 'r5']
+  };
+
+  var uzlyMapy = Array.prototype.slice.call(document.querySelectorAll('.mapa-uzel'));
+  var clanky = Array.prototype.slice.call(document.querySelectorAll('[data-retez]'));
+
+  /* Mapa si sama nic nepamatuje, jen ukazuje, co je otevřené ve
+     výpisu pod ní. Jeden zdroj pravdy, dvě podoby. */
+  var srovnejMapu = function () {
+    if (!uzlyMapy.length) return;
+
+    var otevrena = document.querySelector('.polozka.je-otevrena .radek');
+    var cil = otevrena ? otevrena.id : null;
+
+    uzlyMapy.forEach(function (uzel) {
+      var je = !!cil && uzel.getAttribute('data-cil') === cil;
+      uzel.classList.toggle('je-vybrany', je);
+      uzel.setAttribute('aria-expanded', je ? 'true' : 'false');
+    });
+
+    var sviti = cil ? (cesty[cil] || []) : [];
+    clanky.forEach(function (c) {
+      c.classList.toggle('sviti', sviti.indexOf(c.getAttribute('data-retez')) !== -1);
+    });
+  };
+
   var zavriUrovne = function (krome) {
     urovne2.forEach(function (radek) {
       var polozka = radek.closest('.polozka');
@@ -805,6 +859,7 @@
       polozka.classList.remove('je-otevrena');
       if (radek.hasAttribute('aria-expanded')) radek.setAttribute('aria-expanded', 'false');
     });
+    srovnejMapu();
   };
 
   var jeOtevrena = function (radek) {
@@ -834,6 +889,7 @@
     zavriUrovne(polozka);
     polozka.classList.add('je-otevrena');
     if (radek.hasAttribute('aria-expanded')) radek.setAttribute('aria-expanded', 'true');
+    srovnejMapu();
   };
 
   otevriUroven = function (prvek) {
@@ -841,6 +897,27 @@
     var polozka = prvek && prvek.closest ? prvek.closest('.polozka') : null;
     if (!polozka) zavriUrovne(null);
   };
+
+  uzlyMapy.forEach(function (uzel) {
+    uzel.addEventListener('click', function () {
+      var radek = document.getElementById(uzel.getAttribute('data-cil'));
+      if (!radek) return;
+
+      var polozka = radek.closest('.polozka');
+
+      /* Rozdělaná práce nemá co otevřít, jen se otřese. Na mapě se
+         musí otřást uzel: řádek, který se třese ve výpisu, není
+         na velkém okně vidět. */
+      if (polozka && polozka.classList.contains('polozka-chysta')) {
+        uzel.classList.remove('je-zamceno');
+        void uzel.offsetWidth;
+        uzel.classList.add('je-zamceno');
+        return;
+      }
+
+      prepniUroven(radek);
+    });
+  });
 
   urovne2.forEach(function (radek) {
     radek.addEventListener('click', function () { prepniUroven(radek); });
