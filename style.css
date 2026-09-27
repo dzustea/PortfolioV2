@@ -2453,6 +2453,11 @@ html:has(.doc-strana){scrollbar-width: auto}
 
   .mapa{
     display: block; position: relative;
+    /* Sirku urcuje sloupec, vysku az z ni pomer stran. Bez tohohle
+       mrizka plochu svisle natahne na vysku textoveho sloupce vedle,
+       pomer stran si z te vysky dopocita sirku a mapa vyjede ze sveho
+       sloupce do panelu; dlazdice vpravo pak prejizdi pres delici caru. */
+    width: 100%; align-self: start;
     aspect-ratio: 3 / 2;
     container-type: inline-size;
   }
