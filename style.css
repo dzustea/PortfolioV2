@@ -1667,6 +1667,16 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   border-bottom: 3px solid transparent;
 }
 .telo-txt > p{color: var(--sed); max-width: 52ch}
+/* Web, který je hotový, ale nikde neběží, to musí říct sám. Bez
+   téhle řádky by vypadal stejně jako ty čtyři, na které jde
+   kliknout, a čtenář by se to dozvěděl až marným hledáním odkazu. */
+.telo-stav{
+  margin-top: 16px; padding-top: 12px;
+  border-top: 1px solid var(--linka);
+  font-family: var(--mono);
+  font-size: .68rem; line-height: 1.6; letter-spacing: .02em;
+  color: var(--sed-2);
+}
 
 /* Co projekt umí, vypsané jako přírůstky. */
 .znacky{margin-top: 16px; display: grid; gap: 3px}
@@ -2642,6 +2652,8 @@ html:has(.doc-strana){scrollbar-width: auto}
   .mapa-pip[data-krok="7"].sviti {animation-delay: 330ms}
   .mapa-pip[data-krok="9"].sviti {animation-delay: 440ms}
   .mapa-pip[data-krok="10"].sviti{animation-delay: 550ms}
+  .mapa-pip[data-krok="12"].sviti{animation-delay: 660ms}
+  .mapa-pip[data-krok="13"].sviti{animation-delay: 770ms}
 
   /* Rozdělaná práce dýchá: přes šedý přerušovaný rám přeběhne
      rudý, jako když se na něčem zrovna dělá. Je to vlastní vrstva,
@@ -2681,9 +2693,10 @@ html:has(.doc-strana){scrollbar-width: auto}
    style, kvůli obsahové politice stránky. Dílky cesty tu nejsou,
    ty si polohu nesou samy v SVG. */
 @media (min-width: 1000px){
-  .mapa-uzel[data-cil="r1"]{--x:15; --y:76; --poradi:0}
-  .mapa-uzel[data-cil="r2"]{--x:34; --y:42; --poradi:1}
-  .mapa-uzel[data-cil="r3"]{--x:55; --y:15; --poradi:2}
-  .mapa-uzel[data-cil="r4"]{--x:58; --y:75; --poradi:3}
-  .mapa-uzel[data-cil="r5"]{--x:82; --y:45; --poradi:4}
+  .mapa-uzel[data-cil="r1"]{--x:14; --y:75; --poradi:0}
+  .mapa-uzel[data-cil="r2"]{--x:31; --y:41; --poradi:1}
+  .mapa-uzel[data-cil="r3"]{--x:49; --y:14; --poradi:2}
+  .mapa-uzel[data-cil="r4"]{--x:50; --y:73; --poradi:3}
+  .mapa-uzel[data-cil="r5"]{--x:71; --y:41; --poradi:4}
+  .mapa-uzel[data-cil="r6"]{--x:86; --y:75; --poradi:5}
 }
