@@ -2598,6 +2598,30 @@ html:has(.doc-strana){scrollbar-width: auto}
   .okno-telo > .rejstrik .telo-txt > p{max-width: none}
   .okno-telo > .rejstrik .odkaz{margin-top: 16px}
 
+  /* ── NÍZKÁ OBRAZOVKA ───────────────────────────────────────
+     Ukazatel na mapu přijíždí tak, aby byl vidět i nadpis sekce:
+     bez něj člověk přistane uprostřed něčeho a nepozná, kam se
+     dostal. Na vysoké obrazovce se nadpis i okno vejdou vedle
+     sebe samy, na nižší uz ne, a okno by se dole orizlo.
+
+     Sekce se proto na nižších obrazovkách stáhne: menší odstupy
+     a plošší mapa. Nad 1100 body vysky si drzi plny rytmus. */
+  @media (max-height: 1100px){
+    #projekty{padding-block: clamp(44px, 5vw, 56px)}
+    .okno-mapa{margin-top: clamp(16px, 2vw, 26px)}
+    .mapa{aspect-ratio: 16 / 9}
+  }
+
+  /* Na notebooku s osmisetbodovou obrazovkou by se i stazena sekce
+     dole orizla o jednu dlazdici. Druhy stupen ji stahne jeste vic
+     a mapu zplosti; vic uz z toho vymackat nejde, aniz by se z ni
+     stala carka. */
+  @media (max-height: 850px){
+    #projekty{padding-block: clamp(26px, 3vw, 34px)}
+    .okno-mapa{margin-top: 14px}
+    .mapa{aspect-ratio: 1.9}
+  }
+
   /* ── ŽIVOT NA MAPĚ ─────────────────────────────────────────
      Mapa fungovala, ale stála. Tohle jsou čtyři věci, které se
      hýbou samy; všechny jsou čisté animace CSS, takže je odbaví

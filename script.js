@@ -678,16 +678,50 @@
     oznacStanici(index);
 
     var deska = stanice[index];
-    var r = deska.getBoundingClientRect();
 
-    /* Když je zastávka celá vidět, stránka se nehne. Uzly mapy
-       stojí všechny v jednom okně, takže by přejezd na každý
-       z nich stránkou jen škubal, aniž by se objevilo cokoliv
-       nového. */
-    var celaVidet = r.top >= 8 && r.bottom <= window.innerHeight - 8;
+    /* Do zorného pole nepatří jen zastávka, ale i nadpis sekce,
+       ve které stojí. Bez něj člověk přijede doprostřed něčeho
+       a nemá podle čeho poznat, kam se dostal: na mapě projektů
+       to bylo nejvíc vidět, protože okno zabralo celou obrazovku
+       a nadpis zůstal nad ní.
+
+       Míra je proto celá sekce, pokud se na obrazovku vejde.
+       Když se nevejde, sroluje se aspoň tak, aby její začátek
+       stál pod lištou, a nadpis je vidět vždycky. */
+    var sekce = deska.closest ? deska.closest('section[id]') : null;
+    var vListe = parseFloat(getComputedStyle(document.documentElement)
+                   .getPropertyValue('--nav')) || 64;
+    var volno = window.innerHeight - vListe;
+
+    var mira = deska;
+    var odshora = false;
+
+    if (sekce) {
+      var rs = sekce.getBoundingClientRect();
+      if (rs.height <= volno - 24) {
+        /* Sekce se vejde celá: veze se celá i s nadpisem. */
+        mira = sekce;
+      } else if (deska.closest('.okno-mapa')) {
+        /* Mapa se do zbytku obrazovky nemusí vejít, ale nadpis nad
+           ní má být vidět tak jako tak: zarovná se odshora. */
+        mira = sekce;
+        odshora = true;
+      }
+    }
+
+    var r = mira.getBoundingClientRect();
+
+    /* Když je míra celá vidět, stránka se nehne. Uzly mapy stojí
+       všechny v jednom okně, takže by přejezd na každý z nich
+       stránkou jen škubal, aniž by se objevilo cokoliv nového. */
+    var celaVidet = odshora
+      ? (r.top >= vListe - 2 && r.top <= vListe + 28)
+      : (r.top >= 8 && r.bottom <= window.innerHeight - 8);
 
     if (!celaVidet) {
-      var cil = r.top + window.scrollY - (window.innerHeight - r.height) / 2;
+      var cil = odshora
+        ? r.top + window.scrollY - vListe - 12
+        : r.top + window.scrollY - (window.innerHeight - r.height) / 2;
       var nejvic = document.documentElement.scrollHeight - window.innerHeight;
       if (cil < 0) cil = 0;
       if (cil > nejvic) cil = nejvic;
