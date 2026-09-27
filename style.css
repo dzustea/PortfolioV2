@@ -105,6 +105,13 @@ dl,dt,dd{margin:0}
   --pad:  clamp(20px, 5vw, 56px);
   --sec:  clamp(64px, 9vw, 132px);
 
+  /* Ukazatel myši. Kreslí se v SVG rovnou tady, nestahuje se
+     žádný soubor a obrázek ukazatele spadá pod img-src, které
+     data: adresy povoluje. Je definovaný jednou a odkazují se
+     na něj všechna tři místa, kde se na stránce klepe. */
+  --kurzor:     url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='9' fill='none' stroke='%23f2efe9' stroke-width='1.4' opacity='.85'/><circle cx='14' cy='14' r='2.2' fill='%23e0242c'/></svg>") 14 14, auto;
+  --kurzor-cil: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='6.5' fill='none' stroke='%23e0242c' stroke-width='2'/><circle cx='14' cy='14' r='1.6' fill='%23f2efe9'/></svg>") 14 14, pointer;
+
   /* poloha ukazatele, plní ji skript; bez něj zůstane nula */
   --mx: 0;
   --my: 0;
@@ -657,10 +664,22 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 
    Obrázek ukazatele spadá v obsahové politice pod img-src,
    a ta data: adresy povoluje. */
-#hdr, #hdr a, .skip, .skip:focus-visible{cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><path d='M3 2v16l4-4 2.6 5.4 3-1.4L10 13h6z' fill='%230b0b0c' stroke='%23f2efe9' stroke-width='1.6' stroke-linejoin='miter'/><path d='M3 2v4l3-1z' fill='%23e0242c'/></svg>") 3 2, auto}
+/* Kroužek stojí všude, kde se na stránce klepe: v liště, v mapě
+   projektů a v kontaktním formuláři. Nad tím, co se dá stisknout,
+   se stáhne a zčervená, takže je cíl vidět dřív, než se klepne.
+   Jinde na stránce ukazatel není: tu vede šipka, ne myš. */
+#hdr, #hdr *,
+#kontakt, #kontakt *,
+.okno-mapa, .okno-mapa *,
+.skip{cursor: var(--kurzor)}
+
+#hdr a, .skip, .skip:focus-visible,
+#kontakt a, #kontakt button,
+.okno-mapa .mapa-uzel, .okno-mapa .mapa-uzel *{cursor: var(--kurzor-cil)}
 
 /* V kontaktu kurzor je, jinak by nešlo do formuláře trefit. */
-#kontakt, #kontakt *{cursor: auto}
+/* Do pole patří psací ukazatel: kroužek neukáže, kam se text
+   zapíše ani kde začíná výběr. Je to funkce, ne nedůslednost. */
 #kontakt input, #kontakt textarea{cursor: text}
 
 /* V režimu formuláře mluví ukazatel stavu jinak. */
@@ -2414,12 +2433,8 @@ html:has(.doc-strana){scrollbar-width: auto}
      středem, kreslený v SVG rovnou ve stylu. Obrázek ukazatele
      spadá pod img-src, a ta data: adresy povoluje. */
 
-  .okno-mapa, .okno-mapa *{
-    cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='9' fill='none' stroke='%23f2efe9' stroke-width='1.4' opacity='.85'/><circle cx='14' cy='14' r='2.2' fill='%23e0242c'/></svg>") 14 14, auto;
-  }
-  .okno-mapa .mapa-uzel, .okno-mapa .mapa-uzel *{
-    cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='6.5' fill='none' stroke='%23e0242c' stroke-width='2'/><circle cx='14' cy='14' r='1.6' fill='%23f2efe9'/></svg>") 14 14, pointer;
-  }
+  /* Kroužek řídí --kurzor nahoře v kořeni; mapa si ho nedefinuje
+     podruhé, jen ho používá jako lišta a formulář. */
 
   /* ── PLOCHA ────────────────────────────────────────────────
      Poměr 3:2 a týž poměr má i viewBox SVG, takže je čtvereček
@@ -2582,6 +2597,58 @@ html:has(.doc-strana){scrollbar-width: auto}
   .okno-telo > .rejstrik .telo-txt{border-left: none; margin-left: 0; padding: 0 0 4px}
   .okno-telo > .rejstrik .telo-txt > p{max-width: none}
   .okno-telo > .rejstrik .odkaz{margin-top: 16px}
+
+  /* ── ŽIVOT NA MAPĚ ─────────────────────────────────────────
+     Mapa fungovala, ale stála. Tohle jsou čtyři věci, které se
+     hýbou samy; všechny jsou čisté animace CSS, takže je odbaví
+     grafika mimo hlavní vlákno a mapa se kvůli nim nezpomalí.
+     ───────────────────────────────────────────────────────── */
+
+  /* Proud. Rozsvícenou cestou probíhá jiskra od prvního webu
+     k vybranému. Dílky se rozsvěcejí popořadě podle kroku, takže
+     je vidět i směr, kterým to šlo, ne jenom že to spolu souvisí. */
+  .mapa-pip.sviti{animation: proud 1.9s ease-in-out infinite}
+  @keyframes proud{
+    0%, 58%, 100%{fill: var(--rud);  stroke: var(--rud)}
+    26%          {fill: var(--kost); stroke: var(--kost)}
+  }
+  .mapa-pip[data-krok="3"].sviti {animation-delay: 0ms}
+  .mapa-pip[data-krok="4"].sviti {animation-delay: 110ms}
+  .mapa-pip[data-krok="6"].sviti {animation-delay: 220ms}
+  .mapa-pip[data-krok="7"].sviti {animation-delay: 330ms}
+  .mapa-pip[data-krok="9"].sviti {animation-delay: 440ms}
+  .mapa-pip[data-krok="10"].sviti{animation-delay: 550ms}
+
+  /* Rozdělaná práce dýchá: přes šedý přerušovaný rám přeběhne
+     rudý, jako když se na něčem zrovna dělá. Je to vlastní vrstva,
+     aby dlaždici zůstal její posun na místo i otřesení. */
+  .mapa-uzel--zamceny::after{
+    content: ""; position: absolute; inset: -1px;
+    border: 1px dashed var(--rud);
+    opacity: 0; pointer-events: none;
+    animation: stavi 3.4s ease-in-out infinite;
+  }
+  @keyframes stavi{0%, 100%{opacity: 0} 50%{opacity: .55}}
+
+  /* Slepé větve mrkají. Nikam nevedou, ale mapa díky nim nestojí:
+     je to periferie, která si žije vlastním tempem. Rozjedou se
+     až po sestavení mapy, aby se nepraly s jejím odhalením. */
+  .okno-mapa.in .mapa-pip--slepy{animation: mrknuti 7s ease-in-out 1.2s infinite}
+  .okno-mapa.in .mapa-pip--slepy:nth-of-type(3n)  {animation-delay: 2.6s}
+  .okno-mapa.in .mapa-pip--slepy:nth-of-type(3n+1){animation-delay: 4.1s}
+  @keyframes mrknuti{0%, 100%{opacity: .5} 50%{opacity: .16}}
+
+  /* Náhled cesty. Při najetí na dlaždici se cesta k ní naznačí
+     dřív, než se klepne: je vidět, co se vybere, a mapa odpovídá
+     na pohyb myši, ne až na stisk. Vybraná cesta má přednost,
+     proto ji náhled nepřekresluje. */
+  .mapa-cara.nahled:not(.sviti){stroke: var(--rud); opacity: .5}
+  .mapa-pip.nahled:not(.sviti){fill: var(--rud-tx); stroke: var(--rud); opacity: .65}
+
+  @media (prefers-reduced-motion: reduce){
+    .mapa-pip.sviti, .okno-mapa.in .mapa-pip--slepy, .mapa-uzel--zamceny::after{animation: none}
+    .mapa-uzel--zamceny::after{opacity: .3}
+  }
 }
 
 /* ── SOUŘADNICE MAPY (generované) ────────────────────────────────

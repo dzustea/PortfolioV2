@@ -846,6 +846,17 @@
   /* Popisek uzlu má jedno pevné místo: lištu okna. Pod uzlem by se
      na užší ploše překrýval se sousedem nebo utekl za okraj, tady
      je vždycky vidět a vždycky na stejném řádku. */
+  /* Náhled cesty při najetí. Kreslí totéž co výběr, jen slaběji,
+     takže je dopředu vidět, co se rozsvítí. Vybranou cestu to
+     nepřekreslí, o to se stará :not(.sviti) ve stylu. */
+  var ukazCestu = function (uzel) {
+    var cil = uzel ? uzel.getAttribute('data-cil') : null;
+    var cesta = cil ? (cesty[cil] || []) : [];
+    clanky.forEach(function (c) {
+      c.classList.toggle('nahled', cesta.indexOf(c.getAttribute('data-retez')) !== -1);
+    });
+  };
+
   var napisStav = function (uzel) {
     if (!radekStavu) return;
     if (!uzel) {
@@ -944,11 +955,12 @@
 
   uzlyMapy.forEach(function (uzel) {
     ['mouseenter', 'focus'].forEach(function (co) {
-      uzel.addEventListener(co, function () { napisStav(uzel); });
+      uzel.addEventListener(co, function () { napisStav(uzel); ukazCestu(uzel); });
     });
     ['mouseleave', 'blur'].forEach(function (co) {
       uzel.addEventListener(co, function () {
         napisStav(document.querySelector('.mapa-uzel.je-vybrany'));
+        ukazCestu(null);
       });
     });
 
