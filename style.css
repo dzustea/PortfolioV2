@@ -2347,12 +2347,15 @@ html:has(.doc-strana){scrollbar-width: auto}
    rám jako konzole v úvodu, aby to nebyl cizí prvek, ale druhá
    obrazovka téhož stroje.
 
-   Mapa nedrží celou šířku stránky. Roztažená přes monitor z ní
-   byla změť teček a popisky uzlů si lezly do cesty; v rámu má
-   pevný poměr stran a uzly mají zaručený odstup od krajů.
+   Web je dlaždice: ikona, pořadové číslo a jméno uvnitř rámečku.
+   Dřív stálo jméno pod holým čtverečkem a bylo to křehké: bilo se
+   se zaostřovacím rámem, u kraje plochy se ořezávalo a při změně
+   šířky okna si dvě jména lezla do cesty. Uvnitř dlaždice nemá
+   o co zavadit a rám ohraničí celý uzel, ne jen jeho ikonu.
 
-   Text vybraného webu stojí vedle mapy v témže rámu. Při výběru
-   se proto nikam neposouvá a nic nevyskočí mimo obrazovku.
+   Šířku dlaždice řídí cqi, tedy šířka samotné plochy mapy, ne okna
+   prohlížeče. Mapa se tak chová stejně, ať stojí v jakkoliv širokém
+   rámu, a nepotřebuje k tomu ani jeden další bod zlomu.
 
    Na užší okno mapa mizí a vrací se obyčejný výpis. Strom potřebuje
    plochu do šířky i do výšky, a tu telefon nemá.
@@ -2376,8 +2379,7 @@ html:has(.doc-strana){scrollbar-width: auto}
 
   /* ── LIŠTA OKNA ────────────────────────────────────────────
      Tatáž jako u konzole v úvodu. Vpravo se píše, na čem stojí
-     ukazatel: popisek má jedno pevné místo, kde je vždycky vidět,
-     místo aby se batolil pod uzlem u kraje plochy. */
+     ukazatel: popisek má jedno pevné místo, kde je vždycky vidět. */
 
   .okno-hl{
     display: flex; align-items: center; gap: 7px;
@@ -2396,8 +2398,8 @@ html:has(.doc-strana){scrollbar-width: auto}
   .okno-mapa.ma-vyber .okno-hl .konz-t{color: var(--rud-tx)}
 
   /* ── ROZVRŽENÍ ─────────────────────────────────────────────
-     Mapa vlevo, text vpravo. Je to totéž rozdělení jako v úvodu,
-     kde se stroj ptá vlevo a odpovídá vpravo. */
+     Mapa vlevo, text vpravo. Totéž rozdělení jako v úvodu, kde se
+     stroj ptá vlevo a odpovídá vpravo. */
 
   .okno-telo{
     display: grid;
@@ -2407,127 +2409,158 @@ html:has(.doc-strana){scrollbar-width: auto}
 
   /* ── UKAZATEL MYŠI ─────────────────────────────────────────
      Na zbytku stránky je schovaný, protože se stránka ovládá
-     šipkami. Tady se ale klepe do uzlů a trefit se poslepu nejde,
-     takže dostane vlastní kolečko: kostěný kroužek s rudým středem,
-     kreslený v SVG rovnou ve stylu. Obrázek ukazatele spadá pod
-     img-src, a ta data: adresy povoluje. */
+     šipkami. Tady se ale klepe do dlaždic a trefit se poslepu
+     nejde, takže dostane vlastní kolečko: kostěný kroužek s rudým
+     středem, kreslený v SVG rovnou ve stylu. Obrázek ukazatele
+     spadá pod img-src, a ta data: adresy povoluje. */
 
   .okno-mapa, .okno-mapa *{
     cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='9' fill='none' stroke='%23f2efe9' stroke-width='1.4' opacity='.85'/><circle cx='14' cy='14' r='2.2' fill='%23e0242c'/></svg>") 14 14, auto;
   }
-  /* Nad uzlem se kroužek stáhne a zčervená: je vidět, že tohle
-     je cíl, ještě než se klepne. */
   .okno-mapa .mapa-uzel, .okno-mapa .mapa-uzel *{
     cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'><circle cx='14' cy='14' r='6.5' fill='none' stroke='%23e0242c' stroke-width='2'/><circle cx='14' cy='14' r='1.6' fill='%23f2efe9'/></svg>") 14 14, pointer;
   }
 
-  /* ── PLOCHA MAPY ───────────────────────────────────────────── */
+  /* ── PLOCHA ────────────────────────────────────────────────
+     Poměr 3:2 a týž poměr má i viewBox SVG, takže je čtvereček
+     cesty doopravdy čtvereček. Plocha je zároveň kontejner, od
+     kterého si dlaždice berou svou šířku. */
 
   .mapa{
     display: block; position: relative;
     aspect-ratio: 3 / 2;
-    padding: 0;
+    container-type: inline-size;
   }
 
-  .mapa-cary{position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible}
+  /* ── CESTA ─────────────────────────────────────────────────── */
+
+  .mapa-cary{position: absolute; inset: 0; width: 100%; height: 100%}
   .mapa-cara{
-    stroke: var(--linka-2); stroke-width: 1;
+    stroke: var(--linka-2); stroke-width: 1; fill: none;
     stroke-dasharray: 1; stroke-dashoffset: 1;
     transition: stroke-dashoffset .34s cubic-bezier(.23,1,.32,1),
                 stroke .25s ease, opacity .25s ease;
   }
   .mapa-cara--slepa{stroke: var(--linka); opacity: .5}
 
-  /* Ostrý čtvereček, ne kolečko: na téhle stránce není zaoblený
-     ani jeden roh a mapa není výjimka. */
   .mapa-pip{
-    position: absolute;
-    left: calc(var(--x) * 1%); top: calc(var(--y) * 1%);
-    width: 8px; height: 8px; margin: -4px 0 0 -4px;
-    background: var(--noc); border: 1px solid var(--linka-2);
-    transition: background-color .25s ease, border-color .25s ease, transform .25s ease;
+    fill: var(--noc); stroke: var(--linka-2); stroke-width: .5;
+    transform-box: fill-box; transform-origin: center;
+    transition: fill .25s ease, stroke .25s ease, transform .25s ease;
   }
-  .mapa-pip--slepy{width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px; border-color: var(--linka); opacity: .5}
+  .mapa-pip--slepy{stroke: var(--linka); opacity: .5}
 
-  /* ── UZEL ──────────────────────────────────────────────────── */
+  .mapa-cara.sviti{stroke: var(--rud); opacity: 1}
+  .mapa-pip.sviti{fill: var(--rud); stroke: var(--rud); transform: rotate(45deg)}
+
+  /* ── DLAŽDICE ──────────────────────────────────────────────── */
 
   .mapa-uzel{
     position: absolute;
     left: calc(var(--x) * 1%); top: calc(var(--y) * 1%);
     transform: translate(-50%, -50%);
-    display: grid; justify-items: center; gap: 10px;
-    padding: 0;
-  }
-  .mapa-znak{
-    display: grid; place-items: center;
-    width: 54px; height: 54px;
+    width: clamp(116px, 23cqi, 146px);
+    display: grid; gap: 8px;
+    padding: 10px 11px 11px;
+    text-align: left;
     background: var(--noc-2);
     border: 1px solid var(--linka-2);
-    box-shadow: 0 0 0 5px rgba(7, 7, 8, .9);
+    /* Podklad okolo dlaždice, aby pod ní neprosvítala cesta. */
+    box-shadow: 0 0 0 4px rgba(7, 7, 8, .92);
     transition: background-color .2s ease, border-color .2s ease,
                 transform .16s cubic-bezier(.23,1,.32,1);
   }
-  .mapa-znak .ik{width: 21px; height: 21px; color: var(--sed); transition: color .2s ease}
 
-  /* Pod uzlem stojí jen jméno, na jedné řádce. Co je to za web,
-     se píše v liště okna a celé vedle mapy. */
-  .mapa-jm{
-    font-family: var(--nadpis);
-    font-size: .88rem; font-weight: 600; letter-spacing: -.005em;
-    color: var(--sed); white-space: nowrap;
+  .mapa-hl{display: flex; align-items: center; gap: 8px}
+  .mapa-hl .ik{width: 18px; height: 18px; color: var(--sed); transition: color .2s ease}
+  .mapa-c{
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: .56rem; letter-spacing: .16em;
+    color: var(--sed-2);
     transition: color .2s ease;
   }
 
-  .mapa-uzel--zamceny .mapa-znak{border-style: dashed; background: transparent}
-  .mapa-uzel--zamceny .mapa-znak .ik{color: var(--sed-2); opacity: .6}
+  /* Jméno smí na dvě řádky a dál se ořízne. Místo na dvě řádky má
+     každá dlaždice vždycky, takže jsou všechny stejně vysoké
+     a mapa se při výběru nepřeskládá. */
+  .mapa-jm{
+    font-family: var(--nadpis);
+    font-size: .8rem; font-weight: 600; line-height: 1.25;
+    letter-spacing: -.005em; color: var(--sed);
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden; overflow-wrap: anywhere;
+    min-height: 2.5em;
+    transition: color .2s ease;
+  }
+
+  .mapa-uzel--zamceny{border-style: dashed; background: transparent}
+  .mapa-uzel--zamceny .ik{opacity: .55}
 
   @media (hover: hover) and (pointer: fine){
-    .mapa-uzel:hover .mapa-znak{border-color: var(--rud); transform: scale(1.06)}
-    .mapa-uzel:hover .mapa-znak .ik{color: var(--rud-tx)}
+    .mapa-uzel:hover{
+      border-color: var(--rud);
+      transform: translate(-50%, -50%) scale(1.035);
+    }
+    .mapa-uzel:hover .ik{color: var(--rud-tx)}
     .mapa-uzel:hover .mapa-jm{color: var(--kost)}
   }
-  .mapa-uzel:active .mapa-znak{transform: scale(.97)}
-  .mapa-uzel:focus-visible{outline: none}
-  .mapa-uzel:focus-visible .mapa-znak{
-    border-color: var(--rud);
-    box-shadow: 0 0 0 5px rgba(7,7,8,.9), 0 0 0 7px var(--rud);
+  .mapa-uzel:active{transform: translate(-50%, -50%) scale(.985)}
+
+  /* Obrys, ne stín: nezabírá místo, takže nemá jak zasáhnout do
+     textu uvnitř dlaždice ani do sousedů. */
+  .mapa-uzel:focus-visible{
+    outline: 2px solid var(--rud); outline-offset: 3px;
   }
 
-  /* Vybraný web: uzel se vyplní rudou a rozsvítí se cesta, po které
-     se k němu došlo. Je to stav, ne ozdoba, proto se mění barva,
-     a ne velikost. */
-  .mapa-uzel.je-vybrany .mapa-znak{background: var(--rud); border-color: var(--rud)}
-  .mapa-uzel.je-vybrany .mapa-znak .ik{color: #fff}
-  .mapa-uzel.je-vybrany .mapa-jm{color: var(--kost)}
+  /* Vybraný web. Stav, ne ozdoba, proto se mění barva, ne velikost. */
+  .mapa-uzel.je-vybrany{background: var(--rud); border-color: var(--rud)}
+  .mapa-uzel.je-vybrany .ik{color: #fff}
+  .mapa-uzel.je-vybrany .mapa-jm{color: #fff}
+  .mapa-uzel.je-vybrany .mapa-c{color: rgba(255, 255, 255, .72)}
 
-  .mapa-cara.sviti{stroke: var(--rud); opacity: 1}
-  .mapa-pip.sviti{background: var(--rud); border-color: var(--rud); transform: rotate(45deg)}
-
-  .mapa-uzel.je-na-rade .mapa-znak{border-color: var(--rud-tx)}
+  /* Zastávka šipkou: ukazatel stojí na dlaždici, ale ještě ji
+     neotevřel. */
+  .mapa-uzel.je-na-rade{border-color: var(--rud-tx)}
   .mapa-uzel.je-na-rade .mapa-jm{color: var(--kost)}
 
-  .mapa-uzel.je-zamceno .mapa-znak{animation: trhnuti .3s ease}
+  /* Rozdělaná práce se jen otřese. Vlastní snímky proto, že
+     dlaždice si musí u všech kroků podržet posun na své místo. */
+  .mapa-uzel.je-zamceno{animation: trhnutiUzlu .3s ease}
+  @keyframes trhnutiUzlu{
+    0%, 100%{transform: translate(-50%, -50%)}
+    25%     {transform: translate(calc(-50% - 6px), -50%)}
+    75%     {transform: translate(calc(-50% + 6px), -50%)}
+  }
 
   /* ── ODHALENÍ ──────────────────────────────────────────────
      Mapa se sestaví v tom pořadí, ve kterém weby vznikaly. Není
      to ozdoba: pořadí je půlka toho, co má mapa říct, a takhle
      to řekne dřív, než si toho kdo všimne. */
 
-  .mapa .mapa-uzel, .mapa .mapa-pip{opacity: 0; transition: opacity .3s cubic-bezier(.23,1,.32,1)}
-  .mapa .mapa-znak{transform: scale(.94)}
-  .okno-mapa.in .mapa-uzel, .okno-mapa.in .mapa-pip{opacity: 1}
-  .okno-mapa.in .mapa-znak{transform: none}
-  .okno-mapa.in .mapa-uzel{transition-delay: calc(var(--poradi) * 90ms + 120ms)}
-  .okno-mapa.in .mapa-znak{transition-delay: calc(var(--poradi) * 90ms + 120ms)}
-  .okno-mapa.in .mapa-pip{transition-delay: calc(var(--poradi) * 14ms + 80ms)}
+  .mapa .mapa-uzel{
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(.95);
+    transition: opacity .3s cubic-bezier(.23,1,.32,1),
+                transform .3s cubic-bezier(.23,1,.32,1);
+  }
+  .okno-mapa.in .mapa-uzel{
+    opacity: 1; transform: translate(-50%, -50%);
+    transition-delay: calc(var(--poradi) * 90ms + 120ms);
+  }
+  .mapa-pip{opacity: 0; transition: opacity .3s ease, fill .25s ease, stroke .25s ease, transform .25s ease}
+  .okno-mapa.in .mapa-pip{opacity: 1}
+  .mapa-pip--slepy{opacity: 0}
+  .okno-mapa.in .mapa-pip--slepy{opacity: .5}
   .okno-mapa.in .mapa-cara{stroke-dashoffset: 0}
 
   @media (prefers-reduced-motion: reduce){
-    .mapa .mapa-uzel, .mapa .mapa-pip{transition: opacity .2s ease; transition-delay: 0s}
-    .mapa .mapa-znak{transform: none; transition: background-color .2s ease, border-color .2s ease}
+    .mapa .mapa-uzel{transform: translate(-50%, -50%); transition: opacity .2s ease}
+    .okno-mapa.in .mapa-uzel{transition-delay: 0s}
+    .mapa-uzel:hover, .mapa-uzel:active{transform: translate(-50%, -50%)}
     .mapa-cara{stroke-dasharray: none; stroke-dashoffset: 0; transition: stroke .25s ease}
-    .mapa-uzel:active .mapa-znak{transform: none}
     .mapa-pip.sviti{transform: none}
+    .mapa-uzel.je-zamceno{animation: none}
   }
 
   /* ── TEXT VEDLE MAPY ───────────────────────────────────────
@@ -2546,10 +2579,7 @@ html:has(.doc-strana){scrollbar-width: auto}
   .okno-telo > .rejstrik .polozka::before{display: none}
   .okno-telo > .rejstrik .polozka{position: static}
   .okno-telo > .rejstrik .telo-in{padding-left: 0}
-  .okno-telo > .rejstrik .telo-txt{
-    border-left: none; margin-left: 0;
-    padding: 0 0 4px;
-  }
+  .okno-telo > .rejstrik .telo-txt{border-left: none; margin-left: 0; padding: 0 0 4px}
   .okno-telo > .rejstrik .telo-txt > p{max-width: none}
   .okno-telo > .rejstrik .odkaz{margin-top: 16px}
 }
@@ -2557,38 +2587,12 @@ html:has(.doc-strana){scrollbar-width: auto}
 /* ── SOUŘADNICE MAPY (generované) ────────────────────────────────
    Vyrábí je nastroje-v6/mapa.js v pracovním repu. Ručně se do nich
    nesahá: mění se zdroj a pustí se znovu. Jsou tady, a ne v atributu
-   style, kvůli obsahové politice stránky. */
+   style, kvůli obsahové politice stránky. Dílky cesty tu nejsou,
+   ty si polohu nesou samy v SVG. */
 @media (min-width: 1000px){
-  .mapa-uzel[data-cil="r1"]{--x:15; --y:74; --poradi:0}
-  .mapa-uzel[data-cil="r2"]{--x:34; --y:40; --poradi:1}
-  .mapa-uzel[data-cil="r3"]{--x:54; --y:20; --poradi:2}
-  .mapa-uzel[data-cil="r4"]{--x:58; --y:70; --poradi:3}
-  .mapa-uzel[data-cil="r5"]{--x:79; --y:44; --poradi:4}
-
-  .mapa-pip[data-p="0"]{--x:23.3; --y:63.77; --poradi:0}
-  .mapa-pip[data-p="1"]{--x:25.7; --y:50.23; --poradi:1}
-  .mapa-pip[data-p="2"]{--x:45.84; --y:31.84; --poradi:2}
-  .mapa-pip[data-p="3"]{--x:40.24; --y:51.41; --poradi:3}
-  .mapa-pip[data-p="4"]{--x:51.76; --y:58.59; --poradi:4}
-  .mapa-pip[data-p="5"]{--x:60.77; --y:29.62; --poradi:5}
-  .mapa-pip[data-p="6"]{--x:72.23; --y:34.38; --poradi:6}
-  .mapa-pip[data-p="7"]{--x:66.75; --y:62.75; --poradi:7}
-  .mapa-pip[data-p="8"]{--x:70.25; --y:51.25; --poradi:8}
-  .mapa-pip[data-p="9"]{--x:7; --y:58; --poradi:9}
-  .mapa-pip[data-p="10"]{--x:11; --y:44; --poradi:10}
-  .mapa-pip[data-p="11"]{--x:5; --y:32; --poradi:11}
-  .mapa-pip[data-p="12"]{--x:21; --y:90; --poradi:12}
-  .mapa-pip[data-p="13"]{--x:34; --y:93; --poradi:13}
-  .mapa-pip[data-p="14"]{--x:27; --y:18; --poradi:14}
-  .mapa-pip[data-p="15"]{--x:36; --y:8; --poradi:15}
-  .mapa-pip[data-p="16"]{--x:45; --y:7; --poradi:16}
-  .mapa-pip[data-p="17"]{--x:35; --y:4; --poradi:17}
-  .mapa-pip[data-p="18"]{--x:68; --y:8; --poradi:18}
-  .mapa-pip[data-p="19"]{--x:80; --y:11; --poradi:19}
-  .mapa-pip[data-p="20"]{--x:51; --y:89; --poradi:20}
-  .mapa-pip[data-p="21"]{--x:63; --y:94; --poradi:21}
-  .mapa-pip[data-p="22"]{--x:90; --y:24; --poradi:22}
-  .mapa-pip[data-p="23"]{--x:95; --y:14; --poradi:23}
-  .mapa-pip[data-p="24"]{--x:89; --y:66; --poradi:24}
-  .mapa-pip[data-p="25"]{--x:84; --y:82; --poradi:25}
+  .mapa-uzel[data-cil="r1"]{--x:15; --y:76; --poradi:0}
+  .mapa-uzel[data-cil="r2"]{--x:34; --y:42; --poradi:1}
+  .mapa-uzel[data-cil="r3"]{--x:55; --y:15; --poradi:2}
+  .mapa-uzel[data-cil="r4"]{--x:58; --y:75; --poradi:3}
+  .mapa-uzel[data-cil="r5"]{--x:82; --y:45; --poradi:4}
 }
