@@ -557,230 +557,226 @@
   <div class="wrap">
   <!-- ══ MAPA PROJEKTŮ ═══════════════════════════════════════════
        Na velkém okně nahrazuje výpis projektů strom, jaký mívají
-       hry u dovedností. Weby jsou uzly, čáry mezi nimi je pořadí,
-       ve kterém vznikaly, a slepé větve dávají mapě rozsah do stran,
-       aby nevypadala jako jedna čára přes obrazovku.
+       hry u dovedností, a stojí v okně terminálu jako konzole
+       v úvodu. Weby jsou uzly, čáry mezi nimi je pořadí, ve kterém
+       vznikaly, a slepé větve dávají mapě rozsah do stran.
 
-       Mapa se neposouvá ani nepřibližuje: celá se vejde do jedné
-       plochy a jediné, co s ní jde dělat, je vybrat si web. Výpis
-       pod ní zůstává v dokumentu, drží texty a na telefonu se
-       vrací na jeho místo.
+       Mapa se neposouvá ani nepřibližuje a nedrží celou šířku
+       stránky: celá se vejde do rámu a jediné, co s ní jde dělat,
+       je vybrat si web. Text vybraného webu stojí vedle mapy
+       v témže rámu, takže se při výběru nikam neposouvá.
+
+       Výpis zůstává v dokumentu, drží všechny texty a pod tisíc
+       bodů se vrací na své místo.
 
        Souřadnice uzlů i dílků leží ve stylopisu, ne v atributu
-       style. Stránka má style-src 'self' bez unsafe-inline, takže
-       by prohlížeč polohu z atributu zahodil a mapa by se sesypala
-       na jednu hromadu. -->
-  <div class="mapa rv" role="group" aria-label="Mapa projektů">
-    <svg class="mapa-cary" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-      <line class="mapa-cara" data-retez="r2" x1="13" y1="72" x2="21.97" y2="60.42" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r2" x1="21.97" y1="60.42" x2="25.03" y2="45.58" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r2" x1="25.03" y1="45.58" x2="34" y2="34" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r3" x1="34" y1="34" x2="47.16" y2="26.5" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r3" x1="47.16" y1="26.5" x2="57" y2="15" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r4" x1="34" y1="34" x2="40.92" y2="46.09" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r4" x1="40.92" y1="46.09" x2="53.08" y2="53.91" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r4" x1="53.08" y1="53.91" x2="60" y2="66" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r5" x1="57" y1="15" x2="64.77" y2="25.62" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r5" x1="64.77" y1="25.62" x2="77.23" y2="31.38" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r5" x1="77.23" y1="31.38" x2="85" y2="42" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r5" x1="60" y1="66" x2="69.89" y2="59.62" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r5" x1="69.89" y1="59.62" x2="75.11" y2="48.38" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara" data-retez="r5" x1="75.11" y1="48.38" x2="85" y2="42" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="13" y1="72" x2="6" y2="52" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="6" y1="52" x2="10" y2="38" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="10" y1="38" x2="4" y2="26" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="13" y1="72" x2="20" y2="88" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="20" y1="88" x2="33" y2="92" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="34" y1="34" x2="28" y2="14" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="28" y1="14" x2="38" y2="5" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="57" y1="15" x2="46" y2="4" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="46" y1="4" x2="36" y2="2" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="57" y1="15" x2="72" y2="6" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="72" y1="6" x2="84" y2="10" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="60" y1="66" x2="52" y2="86" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="52" y1="86" x2="64" y2="93" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="85" y1="42" x2="94" y2="22" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="94" y1="22" x2="97" y2="12" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="85" y1="42" x2="93" y2="64" pathLength="1" vector-effect="non-scaling-stroke"/>
-      <line class="mapa-cara mapa-cara--slepa" x1="93" y1="64" x2="88" y2="78" pathLength="1" vector-effect="non-scaling-stroke"/>
-    </svg>
-    <i class="mapa-pip" data-retez="r2" data-p="0" aria-hidden="true"></i>
-    <i class="mapa-pip" data-retez="r2" data-p="1" aria-hidden="true"></i>
-    <i class="mapa-pip" data-retez="r3" data-p="2" aria-hidden="true"></i>
-    <i class="mapa-pip" data-retez="r4" data-p="3" aria-hidden="true"></i>
-    <i class="mapa-pip" data-retez="r4" data-p="4" aria-hidden="true"></i>
-    <i class="mapa-pip" data-retez="r5" data-p="5" aria-hidden="true"></i>
-    <i class="mapa-pip" data-retez="r5" data-p="6" aria-hidden="true"></i>
-    <i class="mapa-pip" data-retez="r5" data-p="7" aria-hidden="true"></i>
-    <i class="mapa-pip" data-retez="r5" data-p="8" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="9" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="10" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="11" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="12" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="13" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="14" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="15" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="16" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="17" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="18" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="19" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="20" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="21" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="22" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="23" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="24" aria-hidden="true"></i>
-    <i class="mapa-pip mapa-pip--slepy" data-p="25" aria-hidden="true"></i>
-    <button class="mapa-uzel" type="button" data-cil="r1" aria-expanded="false">
-      <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-data"/></svg></span>
-      <span class="mapa-popis">
-        <span class="mapa-jm">Herní akademie</span>
-        <span class="mapa-st">Web pro komunitu</span>
-      </span>
-    </button>
-    <button class="mapa-uzel" type="button" data-cil="r2" aria-expanded="false">
-      <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-kod"/></svg></span>
-      <span class="mapa-popis">
-        <span class="mapa-jm">Restovski</span>
-        <span class="mapa-st">Prezentace interpreta</span>
-      </span>
-    </button>
-    <button class="mapa-uzel" type="button" data-cil="r3" aria-expanded="false">
-      <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-spendlik"/></svg></span>
-      <span class="mapa-popis">
-        <span class="mapa-jm">Vyhlídkář</span>
-        <span class="mapa-st">Web i aplikace</span>
-      </span>
-    </button>
-    <button class="mapa-uzel" type="button" data-cil="r4" aria-expanded="false">
-      <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-obalka"/></svg></span>
-      <span class="mapa-popis">
-        <span class="mapa-jm">Kadeřnictví Hrabalová</span>
-        <span class="mapa-st">Objednávkový systém</span>
-      </span>
-    </button>
-    <button class="mapa-uzel mapa-uzel--zamceny" type="button" data-cil="r5" aria-expanded="false">
-      <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-stit"/></svg></span>
-      <span class="mapa-popis">
-        <span class="mapa-jm">Pátý projekt</span>
-        <span class="mapa-st">Právě se staví</span>
-      </span>
-    </button>
+       style: stránka má style-src 'self' bez unsafe-inline. -->
+  <div class="okno-mapa rv">
+    <div class="okno-hl" aria-hidden="true">
+      <span class="konz-z"></span><span class="konz-z"></span><span class="konz-z"></span>
+      <span class="konz-n">filip / projekty</span>
+      <span class="konz-t" data-stav>vyberte uzel</span>
+    </div>
+
+    <div class="okno-telo">
+      <div class="mapa" role="group" aria-label="Mapa projektů">
+        <svg class="mapa-cary" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <line class="mapa-cara" data-retez="r2" x1="15" y1="74" x2="23.3" y2="63.77" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r2" x1="23.3" y1="63.77" x2="25.7" y2="50.23" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r2" x1="25.7" y1="50.23" x2="34" y2="40" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r3" x1="34" y1="40" x2="45.84" y2="31.84" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r3" x1="45.84" y1="31.84" x2="54" y2="20" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r4" x1="34" y1="40" x2="40.24" y2="51.41" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r4" x1="40.24" y1="51.41" x2="51.76" y2="58.59" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r4" x1="51.76" y1="58.59" x2="58" y2="70" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r5" x1="54" y1="20" x2="60.77" y2="29.62" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r5" x1="60.77" y1="29.62" x2="72.23" y2="34.38" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r5" x1="72.23" y1="34.38" x2="79" y2="44" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r5" x1="58" y1="70" x2="66.75" y2="62.75" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r5" x1="66.75" y1="62.75" x2="70.25" y2="51.25" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r5" x1="70.25" y1="51.25" x2="79" y2="44" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="15" y1="74" x2="7" y2="58" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="7" y1="58" x2="11" y2="44" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="11" y1="44" x2="5" y2="32" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="15" y1="74" x2="21" y2="90" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="21" y1="90" x2="34" y2="93" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="34" y1="40" x2="27" y2="18" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="27" y1="18" x2="36" y2="8" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="54" y1="20" x2="45" y2="7" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="45" y1="7" x2="35" y2="4" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="54" y1="20" x2="68" y2="8" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="68" y1="8" x2="80" y2="11" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="58" y1="70" x2="51" y2="89" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="51" y1="89" x2="63" y2="94" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="79" y1="44" x2="90" y2="24" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="90" y1="24" x2="95" y2="14" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="79" y1="44" x2="89" y2="66" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="89" y1="66" x2="84" y2="82" pathLength="1" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <i class="mapa-pip" data-retez="r2" data-p="0" aria-hidden="true"></i>
+        <i class="mapa-pip" data-retez="r2" data-p="1" aria-hidden="true"></i>
+        <i class="mapa-pip" data-retez="r3" data-p="2" aria-hidden="true"></i>
+        <i class="mapa-pip" data-retez="r4" data-p="3" aria-hidden="true"></i>
+        <i class="mapa-pip" data-retez="r4" data-p="4" aria-hidden="true"></i>
+        <i class="mapa-pip" data-retez="r5" data-p="5" aria-hidden="true"></i>
+        <i class="mapa-pip" data-retez="r5" data-p="6" aria-hidden="true"></i>
+        <i class="mapa-pip" data-retez="r5" data-p="7" aria-hidden="true"></i>
+        <i class="mapa-pip" data-retez="r5" data-p="8" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="9" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="10" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="11" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="12" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="13" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="14" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="15" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="16" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="17" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="18" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="19" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="20" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="21" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="22" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="23" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="24" aria-hidden="true"></i>
+        <i class="mapa-pip mapa-pip--slepy" data-p="25" aria-hidden="true"></i>
+        <button class="mapa-uzel" type="button" data-cil="r1" data-nazev="Herní akademie" data-co="Web pro komunitu" aria-expanded="false">
+          <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-data"/></svg></span>
+          <span class="mapa-jm">Herní akademie</span>
+        </button>
+        <button class="mapa-uzel" type="button" data-cil="r2" data-nazev="Restovski" data-co="Prezentace interpreta" aria-expanded="false">
+          <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-kod"/></svg></span>
+          <span class="mapa-jm">Restovski</span>
+        </button>
+        <button class="mapa-uzel" type="button" data-cil="r3" data-nazev="Vyhlídkář" data-co="Web i aplikace" aria-expanded="false">
+          <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-spendlik"/></svg></span>
+          <span class="mapa-jm">Vyhlídkář</span>
+        </button>
+        <button class="mapa-uzel" type="button" data-cil="r4" data-nazev="Kadeřnictví Hrabalová" data-co="Objednávkový systém" aria-expanded="false">
+          <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-obalka"/></svg></span>
+          <span class="mapa-jm">Kadeřnictví Hrabalová</span>
+        </button>
+        <button class="mapa-uzel mapa-uzel--zamceny" type="button" data-cil="r5" data-nazev="Pátý projekt" data-co="Právě se staví" aria-expanded="false">
+          <span class="mapa-znak"><svg class="ik" aria-hidden="true"><use href="#i-stit"/></svg></span>
+          <span class="mapa-jm">Pátý projekt</span>
+        </button>
+      </div>
+
+      <ol class="rejstrik wrap rv">
+
+        <li class="polozka polozka-chysta">
+          <h3 class="rejstrik-h">
+            <span class="radek" id="r5" data-stanice tabindex="0">
+              <span class="radek-b" aria-hidden="true"></span>
+              <span class="radek-c">paty-projekt</span>
+              <span class="radek-n">Pátý projekt</span>
+              <span class="radek-s">Právě se staví</span>
+              <span class="radek-t" aria-hidden="true">zamčeno</span>
+              <span class="jen-ctecka">zamčeno, projekt se teprve staví</span>
+            </span>
+          </h3>
+        </li>
+
+        <li class="polozka">
+          <h3 class="rejstrik-h">
+            <button class="radek" data-stanice id="r1" aria-expanded="false" aria-controls="t1">
+              <span class="radek-b" aria-hidden="true"></span>
+              <span class="radek-c">herni-akademie</span>
+              <span class="radek-n">Herní akademie</span>
+              <span class="radek-s">Web pro komunitu</span>
+              <span class="radek-t" aria-hidden="true">hotovo</span>
+              <span class="jen-ctecka">otevřít web v novém okně</span>
+              <span class="radek-z" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="telo" id="t1" role="region" aria-labelledby="r1">
+            <div class="telo-in">
+              <div class="telo-txt">
+                <p class="telo-cat" aria-hidden="true"><b></b>cat herni-akademie.md</p>
+                <p>Komunitní web, kde členové plní úkoly, sbírají body a měří se v žebříčku. Je tu chat, profily i administrace, ze které správce řídí obsah z jednoho místa.</p>
+                <ul class="znacky"><li>Uživatelské účty</li><li>Vlastní databáze</li><li>Administrace</li><li>Chat</li></ul>
+                <a href="https://motivo.free.nf" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="polozka">
+          <h3 class="rejstrik-h">
+            <button class="radek" data-stanice id="r2" aria-expanded="false" aria-controls="t2">
+              <span class="radek-b" aria-hidden="true"></span>
+              <span class="radek-c">restovski</span>
+              <span class="radek-n">Restovski</span>
+              <span class="radek-s">Prezentace interpreta</span>
+              <span class="radek-t" aria-hidden="true">hotovo</span>
+              <span class="jen-ctecka">otevřít web v novém okně</span>
+              <span class="radek-z" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="telo" id="t2" role="region" aria-labelledby="r2">
+            <div class="telo-in">
+              <div class="telo-txt">
+                <p class="telo-cat" aria-hidden="true"><b></b>cat restovski.md</p>
+                <p>Web českého rappera. Koncerty, které se dají filtrovat podle data a místa, diskografie, galerie a obchod. Návštěvník si přepne světlý nebo tmavý vzhled.</p>
+                <ul class="znacky"><li>Filtrování koncertů</li><li>Galerie</li><li>Světlý i tmavý režim</li></ul>
+                <a href="https://restovski.vercel.app/" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="polozka">
+          <h3 class="rejstrik-h">
+            <button class="radek" data-stanice id="r3" aria-expanded="false" aria-controls="t3">
+              <span class="radek-b" aria-hidden="true"></span>
+              <span class="radek-c">vyhlidkar</span>
+              <span class="radek-n">Vyhlídkář</span>
+              <span class="radek-s">Web i aplikace do telefonu</span>
+              <span class="radek-t" aria-hidden="true">hotovo</span>
+              <span class="jen-ctecka">otevřít web v novém okně</span>
+              <span class="radek-z" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="telo" id="t3" role="region" aria-labelledby="r3">
+            <div class="telo-in">
+              <div class="telo-txt">
+                <p class="telo-cat" aria-hidden="true"><b></b>cat vyhlidkar.md</p>
+                <p>Mapa vyhlídek, laviček a klidných míst v okolí. Lidé sem přidávají vlastní tipy s fotkou a hodnocením. Běží na webu i jako aplikace v telefonu, obojí nad stejnými daty.</p>
+                <ul class="znacky"><li>Mapa a poloha</li><li>Fotky od uživatelů</li><li>Aplikace do telefonu</li></ul>
+                <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+        <li class="polozka">
+          <h3 class="rejstrik-h">
+            <button class="radek" data-stanice id="r4" aria-expanded="false" aria-controls="t4">
+              <span class="radek-b" aria-hidden="true"></span>
+              <span class="radek-c">kadernictvi-hrabalova</span>
+              <span class="radek-n">Kadeřnictví Hrabalová</span>
+              <span class="radek-s">Objednávkový systém</span>
+              <span class="radek-t" aria-hidden="true">hotovo</span>
+              <span class="jen-ctecka">otevřít web v novém okně</span>
+              <span class="radek-z" aria-hidden="true"></span>
+            </button>
+          </h3>
+          <div class="telo" id="t4" role="region" aria-labelledby="r4">
+            <div class="telo-in">
+              <div class="telo-txt">
+                <p class="telo-cat" aria-hidden="true"><b></b>cat kadernictvi-hrabalova.md</p>
+                <p>Zákaznice si vybere volný termín a potvrzení jí přijde e-mailem. Kadeřnice vidí celý kalendář a přepisuje termíny za pochodu. Dva lidé se nikdy neobjednají na stejný čas.</p>
+                <ul class="znacky"><li>Online objednávky</li><li>Potvrzení e-mailem</li><li>Administrace</li></ul>
+                <a href="https://denisa-hair.vercel.app/" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </li>
+
+
+      </ol>
+    </div>
   </div>
-  </div>
 
-  <ol class="rejstrik wrap rv">
-
-    <li class="polozka polozka-chysta">
-      <h3 class="rejstrik-h">
-        <span class="radek" id="r5" data-stanice tabindex="0">
-          <span class="radek-b" aria-hidden="true"></span>
-          <span class="radek-c">paty-projekt</span>
-          <span class="radek-n">Pátý projekt</span>
-          <span class="radek-s">Právě se staví</span>
-          <span class="radek-t" aria-hidden="true">zamčeno</span>
-          <span class="jen-ctecka">zamčeno, projekt se teprve staví</span>
-        </span>
-      </h3>
-    </li>
-
-    <li class="polozka">
-      <h3 class="rejstrik-h">
-        <button class="radek" data-stanice id="r1" aria-expanded="false" aria-controls="t1">
-          <span class="radek-b" aria-hidden="true"></span>
-          <span class="radek-c">herni-akademie</span>
-          <span class="radek-n">Herní akademie</span>
-          <span class="radek-s">Web pro komunitu</span>
-          <span class="radek-t" aria-hidden="true">hotovo</span>
-          <span class="jen-ctecka">otevřít web v novém okně</span>
-          <span class="radek-z" aria-hidden="true"></span>
-        </button>
-      </h3>
-      <div class="telo" id="t1" role="region" aria-labelledby="r1">
-        <div class="telo-in">
-          <div class="telo-txt">
-            <p class="telo-cat" aria-hidden="true"><b></b>cat herni-akademie.md</p>
-            <p>Komunitní web, kde členové plní úkoly, sbírají body a měří se v žebříčku. Je tu chat, profily i administrace, ze které správce řídí obsah z jednoho místa.</p>
-            <ul class="znacky"><li>Uživatelské účty</li><li>Vlastní databáze</li><li>Administrace</li><li>Chat</li></ul>
-            <a href="https://motivo.free.nf" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
-          </div>
-        </div>
-      </div>
-    </li>
-
-    <li class="polozka">
-      <h3 class="rejstrik-h">
-        <button class="radek" data-stanice id="r2" aria-expanded="false" aria-controls="t2">
-          <span class="radek-b" aria-hidden="true"></span>
-          <span class="radek-c">restovski</span>
-          <span class="radek-n">Restovski</span>
-          <span class="radek-s">Prezentace interpreta</span>
-          <span class="radek-t" aria-hidden="true">hotovo</span>
-          <span class="jen-ctecka">otevřít web v novém okně</span>
-          <span class="radek-z" aria-hidden="true"></span>
-        </button>
-      </h3>
-      <div class="telo" id="t2" role="region" aria-labelledby="r2">
-        <div class="telo-in">
-          <div class="telo-txt">
-            <p class="telo-cat" aria-hidden="true"><b></b>cat restovski.md</p>
-            <p>Web českého rappera. Koncerty, které se dají filtrovat podle data a místa, diskografie, galerie a obchod. Návštěvník si přepne světlý nebo tmavý vzhled.</p>
-            <ul class="znacky"><li>Filtrování koncertů</li><li>Galerie</li><li>Světlý i tmavý režim</li></ul>
-            <a href="https://restovski.vercel.app/" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
-          </div>
-        </div>
-      </div>
-    </li>
-
-    <li class="polozka">
-      <h3 class="rejstrik-h">
-        <button class="radek" data-stanice id="r3" aria-expanded="false" aria-controls="t3">
-          <span class="radek-b" aria-hidden="true"></span>
-          <span class="radek-c">vyhlidkar</span>
-          <span class="radek-n">Vyhlídkář</span>
-          <span class="radek-s">Web i aplikace do telefonu</span>
-          <span class="radek-t" aria-hidden="true">hotovo</span>
-          <span class="jen-ctecka">otevřít web v novém okně</span>
-          <span class="radek-z" aria-hidden="true"></span>
-        </button>
-      </h3>
-      <div class="telo" id="t3" role="region" aria-labelledby="r3">
-        <div class="telo-in">
-          <div class="telo-txt">
-            <p class="telo-cat" aria-hidden="true"><b></b>cat vyhlidkar.md</p>
-            <p>Mapa vyhlídek, laviček a klidných míst v okolí. Lidé sem přidávají vlastní tipy s fotkou a hodnocením. Běží na webu i jako aplikace v telefonu, obojí nad stejnými daty.</p>
-            <ul class="znacky"><li>Mapa a poloha</li><li>Fotky od uživatelů</li><li>Aplikace do telefonu</li></ul>
-            <a href="https://vyhlidkar.vercel.app/" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
-          </div>
-        </div>
-      </div>
-    </li>
-
-    <li class="polozka">
-      <h3 class="rejstrik-h">
-        <button class="radek" data-stanice id="r4" aria-expanded="false" aria-controls="t4">
-          <span class="radek-b" aria-hidden="true"></span>
-          <span class="radek-c">kadernictvi-hrabalova</span>
-          <span class="radek-n">Kadeřnictví Hrabalová</span>
-          <span class="radek-s">Objednávkový systém</span>
-          <span class="radek-t" aria-hidden="true">hotovo</span>
-          <span class="jen-ctecka">otevřít web v novém okně</span>
-          <span class="radek-z" aria-hidden="true"></span>
-        </button>
-      </h3>
-      <div class="telo" id="t4" role="region" aria-labelledby="r4">
-        <div class="telo-in">
-          <div class="telo-txt">
-            <p class="telo-cat" aria-hidden="true"><b></b>cat kadernictvi-hrabalova.md</p>
-            <p>Zákaznice si vybere volný termín a potvrzení jí přijde e-mailem. Kadeřnice vidí celý kalendář a přepisuje termíny za pochodu. Dva lidé se nikdy neobjednají na stejný čas.</p>
-            <ul class="znacky"><li>Online objednávky</li><li>Potvrzení e-mailem</li><li>Administrace</li></ul>
-            <a href="https://denisa-hair.vercel.app/" target="_blank" rel="noopener noreferrer" class="odkaz">Otevřít web<svg class="ik" aria-hidden="true"><use href="#i-sipka-ven"/></svg></a>
-          </div>
-        </div>
-      </div>
-    </li>
-
-
-  </ol>
 </section>
 
 <!-- Brána mezi úrovněmi. Linka se při odhalení dokreslí

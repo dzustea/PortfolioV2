@@ -679,12 +679,21 @@
 
     var deska = stanice[index];
     var r = deska.getBoundingClientRect();
-    var cil = r.top + window.scrollY - (window.innerHeight - r.height) / 2;
-    var nejvic = document.documentElement.scrollHeight - window.innerHeight;
-    if (cil < 0) cil = 0;
-    if (cil > nejvic) cil = nejvic;
 
-    window.scrollTo(0, cil);
+    /* Když je zastávka celá vidět, stránka se nehne. Uzly mapy
+       stojí všechny v jednom okně, takže by přejezd na každý
+       z nich stránkou jen škubal, aniž by se objevilo cokoliv
+       nového. */
+    var celaVidet = r.top >= 8 && r.bottom <= window.innerHeight - 8;
+
+    if (!celaVidet) {
+      var cil = r.top + window.scrollY - (window.innerHeight - r.height) / 2;
+      var nejvic = document.documentElement.scrollHeight - window.innerHeight;
+      if (cil < 0) cil = 0;
+      if (cil > nejvic) cil = nejvic;
+
+      window.scrollTo(0, cil);
+    }
 
     /* Zaostřením se zastávka potvrdí enterem sama. Posun si
        řídíme vlastní, proto preventScroll. */
@@ -831,6 +840,21 @@
 
   var uzlyMapy = Array.prototype.slice.call(document.querySelectorAll('.mapa-uzel'));
   var clanky = Array.prototype.slice.call(document.querySelectorAll('[data-retez]'));
+  var oknoMapy = document.querySelector('.okno-mapa');
+  var radekStavu = oknoMapy ? oknoMapy.querySelector('[data-stav]') : null;
+
+  /* Popisek uzlu má jedno pevné místo: lištu okna. Pod uzlem by se
+     na užší ploše překrýval se sousedem nebo utekl za okraj, tady
+     je vždycky vidět a vždycky na stejném řádku. */
+  var napisStav = function (uzel) {
+    if (!radekStavu) return;
+    if (!uzel) {
+      radekStavu.textContent = 'vyberte uzel';
+      return;
+    }
+    radekStavu.textContent = uzel.getAttribute('data-nazev') +
+      ' · ' + uzel.getAttribute('data-co');
+  };
 
   /* Mapa si sama nic nepamatuje, jen ukazuje, co je otevřené ve
      výpisu pod ní. Jeden zdroj pravdy, dvě podoby. */
@@ -850,6 +874,10 @@
     clanky.forEach(function (c) {
       c.classList.toggle('sviti', sviti.indexOf(c.getAttribute('data-retez')) !== -1);
     });
+
+    var vybrany = cil ? document.querySelector('.mapa-uzel.je-vybrany') : null;
+    if (oknoMapy) oknoMapy.classList.toggle('ma-vyber', !!vybrany);
+    napisStav(vybrany);
   };
 
   var zavriUrovne = function (krome) {
@@ -893,12 +921,37 @@
   };
 
   otevriUroven = function (prvek) {
+    /* Na mapě ukazatel rovnou otevře to, na čem stojí. Sloupec
+       vedle mapy je popis uzlu, takže prázdný by vypadal jako
+       chyba; takhle text sleduje šipku a enter už jen otevře
+       samotný web. Rozdělaná práce popis nemá, u ní se zavírá. */
+    if (prvek && prvek.classList && prvek.classList.contains('mapa-uzel')) {
+      var radekMapy = document.getElementById(prvek.getAttribute('data-cil'));
+      var polozkaMapy = radekMapy ? radekMapy.closest('.polozka') : null;
+
+      if (polozkaMapy && !polozkaMapy.classList.contains('polozka-chysta')) {
+        if (!polozkaMapy.classList.contains('je-otevrena')) prepniUroven(radekMapy);
+        return;
+      }
+      zavriUrovne(null);
+      return;
+    }
+
     /* Odchod ukazatele z rejstříku zavře, co zůstalo otevřené. */
     var polozka = prvek && prvek.closest ? prvek.closest('.polozka') : null;
     if (!polozka) zavriUrovne(null);
   };
 
   uzlyMapy.forEach(function (uzel) {
+    ['mouseenter', 'focus'].forEach(function (co) {
+      uzel.addEventListener(co, function () { napisStav(uzel); });
+    });
+    ['mouseleave', 'blur'].forEach(function (co) {
+      uzel.addEventListener(co, function () {
+        napisStav(document.querySelector('.mapa-uzel.je-vybrany'));
+      });
+    });
+
     uzel.addEventListener('click', function () {
       var radek = document.getElementById(uzel.getAttribute('data-cil'));
       if (!radek) return;
@@ -918,6 +971,15 @@
       prepniUroven(radek);
     });
   });
+
+  /* Na velkém okně je vedle mapy sloupec s textem. Prázdný by
+     vypadal jako chyba, takže se první web otevře sám; je to
+     zároveň nejstarší uzel, tedy začátek cesty. Na telefonu,
+     kde mapa není, zůstává výpis po načtení celý sbalený. */
+  if (mapaPlati) {
+    var prvni = document.getElementById('r1');
+    if (prvni && !document.querySelector('.polozka.je-otevrena')) prepniUroven(prvni);
+  }
 
   urovne2.forEach(function (radek) {
     radek.addEventListener('click', function () { prepniUroven(radek); });
