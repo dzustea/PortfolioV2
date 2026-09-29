@@ -1499,25 +1499,6 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   font-size: .72rem; letter-spacing: .04em; color: var(--sed-2);
 }
 
-/* Pás technologií. Nekonečné popojíždění bez skriptu: seznam je
-   v masce a posune se přesně o svou šířku, takže návrat na
-   začátek není vidět. Stojí při najetí i při potlačeném pohybu. */
-.pas{
-  margin-top: clamp(40px, 5vw, 72px);
-  overflow: hidden; padding-block: 16px;
-  border-block: 1px solid var(--linka);
-  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-}
-.pas-stopa{display: flex; gap: 40px; width: max-content; animation: pas 36s linear infinite}
-.pas:hover .pas-stopa{animation-play-state: paused}
-.pas-stopa li{
-  font-family: var(--mono);
-  font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--sed-2); white-space: nowrap;
-}
-@keyframes pas{to{transform: translateX(-50%)}}
-
-
 /* ══ HISTORIE PROJEKTŮ ═════════════════════════════════════════
    Ne seznam, ale historie. Vlevo svislá větev s body, jako když
    si vývojář vypíše, co se kdy dodělalo: nahoře rozdělaná práce
@@ -2268,7 +2249,6 @@ footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
   }
   html{scroll-behavior: auto}
   .rv{opacity: 1; transform: none}
-  .pas-stopa{animation: none}
   .konz{transform: none}
 }
 

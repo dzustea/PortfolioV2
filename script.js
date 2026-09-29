@@ -357,23 +357,6 @@
   window.addEventListener('pageshow', doberOpozdilce);
 
 
-  /* ── PÁS TECHNOLOGIÍ ──────────────────────────────────────────
-     Posun o polovinu šířky navazuje sám na sebe jen tehdy, když
-     je seznam v pásu dvakrát. Druhá polovina je kopie té první
-     a je schovaná před čtečkou obrazovky.
-     ──────────────────────────────────────────────────────────── */
-
-  var pas = document.querySelector('.pas-stopa');
-
-  if (pas) {
-    Array.prototype.slice.call(pas.children).forEach(function (polozka) {
-      var kopie = polozka.cloneNode(true);
-      kopie.setAttribute('aria-hidden', 'true');
-      pas.appendChild(kopie);
-    });
-  }
-
-
   var presnyUkazatel = matchMedia('(hover: hover) and (pointer: fine)');
 
 
