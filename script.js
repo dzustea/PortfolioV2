@@ -116,6 +116,15 @@
       return Math.round(bajtu / 1024) + ' kB';
     };
 
+    /* Čeština má u počtů tři tvary: jeden projekt, dva projekty,
+       pět projektů. Výpis uměl jen prostřední, takže při čtyřech
+       vycházel správně a od pátého ne. */
+    var mnozne = function (kolik, tvary) {
+      if (kolik === 1) return kolik + ' ' + tvary[0];
+      if (kolik >= 2 && kolik <= 4) return kolik + ' ' + tvary[1];
+      return kolik + ' ' + tvary[2];
+    };
+
     zapisRadek(0, '');
 
     /* Čeká se na písma, která jsou pod oponou hned vidět: text
@@ -139,7 +148,14 @@
     dokumentHotov.then(function () {
       zapisRadek(0, preneseno(['.css', '.js']));
       var projektu = document.querySelectorAll('.polozka:not(.polozka-chysta)').length;
-      zapisRadek(2, projektu ? projektu + ' projekty' : '');
+      zapisRadek(2, projektu ? mnozne(projektu, ['projekt', 'projekty', 'projektů']) : '');
+
+      /* Mapa projektů je svět, do kterého se za oponou vstupuje,
+         takže ji výpis spočítá stejně jako všechno ostatní. Uzlů
+         je o jeden víc než projektů: poslední je rozdělaná práce,
+         kterou ještě nejde otevřít. */
+      var uzlu = document.querySelectorAll('.mapa-uzel').length;
+      zapisRadek(3, uzlu ? mnozne(uzlu, ['uzel', 'uzly', 'uzlů']) : '');
     });
 
     /* Pojistka: kdyby se příslib písem nesplnil, opona se dá
@@ -156,7 +172,7 @@
 
     Promise.race([pisemNejvys, pojistka]).then(function () {
       zapisRadek(1, preneseno(['.woff2']));
-      zapisRadek(3, Math.round(performance.now()) + ' ms');
+      zapisRadek(4, Math.round(performance.now()) + ' ms');
       hotovo = true;
       if (opona) opona.classList.remove('op-nacita');
     });
@@ -942,6 +958,13 @@
       if (odkaz) odkaz.click();
       return;
     }
+
+    /* Jakmile člověk otevře první projekt, ví, že se řádky
+       rozbalují, a nápověda zmizí ze všech naráz. Drží se to jen
+       v paměti stránky: do prohlížeče tenhle web neukládá nic
+       a kvůli nápovědě s tím nezačne. */
+    var rejstrik = polozka.closest('.rejstrik');
+    if (rejstrik) rejstrik.classList.add('uz-vi');
 
     zavriUrovne(polozka);
     polozka.classList.add('je-otevrena');

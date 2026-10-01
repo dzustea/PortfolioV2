@@ -1614,6 +1614,36 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 .je-otevrena .radek-z::before, .je-otevrena .radek-z::after{background: var(--rud-tx)}
 .polozka-chysta .radek-z{display: none}
 
+/* ── DOSAH ──────────────────────────────────────────────────────
+   Štítek vedle stavu. Je to údaj o klientovi, ne o mně, takže
+   nestojí první a nekřičí: jméno a typ projektu mají přednost
+   a tohle je potvrzení, které si člověk přečte až po nich.
+   Rudý rám ho odliší od stavu, který je šedý.
+   ─────────────────────────────────────────────────────────── */
+
+.radek-stav{display: flex; align-items: center; gap: 8px; justify-self: end}
+.radek-d{
+  padding: 3px 8px;
+  border: 1px solid var(--rud);
+  font-family: var(--mono);
+  font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--rud-tx); white-space: nowrap;
+}
+
+/* ── NÁPOVĚDA K ROZBALENÍ ───────────────────────────────────────
+   Na počítači je řádek zjevně ovladatelný: ukazatel se nad ním
+   mění a dole stojí nápověda ke klávesám. Na dotyku není ani
+   jedno, takže ze samotného plus u kraje nikdo nepozná, že se
+   řádek rozbalí.
+
+   Nápověda proto stojí jen u prvního otevíratelného projektu, ne
+   u všech šesti: šestkrát zopakovaná věta už není nápověda, ale
+   šum. Jakmile člověk první projekt otevře, ví to, a nápověda
+   zmizí ze všech řádků naráz.
+   ─────────────────────────────────────────────────────────── */
+
+.radek-h{display: none}
+
 /* Trhnutí, když někdo zkusí otevřít rozdělanou práci. */
 .radek.je-zamceno{animation: trhnuti .3s ease}
 @keyframes trhnuti{
@@ -1703,13 +1733,40 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .radek{
     grid-template-columns: 10px minmax(0, 1fr) auto;
     grid-template-areas:
-      "bod slug  stav"
-      "bod nazev znacka"
-      "bod typ   znacka";
+      "bod slug     stav"
+      "bod nazev    znacka"
+      "bod typ      znacka"
+      "bod napoveda napoveda";
     align-items: start;
     gap: 3px clamp(12px, 3.4vw, 18px);
     padding: 15px 2px 17px 0;
   }
+
+  /* Nápověda k rozbalení. Jen na dotyku, jen u prvního
+     otevíratelného projektu a jen dokud člověk nějaký neotevře. */
+  .rejstrik:not(.uz-vi) .radek-h{
+    display: block; grid-area: napoveda;
+    margin-top: 8px;
+    font-family: var(--mono);
+    font-size: .62rem; letter-spacing: .1em;
+    color: var(--rud-tx);
+  }
+  .rejstrik:not(.uz-vi) .radek-h::before{content: "▸ "; color: var(--rud)}
+
+  /* Plus u téhož řádku třikrát přeblikne do rudé. Není to ozdoba:
+     je to jediné místo, kam se má člověk na dotyku podívat, a tři
+     cykly stačí, aby si toho všiml, aniž by to blikalo pořád. */
+  .rejstrik:not(.uz-vi) .radek:has(.radek-h) .radek-z::before,
+  .rejstrik:not(.uz-vi) .radek:has(.radek-h) .radek-z::after{
+    animation: napoveda 1.6s ease-in-out 3;
+  }
+  @keyframes napoveda{
+    0%, 100%{background: var(--sed-2)}
+    50%     {background: var(--rud-tx)}
+  }
+
+  /* Štítek s dosahem se na úzkou obrazovku vejde jen pod stav. */
+  .radek-stav{flex-direction: column; align-items: flex-end; gap: 5px}
   .radek-b{grid-area: bod; align-self: center}
   .radek-c{grid-area: slug; align-self: center}
   .radek-n{grid-area: nazev; font-size: 1.2rem}
@@ -2250,6 +2307,8 @@ footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
   html{scroll-behavior: auto}
   .rv{opacity: 1; transform: none}
   .konz{transform: none}
+  /* Nápověda zůstává, přeblikávání ne: text řekne totéž bez pohybu. */
+  .radek-z::before, .radek-z::after{animation: none !important}
 }
 
 
@@ -2481,8 +2540,27 @@ html:has(.doc-strana){scrollbar-width: auto}
                 transform .16s cubic-bezier(.23,1,.32,1);
   }
 
-  .mapa-hl{display: flex; align-items: center; gap: 8px}
+  /* Výšku hlavičky drží ikona, aby dlaždice se štítkem nebyla
+     o chlup vyšší než ostatní. */
+  .mapa-hl{display: flex; align-items: center; gap: 8px; min-height: 18px}
   .mapa-hl .ik{width: 18px; height: 18px; color: var(--sed); transition: color .2s ease}
+  /* Dosah klienta. V dlaždici stojí v hlavičce vedle pořadového
+     čísla, aby byl vidět na počítači i bez rozkliknutí: výpis
+     s řádky je tu nahrazený mapou, takže štítek z řádku by se
+     na velkém okně vůbec neukázal. Celou větou to pak řeknou
+     údaje vedle mapy. */
+  .mapa-d{
+    margin-left: auto;
+    padding: 2px 5px;
+    border: 1px solid var(--rud);
+    font-family: var(--mono);
+    font-size: .5rem; letter-spacing: .1em; line-height: 1;
+    color: var(--rud-tx); white-space: nowrap;
+  }
+  .mapa-uzel.je-vybrany .mapa-d{border-color: rgba(255,255,255,.55); color: #fff}
+  /* Když je štítek, odsazuje číslo on, ne ono. */
+  .mapa-d + .mapa-c{margin-left: 7px}
+
   .mapa-c{
     margin-left: auto;
     font-family: var(--mono);
