@@ -1621,13 +1621,26 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
    Rudý rám ho odliší od stavu, který je šedý.
    ─────────────────────────────────────────────────────────── */
 
-.radek-stav{display: flex; align-items: center; gap: 8px; justify-self: end}
+.radek-stav{display: flex; align-items: center; gap: 12px; justify-self: end}
+
+/* Dosah je údaj, ne stav a ani ovládací prvek. Orámovaný stál
+   v pravém sloupci nad stejně orámovaným "hotovo" a dvě krabičky
+   na sobě z toho udělaly změť: čtenář nepoznal, co z toho je
+   stav projektu a co informace o klientovi.
+
+   Rámeček proto nemá. Zůstal rudý čtvereček, kterým si stránka
+   značí drobnosti i jinde, a sazba je strojopisná jako ostatní
+   údaje. Krabička zbyla jediná, a to na stav, kam patří. */
 .radek-d{
-  padding: 3px 8px;
-  border: 1px solid var(--rud);
   font-family: var(--mono);
-  font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--rud-tx); white-space: nowrap;
+  font-size: .64rem; letter-spacing: .06em;
+  color: var(--sed); white-space: nowrap;
+}
+.radek-d::before{
+  content: ""; display: inline-block;
+  width: 4px; height: 4px; margin-right: 7px;
+  vertical-align: 1px;
+  background: var(--rud);
 }
 
 /* ── NÁPOVĚDA K ROZBALENÍ ───────────────────────────────────────
@@ -1736,6 +1749,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
       "bod slug     stav"
       "bod nazev    znacka"
       "bod typ      znacka"
+      "bod dosah    dosah"
       "bod napoveda napoveda";
     align-items: start;
     gap: 3px clamp(12px, 3.4vw, 18px);
@@ -1764,8 +1778,21 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   /* Co je otevřené, se rozbalit nedá: tam by věta lhala. */
   .je-otevrena .radek-h{display: none}
 
-  /* Štítek s dosahem se na úzkou obrazovku vejde jen pod stav. */
-  .radek-stav{flex-direction: column; align-items: flex-end; gap: 5px}
+  /* Na telefonu se pravý sloupec rozpadl na dvě krabičky nad
+     sebou. Dosah proto z toho sloupce odchází dolů k textu, kam
+     svým významem patří: čte se zleva spolu s názvem a typem
+     projektu a vpravo zůstane jediný štítek, totiž stav.
+
+     display: contents rozpustí obal, takže se stav a dosah
+     rozejdou do dvou různých míst mřížky, aniž by se musela
+     měnit značka. */
+  .radek-stav{display: contents}
+  .radek-t{grid-area: stav; align-self: center; justify-self: end}
+  .radek-d{
+    grid-area: dosah; justify-self: start;
+    margin-top: 6px;
+    white-space: normal;
+  }
   .radek-b{grid-area: bod; align-self: center}
   .radek-c{grid-area: slug; align-self: center}
   .radek-n{grid-area: nazev; font-size: 1.2rem}
@@ -1778,6 +1805,19 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .radek::before{inset: 0 calc(var(--pad) * -1)}
 
   .polozka::before{left: 4px}
+
+  /* Větev končila dvacet šest bodů pod horním krajem poslední
+     položky. Na počítači je to přesně u jejího bodu, protože
+     tam má řádek jedinou sazbovou řádku. Na telefonu má řádek
+     čtyři, bod je tím pádem o dost níž a větev končila kus nad
+     ním: u Kadeřnictví to vypadalo, že Svačinář už na ní nevisí.
+
+     Polovina výšky položky trefí bod přesně, protože ten je
+     v řádku svisle na střed. Rozbalená položka je vyšší, tam
+     větev dojede až dolů, stejně jako u ostatních. */
+  .polozka:first-child::before{top: 50%}
+  .polozka:last-child::before{bottom: auto; height: 50%}
+  .polozka:last-child.je-otevrena::before{bottom: 0; height: auto}
   .telo-in{padding-left: calc(10px + clamp(12px, 3.4vw, 18px))}
 }
 
@@ -2550,13 +2590,18 @@ html:has(.doc-strana){scrollbar-width: auto}
      údaje vedle mapy. */
   .mapa-d{
     margin-left: auto;
-    padding: 2px 5px;
-    border: 1px solid var(--rud);
     font-family: var(--mono);
     font-size: .5rem; letter-spacing: .1em; line-height: 1;
-    color: var(--rud-tx); white-space: nowrap;
+    color: var(--sed-2); white-space: nowrap;
   }
-  .mapa-uzel.je-vybrany .mapa-d{border-color: rgba(255,255,255,.55); color: #fff}
+  .mapa-d::before{
+    content: ""; display: inline-block;
+    width: 3px; height: 3px; margin-right: 5px;
+    vertical-align: 1px;
+    background: var(--rud);
+  }
+  .mapa-uzel.je-vybrany .mapa-d{color: rgba(255,255,255,.75)}
+  .mapa-uzel.je-vybrany .mapa-d::before{background: #fff}
   /* Když je štítek, odsazuje číslo on, ne ono. */
   .mapa-d + .mapa-c{margin-left: 7px}
 
