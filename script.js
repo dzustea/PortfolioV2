@@ -959,13 +959,6 @@
       return;
     }
 
-    /* Jakmile člověk otevře první projekt, ví, že se řádky
-       rozbalují, a nápověda zmizí ze všech naráz. Drží se to jen
-       v paměti stránky: do prohlížeče tenhle web neukládá nic
-       a kvůli nápovědě s tím nezačne. */
-    var rejstrik = polozka.closest('.rejstrik');
-    if (rejstrik) rejstrik.classList.add('uz-vi');
-
     zavriUrovne(polozka);
     polozka.classList.add('je-otevrena');
     if (radek.hasAttribute('aria-expanded')) radek.setAttribute('aria-expanded', 'true');

@@ -1742,28 +1742,27 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
     padding: 15px 2px 17px 0;
   }
 
-  /* Nápověda k rozbalení. Jen na dotyku, jen u prvního
-     otevíratelného projektu a jen dokud člověk nějaký neotevře. */
-  .rejstrik:not(.uz-vi) .radek-h{
+  /* Nápověda k rozbalení. Plus u pravého kraje si na telefonu
+     nikdo nevšiml: je drobné, šedé a stojí na opačné straně, než
+     kam se čte. Na dotyku proto mizí úplně a místo něj stojí pod
+     každým otevíratelným projektem rudá věta. Řekne totéž slovy,
+     je u levého kraje v cestě čtení a nedá se přehlédnout.
+
+     Na počítači plus zůstává: tam je u řádku vidět ukazatel myši
+     i nápověda ke klávesám, takže je co číst i bez ní. */
+  .radek-z{display: none}
+
+  .radek-h{
     display: block; grid-area: napoveda;
     margin-top: 8px;
     font-family: var(--mono);
     font-size: .62rem; letter-spacing: .1em;
     color: var(--rud-tx);
   }
-  .rejstrik:not(.uz-vi) .radek-h::before{content: "▸ "; color: var(--rud)}
+  .radek-h::before{content: "▸ "; color: var(--rud)}
 
-  /* Plus u téhož řádku třikrát přeblikne do rudé. Není to ozdoba:
-     je to jediné místo, kam se má člověk na dotyku podívat, a tři
-     cykly stačí, aby si toho všiml, aniž by to blikalo pořád. */
-  .rejstrik:not(.uz-vi) .radek:has(.radek-h) .radek-z::before,
-  .rejstrik:not(.uz-vi) .radek:has(.radek-h) .radek-z::after{
-    animation: napoveda 1.6s ease-in-out 3;
-  }
-  @keyframes napoveda{
-    0%, 100%{background: var(--sed-2)}
-    50%     {background: var(--rud-tx)}
-  }
+  /* Co je otevřené, se rozbalit nedá: tam by věta lhala. */
+  .je-otevrena .radek-h{display: none}
 
   /* Štítek s dosahem se na úzkou obrazovku vejde jen pod stav. */
   .radek-stav{flex-direction: column; align-items: flex-end; gap: 5px}
