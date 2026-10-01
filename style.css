@@ -934,7 +934,6 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 /* Úvod se odhalí shora dolů: hlavička, věta, konzole, lišta. */
 .hero-veta.rv{transition-delay: .08s}
 .konz.rv{transition-delay: .16s}
-.hero-pata.rv{transition-delay: .26s}
 .obory .rv:nth-child(2){transition-delay: .08s}
 .obory .rv:nth-child(3){transition-delay: .16s}
 
@@ -961,7 +960,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
    krotí jednotlivé kusy, ne obal, jinak by se celý úvod ve
    volném místě odsunul doprostřed. */
 .hero-in{display: block}
-.hero-hl, .hero-veta, .hero-pata{max-width: 720px}
+.hero-hl, .hero-veta{max-width: 720px}
 
 /* ── HLAVIČKA ÚVODU ─────────────────────────────────────────── */
 
@@ -1217,16 +1216,6 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .odp-hl b, .odpoved.pise .odp-t::after, .odpoved.pise::before{animation: none}
 }
 
-/* ── PATA ÚVODU ────────────────────────────────────────────── */
-
-.hero-pata{
-  margin-top: clamp(22px, 3vw, 32px);
-  display: flex; flex-wrap: wrap; gap: 6px 22px;
-  font-family: var(--mono);
-  font-size: .66rem; letter-spacing: .05em; color: var(--sed-2);
-}
-.hero-pata span{display: flex; align-items: center; gap: 10px}
-
 /* ── ÚVOD NA VELKÉM MONITORU ───────────────────────────────────
    Úvod byl zastropovaný na hodnotách, které sedí notebooku:
    jméno končilo na 2,7 rem a celá sestava na 860 bodech. Na
@@ -1246,7 +1235,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 @media (min-width: 1280px) and (min-height: 800px){
   /* Věta si drží míru řádku ve znacích, ne v bodech: delší řádek
      než zhruba padesát znaků se hůř čte, i když je na nej misto. */
-  .hero-hl, .hero-pata{max-width: 880px}
+  .hero-hl{max-width: 880px}
   .hero-veta{max-width: 50ch}
   .konz-sloupce{max-width: 1080px; gap: 38px}
 
@@ -1254,7 +1243,6 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .stav{font-size: .74rem}
 
   .hero-veta{margin-top: 34px; font-size: 1.16rem}
-  .hero-pata{margin-top: 36px; font-size: .74rem}
 
   .konz-hl{padding: 11px 15px; font-size: .72rem}
   .konz-z{width: 8px; height: 8px}
@@ -1272,7 +1260,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 }
 
 @media (min-width: 1650px) and (min-height: 900px){
-  .hero-hl, .hero-pata{max-width: 960px}
+  .hero-hl{max-width: 960px}
   .hero-veta{max-width: 52ch}
   .konz-sloupce{max-width: 1200px; gap: 44px}
 
@@ -1280,7 +1268,6 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .stav{font-size: .78rem}
 
   .hero-veta{margin-top: 38px; font-size: 1.26rem}
-  .hero-pata{margin-top: 40px; font-size: .78rem}
 
   .konz-hl{padding: 13px 18px; font-size: .76rem}
   .konz-z{width: 9px; height: 9px}
@@ -1296,10 +1283,6 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .odp-t{font-size: 1.26rem}
   .odp-a{font-size: .72rem}
 }
-.hero-pata span + span::before{
-  content: ""; width: 3px; height: 3px; background: var(--rud); flex: none;
-}
-
 /* Jediný barevný puntík na stránce. Nese skutečný stav,
    proto smí i dýchat. */
 .dot{
@@ -1445,16 +1428,6 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
     font-size: .62rem; color: var(--sed-2);
   }
   .konz-pata .jen-dotyk::before{content: none}
-
-  /* Údaje jsou poznámka pod čarou: drobné, tlumené, pod sebou. */
-  .hero-pata{
-    display: grid; gap: 5px;
-    margin-top: clamp(20px, 5vw, 30px);
-    padding-top: 14px;
-    border-top: 1px solid var(--linka);
-    font-size: .62rem; color: var(--sed-2);
-  }
-  .hero-pata span + span::before{width: 3px; height: 3px}
 }
 
 
@@ -2276,8 +2249,6 @@ footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
      Úvod jim uhne, aby se ani jméno, ani poslední řádek
      neschovaly pod ně. */
   #hero{min-height: 0; padding-top: calc(var(--nav) + 86px); padding-bottom: 76px}
-
-  .hero-pata{gap: 6px 16px}
 
   .obor{grid-template-columns: 40px 1fr; padding: 20px 0 22px}
   .obor h3{font-size: 1.2rem}
