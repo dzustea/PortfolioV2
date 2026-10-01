@@ -972,16 +972,25 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 
 .jmeno{
   font-family: var(--nadpis);
-  font-size: clamp(1.75rem, 3.5vw, 2.7rem);
-  font-weight: 600; letter-spacing: -.005em; line-height: 1.05;
+  font-size: clamp(2.3rem, 7vw, 3.1rem);
+  font-weight: 600; letter-spacing: -.01em; line-height: 1.02;
 }
-.jmeno span{
-  display: block; margin-top: 6px;
-  font-family: var(--mono);
-  font-size: .72rem; font-weight: 400; letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--sed-2);
+
+/* Rudá linka pod jménem. Je to tatáž linka, jakou má pod sebou
+   každý nadpis sekce, takže jméno čte stránka jako svůj první
+   nadpis, a ne jako samostatně stojící slovo.
+
+   Dokresluje se zleva v okamžiku, kdy se odhrne opona, tedy když
+   ji člověk poprvé uvidí. Bez skriptu je rovnou nakreslená. */
+.jmeno::after{
+  content: ''; display: block;
+  width: clamp(84px, 9vw, 132px); height: 1px;
+  margin-top: clamp(16px, 1.8vw, 24px);
+  background: var(--rud);
+  transform-origin: left;
+  transition: transform .9s cubic-bezier(.22,1,.36,1) .35s;
 }
+.js:not(.je-odhrnuto) .jmeno::after{transform: scaleX(0)}
 
 .stav{
   display: flex; align-items: center; gap: 10px;
@@ -1241,8 +1250,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .hero-veta{max-width: 50ch}
   .konz-sloupce{max-width: 1080px; gap: 38px}
 
-  .jmeno{font-size: 3.55rem}
-  .jmeno span{margin-top: 9px; font-size: .82rem}
+  .jmeno{font-size: 4.4rem}
   .stav{font-size: .74rem}
 
   .hero-veta{margin-top: 34px; font-size: 1.16rem}
@@ -1268,8 +1276,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .hero-veta{max-width: 52ch}
   .konz-sloupce{max-width: 1200px; gap: 44px}
 
-  .jmeno{font-size: 4.2rem}
-  .jmeno span{margin-top: 11px; font-size: .88rem}
+  .jmeno{font-size: 5.2rem}
   .stav{font-size: .78rem}
 
   .hero-veta{margin-top: 38px; font-size: 1.26rem}
@@ -1352,13 +1359,6 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 }
 
 @media (hover: none), (pointer: coarse){
-  /* Podtitul je čtená sazba, ne další strojopisný řádek. */
-  .jmeno span{
-    font-family: var(--sans);
-    font-size: .95rem; letter-spacing: 0; text-transform: none;
-    color: var(--sed); margin-top: 6px;
-  }
-
   /* Stav je štítek, ne věta. */
   .stav{
     margin-left: 0;
