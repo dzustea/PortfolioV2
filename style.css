@@ -243,7 +243,13 @@ body{
   animation: oknoNaskoci .5s steps(1) both;
 }
 @keyframes oknoNaskoci{
-  0%  {opacity: 0}
+  /* Blikne to dvakrát jako stará obrazovka, jenže první krok je
+     rozsvícený, ne zhasnutý. Na prvních sto milisekund tak okno
+     nebylo prázdné: prohlížeč nemohl nic vykreslit a čekal, i když
+     už měl celou stránku stáhnutou. Teď je první obrázek hotový
+     v první možný okamžik a blikání zůstává. */
+  0%  {opacity: 1}
+  8%  {opacity: 0}
   20% {opacity: .5}
   35% {opacity: 0}
   55% {opacity: 1}
