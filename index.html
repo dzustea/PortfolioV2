@@ -240,19 +240,20 @@
 </head>
 <body>
 <!-- ══ OPONA ═════════════════════════════════════════════════════
-     První, co člověk uvidí: nahrávací obrazovka, na které se
-     stránka načítá. Pruh postupu i řádky pod ním přibývají podle
-     toho, co je doopravdy hotové, a čísla v nich jsou skutečná,
-     ne pro efekt: přenesené kilobajty z měření prohlížeče, počet
-     projektů v dokumentu a čas od prvního bajtu.
+     První, co člověk uvidí: čtyři klávesy se šipkami uprostřed
+     tmy. Nic jiného tu nestojí, takže není co číst ani co luštit
+     a je hned jasné, čím se stránka ovládá. Nahoru a dolů jsou
+     rudé, protože ty vedou; doleva a doprava jsou vedle nich
+     tlumené, aby bylo vidět, že jde o klávesnici, a ne o dvě
+     osamocené značky.
 
-     Pod výpisem čeká start. Opona se neodhrne sama: čeká, dokud
-     člověk nestiskne šipku dolů (na telefonu nešvihne prstem).
-     Teprve pak se slovo dopíše, okno se rozletí přes celou
-     obrazovku a pod ním zůstane hotová stránka.
+     Opona se neodhrne sama: čeká, dokud člověk nestiskne šipku
+     dolů (na telefonu nešvihne prstem). Teprve pak se pod
+     klávesami dopíše START, klávesy se zableskly a propadnou
+     dopředu a pod nimi zůstane hotová stránka.
 
-     Je to tentýž rám, jaký drží nabídku v úvodu stránky, takže
-     opona není cizí předsíň, ale první obrazovka téhož světa.
+     Svět za oponou mezitím sílí podle toho, kolik je doopravdy
+     načteno; není to odpočet nastavený dopředu.
 
      Bez skriptu se opona vůbec nevykreslí: třídu js přidává na
      dokument skript hned na začátku, takže když neběží, není
@@ -266,52 +267,37 @@
        stránka vzniká. -->
   <div class="op-svet"><i class="op-mrizka"></i><i class="op-zar"></i></div>
 
-  <!-- Okno a pod ním návod k ovládání. Svislice je drží u sebe
-       uprostřed obrazovky, takže návod visí pod oknem jako
-       popiska pod přístrojem. -->
+  <!-- Klávesy uprostřed obrazovky a pod nimi místo pro START.
+       Svislice je drží u sebe, takže slovo při spuštění naskočí
+       přesně pod kresbou, a ne někde stranou. -->
   <div class="op-stred">
 
-    <div class="op-okno"><i class="op-crt" aria-hidden="true"></i>
-      <div class="op-hl">
-        <span class="op-kosa"></span>
-        <span class="op-n">Filip Lochman</span>
-        <span class="op-t"><i class="op-stav-nacita">nahrávání</i><i class="op-stav-hotovo">připraveno</i></span>
-      </div>
-
-      <div class="op-telo">
-        <!-- Pruh postupu. Plní se podle --staveno, které přibývá
-             s každým hotovým řádkem, takže ukazuje skutečný stav
-             načítání, ne odpočet nastavený dopředu. -->
-        <div class="op-pruh"><i></i></div>
-
-        <ol class="op-log">
-          <li class="op-r"><b class="op-dilek"></b><span class="op-co">grafika a ovládání</span><span class="op-hod"></span></li>
-          <li class="op-r"><b class="op-dilek"></b><span class="op-co">písmo</span><span class="op-hod"></span></li>
-          <li class="op-r"><b class="op-dilek"></b><span class="op-co">obsah</span><span class="op-hod"></span></li>
-          <li class="op-r"><b class="op-dilek"></b><span class="op-co">mapa</span><span class="op-hod"></span></li>
-          <li class="op-r"><b class="op-dilek"></b><span class="op-co">čas</span><span class="op-hod"></span></li>
-        </ol>
-
-        <p class="op-start"><span class="op-psano"></span></p>
-      </div>
-    </div>
-
-    <!-- Návod k ovládání. Na počítači klávesy se šipkami, na
-         dotyku telefon se švihnutím. Kreslené v SVG, takže se
-         nestahuje žádný obrázek a je to ostré na každé obrazovce.
-         Ukáže se vždycky jen ten, který na daném zařízení dává
-         smysl, a rozeběhne se, teprve až je sestaveno. -->
+    <!-- Návod k ovládání. Na počítači klávesnicový kříž, na dotyku
+         telefon se švihnutím. Kreslené v SVG, takže se nestahuje
+         žádný obrázek a je to ostré na každé obrazovce. Ukáže se
+         vždycky jen ten, který na daném zařízení dává smysl,
+         a rozeběhne se, teprve až je načteno. -->
     <div class="op-navod">
       <div class="nav-p nav-klavesy">
-        <svg viewBox="0 0 108 76" width="108" height="76" role="img" aria-hidden="true">
-          <g fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="36" y="2" width="36" height="34"/>
-            <rect x="36" y="40" width="36" height="34"/>
+        <!-- Kříž šipek tak, jak leží na klávesnici: nahoru nad
+             spodní trojicí. Doleva a doprava stránku nevedou,
+             jsou tu proto, aby kresba byla klávesnice; rudé jsou
+             jen ty dvě, kterými se někam dostanete. -->
+        <svg viewBox="0 0 112 74" width="112" height="74" role="img" aria-hidden="true">
+          <g class="kl-vedle">
+            <rect x="1" y="39" width="34" height="34"/>
+            <rect x="77" y="39" width="34" height="34"/>
+            <path d="M12 56l12-8v16z"/>
+            <path d="M100 56l-12-8v16z"/>
           </g>
-          <path d="M54 11l9 14H45z" fill="currentColor"/>
-          <path d="M54 65l-9-14h18z" fill="currentColor"/>
+          <g class="kl-vedou">
+            <rect x="39" y="1" width="34" height="34"/>
+            <rect x="39" y="39" width="34" height="34"/>
+            <path d="M56 12l8 12H48z"/>
+            <path d="M56 62l-8-12h16z"/>
+          </g>
         </svg>
-        <span>šipky nahoru a dolů</span>
+        <span>šipkami nahoru a dolů</span>
       </div>
 
       <div class="nav-p nav-prst">
@@ -326,6 +312,8 @@
         <span>švihněte nahoru</span>
       </div>
     </div>
+
+    <p class="op-start"><span class="op-psano"></span></p>
 
   </div>
 </div>

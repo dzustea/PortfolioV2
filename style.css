@@ -226,160 +226,26 @@ body{
   position: absolute; inset: 0;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  gap: clamp(18px, 3.4vw, 30px);
   padding: clamp(16px, 5vw, 32px);
 }
 
-.op-okno{
-  position: relative;
-  width: min(540px, 100%);
-  border: 1px solid var(--linka-2);
-  background: rgba(7,7,8,.94);
-  box-shadow: 0 0 0 1px rgba(224,36,44,.16), 0 30px 90px rgba(0,0,0,.75), 0 0 120px rgba(224,36,44,.14);
-  overflow: hidden;
-  will-change: transform;
-  /* Okno naskočí jako stará obrazovka: dvakrát blikne a pak
-     se rozsvítí napevno. */
-  animation: oknoNaskoci .5s steps(1) both;
-}
-@keyframes oknoNaskoci{
-  /* Blikne to dvakrát jako stará obrazovka, jenže první krok je
-     rozsvícený, ne zhasnutý. Na prvních sto milisekund tak okno
-     nebylo prázdné: prohlížeč nemohl nic vykreslit a čekal, i když
-     už měl celou stránku stáhnutou. Teď je první obrázek hotový
-     v první možný okamžik a blikání zůstává. */
-  0%  {opacity: 1}
-  8%  {opacity: 0}
-  20% {opacity: .5}
-  35% {opacity: 0}
-  55% {opacity: 1}
-  70% {opacity: .7}
-  100%{opacity: 1}
-}
-
-/* Skenovací linky přes celé okno. Jsou to dva body průhledného
-   pruhu, takže kreslení stojí jeden přechod a nic víc. */
-.op-crt{
-  position: absolute; inset: 0; z-index: 2; pointer-events: none;
-  background: repeating-linear-gradient(180deg,
-    rgba(0,0,0,.28) 0 1px, transparent 1px 3px);
-  opacity: .5;
-}
-/* Po obrazovce jednou za čas přejede světlejší pruh, jako když
-   se překresluje obraz. */
-.op-crt::after{
-  content: ""; position: absolute; left: 0; right: 0; height: 34%;
-  background: linear-gradient(180deg, transparent, rgba(242,239,233,.055), transparent);
-  animation: crtPrejezd 4.2s linear infinite;
-}
-@keyframes crtPrejezd{
-  from{transform: translateY(-120%)}
-  to  {transform: translateY(420%)}
-}
-
-.op-hl{
-  display: flex; align-items: center; gap: 7px;
-  padding: 9px 12px;
-  border-bottom: 1px solid var(--linka);
-  font-family: var(--mono);
-  font-size: .62rem; letter-spacing: .1em;
-  color: var(--sed-2);
-}
-/* Kosočtverec v rohu: tatáž značka, jakou mají kontrolní body
-   na dráze, takže okno patří k téže sadě. */
-.op-kosa{
-  width: 7px; height: 7px; flex: none;
-  background: var(--rud);
-  transform: rotate(45deg);
-}
-.op-n{margin-left: 6px; color: var(--kost)}
-.op-t{margin-left: auto}
-/* Vpravo stojí stav. Dokud se načítá, je vidět jedno slovo, po
-   dokončení druhé; mění se to třídou, kterou okno stejně dostává
-   kvůli ostatním prvkům, takže to nestojí ani řádek skriptu. */
-.op-t i{font-style: normal}
-.op-stav-hotovo{color: var(--rud-tx)}
-.op-nacita .op-stav-hotovo,
-.op-t .op-stav-nacita{display: none}
-.op-nacita .op-t .op-stav-nacita{display: inline}
-
-.op-telo{padding: 14px 12px 12px}
-
-/* ── VÝPIS SESTAVENÍ ─────────────────────────────────────────
-   Řádek se rozsvítí teprve ve chvíli, kdy je ta věc doopravdy
-   hotová. Dokud se čeká, není tam prázdné místo: řádky přibývají
-   zdola, takže je vidět, že se něco děje.
-   ─────────────────────────────────────────────────────────── */
-
-/* ── PRUH POSTUPU ────────────────────────────────────────────
-   Dělený na dílky, aby se dalo odečíst, kolik zbývá, a ne jen
-   tušit. Plní se z téže hodnoty, která za oknem rozsvěcí svět.
-   ─────────────────────────────────────────────────────────── */
-
-.op-pruh{
-  position: relative;
-  height: 12px; margin-bottom: 16px;
-  border: 1px solid var(--linka);
-}
-.op-pruh i{
-  position: absolute; inset: 2px;
-  background-image: linear-gradient(90deg, var(--rud) 0 11px, transparent 11px 15px);
-  background-size: 15px 100%;
-  /* Dílky se odkrývají zprava doleva, takže se neroztahují ani
-     nepřeskakují: je to vždycky celý dílek, nebo žádný. */
-  clip-path: inset(0 calc(100% - var(--staveno, 0) * 100%) 0 0);
-  transition: clip-path .5s cubic-bezier(.22,1,.36,1);
-}
-
-.op-log{font-family: var(--mono); font-size: .72rem; letter-spacing: .02em}
-
-.op-r{
-  display: grid; grid-template-columns: 12px minmax(0, 1fr) auto;
-  align-items: center; gap: 10px;
-  padding: 3px 0;
-  color: var(--sed-2);
-  opacity: 0; transform: translateY(5px);
-  transition: opacity .28s ease, transform .28s cubic-bezier(.22,1,.36,1);
-}
-.op-r.je-hotovo{opacity: 1; transform: none}
-
-/* Dílek u hotového řádku. Tentýž kosočtverec jako v rohu okna
-   a na dráze; jedna značka na celou stránku. */
-.op-dilek{
-  width: 6px; height: 6px;
-  margin-left: 2px;
-  background: var(--rud);
-  transform: rotate(45deg);
-}
-.op-co{color: var(--kost)}
-.op-hod{color: var(--sed-2)}
-
 /* ── START ───────────────────────────────────────────────────
    Nic tu nestojí, dokud člověk nestiskne šipku. Pak se slovo
-   dopíše samo, písmeno po písmeni, a okno se rozletí. Je to
-   jediné místo v okně vysázené nadpisovým písmem: po celou dobu
-   načítání je prázdné, takže když se zaplní, je to vidět.
+   dopíše samo, písmeno po písmeni, a opona se otevře. Dokud se
+   nepíše, nezabírá ani řádek: klávesy tak leží na pravém středu
+   obrazovky a nejsou o kousek výš kvůli prázdnému místu pod nimi.
    ─────────────────────────────────────────────────────────── */
 
-/* Dokud se nepíše, není co oddělovat: linka i mezera se ukážou
-   teprve ve chvíli, kdy do pruhu přijde první písmeno. Prázdný
-   orámovaný pruh pod výpisem by vypadal jako něco, co se
-   nenačetlo. */
-.op-start:has(.op-psano:empty){
-  min-height: 0; margin-top: 0; padding-top: 0;
-  border-top-color: transparent;
-}
 .op-start{
   display: flex; align-items: center; justify-content: center;
-  min-height: 1.6em;
-  margin-top: 14px; padding-top: 13px;
-  border-top: 1px solid var(--linka);
-  transition: min-height .2s ease, padding-top .2s ease;
+  min-height: 1.5em;
+  margin-top: clamp(22px, 4vw, 34px);
   font-family: var(--nadpis);
-  font-weight: 600; font-size: .92rem;
-  letter-spacing: .34em; text-indent: .34em;
+  font-weight: 600; font-size: clamp(1rem, 3.4vw, 1.35rem);
+  letter-spacing: .36em; text-indent: .36em;
   color: var(--kost);
 }
+.op-start:has(.op-psano:empty){min-height: 0; margin-top: 0}
 .op-psano{white-space: pre}
 
 
@@ -390,27 +256,38 @@ body{
    ani na úzké obrazovce nemá co lámat.
 
    Kresba se řídí šířkou okna, ne pevným rozměrem, a rozeběhne
-   se teprve ve chvíli, kdy je sestaveno: dokud se načítá, stojí.
+   se teprve ve chvíli, kdy je načteno: dokud se načítá, stojí.
+   Je to jediné, co na oponě stojí, takže nese celou obrazovku
+   a je podle toho velká.
    ─────────────────────────────────────────────────────────── */
 
 .op-navod{
   display: flex; align-items: flex-start; justify-content: center;
-  gap: clamp(16px, 4vw, 32px);
   color: var(--sed-2);
   text-align: center;
 }
-.nav-p{display: grid; justify-items: center; gap: 10px}
-.nav-p svg{width: clamp(52px, 14vw, 82px); height: auto}
+.nav-p{display: grid; justify-items: center; gap: clamp(16px, 2.6vw, 24px)}
+.nav-p svg{width: clamp(148px, 30vw, 232px); height: auto}
 .nav-p span{
   font-family: var(--mono);
-  font-size: clamp(.54rem, 2.8vw, .6rem);
-  letter-spacing: .12em; text-transform: uppercase;
-  max-width: 24ch; line-height: 1.5;
+  font-size: clamp(.6rem, 3vw, .72rem);
+  letter-spacing: .16em; text-transform: uppercase;
+  max-width: 32ch; line-height: 1.5;
 }
 
-/* Klávesa, o kterou jde, svítí rudě. */
-.nav-klavesy svg rect:last-of-type{stroke: var(--rud)}
-.nav-klavesy svg path:last-of-type{fill: var(--rud-tx)}
+/* Klávesy, které vedou, svítí rudě; zbylé dvě jsou tlumené.
+   Obrys i výplň jsou ve stylu, ne v atributech kresby: barvy
+   stránky mají být na jednom místě. */
+.nav-klavesy rect{fill: none; stroke-width: 2}
+.nav-klavesy path{stroke: none}
+.kl-vedou rect{stroke: var(--rud)}
+.kl-vedou path{fill: var(--rud-tx)}
+/* Tlumené tak, aby se daly přečíst jako klávesnice, ale aby
+   oko šlo rovnou na ty dvě rudé. */
+.kl-vedle{opacity: .5}
+.kl-vedle rect{stroke: var(--linka-2)}
+.kl-vedle path{fill: var(--sed-2)}
+
 .nav-prst svg path:last-of-type{fill: var(--rud-tx)}
 
 /* Tep je jediná výzva, která na oponě zbyla: dokud se sestavuje,
@@ -430,28 +307,33 @@ body{
 
 
 /* ── SPUŠTĚNÍ ────────────────────────────────────────────────
-   Okno se rozletí přes celou obrazovku a zhasne; pod ním
-   zůstane hotová stránka, která mezitím dojede na své místo.
-   Všechno jsou posuny, měřítka a průhlednost.
+   Není co rozletět do stran, okno je pryč. Klávesy se po stisku
+   nejdřív o kousek propadnou, jako když spínač sepne, a pak
+   projedou divákovi kolem hlavy; slovo START je následuje
+   o chvíli později a pod tím vším zůstane hotová stránka, která
+   mezitím dojede na své místo.
+
+   Všechno jsou měřítka a průhlednost, nic se nepřepočítává.
    ─────────────────────────────────────────────────────────── */
 
-/* Po stisku zhasne výpis i návod: od té chvíle mluví rozlet. */
-.je-vyjezd .op-log,
-.je-vyjezd .op-pruh,
-.je-vyjezd .op-navod{opacity: 0; transition: opacity .14s ease; animation: none}
+/* Tep návodu po stisku ustoupí: od té chvíle mluví rozlet. */
+.je-vyjezd .nav-p svg{animation: none}
 
-.je-vyjezd .op-okno{
-  animation: oknoSkubne .16s steps(2) 1, oknoRoste .66s cubic-bezier(.55,0,.9,.35) .16s forwards;
+.je-vyjezd .op-navod{
+  animation: klavesySepnou .66s cubic-bezier(.5,0,.85,.4) forwards;
 }
-/* Škubnutí obrazu, jako když se přepne signál. */
-@keyframes oknoSkubne{
-  0%,100%{transform: translate(0, 0)}
-  50%    {transform: translate(7px, -3px)}
+@keyframes klavesySepnou{
+  0%  {transform: scale(1);    opacity: 1}
+  12% {transform: scale(.93);  opacity: 1}
+  100%{transform: scale(2.9);  opacity: 0}
 }
-@keyframes oknoRoste{
+
+.je-vyjezd .op-start{
+  animation: startZhasne .56s cubic-bezier(.5,0,.85,.4) .12s forwards;
+}
+@keyframes startZhasne{
   0%  {transform: scale(1);   opacity: 1}
-  40% {transform: scale(1.5); opacity: 1}
-  100%{transform: scale(9);   opacity: 0}
+  100%{transform: scale(1.9); opacity: 0}
 }
 
 .je-vyjezd .op-svet{animation: svetDostaven .7s ease forwards}
@@ -470,10 +352,9 @@ body{
 .je-odhrnuto #main, .je-odhrnuto #hdr{transform: none; animation: none}
 
 @media (prefers-reduced-motion: reduce){
-  .op-okno, .op-crt::after, .nav-p svg{animation: none}
-  .op-pruh i{transition: none}
-  .op-okno{opacity: 1}
-  .je-vyjezd .op-okno, .je-vyjezd .op-tma{animation: none; opacity: 0}
+  .nav-p svg{animation: none}
+  .je-vyjezd .op-navod, .je-vyjezd .op-start,
+  .je-vyjezd .op-tma{animation: none; opacity: 0}
   .js #main, .js #hdr{transform: none}
 }
 
@@ -1033,12 +914,15 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   background: rgba(7,7,8,.72);
 }
 
+/* Nadpis rámu. Dřív to byla lišta: oddělená linkou, strojopisem
+   a malými písmeny, tedy přesně to, co nosí okno terminálu.
+   Teď je to popiska panelu — nadpisovým písmem, prostrkaně
+   a bez linky pod sebou, takže rám drží jeden celek a nevypadá
+   jako okno s titulkem. */
 .konz-hl{
-  display: flex; align-items: center; gap: 7px;
-  padding: 9px 12px;
-  border-bottom: 1px solid var(--linka);
-  font-family: var(--mono);
-  font-size: .62rem; letter-spacing: .1em;
+  display: flex; align-items: center; gap: 9px;
+  padding: 15px 16px 0;
+  font-size: .62rem;
   color: var(--sed-2);
 }
 /* Značka v rohu rámu: týž kosočtverec jako na dráze a v okně
@@ -1050,14 +934,22 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   transform: rotate(45deg);
 }
 .konz-n{
-  margin-left: 6px;
-  color: var(--kost); text-transform: uppercase;
+  font-family: var(--nadpis); font-weight: 600;
+  font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--kost);
 }
-.konz-t{margin-left: auto; color: var(--sed-2)}
+/* Vpravo stojí údaj, ne název: ten zůstává ve strojopisu, protože
+   se mění podle toho, kde ukazatel právě je. */
+.konz-t{
+  margin-left: auto;
+  font-family: var(--mono);
+  letter-spacing: .1em;
+  color: var(--sed-2);
+}
 
 /* Okno drží jen výpis voleb; odpověď na vybranou stojí vedle
    něj, ne v něm. */
-.konz-telo{padding: 14px 12px 12px}
+.konz-telo{padding: 14px 16px 16px}
 .konz-l{min-width: 0}
 
 /* Otázka nad nabídkou. Rudý svislý praporek u levého kraje ji
@@ -1264,7 +1156,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 
   .hero-veta{margin-top: 34px; font-size: 1.16rem}
 
-  .konz-hl{padding: 11px 15px; font-size: .72rem}
+  .konz-hl{padding: 17px 18px 0; font-size: .68rem}
   .konz-kosa{width: 8px; height: 8px}
   .konz-telo{padding: 18px 16px 16px}
   .konz-dotaz{font-size: .84rem}
@@ -1289,7 +1181,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 
   .hero-veta{margin-top: 38px; font-size: 1.26rem}
 
-  .konz-hl{padding: 13px 18px; font-size: .76rem}
+  .konz-hl{padding: 19px 20px 0; font-size: .72rem}
   .konz-kosa{width: 9px; height: 9px}
   .konz-telo{padding: 22px 20px 20px}
   .konz-dotaz{font-size: .9rem}
@@ -2459,19 +2351,17 @@ html:has(.doc-strana){scrollbar-width: auto}
     background: rgba(7, 7, 8, .72);
   }
 
-  /* ── LIŠTA OKNA ────────────────────────────────────────────
-     Tatáž jako u nabídky v úvodu. Vpravo se píše, na čem stojí
-     ukazatel: popisek má jedno pevné místo, kde je vždycky vidět. */
+  /* ── POPISKA RÁMU ──────────────────────────────────────────
+     Tatáž jako u nabídky v úvodu: název panelu nadpisovým písmem,
+     bez linky pod sebou. Vpravo se píše, na čem stojí ukazatel;
+     popisek má jedno pevné místo, kde je vždycky vidět. */
 
   .okno-hl{
-    display: flex; align-items: center; gap: 7px;
-    padding: 9px 12px;
-    border-bottom: 1px solid var(--linka);
-    font-family: var(--mono);
-    font-size: .62rem; letter-spacing: .1em;
+    display: flex; align-items: center; gap: 9px;
+    padding: 15px 18px 0;
+    font-size: .62rem;
     color: var(--sed-2);
   }
-  .okno-hl .konz-n{margin-left: 6px}
   .okno-hl .konz-t{
     margin-left: auto; color: var(--sed);
     text-transform: lowercase;

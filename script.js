@@ -36,24 +36,24 @@
 
   var tlumenyPohyb = matchMedia('(prefers-reduced-motion: reduce)');
 
-  /* ── OPONA: SESTAVENÍ V TERMINÁLU ─────────────────────────────
-     Opona je nahrávací obrazovka, na které se stránka načítá.
-     Řádky
-     výpisu přibývají podle skutečných událostí, ne podle stopek:
+  /* ── OPONA ────────────────────────────────────────────────────
+     Opona je tma se čtyřmi klávesami uprostřed. Nic se v ní
+     nečte ani neluští: jediné, co říká, je čím se stránka ovládá.
 
-       1.  styl a skript jsou přenesené
+     Svět za ní mezitím sílí podle skutečných událostí, ne podle
+     stopek. Kroky jsou dva:
+
+       1.  dokument je poskládaný
        2.  písma jsou připravená
-       3.  obsah je poskládaný
-       4.  hotovo, a za jak dlouho
 
-     Čísla vedle řádků nejsou pro efekt. Kilobajty bere skript
-     z měření prohlížeče, počet projektů z dokumentu a čas
-     z hodin, které běží od prvního bajtu stránky.
+     Dokud oba neproběhnou, je mřížka i záře za oponou slabá
+     a nedá se spustit; na pomalém připojení je proto vidět, že
+     se čeká na něco doopravdy, a ne na nastavený odpočet.
 
-     Pod výpisem čeká příkaz. Nikdo ho nepíše, dokud člověk
-     nestiskne šipku dolů; pak se dopíše sám, znak po znaku, okno
-     se rozletí přes celou obrazovku a pod ním zůstane hotová
-     stránka. Terminál se tím promění ve web.
+     Spustit se musí ručně. Nikdo nic nepíše, dokud člověk
+     nestiskne šipku dolů; pak se pod klávesami dopíše START,
+     znak po znaku, klávesy projedou kolem hlavy a pod nimi
+     zůstane hotová stránka.
 
      Celý blok je první v souboru a v try/catch, aby případná
      chyba kdekoli níž nenechala stránku zakrytou.
@@ -67,66 +67,23 @@
     koren.classList.add('js');
 
     opona = document.getElementById('opona');
-    var radkyLogu = opona ? Array.prototype.slice.call(opona.querySelectorAll('.op-r')) : [];
     var psano = opona ? opona.querySelector('.op-psano') : null;
     var hotovo = false;
 
     if (opona) opona.classList.add('op-nacita');
 
-    var hotovychRadku = 0;
+    /* Svět za oponou sílí podle toho, kolik je hotovo. Není to
+       odpočet nastavený dopředu: drží se toho, co prohlížeč
+       opravdu dokončil. */
+    var KROKU = 2;
+    var kroku = 0;
 
-    var zapisRadek = function (poradi, hodnota) {
-      var radek = radkyLogu[poradi];
-      if (!radek) return;
-      var pole = radek.querySelector('.op-hod');
-      if (pole && hodnota) pole.textContent = hodnota;
-      if (radek.classList.contains('je-hotovo')) return;
-
-      radek.classList.add('je-hotovo');
-      hotovychRadku += 1;
-
-      /* Za oknem se o kus vynoří svět stránky: s každým
-         hotovým řádkem sílí mřížka i záře, takže je vidět, že se
-         něco staví, ne jen čeká. */
-      opona.style.setProperty('--staveno',
-        (hotovychRadku / radkyLogu.length).toFixed(2));
+    var postoupil = function () {
+      kroku += 1;
+      if (opona) {
+        opona.style.setProperty('--staveno', (kroku / KROKU).toFixed(2));
+      }
     };
-
-    /* Kolik toho prohlížeč doopravdy stáhl. Když měření není
-       k dispozici, řádek prostě hodnotu nemá. */
-    var preneseno = function (pripony) {
-      if (!window.performance || !performance.getEntriesByType) return '';
-
-      var bajtu = 0;
-      var nasel = false;
-
-      performance.getEntriesByType('resource').forEach(function (z) {
-        for (var i = 0; i < pripony.length; i++) {
-          if (z.name.indexOf(pripony[i]) > -1) {
-            bajtu += z.transferSize || 0;
-            nasel = true;
-            return;
-          }
-        }
-      });
-
-      if (!nasel) return '';
-      /* Nula bajtů neznamená, že se nic nestahovalo: soubor byl
-         v mezipaměti. Říct to je poctivější než prázdný řádek. */
-      if (!bajtu) return 'z mezipaměti';
-      return Math.round(bajtu / 1024) + ' kB';
-    };
-
-    /* Čeština má u počtů tři tvary: jeden projekt, dva projekty,
-       pět projektů. Výpis uměl jen prostřední, takže při čtyřech
-       vycházel správně a od pátého ne. */
-    var mnozne = function (kolik, tvary) {
-      if (kolik === 1) return kolik + ' ' + tvary[0];
-      if (kolik >= 2 && kolik <= 4) return kolik + ' ' + tvary[1];
-      return kolik + ' ' + tvary[2];
-    };
-
-    zapisRadek(0, '');
 
     /* Čeká se na písma, která jsou pod oponou hned vidět: text
        v Archivu a jméno s nadpisy v Chakře. Strojopis se
@@ -146,18 +103,7 @@
         })
       : Promise.resolve();
 
-    dokumentHotov.then(function () {
-      zapisRadek(0, preneseno(['.css', '.js']));
-      var projektu = document.querySelectorAll('.polozka:not(.polozka-chysta)').length;
-      zapisRadek(2, projektu ? mnozne(projektu, ['projekt', 'projekty', 'projektů']) : '');
-
-      /* Mapa projektů je svět, do kterého se za oponou vstupuje,
-         takže ji výpis spočítá stejně jako všechno ostatní. Uzlů
-         je o jeden víc než projektů: poslední je rozdělaná práce,
-         kterou ještě nejde otevřít. */
-      var uzlu = document.querySelectorAll('.mapa-uzel').length;
-      zapisRadek(3, uzlu ? mnozne(uzlu, ['uzel', 'uzly', 'uzlů']) : '');
-    });
+    dokumentHotov.then(postoupil);
 
     /* Pojistka: kdyby se příslib písem nesplnil, opona se dá
        otevřít i tak. Písmo má font-display:swap, takže mezitím
@@ -172,8 +118,7 @@
     });
 
     Promise.race([pisemNejvys, pojistka]).then(function () {
-      zapisRadek(1, preneseno(['.woff2']));
-      zapisRadek(4, Math.round(performance.now()) + ' ms');
+      postoupil();
       hotovo = true;
       if (opona) opona.classList.remove('op-nacita');
     });
