@@ -37,7 +37,8 @@
   var tlumenyPohyb = matchMedia('(prefers-reduced-motion: reduce)');
 
   /* ── OPONA: SESTAVENÍ V TERMINÁLU ─────────────────────────────
-     Opona je terminál, ve kterém se stránka sestavuje. Řádky
+     Opona je nahrávací obrazovka, na které se stránka načítá.
+     Řádky
      výpisu přibývají podle skutečných událostí, ne podle stopek:
 
        1.  styl a skript jsou přenesené
@@ -84,7 +85,7 @@
       radek.classList.add('je-hotovo');
       hotovychRadku += 1;
 
-      /* Za terminálem se o kus vynoří svět stránky: s každým
+      /* Za oknem se o kus vynoří svět stránky: s každým
          hotovým řádkem sílí mřížka i záře, takže je vidět, že se
          něco staví, ne jen čeká. */
       opona.style.setProperty('--staveno',
@@ -178,14 +179,14 @@
     });
 
     /* ── SPUŠTĚNÍ ─────────────────────────────────────────────
-       Stisk šipky dopíše příkaz a rozletí okno. Skript při tom
-       nekreslí nic než text příkazu; rozlet je v keyframech,
-       takže ho vede grafika.
+       Stisk šipky dopíše slovo a rozletí okno. Skript při tom
+       nekreslí nic než to slovo; rozlet je v keyframech, takže
+       ho vede grafika.
        ─────────────────────────────────────────────────────── */
 
     if (opona) {
       var spousti = false;
-      var PRIKAZ = './start';
+      var PRIKAZ = 'START';
 
       var rozlet = function () {
         koren.classList.add('je-vyjezd');
@@ -211,9 +212,9 @@
           psano.textContent = PRIKAZ.slice(0, znak);
           if (znak >= PRIKAZ.length) {
             clearInterval(pise);
-            setTimeout(rozlet, 140);
+            setTimeout(rozlet, 170);
           }
-        }, 34);
+        }, 58);
       };
 
       window.addEventListener('keydown', function (udalost) {
@@ -485,94 +486,95 @@
     zadrz(udalost);
   }, { passive: false });
 
-  /* ── OPIČKA NA LIÁNÁCH ────────────────────────────────────────
-     Ukazatel postupu. Jedna liána je jedna zastávka, opička na ni
-     skočí pokaždé, když se ukazatel pohne. Liány se dodělají
-     podle počtu zastávek, aby to nikdy nesedělo jen náhodou.
+  /* ── LOĎ NA DRÁZE ─────────────────────────────────────────────
+     Ukazatel postupu. Jeden kontrolní bod je jedna zastávka, loď
+     k němu přeletí pokaždé, když se ukazatel pohne. Body se
+     dodělají podle počtu zastávek, aby to nikdy nesedělo jen
+     náhodou.
      ──────────────────────────────────────────────────────────── */
 
-  var hrazda = document.querySelector('.hrazda');
-  var opicka = hrazda ? hrazda.querySelector('.opicka') : null;
-  var liany = [];
+  var draha = document.querySelector('.draha');
+  var lod = draha ? draha.querySelector('.lod') : null;
+  var body = [];
 
-  /* Hrazda neměří zastávky, ale místa ve stránce. Volby v konzoli
-     jsou nabídka, ne cesta, a celá historie projektů je jedno
-     místo: opička k ní doskáče, počká tam, a zase vyrazí, až
-     z ní člověk odejde.
+  /* Dráha neměří zastávky, ale místa ve stránce. Volby v nabídce
+     jsou rozcestník, ne cesta, a celá historie projektů je jedno
+     místo: loď k němu doletí, počká tam a zase vyrazí, až z něj
+     člověk odejde.
 
-     Každá zastávka proto dostane pořadí své liány; ty, které
-     liánu nemají, mají mínus jedna. */
+     Každá zastávka proto dostane pořadí svého bodu; ty, které bod
+     nemají, mají mínus jedna. */
   var liceni = [];
-  var lian = 0;
+  var pocetBodu = 0;
   var rejstrikMa = -1;
 
   stanice.forEach(function (prvek) {
     if (prvek.classList.contains('volba')) { liceni.push(-1); return; }
 
     if (prvek.closest('.rejstrik') || prvek.closest('.mapa')) {
-      if (rejstrikMa < 0) { rejstrikMa = lian; lian += 1; }
+      if (rejstrikMa < 0) { rejstrikMa = pocetBodu; pocetBodu += 1; }
       liceni.push(rejstrikMa);
       return;
     }
 
-    liceni.push(lian);
-    lian += 1;
+    liceni.push(pocetBodu);
+    pocetBodu += 1;
   });
 
   var poloha = function (poradi) {
-    return ((poradi + 0.5) / lian * 100).toFixed(2) + '%';
+    return ((poradi + 0.5) / pocetBodu * 100).toFixed(2) + '%';
   };
 
-  if (hrazda && opicka && lian) {
-    for (var l = 0; l < lian; l++) (function (i) {
-      var liana = document.createElement('i');
-      liana.className = 'liana';
-      liana.style.setProperty('--x', poloha(i));
-      hrazda.insertBefore(liana, opicka);
-      liany.push(liana);
+  if (draha && lod && pocetBodu) {
+    for (var l = 0; l < pocetBodu; l++) (function (i) {
+      var bod = document.createElement('i');
+      bod.className = 'bod';
+      bod.style.setProperty('--x', poloha(i));
+      draha.insertBefore(bod, lod);
+      body.push(bod);
     })(l);
 
-    /* Dokud je člověk v úvodu, visí opička na začátku hrazdy,
-       před první liánou: cesta ještě nezačala. */
-    opicka.style.setProperty('--x', '24px');
+    /* Dokud je člověk v úvodu, stojí loď na začátku dráhy, před
+       prvním bodem: cesta ještě nezačala. */
+    lod.style.setProperty('--x', '24px');
   }
 
-  var presunOpicku = function (index) {
-    if (!opicka || !liany.length) return;
+  var presunLod = function (index) {
+    if (!lod || !body.length) return;
     var byloKde = kde;
     var poradi = liceni[index];
     if (poradi === undefined) poradi = -1;
     var bylo = kde > -1 ? liceni[kde] : -1;
 
-    /* Uvnitř historie se opička nehýbe: je to jedno místo. */
+    /* Uvnitř historie se loď nehýbe: je to jedno místo. */
     if (poradi > -1 && poradi === bylo) return;
 
-    liany.forEach(function (liana, i) {
-      liana.classList.toggle('je-drzena', i === poradi);
+    body.forEach(function (bod, i) {
+      bod.classList.toggle('je-aktivni', i === poradi);
     });
 
-    /* V úvodu se opička vrátí na začátek hrazdy. */
+    /* V úvodu se loď vrátí na začátek dráhy. */
     if (poradi < 0) {
-      opicka.style.setProperty('--x', '24px');
-      opicka.style.setProperty('--smer', '-1');
+      lod.style.setProperty('--x', '24px');
+      lod.style.setProperty('--smer', '-1');
       return;
     }
 
-    opicka.style.setProperty('--x', 'calc(' + poloha(poradi) + ' - 12px)');
-    opicka.style.setProperty('--smer', index < byloKde ? '-1' : '1');
+    lod.style.setProperty('--x', 'calc(' + poloha(poradi) + ' - 12px)');
+    lod.style.setProperty('--smer', index < byloKde ? '-1' : '1');
 
-    /* Skok se přehraje znovu i při druhém stisku téže šipky.
+    /* Přelet se přehraje znovu i při druhém stisku téže šipky.
        Bez vynuceného přečtení rozměru by prohlížeč změnu třídy
-       v jednom snímku neviděl a opička by jen klouzala. */
-    opicka.classList.remove('skace');
-    void opicka.offsetWidth;
-    opicka.classList.add('skace');
+       v jednom snímku neviděl a loď by jen klouzala. */
+    lod.classList.remove('leti');
+    void lod.offsetWidth;
+    lod.classList.add('leti');
   };
 
-  /* Na dotyku stránku nevede ukazatel, ale prst. Opička proto
-     hlídá, co je zrovna uprostřed okna: dokud je to táž liána,
-     visí a čeká, a teprve když se objeví další sekce, skočí. Po
-     hrazdě tím pádem neklouže ani na telefonu.
+  /* Na dotyku stránku nevede ukazatel, ale prst. Loď proto hlídá,
+     co je zrovna uprostřed okna: dokud je to týž bod, stojí a
+     čeká, a teprve když se objeví další sekce, přeletí. Po dráze
+     tím pádem neklouže ani na telefonu.
 
      Měří to prohlížeč sám přes IntersectionObserver, takže se
      při posunu nic nepočítá. Pás uprostřed okna je úzký
@@ -589,7 +591,7 @@
          k té člověk právě dorazil. */
       for (var i = 0; i < stanice.length; i++) {
         if (vidim[i]) {
-          if (i !== kde) { presunOpicku(i); kde = i; }
+          if (i !== kde) { presunLod(i); kde = i; }
           return;
         }
       }
@@ -609,7 +611,7 @@
   var ODPOVED_VYCHOZI = odpovedText ? odpovedText.textContent : '';
   var pise = 0;
 
-  /* Odpověď vedle konzole. Text se bere z atributu na řádku
+  /* Odpověď vedle nabídky. Text se bere z atributu na řádku
      a vypisuje se znak po znaku, jako by ho stroj vlevo právě
      psal; vkládá se přes textContent, takže se do stránky
      nedostane žádné značkování.
@@ -662,7 +664,7 @@
     /* Odchod z historie zavře, co v ní zůstalo rozbalené. */
     if (otevriUroven) otevriUroven(deska);
 
-    presunOpicku(index);
+    presunLod(index);
     kde = index;
   };
 

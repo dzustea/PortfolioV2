@@ -25,7 +25,7 @@
    Tři písma, každé na svou práci:
 
      Archivo         všechno, co se čte v odstavcích
-     JetBrains Mono  terminál, štítky, ukazatele, čísla
+     JetBrains Mono  štítky, ukazatele, čísla, měřené hodnoty
      Chakra Petch    nadpisy, jména projektů, volby
 
    Archivo je proměnné v rozsahu tloušťky 100 až 900, takže
@@ -169,7 +169,7 @@ body{
    příkaz se dopíše, okno se rozletí přes celou obrazovku a pod
    ním zůstane hotová stránka. Terminál se promění ve web.
 
-   Je to tentýž terminál, jaký stojí v úvodu stránky, jen přes
+   Je to tentýž rám, jaký stojí v úvodu stránky, jen přes
    celou obrazovku: opona není cizí předsíň, ale první obrazovka
    téhož světa.
 
@@ -189,7 +189,7 @@ body{
 .op-tma{position: absolute; inset: 0; background: var(--noc)}
 
 /* ── SVĚT, KTERÝ SE STAVÍ ──────────────────────────────────────
-   Za terminálem se s každým hotovým řádkem výpisu o kus vynoří
+   Za oknem se s každým hotovým řádkem výpisu o kus vynoří
    totéž pozadí, jaké má stránka: mřížka do hloubky a rudá záře.
    Sílu drží proměnná --staveno, kterou zapisuje skript podle
    skutečného postupu, takže je při načítání vidět, jak stránka
@@ -220,7 +220,7 @@ body{
 }
 
 /* Svislice drží okno a pod ním návod pohromadě uprostřed
-   obrazovky. Návod tak visí pod terminálem jako popiska pod
+   obrazovky. Návod tak visí pod oknem jako popiska pod
    přístrojem a na úzké obrazovce se nemá kam zlomit. */
 .op-stred{
   position: absolute; inset: 0;
@@ -285,10 +285,23 @@ body{
   font-size: .62rem; letter-spacing: .1em;
   color: var(--sed-2);
 }
-.op-z{width: 7px; height: 7px; background: var(--linka-2)}
-.op-z:first-child{background: var(--rud)}
-.op-n{margin-left: 6px}
+/* Kosočtverec v rohu: tatáž značka, jakou mají kontrolní body
+   na dráze, takže okno patří k téže sadě. */
+.op-kosa{
+  width: 7px; height: 7px; flex: none;
+  background: var(--rud);
+  transform: rotate(45deg);
+}
+.op-n{margin-left: 6px; color: var(--kost)}
 .op-t{margin-left: auto}
+/* Vpravo stojí stav. Dokud se načítá, je vidět jedno slovo, po
+   dokončení druhé; mění se to třídou, kterou okno stejně dostává
+   kvůli ostatním prvkům, takže to nestojí ani řádek skriptu. */
+.op-t i{font-style: normal}
+.op-stav-hotovo{color: var(--rud-tx)}
+.op-nacita .op-stav-hotovo,
+.op-t .op-stav-nacita{display: none}
+.op-nacita .op-t .op-stav-nacita{display: inline}
 
 .op-telo{padding: 14px 12px 12px}
 
@@ -297,6 +310,26 @@ body{
    hotová. Dokud se čeká, není tam prázdné místo: řádky přibývají
    zdola, takže je vidět, že se něco děje.
    ─────────────────────────────────────────────────────────── */
+
+/* ── PRUH POSTUPU ────────────────────────────────────────────
+   Dělený na dílky, aby se dalo odečíst, kolik zbývá, a ne jen
+   tušit. Plní se z téže hodnoty, která za oknem rozsvěcí svět.
+   ─────────────────────────────────────────────────────────── */
+
+.op-pruh{
+  position: relative;
+  height: 12px; margin-bottom: 16px;
+  border: 1px solid var(--linka);
+}
+.op-pruh i{
+  position: absolute; inset: 2px;
+  background-image: linear-gradient(90deg, var(--rud) 0 11px, transparent 11px 15px);
+  background-size: 15px 100%;
+  /* Dílky se odkrývají zprava doleva, takže se neroztahují ani
+     nepřeskakují: je to vždycky celý dílek, nebo žádný. */
+  clip-path: inset(0 calc(100% - var(--staveno, 0) * 100%) 0 0);
+  transition: clip-path .5s cubic-bezier(.22,1,.36,1);
+}
 
 .op-log{font-family: var(--mono); font-size: .72rem; letter-spacing: .02em}
 
@@ -310,47 +343,48 @@ body{
 }
 .op-r.je-hotovo{opacity: 1; transform: none}
 
-/* Fajfka kreslená dvěma hranami: strojopis ji v podmnožině
-   znaků mít nemusí a čtvereček místo ní by vypadal jako chyba. */
-.op-fajfka{
-  width: 9px; height: 5px;
-  border-left: 1px solid var(--rud);
-  border-bottom: 1px solid var(--rud);
-  transform: rotate(-45deg) translate(1px, -1px);
+/* Dílek u hotového řádku. Tentýž kosočtverec jako v rohu okna
+   a na dráze; jedna značka na celou stránku. */
+.op-dilek{
+  width: 6px; height: 6px;
+  margin-left: 2px;
+  background: var(--rud);
+  transform: rotate(45deg);
 }
 .op-co{color: var(--kost)}
 .op-hod{color: var(--sed-2)}
 
-/* ── PŘÍKAZ ──────────────────────────────────────────────────
-   Nikdo ho nepíše, dokud člověk nestiskne šipku. Pak se dopíše
-   sám, znak po znaku, a okno se rozletí.
+/* ── START ───────────────────────────────────────────────────
+   Nic tu nestojí, dokud člověk nestiskne šipku. Pak se slovo
+   dopíše samo, písmeno po písmeni, a okno se rozletí. Je to
+   jediné místo v okně vysázené nadpisovým písmem: po celou dobu
+   načítání je prázdné, takže když se zaplní, je to vidět.
    ─────────────────────────────────────────────────────────── */
 
-.op-prikaz{
-  display: flex; align-items: center; gap: 8px;
-  margin-top: 14px; padding-top: 12px;
+/* Dokud se nepíše, není co oddělovat: linka i mezera se ukážou
+   teprve ve chvíli, kdy do pruhu přijde první písmeno. Prázdný
+   orámovaný pruh pod výpisem by vypadal jako něco, co se
+   nenačetlo. */
+.op-start:has(.op-psano:empty){
+  min-height: 0; margin-top: 0; padding-top: 0;
+  border-top-color: transparent;
+}
+.op-start{
+  display: flex; align-items: center; justify-content: center;
+  min-height: 1.6em;
+  margin-top: 14px; padding-top: 13px;
   border-top: 1px solid var(--linka);
-  font-family: var(--mono);
-  font-size: .78rem; letter-spacing: .02em;
+  transition: min-height .2s ease, padding-top .2s ease;
+  font-family: var(--nadpis);
+  font-weight: 600; font-size: .92rem;
+  letter-spacing: .34em; text-indent: .34em;
   color: var(--kost);
 }
-.op-prikaz b{
-  width: 0; height: 0;
-  border-left: 6px solid var(--rud);
-  border-top: 4px solid transparent;
-  border-bottom: 4px solid transparent;
-}
 .op-psano{white-space: pre}
-.op-kurzor{
-  width: .5em; height: 1.05em;
-  background: var(--rud);
-  animation: kurzorBlika 1.05s steps(1) infinite;
-}
-@keyframes kurzorBlika{0%,50%{opacity: 1} 51%,100%{opacity: 0}}
 
 
 /* ── NÁVOD K OVLÁDÁNÍ ──────────────────────────────────────────
-   Visí pod terminálem jako popiska pod přístrojem. Na počítači
+   Visí pod oknem jako popiska pod přístrojem. Na počítači
    klávesy se šipkami, na dotyku telefon se švihnutím; ukáže se
    vždycky jen ten, který na daném zařízení dává smysl, takže se
    ani na úzké obrazovce nemá co lámat.
@@ -403,6 +437,7 @@ body{
 
 /* Po stisku zhasne výpis i návod: od té chvíle mluví rozlet. */
 .je-vyjezd .op-log,
+.je-vyjezd .op-pruh,
 .je-vyjezd .op-navod{opacity: 0; transition: opacity .14s ease; animation: none}
 
 .je-vyjezd .op-okno{
@@ -435,216 +470,189 @@ body{
 .je-odhrnuto #main, .je-odhrnuto #hdr{transform: none; animation: none}
 
 @media (prefers-reduced-motion: reduce){
-  .op-kurzor, .op-okno, .op-crt::after, .nav-p svg{animation: none}
+  .op-okno, .op-crt::after, .nav-p svg{animation: none}
+  .op-pruh i{transition: none}
   .op-okno{opacity: 1}
   .je-vyjezd .op-okno, .je-vyjezd .op-tma{animation: none; opacity: 0}
   .js #main, .js #hdr{transform: none}
 }
 
 
-/* ══ OPIČKA NA LIÁNÁCH ═════════════════════════════════════════
-   Ukazatel postupu ve stránce. Visí pod lištou, každá liána je
-   jedno místo ve stránce a opička na ně skáče, jak člověk
-   postupuje. Vpravo od poslední liány už nic není, takže je
-   vidět i to, kolik zbývá.
+/* ══ DRÁHA S KONTROLNÍMI BODY ══════════════════════════════════
+   Ukazatel postupu ve stránce. Pod lištou vede vyznačená trasa,
+   na ní stojí kontrolní body a mezi nimi přelétá loď: jeden bod
+   je jedno místo ve stránce. Vpravo od posledního bodu už nic
+   není, takže je vidět i to, kolik zbývá.
 
-   Hrazda neměří zastávky, ale místa: volby v konzoli se
-   nepočítají (rozcestník je nabídka, ne cesta) a celá historie
-   projektů je jedno místo. Na dotyku vede opičku to, co je
-   zrovna uprostřed okna, na počítači ukazatel šipek; v obou
-   případech visí a čeká, dokud se člověk neposune dál.
+   Dráha neměří zastávky, ale místa: volby v nabídce se nepočítají
+   (rozcestník je nabídka, ne cesta) a celá historie projektů je
+   jedno místo. Na dotyku vede loď to, co je zrovna uprostřed
+   okna, na počítači ukazatel šipek; v obou případech zůstane
+   stát a čeká, dokud se člověk neposune dál.
 
    Pohyb je rozdělený do tří vrstev, aby si transformace
-   nepřekážely: vnější prvek jede do strany, prostřední se houpe
-   pořád dokola a vnitřní dělá vlastní skok.
+   nepřekážely: vnější prvek jede do strany, prostřední se vznáší
+   pořád dokola a vnitřní dělá vlastní přelet.
    ══════════════════════════════════════════════════════════════ */
 
-/* Dokud visí opona, opička nemá kde viset. */
-.hrazda{opacity: 0; transition: opacity .5s ease}
-.je-odhrnuto .hrazda{opacity: 1}
+/* Dokud visí opona, loď nemá kam letět. */
+.draha{opacity: 0; transition: opacity .5s ease}
+.je-odhrnuto .draha{opacity: 1}
 
-.hrazda{
+.draha{
   position: fixed; left: 0; right: 0; top: var(--nav);
   height: 58px; z-index: 95; pointer-events: none;
   padding-inline: clamp(18px, 4vw, 48px);
 }
-/* Větev, ze které liány visí. */
-.hrazda::before{
+/* Trasa. Přerušovaná, aby to byla vyznačená cesta, a ne linka
+   rozhraní; na krajích se ztrácí do tmy. */
+.draha::before{
   content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--linka-2) 12%, var(--linka-2) 88%, transparent);
+  background-image: repeating-linear-gradient(90deg,
+    var(--linka-2) 0 7px, transparent 7px 14px);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 11%, #000 89%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 11%, #000 89%, transparent);
 }
 
-/* ── LIÁNA ─────────────────────────────────────────────────────
-   Provaz, ne čára: dva body světla a tmy nad sebou dělají
-   zkroucení, na konci je uzel. Každá visí jinak dlouho a houpe
-   se jinak rychle, takže hrazda nikdy nestojí na místě a přitom
-   se nic neopakuje na oko pravidelně.
+/* ── KONTROLNÍ BOD ─────────────────────────────────────────────
+   Krátká svislice a pod ní kosočtverec: značka na trase, jakou
+   mívá mapa úrovní. Čeká tiše, dokud k ní loď nedoletí.
    ─────────────────────────────────────────────────────────── */
 
-.liana{
+.bod{
   position: absolute; top: 0; left: var(--x, 0);
-  width: 2px; height: 16px;
-  background:
-    repeating-linear-gradient(180deg,
-      rgba(242,239,233,.30) 0 2px,
-      rgba(242,239,233,.12) 2px 4px);
-  transform-origin: 50% 0;
-  animation: lianaSeHoupe 5.5s ease-in-out infinite;
+  width: 1px; height: 11px;
+  background: var(--linka-2);
 }
-/* Uzel na konci provazu. */
-.liana::after{
-  content: ""; position: absolute; left: -1px; bottom: -2px;
-  width: 4px; height: 3px;
-  background: rgba(242,239,233,.24);
+.bod::after{
+  content: ""; position: absolute; left: -3px; bottom: -7px;
+  width: 7px; height: 7px;
+  background: rgba(242,239,233,.26);
+  transform: rotate(45deg);
 }
 
-/* Liány nevisí stejně dlouho; rozdíl je pár bodů, ale hrazda
-   tím přestane vypadat jako hřeben. */
-.liana:nth-child(2n){height: 21px; animation-duration: 6.4s; animation-delay: -1.4s}
-.liana:nth-child(3n){height: 13px; animation-duration: 7.1s; animation-delay: -2.9s}
-.liana:nth-child(5n){height: 24px; animation-duration: 5.9s; animation-delay: -4.2s}
-
-@keyframes lianaSeHoupe{
-  0%,100%{transform: rotate(-2.5deg)}
-  50%    {transform: rotate(2.5deg)}
-}
-
-/* Liána, na které opička právě visí: rudá, delší, s výraznějším
-   uzlem a rozhoupaná. Doskok ji nejdřív protáhne a pak se
-   ustálí, takže je vidět, že na ni něco dosedlo. */
-.liana.je-drzena{
-  height: 30px;
-  background:
-    repeating-linear-gradient(180deg,
-      var(--rud) 0 2px,
-      rgba(224,36,44,.42) 2px 4px);
-  animation: lianaDoskok .62s cubic-bezier(.3,1.4,.5,1), lianaSeHoupe 2.6s ease-in-out .62s infinite;
-}
-.liana.je-drzena::after{
+/* Bod, u kterého loď právě stojí: rudý, delší a s kroužkem,
+   který se jednou rozletí a zhasne. Je vidět, že se doletělo,
+   a ne že tam ta značka svítila celou dobu. */
+.bod.je-aktivni{height: 15px; background: var(--rud)}
+.bod.je-aktivni::after{
+  width: 9px; height: 9px; left: -4px; bottom: -9px;
   background: var(--rud);
-  width: 6px; height: 4px; left: -2px; bottom: -3px;
 }
-@keyframes lianaDoskok{
-  0%  {transform: scaleY(.72) rotate(0)}
-  45% {transform: scaleY(1.14) rotate(3deg)}
-  75% {transform: scaleY(.95) rotate(-2deg)}
-  100%{transform: scaleY(1) rotate(0)}
+.bod.je-aktivni::before{
+  content: ""; position: absolute; left: -9px; bottom: -14px;
+  width: 19px; height: 19px;
+  border: 1px solid var(--rud);
+  opacity: 0;
+  transform: rotate(45deg);
+  animation: bodDosed .62s cubic-bezier(.3,1.4,.5,1);
+}
+@keyframes bodDosed{
+  0%  {opacity: .9; transform: rotate(45deg) scale(.4)}
+  100%{opacity: 0;  transform: rotate(45deg) scale(1)}
 }
 
-/* ── OPIČKA ───────────────────────────────────────────────────
-   Tři vrstvy: posun do strany, houpání, skok. Tělo je jeden
-   prvek, tvar mu dělají stíny rozložené po čtyřech bodech,
-   takže se nestahuje žádný obrázek.
+/* ── LOĎ ───────────────────────────────────────────────────────
+   Tři vrstvy: posun do strany, vznášení, přelet. Trup je jeden
+   prvek, tvar mu dělají stíny rozložené po čtyřech bodech, takže
+   se nestahuje žádný obrázek.
    ─────────────────────────────────────────────────────────── */
 
-/* Posun je v levé hraně, ne v transformaci: procento v posunu
-   se počítá z vlastní velikosti prvku, a ta jsou čtyři body. */
-.opicka{
+/* Posun je v levé hraně, ne v transformaci: procento v posunu se
+   počítá z vlastní velikosti prvku, a ta jsou čtyři body. */
+.lod{
   position: absolute; top: 0; left: var(--x, 0);
   transition: left .46s cubic-bezier(.34,1.24,.5,1);
 }
 
-/* Houpání kolem ruky. Běží pořád, takže opička nikdy nestojí
-   jako přilepená. */
-.op-ruka{
+/* Vznášení. Běží pořád, takže loď nikdy nestojí jako přilepená. */
+.lod-vznos{
   display: block;
-  transform-origin: 50% 0;
-  animation: opickaSeHoupe 3.4s ease-in-out infinite;
+  animation: lodSeVznasi 3.4s ease-in-out infinite;
 }
-@keyframes opickaSeHoupe{
-  0%,100%{transform: rotate(-4deg)}
-  50%    {transform: rotate(4deg)}
+@keyframes lodSeVznasi{
+  0%,100%{transform: translateY(0)}
+  50%    {transform: translateY(3px)}
 }
-/* Při skoku houpání ustoupí: ve vzduchu se není čeho držet. */
-.opicka.skace .op-ruka{animation: none}
+/* Při přeletu se vznášení vypne: ve vzduchu táhne motor. */
+.lod.leti .lod-vznos{animation: none}
 
-.opicka i{
+/* Trup. Čtyřbodová mřížka jako sprite ve staré hře: vzadu široká
+   záď s křidélky, dopředu se to zužuje do špičky, kabina v kosti.
+   Souměrný tvar vypadal jako křížek a nebylo z něj poznat, kam
+   loď míří; tenhle to říká sám od sebe. Překlopení řídí --smer,
+   takže se při návratu zpátky otočí i kabina a motor.
+
+   Loď letí kousek pod kontrolními body, ne přes ně: jinak by si
+   zakryla právě tu značku, u které stojí. */
+.lod i{
   display: block; position: relative;
   width: 4px; height: 4px;
-  margin-top: 20px;
+  margin-top: 28px;
   transform: scaleX(var(--smer, 1));
-  box-shadow: var(--visi);
+  box-shadow: var(--trup);
+
+  --trup:
+     8px 8px  var(--kost),
+     0   0    var(--rud),
+     0   4px  var(--rud),  4px 4px  var(--rud),  8px 4px var(--rud), 12px 4px var(--rud),
+     0   8px  var(--rud),  4px 8px  var(--rud), 12px 8px var(--rud),
+    16px 8px  var(--rud), 20px 8px  var(--rud),
+     0  12px  var(--rud),  4px 12px var(--rud),  8px 12px var(--rud), 12px 12px var(--rud),
+     0  16px  var(--rud);
 }
 
-/* Dvě polohy těla. Visící má ruku nahoře u liány, letící má
-   obě ruce rozpažené a nohy pokrčené. Je to týž trik jako
-   u sprite ve staré hře: mezi snímky se skáče, neprolíná se. */
-.opicka i{
-  --visi:
-    12px 0    var(--rud),
-     8px 4px  var(--rud), 12px 4px  var(--rud), 16px 4px  var(--rud), 20px 4px  var(--rud),
-     0   8px  var(--rud),  4px 8px  var(--rud),  8px 8px  var(--rud), 12px 8px  var(--rud), 16px 8px var(--rud), 20px 8px var(--rud), 24px 8px var(--rud),
-     0  12px  var(--rud),  4px 12px var(--rud), 12px 12px var(--rud), 20px 12px var(--rud), 24px 12px var(--rud),
-     4px 16px var(--rud),  8px 16px var(--rud), 12px 16px var(--rud), 16px 16px var(--rud), 20px 16px var(--rud),
-     8px 20px var(--rud), 12px 20px var(--rud), 16px 20px var(--rud), 24px 20px var(--rud),
-     8px 24px var(--rud), 12px 24px var(--rud), 16px 24px var(--rud), 24px 24px var(--rud),
-     4px 28px var(--rud), 20px 28px var(--rud);
-
-  --leti:
-     0   0    var(--rud), 24px 0    var(--rud),
-     4px 4px  var(--rud),  8px 4px  var(--rud), 12px 4px var(--rud), 16px 4px var(--rud), 20px 4px var(--rud),
-     0   8px  var(--rud),  4px 8px  var(--rud),  8px 8px var(--rud), 12px 8px var(--rud), 16px 8px var(--rud), 20px 8px var(--rud), 24px 8px var(--rud),
-     0  12px  var(--rud),  4px 12px var(--rud), 12px 12px var(--rud), 20px 12px var(--rud), 24px 12px var(--rud),
-     4px 16px var(--rud),  8px 16px var(--rud), 12px 16px var(--rud), 16px 16px var(--rud), 20px 16px var(--rud),
-     8px 20px var(--rud), 12px 20px var(--rud), 16px 20px var(--rud), 28px 20px var(--rud),
-     4px 24px var(--rud), 20px 24px var(--rud), 28px 24px var(--rud),
-     0  28px  var(--rud), 24px 28px var(--rud);
-}
-
-/* Oči. V kresbě jsou to dvě mezery, takže zamrkat znamená je na
-   okamžik zaplnit. Je to vlastní vrstva, aby se mrkání nepralo
-   s výměnou polohy těla při skoku. */
-.opicka i::before{
+/* Motor. Dva body za trupem, které nepravidelně probliknou,
+   takže loď žije i ve chvíli, kdy stojí nad bodem. */
+.lod i::before{
   content: ""; position: absolute; left: 0; top: 0;
   width: 4px; height: 4px;
-  box-shadow: 8px 12px var(--rud), 16px 12px var(--rud);
-  opacity: 0;
-  animation: opickaMrka 6.2s steps(1) infinite;
+  box-shadow: -4px 8px var(--rud), -8px 8px rgba(224,36,44,.45);
+  animation: motorBlika .5s steps(1) infinite;
 }
-@keyframes opickaMrka{
-  0%,95%  {opacity: 0}
-  96%,98% {opacity: 1}
-  99%,100%{opacity: 0}
+@keyframes motorBlika{
+  0%,100%{opacity: .85}
+  50%    {opacity: .35}
 }
 
-/* Skok. Oblouk nahoru, náklon po směru letu, v půlce výměna
-   polohy těla a na konci dosed, při kterém se opička o kousek
-   stlačí. Přehraje se při každé změně liány. */
-.opicka.skace i{animation: opickaSkace .52s cubic-bezier(.3,.7,.4,1)}
-@keyframes opickaSkace{
-  0%  {transform: scaleX(var(--smer, 1)) translateY(0) rotate(0);
-       box-shadow: var(--visi)}
-  18% {box-shadow: var(--leti)}
-  45% {transform: scaleX(var(--smer, 1)) translateY(-17px) rotate(-10deg)}
-  78% {box-shadow: var(--leti)}
-  79% {box-shadow: var(--visi)}
-  88% {transform: scaleX(calc(var(--smer, 1) * 1.14)) scaleY(.84) translateY(2px) rotate(0)}
-  100%{transform: scaleX(var(--smer, 1)) scaleY(1) translateY(0) rotate(0);
-       box-shadow: var(--visi)}
+/* Přelet. Loď se protáhne po směru letu, nakloní se a motor za
+   ní vzplane; na konci se srovná. Naklonění se překlápí samo
+   spolu s trupem, takže při letu doleva padá na druhou stranu. */
+.lod.leti i{animation: lodLeti .52s cubic-bezier(.3,.7,.4,1)}
+@keyframes lodLeti{
+  0%  {transform: scaleX(var(--smer, 1)) translateY(0) rotate(0)}
+  22% {transform: scaleX(calc(var(--smer, 1) * 1.22)) scaleY(.82) translateY(-3px) rotate(-7deg)}
+  62% {transform: scaleX(calc(var(--smer, 1) * 1.22)) scaleY(.82) translateY(-3px) rotate(-7deg)}
+  86% {transform: scaleX(calc(var(--smer, 1) * .92)) scaleY(1.1) translateY(2px) rotate(4deg)}
+  100%{transform: scaleX(var(--smer, 1)) scaleY(1) translateY(0) rotate(0)}
+}
+.lod.leti i::before{animation: motorVzplane .52s ease-out}
+@keyframes motorVzplane{
+  0%  {opacity: 1; box-shadow: -4px 8px var(--rud), -8px 8px rgba(224,36,44,.45)}
+  30% {opacity: 1; box-shadow: -4px 8px var(--rud), -8px 8px var(--rud),
+                               -12px 8px rgba(224,36,44,.72), -16px 8px rgba(224,36,44,.28)}
+  100%{opacity: .85; box-shadow: -4px 8px var(--rud), -8px 8px rgba(224,36,44,.45)}
 }
 
-/* Na dotyku opička po hrazdě neklouže. Visí na téže liáně jako
-   na počítači a čeká, dokud člověk nedojede k další sekci; pak
-   teprve skočí. Kterou liánu drží, pozná skript podle toho, co
+/* Na dotyku loď po dráze neklouže. Stojí nad týmž bodem jako na
+   počítači a čeká, dokud člověk nedojede k další sekci; pak
+   teprve přeletí. Který bod je její, pozná skript podle toho, co
    je zrovna uprostřed okna. */
 @media (hover: none), (pointer: coarse){
-  .liana{opacity: .7}
+  .bod{opacity: .72}
 }
 
 @media (max-width: 560px){
-  .hrazda{height: 52px; padding-inline: 10px}
-  .opicka i{margin-top: 15px}
-  .liana{height: 13px}
-  .liana:nth-child(2n){height: 17px}
-  .liana:nth-child(3n){height: 11px}
-  .liana:nth-child(5n){height: 19px}
-  .liana.je-drzena{height: 24px}
+  .draha{height: 52px; padding-inline: 10px}
+  .lod i{margin-top: 22px}
+  .bod{height: 9px}
+  .bod.je-aktivni{height: 12px}
 }
 
 @media (prefers-reduced-motion: reduce){
-  .liana, .op-ruka, .opicka i::before{animation: none}
-  .liana.je-drzena{animation: none}
-  .opicka.skace i{animation: none}
+  .lod-vznos, .lod i::before{animation: none}
+  .bod.je-aktivni::before{animation: none}
+  .lod.leti i, .lod.leti i::before{animation: none}
 }
 
 
@@ -937,7 +945,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 /* Prvek, přes který stránka přeskočila, se objeví bez přechodu. */
 .rv.bez-prechodu{transition: none}
 
-/* Úvod se odhalí shora dolů: hlavička, věta, konzole, lišta. */
+/* Úvod se odhalí shora dolů: hlavička, věta, nabídka, lišta. */
 .hero-veta.rv{transition-delay: .08s}
 .konz.rv{transition-delay: .16s}
 .obory .rv:nth-child(2){transition-delay: .08s}
@@ -945,10 +953,10 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 
 
 /* ══ ÚVOD ══════════════════════════════════════════════════════
-   Jméno, jedna věta a malá konzole. Rozcestník v ní je vysázený
-   drobně, jako výpis v terminálu: tři řádky, mezi kterými se
+   Jméno, jedna věta a malá nabídka. Rozcestník v ní je vysázený
+   drobně jako nabídka ve hře: tři řádky, mezi kterými se
    vybírá šipkami a potvrzuje enterem. Kdo si vybrat nechce, jde
-   dál dolů; konzole nikomu nestojí v cestě.
+   dál dolů; nabídka nikomu nestojí v cestě.
 
    Stav drží jediná třída je-vybrana, kterou zapisuje skript.
    Vedle ní platí i najetí a zaostření, aby výběr fungoval
@@ -1033,11 +1041,18 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   font-size: .62rem; letter-spacing: .1em;
   color: var(--sed-2);
 }
-/* Tři značky v rohu okna. Ostré, ne kolečka: na téhle stránce
-   není zaoblený ani jeden roh. */
-.konz-z{width: 7px; height: 7px; background: var(--linka-2)}
-.konz-z:first-child{background: var(--rud)}
-.konz-n{margin-left: 6px}
+/* Značka v rohu rámu: týž kosočtverec jako na dráze a v okně
+   opony. Ostrý, ne kolečko: na téhle stránce není zaoblený ani
+   jeden roh. */
+.konz-kosa{
+  width: 7px; height: 7px; flex: none;
+  background: var(--rud);
+  transform: rotate(45deg);
+}
+.konz-n{
+  margin-left: 6px;
+  color: var(--kost); text-transform: uppercase;
+}
 .konz-t{margin-left: auto; color: var(--sed-2)}
 
 /* Okno drží jen výpis voleb; odpověď na vybranou stojí vedle
@@ -1045,20 +1060,19 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 .konz-telo{padding: 14px 12px 12px}
 .konz-l{min-width: 0}
 
+/* Otázka nad nabídkou. Rudý svislý praporek u levého kraje ji
+   odděluje od voleb pod ní, aniž by si s nimi zahrál na další
+   řádek nabídky. */
 .konz-dotaz{
-  display: flex; align-items: baseline; gap: 8px;
+  display: flex; align-items: center; gap: 10px;
   font-family: var(--mono);
   font-size: .74rem; letter-spacing: .04em;
   color: var(--kost);
-  /* Ve výpisu terminálu se píše malými písmeny; na telefonu je
-     z téže věty nadpis, a ten velké písmeno mít má. */
-  text-transform: lowercase;
 }
-.konz-dotaz b{
-  width: 0; height: 0; align-self: center;
-  border-left: 6px solid var(--rud);
-  border-top: 4px solid transparent;
-  border-bottom: 4px solid transparent;
+.konz-dotaz::before{
+  content: ""; flex: none;
+  width: 2px; height: 1.05em;
+  background: var(--rud);
 }
 
 .konz-v{margin-top: 10px}
@@ -1123,7 +1137,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 .konz-pata span + span::before{content: "· "; color: var(--linka-2)}
 
 /* ── ODPOVĚĎ NA VOLBU ──────────────────────────────────────────
-   Stojí vedle okna, ne v něm: terminál se ptá, tohle je jeho
+   Stojí vedle nabídky, ne v ní: nabídka se ptá, tohle je její
    odpověď. Drží ji rudá hrana zleva, nad ní je štítek a pod ní
    pobídka k enteru. Text se vypisuje znak po znaku a na konci
    za ním bliká kurzor, takže je vidět, že to právě dopsal
@@ -1212,7 +1226,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   border-bottom: 3px solid transparent;
 }
 
-/* Na užší okno jde odpověď pod konzoli; vedle sebe by se ani
+/* Na užší okno jde odpověď pod nabídku; vedle sebe by se ani
    jeden sloupec nedal přečíst. */
 @media (max-width: 860px){
   .konz-sloupce{grid-template-columns: minmax(0, 1fr); max-width: 560px}
@@ -1228,7 +1242,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
    monitoru nad 1280 bodů pak uprostřed obrazovky stála drobná
    vizitka a kolem ní prázdno.
 
-   Roste jen to, co v úvodu stojí: jméno, věta, okno konzole
+   Roste jen to, co v úvodu stojí: jméno, věta, rám nabídky
    i odpověď vedle něj. Lišty nahoře se to netýká, ta má svou
    velikost danou tím, že je to lišta.
 
@@ -1251,7 +1265,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .hero-veta{margin-top: 34px; font-size: 1.16rem}
 
   .konz-hl{padding: 11px 15px; font-size: .72rem}
-  .konz-z{width: 8px; height: 8px}
+  .konz-kosa{width: 8px; height: 8px}
   .konz-telo{padding: 18px 16px 16px}
   .konz-dotaz{font-size: .84rem}
   .konz-v{margin-top: 13px}
@@ -1276,7 +1290,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .hero-veta{margin-top: 38px; font-size: 1.26rem}
 
   .konz-hl{padding: 13px 18px; font-size: .76rem}
-  .konz-z{width: 9px; height: 9px}
+  .konz-kosa{width: 9px; height: 9px}
   .konz-telo{padding: 22px 20px 20px}
   .konz-dotaz{font-size: .9rem}
   .konz-v{margin-top: 15px}
@@ -1318,7 +1332,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 
 
 /* ══ ÚVOD NA TELEFONU ══════════════════════════════════════════
-   Na počítači zůstává úvod tak, jak je: okno terminálu, vlevo
+   Na počítači zůstává úvod tak, jak je: rám nabídky, vlevo
    výpis voleb, vpravo náhled. Na telefonu to ale nefungovalo,
    a ne kvůli drobnostem.
 
@@ -1330,10 +1344,9 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 
    Proto se tady liší tři věci:
 
-     * rám okna s titulkem mizí. Titulek „filip / portfolio"
-       návštěvníkovi nic neříká a na úzké obrazovce jen ubírá
-       místo.
-     * otázka je nadpis, ne pobídka konzole: čtená sazba, velká
+     * rám s titulkem mizí. Titulek „nabídka" návštěvníkovi na
+       telefonu nic nepřidá a jen ubírá místo.
+     * otázka je nadpis, ne řádek nabídky: čtená sazba, velká
        a světlá, aby bylo jasné, že se ptá na něco člověka.
      * volby jsou tlačítka: rámeček, podklad, název čtenou
        sazbou a rudá šipka. Číslo a strojopis zůstaly jen tam,
@@ -1359,7 +1372,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 
   .hero-veta{font-size: 1rem; max-width: none}
 
-  /* ── KONZOLE BEZ RÁMU ────────────────────────────────────── */
+  /* ── NABÍDKA BEZ RÁMU ────────────────────────────────────── */
 
   .konz{
     max-width: none;
@@ -1369,10 +1382,9 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   .konz-hl{display: none}
   .konz-telo{display: block; padding: 0}
 
-  /* Otázka je nadpis. Klínek před ní zůstal jako jediná stopa
-     po konzoli, jen menší a odsazený. */
+  /* Otázka je nadpis. Praporek před ní zůstal jako jediná stopa
+     po rámu nabídky, jen vyšší, aby nadpisu stačil. */
   .konz-dotaz{
-    text-transform: none;
     font-family: var(--nadpis);
     font-size: clamp(1.25rem, 5.6vw, 1.5rem);
     font-weight: 600; letter-spacing: -.005em;
@@ -1380,12 +1392,7 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
     gap: 10px;
     margin-bottom: 14px;
   }
-  .konz-dotaz b{
-    border-left-width: 7px;
-    border-top-width: 5px;
-    border-bottom-width: 5px;
-    align-self: center;
-  }
+  .konz-dotaz::before{width: 3px; height: .9em}
 
   /* ── VOLBA JE TLAČÍTKO ───────────────────────────────────── */
 
@@ -1802,42 +1809,33 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 
 
 /* ── ŘÁDEK KONZOLE ─────────────────────────────────────────────
-   Drobnost pro toho, kdo čte. Vlevo příkaz, kterým se ta věc
-   doopravdy dělá, vpravo česky, co dělá. Příkaz je ozdoba, proto
-   je schovaný čtečce obrazovky; význam vedle něj je obyčejný
-   text, který si přečte každý.
+   Jedna věta pod úvodem sekce: je to jediné místo, kde na
+   stránce mluvím já, a ne rozhraní. Proto je rudá jako všechno
+   ostatní, co má člověk zaznamenat.
+
+   Dřív tu vlevo stál příkaz, kterým se ta věc doopravdy dělá,
+   a česky až za ním. Byla to rekvizita z jiného řemesla, než
+   jaké si u mě člověk kupuje, tak zbyla jen ta věta.
+
+   Kosočtverec před ní je táž značka, jakou mají kontrolní body
+   na dráze i rohy rámů: je podle ní poznat, že je to poznámka
+   stránky, a ne další nadpis. Třída se nejmenuje hláska, protože
+   tu si drží zpráva pod formulářem.
    ─────────────────────────────────────────────────────────── */
 
-.konzole{
+.vzkaz{
   margin-top: 16px;
-  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px;
+  display: flex; align-items: center; gap: 10px;
   font-family: var(--mono);
-  font-size: .72rem; letter-spacing: .02em;
+  font-size: .72rem; letter-spacing: .04em;
+  color: var(--rud-tx);
 }
-.konzole b{
-  position: relative;
-  padding: 4px 10px 4px 22px;
-  border: 1px solid var(--linka);
-  font-weight: 400; color: var(--kost);
-  white-space: nowrap;
+.vzkaz::before{
+  content: ""; flex: none;
+  width: 6px; height: 6px;
+  background: var(--rud);
+  transform: rotate(45deg);
 }
-/* Pobídka konzole. Klínek kreslený dvěma hranami, aby se
-   nespoléhal na to, že písmo má zrovna šipku. */
-.konzole b::before{
-  content: ""; position: absolute; left: 9px; top: 50%;
-  width: 0; height: 0;
-  border-left: 5px solid var(--rud);
-  border-top: 3px solid transparent;
-  border-bottom: 3px solid transparent;
-  transform: translateY(-50%);
-}
-/* Poznámka za mřížkou je jediné místo, kde na stránce mluvím
-   já, a ne rozhraní. Proto je rudá jako všechno ostatní, co
-   má člověk zaznamenat. */
-.konzole span{color: var(--rud-tx)}
-/* Před vysvětlením stojí mřížka, jako když si programátor napíše
-   poznámku do kódu. */
-.konzole span::before{content: "# "; color: var(--linka-2)}
 
 
 /* ══ KONTAKT ═══════════════════════════════════════════════════ */
@@ -2251,8 +2249,8 @@ footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
 
   /* Dole je zem a nad ní ukazatel stavu. Úvod jim uhne, aby
      poslední řádek nezůstal schovaný pod nimi. */
-  /* Nahoře visí opička na liánách, dole stojí ukazatel stavu.
-     Úvod jim uhne, aby se ani jméno, ani poslední řádek
+  /* Nahoře vede dráha s kontrolními body, dole stojí ukazatel
+     stavu. Úvod jim uhne, aby se ani jméno, ani poslední řádek
      neschovaly pod ně. */
   #hero{min-height: 0; padding-top: calc(var(--nav) + 86px); padding-bottom: 76px}
 
@@ -2292,7 +2290,7 @@ footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
 @media (hover: none), (pointer: coarse){
   html{
     scroll-snap-type: y proximity;
-    /* Zarážka sedí pod lištou i pod hrazdou s liánami, aby po
+    /* Zarážka sedí pod lištou i pod dráhou, aby po
        dosednutí nebyl nadpis schovaný za nimi. */
     scroll-padding-top: calc(var(--nav) + 52px);
   }
@@ -2427,8 +2425,8 @@ html:has(.doc-strana){scrollbar-width: auto}
 
 
 /* ══ MAPA PROJEKTŮ ═════════════════════════════════════════════
-   Strom, jaký mívají hry u dovedností, v okně terminálu: stejný
-   rám jako konzole v úvodu, aby to nebyl cizí prvek, ale druhá
+   Strom, jaký mívají hry u dovedností, v témž rámu: stejný
+   rám jako nabídka v úvodu, aby to nebyl cizí prvek, ale druhá
    obrazovka téhož stroje.
 
    Web je dlaždice: ikona, pořadové číslo a jméno uvnitř rámečku.
@@ -2462,7 +2460,7 @@ html:has(.doc-strana){scrollbar-width: auto}
   }
 
   /* ── LIŠTA OKNA ────────────────────────────────────────────
-     Tatáž jako u konzole v úvodu. Vpravo se píše, na čem stojí
+     Tatáž jako u nabídky v úvodu. Vpravo se píše, na čem stojí
      ukazatel: popisek má jedno pevné místo, kde je vždycky vidět. */
 
   .okno-hl{

@@ -24,7 +24,7 @@
      nadpisového písma, protože jméno v úvodu je první věc, kterou
      člověk za oponou uvidí.
 
-     Úplně první v řadě je ale strojopis. Opona je terminál a je
+     Úplně první v řadě je ale strojopis. Nahrávací obrazovka je
      celá v něm, takže je to jediné písmo, které člověk uvidí
      dřív, než oponu odhrne. Dokud se nepřednačítal, prohlížeč
      se o něm dozvěděl až z rozpisu stylu a první obrazovka se
@@ -240,19 +240,18 @@
 </head>
 <body>
 <!-- ══ OPONA ═════════════════════════════════════════════════════
-     První, co člověk uvidí: terminál, ve kterém se stránka
-     sestavuje. Řádky přibývají podle toho, co je doopravdy
-     hotové, a čísla v nich jsou skutečná, ne pro efekt:
-     přenesené kilobajty z měření prohlížeče, počet projektů
-     v dokumentu a čas od prvního bajtu.
+     První, co člověk uvidí: nahrávací obrazovka, na které se
+     stránka načítá. Pruh postupu i řádky pod ním přibývají podle
+     toho, co je doopravdy hotové, a čísla v nich jsou skutečná,
+     ne pro efekt: přenesené kilobajty z měření prohlížeče, počet
+     projektů v dokumentu a čas od prvního bajtu.
 
-     Pod výpisem čeká příkaz ./start. Opona se neodhrne sama:
-     čeká, dokud člověk nestiskne šipku dolů (na telefonu
-     nešvihne prstem). Teprve pak se příkaz dopíše, okno se
-     rozletí přes celou obrazovku a pod ním zůstane hotová
-     stránka. Terminál se tím doslova promění ve web.
+     Pod výpisem čeká start. Opona se neodhrne sama: čeká, dokud
+     člověk nestiskne šipku dolů (na telefonu nešvihne prstem).
+     Teprve pak se slovo dopíše, okno se rozletí přes celou
+     obrazovku a pod ním zůstane hotová stránka.
 
-     Je to tentýž terminál, jaký stojí v úvodu stránky, takže
+     Je to tentýž rám, jaký drží nabídku v úvodu stránky, takže
      opona není cizí předsíň, ale první obrazovka téhož světa.
 
      Bez skriptu se opona vůbec nevykreslí: třídu js přidává na
@@ -262,33 +261,38 @@
 <div id="opona" aria-hidden="true">
   <div class="op-tma"></div>
 
-  <!-- Svět, který se za terminálem staví. Mřížka a záře sílí
-       s každým hotovým řádkem výpisu, takže je při načítání
-       vidět, jak stránka vzniká. -->
+  <!-- Svět, který se za oknem staví. Mřížka a záře sílí s každým
+       hotovým řádkem výpisu, takže je při načítání vidět, jak
+       stránka vzniká. -->
   <div class="op-svet"><i class="op-mrizka"></i><i class="op-zar"></i></div>
 
   <!-- Okno a pod ním návod k ovládání. Svislice je drží u sebe
-       uprostřed obrazovky, takže návod visí pod terminálem jako
+       uprostřed obrazovky, takže návod visí pod oknem jako
        popiska pod přístrojem. -->
   <div class="op-stred">
 
     <div class="op-okno"><i class="op-crt" aria-hidden="true"></i>
       <div class="op-hl">
-        <span class="op-z"></span><span class="op-z"></span><span class="op-z"></span>
-        <span class="op-n">filip / portfolio</span>
-        <span class="op-t">sestavení</span>
+        <span class="op-kosa"></span>
+        <span class="op-n">Filip Lochman</span>
+        <span class="op-t"><i class="op-stav-nacita">nahrávání</i><i class="op-stav-hotovo">připraveno</i></span>
       </div>
 
       <div class="op-telo">
+        <!-- Pruh postupu. Plní se podle --staveno, které přibývá
+             s každým hotovým řádkem, takže ukazuje skutečný stav
+             načítání, ne odpočet nastavený dopředu. -->
+        <div class="op-pruh"><i></i></div>
+
         <ol class="op-log">
-          <li class="op-r"><b class="op-fajfka"></b><span class="op-co">styl a skript</span><span class="op-hod"></span></li>
-          <li class="op-r"><b class="op-fajfka"></b><span class="op-co">písma</span><span class="op-hod"></span></li>
-          <li class="op-r"><b class="op-fajfka"></b><span class="op-co">obsah</span><span class="op-hod"></span></li>
-          <li class="op-r"><b class="op-fajfka"></b><span class="op-co">mapa</span><span class="op-hod"></span></li>
-          <li class="op-r"><b class="op-fajfka"></b><span class="op-co">hotovo</span><span class="op-hod"></span></li>
+          <li class="op-r"><b class="op-dilek"></b><span class="op-co">grafika a ovládání</span><span class="op-hod"></span></li>
+          <li class="op-r"><b class="op-dilek"></b><span class="op-co">písmo</span><span class="op-hod"></span></li>
+          <li class="op-r"><b class="op-dilek"></b><span class="op-co">obsah</span><span class="op-hod"></span></li>
+          <li class="op-r"><b class="op-dilek"></b><span class="op-co">mapa</span><span class="op-hod"></span></li>
+          <li class="op-r"><b class="op-dilek"></b><span class="op-co">čas</span><span class="op-hod"></span></li>
         </ol>
 
-        <p class="op-prikaz"><b></b><span class="op-psano"></span><i class="op-kurzor"></i></p>
+        <p class="op-start"><span class="op-psano"></span></p>
       </div>
     </div>
 
@@ -383,23 +387,23 @@
     <a href="#kontakt" class="hdr-cta">Napsat zprávu</a>
   </div>
 
-  <!-- Hrazda s liánami. Visí pod lištou přes celou šířku okna
-       a místo ukazatele postupu po ní skáče opička: jedna liána
+  <!-- Dráha s kontrolními body. Vede pod lištou přes celou šířku
+       okna a místo ukazatele postupu po ní přelétá loď: jeden bod
        je jedna zastávka ve stránce, takže je na první pohled
-       vidět, kde člověk je a kolik mu zbývá. Liány dodělá
-       skript, aby jich bylo přesně tolik co zastávek. -->
-  <div class="hrazda" aria-hidden="true">
-    <span class="opicka"><span class="op-ruka"><i></i></span></span>
+       vidět, kde člověk je a kolik mu zbývá. Body dodělá skript,
+       aby jich bylo přesně tolik co zastávek. -->
+  <div class="draha" aria-hidden="true">
+    <span class="lod"><span class="lod-vznos"><i></i></span></span>
   </div>
 </header>
 
 <main id="main">
 
 <!-- ══ ÚVOD ══════════════════════════════════════════════════════
-     Jméno, jedna věta a malá konzole. Rozcestník v ní je vysázený
-     drobně, jako výpis v terminálu: tři řádky, mezi kterými se
-     vybírá šipkami a potvrzuje enterem. Kdo si vybrat nechce,
-     jde prostě dál dolů; konzole nikomu nestojí v cestě.
+     Jméno, jedna věta a malá nabídka. Rozcestník v ní je vysázený
+     drobně jako nabídka ve hře: tři řádky, mezi kterými se vybírá
+     šipkami a potvrzuje enterem. Kdo si vybrat nechce, jde prostě
+     dál dolů; nabídka nikomu nestojí v cestě.
 
      Bez obrázku, bez fotky.
 ══════════════════════════════════════════════════════════════════ -->
@@ -418,14 +422,14 @@
 
     <div class="konz">
       <div class="konz-hl" aria-hidden="true">
-        <span class="konz-z"></span><span class="konz-z"></span><span class="konz-z"></span>
-        <span class="konz-n">filip / portfolio</span>
+        <span class="konz-kosa"></span>
+        <span class="konz-n">nabídka</span>
         <span class="konz-t">úvod</span>
       </div>
 
       <div class="konz-telo">
         <div class="konz-l">
-        <p class="konz-dotaz"><b aria-hidden="true"></b>S čím jdete?</p>
+        <p class="konz-dotaz">S čím jdete?</p>
 
         <ul class="konz-v">
           <li>
@@ -464,10 +468,10 @@
       </div>
     </div>
 
-    <!-- Odpověď na vybranou volbu. Stojí vedle okna, ne v něm:
-         terminál se ptá, tohle je jeho odpověď. Text do ní
-         zapisuje skript z atributu data-popis na řádku, znak po
-         znaku a přes textContent. -->
+    <!-- Odpověď na vybranou volbu. Stojí vedle nabídky, ne v ní:
+         nabídka se ptá, tohle je odpověď. Text do ní zapisuje
+         skript z atributu data-popis na řádku, znak po znaku
+         a přes textContent. -->
     <div class="odpoved" aria-hidden="true">
       <p class="odp-hl"><b></b>odpověď</p>
       <p class="odp-t">Vyberte šipkami, s čím jdete.</p>
@@ -498,10 +502,9 @@
     <div class="prace-nad">
       <h2 class="nadpis rv">Co pro vás udělám<br><b>a zůstanu u toho</b></h2>
       <p class="nadpis-p rv">Nekupujete šablonu. Web vzniká podle toho, co potřebujete, a já na něm dělám od prvního návrhu až po spuštění.</p>
-      <!-- Řádek konzole. Vlevo příkaz, kterým se to doopravdy
-           dělá, vpravo česky, co dělá. Kdo příkazy zná, usměje
-           se; kdo je nezná, dočte se totéž vedle. -->
-      <p class="konzole rv"><b aria-hidden="true">npm run build</b><span>tady návrh přestane být obrázkem</span></p>
+      <!-- Hláška pod úvodem sekce. Jedna věta, která řekne, o co
+           tu jde, dřív než se člověk dočte k podrobnostem. -->
+      <p class="vzkaz rv">Tady návrh přestane být obrázkem</p>
     </div>
 
     <ol class="obory">
@@ -549,14 +552,13 @@
   <div class="wrap">
     <h2 class="nadpis rv">Projekty k náhledu,<br><b>některé v procesu</b></h2>
     <p class="nadpis-p rv">Pět webů, které jsem postavil, vypsaných jako historie: nahoře rozdělaná práce, pod ní hotové. Enter rozbalí, co je uvnitř, druhý enter web otevře.</p>
-    <p class="konzole rv"><b aria-hidden="true">git log --oneline</b><span>žádné sliby, jen hotové věci</span></p>
+    <p class="vzkaz rv">Žádné sliby, jen hotové věci</p>
   </div>
 
   <div class="wrap">
   <!-- ══ MAPA PROJEKTŮ ═══════════════════════════════════════════
        Na velkém okně nahrazuje výpis projektů strom, jaký mívají
-       hry u dovedností, a stojí v okně terminálu jako konzole
-       v úvodu. Weby jsou dlaždice, čáry mezi nimi jsou pořadí,
+       hry u dovedností, a stojí v témž rámu jako nabídka v úvodu. Weby jsou dlaždice, čáry mezi nimi jsou pořadí,
        ve kterém vznikaly, a slepé větve dávají mapě rozsah do stran.
 
        Mapa se neposouvá ani nepřibližuje a nedrží celou šířku
@@ -572,8 +574,8 @@
        bez unsafe-inline. -->
   <div class="okno-mapa rv">
     <div class="okno-hl" aria-hidden="true">
-      <span class="konz-z"></span><span class="konz-z"></span><span class="konz-z"></span>
-      <span class="konz-n">filip / projekty</span>
+      <span class="konz-kosa"></span>
+      <span class="konz-n">mapa světa</span>
       <span class="konz-t" data-stav>vyberte uzel</span>
     </div>
 
@@ -878,7 +880,7 @@
     <div class="kont-l rv" data-stanice>
       <h2 class="nadpis">Máte nápad?<br><b>Pojďme ho postavit.</b></h2>
       <p class="nadpis-p">Stačí pár vět o tom, co potřebujete. Ozvu se, jakmile si zprávu přečtu, a řekneme si, co to obnáší.</p>
-      <p class="konzole"><b aria-hidden="true">git push</b><span>odsud jde práce ven a zpátky ne</span></p>
+      <p class="vzkaz">Odsud jde práce ven a zpátky ne</p>
 
       <div class="spojeni">
         <a href="mailto:filda.lochman12@gmail.com">
