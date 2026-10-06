@@ -1556,18 +1556,6 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 .telo-in{padding-left: calc(clamp(4px, 1vw, 10px) + 10px + clamp(10px, 1.6vw, 20px))}
 .telo-txt{padding: 2px 0 26px; border-left: 1px solid var(--linka); padding-left: clamp(14px, 2vw, 24px); margin-left: -1px}
 
-.telo-cat{
-  display: flex; align-items: center; gap: 8px;
-  margin-bottom: 12px;
-  font-family: var(--mono);
-  font-size: .68rem; letter-spacing: .04em; color: var(--sed-2);
-}
-.telo-cat b{
-  width: 0; height: 0;
-  border-left: 5px solid var(--rud);
-  border-top: 3px solid transparent;
-  border-bottom: 3px solid transparent;
-}
 .telo-txt > p{color: var(--sed); max-width: 52ch}
 /* Web, který je hotový, ale nikde neběží, to musí říct sám. Bez
    téhle řádky by vypadal stejně jako ty čtyři, na které jde
