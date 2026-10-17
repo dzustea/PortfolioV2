@@ -9,6 +9,12 @@
 <meta name="robots" content="index, follow, max-image-preview:large"/>
 <meta name="theme-color" content="#0b0b0c"/>
 <link rel="canonical" href="https://www.filiplochman.cz/"/>
+<!-- Stránka je psaná česky a do angličtiny ji překládá preklad.js
+     podle jazyka zařízení. Volba se nese v adrese, takže anglická
+     verze má vlastní odkaz, který jde poslat i uložit. -->
+<link rel="alternate" hreflang="cs" href="https://www.filiplochman.cz/"/>
+<link rel="alternate" hreflang="en" href="https://www.filiplochman.cz/?lang=en"/>
+<link rel="alternate" hreflang="x-default" href="https://www.filiplochman.cz/"/>
 <!-- Ikony. SVG pro prohlížeče, které ho umí, ICO kvůli tomu, že si
      ho roboti stahují z kořene sami od sebe, a PNG proto, že Google
      chce pro ikonu ve výsledcích hledání čtverec o straně v násobku
@@ -247,6 +253,7 @@
 <!-- Skript se stahuje souběžně s rozborem dokumentu a spustí se,
      až je dokument hotový. Je to totéž pořadí, jaké měl na konci
      těla, jen se o něm prohlížeč dozví hned na začátku. -->
+<script src="preklad.js" defer></script>
 <script src="script.js" defer></script>
 </head>
 <body>
@@ -450,7 +457,7 @@
             </a>
           </li>
           <li>
-            <a class="volba" href="#projekty" data-stanice data-popis="Čtyři weby, které jsem postavil, i s tím, co na každém z nich stálo za řeč.">
+            <a class="volba" href="#projekty" data-stanice data-popis="Šest webů, které jsem postavil, i s tím, co na každém z nich stálo za řeč.">
               <span class="volba-u" aria-hidden="true"></span>
               <span class="volba-c" aria-hidden="true">03</span>
               <span class="volba-n">Chci jen vidět práci</span>

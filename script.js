@@ -713,6 +713,12 @@
      ──────────────────────────────────────────────────────────── */
 
   var formularHry = document.getElementById('cform');
+  /* Hlášky, které vypisuje skript, projdou slovníkem. Bez
+     preklad.js se vrátí čeština, takže stránka funguje i tak. */
+  var t = function (veta) {
+    return window.PREKLAD ? window.PREKLAD.t(veta) : veta;
+  };
+
   var kontakt = document.getElementById('kontakt');
 
   if (formularHry && kontakt) {
@@ -1315,7 +1321,7 @@
 
       if (chybi) {
         if (adresa.stav === 'tvar') zkontrolujAdresu();
-        hlaska.textContent = 'Vyplňte prosím všechna pole platnými údaji.';
+        hlaska.textContent = t('Vyplňte prosím všechna pole platnými údaji.');
         hlaska.className = 'hlaska err';
         var prvniChyba = formular.querySelector('[aria-invalid="true"]');
         if (prvniChyba) prvniChyba.focus();
@@ -1329,7 +1335,7 @@
       if (adresa.stav === 'navrh' && poleEmail.value.trim() !== trvaNa) {
         trvaNa = poleEmail.value.trim();
         ukazNavrh(adresa.navrh);
-        hlaska.textContent = 'Zkontrolujte adresu, ať odpověď dojde. Odesláním znovu ji potvrdíte.';
+        hlaska.textContent = t('Zkontrolujte adresu, ať odpověď dojde. Odesláním znovu ji potvrdíte.');
         hlaska.className = 'hlaska err';
         navrhTl.focus();
         return;
@@ -1338,7 +1344,7 @@
       /* Tlačítko se zamkne, aby odesláním dvakrát za sebou
          nevznikly dvě stejné zprávy. */
       tlacitko.disabled = true;
-      popisek.textContent = 'Odesílám...';
+      popisek.textContent = t('Odesílám...');
       hlaska.textContent = '';
       hlaska.className = 'hlaska';
 
@@ -1349,7 +1355,7 @@
       })
         .then(function (odpoved) {
           if (!odpoved.ok) throw new Error('Formspree odpovedel chybou');
-          hlaska.textContent = 'Zpráva odeslána. Ozvu se co nejdřív.';
+          hlaska.textContent = t('Zpráva odeslána. Ozvu se co nejdřív.');
           hlaska.className = 'hlaska ok';
           formular.reset();
           trvaNa = '';
@@ -1358,12 +1364,12 @@
         .catch(function () {
           /* Podrobnost chyby se ven nedostane. Uživateli nepomůže
              a útočníkovi by prozradila, co běží na pozadí. */
-          hlaska.textContent = 'Odeslání selhalo. Napište prosím přímo na filda.lochman12@gmail.com';
+          hlaska.textContent = t('Odeslání selhalo. Napište prosím přímo na filda.lochman12@gmail.com');
           hlaska.className = 'hlaska err';
         })
         .then(function () {
           tlacitko.disabled = false;
-          popisek.textContent = 'Odeslat zprávu';
+          popisek.textContent = t('Odeslat zprávu');
         });
     });
   }
