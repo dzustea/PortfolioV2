@@ -2654,9 +2654,10 @@ html:has(.doc-strana){scrollbar-width: auto}
    ty si polohu nesou samy v SVG. */
 @media (min-width: 1000px){
   .mapa-uzel[data-cil="r1"]{--x:14; --y:75; --poradi:0}
-  .mapa-uzel[data-cil="r2"]{--x:31; --y:41; --poradi:1}
-  .mapa-uzel[data-cil="r3"]{--x:49; --y:14; --poradi:2}
-  .mapa-uzel[data-cil="r4"]{--x:50; --y:73; --poradi:3}
-  .mapa-uzel[data-cil="r5"]{--x:71; --y:41; --poradi:4}
-  .mapa-uzel[data-cil="r6"]{--x:86; --y:75; --poradi:5}
+  .mapa-uzel[data-cil="r2"]{--x:29; --y:41; --poradi:1}
+  .mapa-uzel[data-cil="r3"]{--x:45; --y:14; --poradi:2}
+  .mapa-uzel[data-cil="r4"]{--x:46; --y:73; --poradi:3}
+  .mapa-uzel[data-cil="r5"]{--x:64; --y:41; --poradi:4}
+  .mapa-uzel[data-cil="r6"]{--x:80; --y:14; --poradi:5}
+  .mapa-uzel[data-cil="r7"]{--x:84; --y:75; --poradi:6}
 }
