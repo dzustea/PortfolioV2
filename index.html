@@ -64,6 +64,34 @@
      a kde jinde mě najde. Není to skript, prohlížeč to nespouští,
      je to jen datový blok; proto projde i přes přísné CSP.
      Jediné, co tu smí stát, je pravda ze stránky samotné. -->
+<!-- Dva weby jsou dočasně schované, takže tu nejsou ani v datech:
+     strukturovaná data mají popisovat to, co je na stránce vidět.
+     Až se vrátí, vrátí se i tyhle dvě položky a čísla se posunou.
+
+             {
+               "@type": "ListItem",
+               "position": 1,
+               "item": {
+                 "@type": "WebSite",
+                 "name": "Herní akademie",
+                 "description": "Web pro komunitu: úkoly, body, žebříček, chat a administrace.",
+                 "url": "https://motivo.free.nf",
+                 "creator": { "@id": "https://www.filiplochman.cz/#filip" }
+               }
+             },
+     
+             {
+               "@type": "ListItem",
+               "position": 3,
+               "item": {
+                 "@type": "WebSite",
+                 "name": "Vyhlídkář",
+                 "description": "Mapa vyhlídek, laviček a klidných míst s tipy od návštěvníků.",
+                 "url": "https://vyhlidkar.vercel.app/",
+                 "creator": { "@id": "https://www.filiplochman.cz/#filip" }
+               }
+             },
+-->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -174,23 +202,12 @@
       "@type": "ItemList",
       "@id": "https://www.filiplochman.cz/#projekty",
       "name": "Hotové weby",
-      "numberOfItems": 5,
+      "numberOfItems": 4,
       "itemListOrder": "https://schema.org/ItemListUnordered",
       "itemListElement": [
         {
           "@type": "ListItem",
           "position": 1,
-          "item": {
-            "@type": "WebSite",
-            "name": "Herní akademie",
-            "description": "Web pro komunitu: úkoly, body, žebříček, chat a administrace.",
-            "url": "https://motivo.free.nf",
-            "creator": { "@id": "https://www.filiplochman.cz/#filip" }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
           "item": {
             "@type": "WebSite",
             "name": "Restovski",
@@ -201,18 +218,7 @@
         },
         {
           "@type": "ListItem",
-          "position": 3,
-          "item": {
-            "@type": "WebSite",
-            "name": "Vyhlídkář",
-            "description": "Mapa vyhlídek, laviček a klidných míst s tipy od návštěvníků.",
-            "url": "https://vyhlidkar.vercel.app/",
-            "creator": { "@id": "https://www.filiplochman.cz/#filip" }
-          }
-        },
-        {
-          "@type": "ListItem",
-          "position": 4,
+          "position": 2,
           "item": {
             "@type": "CreativeWork",
             "name": "Tady Svačinář",
@@ -222,7 +228,7 @@
         },
         {
           "@type": "ListItem",
-          "position": 5,
+          "position": 3,
           "item": {
             "@type": "WebSite",
             "name": "Loremasters",
@@ -233,7 +239,7 @@
         },
         {
           "@type": "ListItem",
-          "position": 6,
+          "position": 4,
           "item": {
             "@type": "WebSite",
             "name": "Natte Visstick",
@@ -457,7 +463,7 @@
             </a>
           </li>
           <li>
-            <a class="volba" href="#projekty" data-stanice data-popis="Šest webů, které jsem postavil, i s tím, co na každém z nich stálo za řeč.">
+            <a class="volba" href="#projekty" data-stanice data-popis="Čtyři weby, které jsem postavil, i s tím, co na každém z nich stálo za řeč.">
               <span class="volba-u" aria-hidden="true"></span>
               <span class="volba-c" aria-hidden="true">03</span>
               <span class="volba-n">Chci jen vidět práci</span>
@@ -559,7 +565,7 @@
 
   <div class="wrap">
     <h2 class="nadpis rv">Projekty k náhledu,<br><b>některé v procesu</b></h2>
-    <p class="nadpis-p rv">Šest webů, které jsem postavil, vypsaných jako historie: nahoře rozdělaná práce, pod ní hotové. Enter rozbalí, co je uvnitř, druhý enter web otevře.</p>
+    <p class="nadpis-p rv">Čtyři weby, které jsem postavil, vypsané jako historie: nahoře rozdělaná práce, pod ní hotové. Enter rozbalí, co je uvnitř, druhý enter web otevře.</p>
     <p class="vzkaz rv">Žádné sliby, jen hotové věci</p>
   </div>
 
@@ -591,110 +597,73 @@
     <div class="okno-telo">
       <div class="mapa" role="group" aria-label="Mapa projektů">
         <svg class="mapa-cary" viewBox="0 0 150 100" aria-hidden="true">
-          <line class="mapa-cara" data-retez="r2" x1="21" y1="75" x2="31.59" y2="64.58" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r2" x1="31.59" y1="64.58" x2="32.91" y2="51.42" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r2" x1="32.91" y1="51.42" x2="43.5" y2="41" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r3" x1="43.5" y1="41" x2="58.86" y2="28.83" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r3" x1="58.86" y1="28.83" x2="67.5" y2="14" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r4" x1="43.5" y1="41" x2="49.02" y2="52.72" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r4" x1="49.02" y1="52.72" x2="63.48" y2="61.28" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r4" x1="63.48" y1="61.28" x2="69" y2="73" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r5" x1="67.5" y1="14" x2="74.23" y2="24.3" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r5" x1="74.23" y1="24.3" x2="89.27" y2="30.7" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r5" x1="89.27" y1="30.7" x2="96" y2="41" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r5" x1="69" y1="73" x2="80.94" y2="63.44" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r5" x1="80.94" y1="63.44" x2="84.06" y2="50.56" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r5" x1="84.06" y1="50.56" x2="96" y2="41" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r6" x1="96" y1="41" x2="111.36" y2="28.83" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r6" x1="111.36" y1="28.83" x2="120" y2="14" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r7" x1="120" y1="14" x2="118.75" y2="29.37" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r7" x1="118.75" y1="29.37" x2="126.89" y2="44.33" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r7" x1="126.89" y1="44.33" x2="121.75" y2="59.87" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara" data-retez="r7" x1="121.75" y1="59.87" x2="126" y2="75" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r4" x1="21" y1="75" x2="33.45" y2="64.77" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r4" x1="33.45" y1="64.77" x2="37.05" y2="51.23" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r4" x1="37.05" y1="51.23" x2="49.5" y2="41" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r5" x1="49.5" y1="41" x2="61.76" y2="33.3" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r5" x1="61.76" y1="33.3" x2="65.75" y2="21.7" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r5" x1="65.75" y1="21.7" x2="78" y2="14" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r6" x1="78" y1="14" x2="79.03" y2="28.32" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r6" x1="79.03" y1="28.32" x2="89.34" y2="41.54" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r6" x1="89.34" y1="41.54" x2="86.53" y2="56.32" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r6" x1="86.53" y1="56.32" x2="93" y2="70" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r7" x1="93" y1="70" x2="106.69" y2="61.69" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r7" x1="106.69" y1="61.69" x2="112.31" y2="49.31" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara" data-retez="r7" x1="112.31" y1="49.31" x2="126" y2="41" pathLength="1" vector-effect="non-scaling-stroke"/>
           <line class="mapa-cara mapa-cara--slepa" x1="21" y1="75" x2="7.5" y2="56" pathLength="1" vector-effect="non-scaling-stroke"/>
           <line class="mapa-cara mapa-cara--slepa" x1="7.5" y1="56" x2="13.5" y2="40" pathLength="1" vector-effect="non-scaling-stroke"/>
           <line class="mapa-cara mapa-cara--slepa" x1="13.5" y1="40" x2="4.5" y2="27" pathLength="1" vector-effect="non-scaling-stroke"/>
           <line class="mapa-cara mapa-cara--slepa" x1="21" y1="75" x2="30" y2="93" pathLength="1" vector-effect="non-scaling-stroke"/>
           <line class="mapa-cara mapa-cara--slepa" x1="30" y1="93" x2="48" y2="96" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="43.5" y1="41" x2="36" y2="15" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="36" y1="15" x2="46.5" y2="6" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="67.5" y1="14" x2="49.5" y2="4" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="49.5" y1="4" x2="36" y2="2" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="67.5" y1="14" x2="91.5" y2="9" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="91.5" y1="9" x2="99" y2="2" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="69" y1="73" x2="54" y2="92" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="54" y1="92" x2="72" y2="96" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="96" y1="41" x2="97.5" y2="58" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="97.5" y1="58" x2="90" y2="67" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="120" y1="14" x2="139.5" y2="30" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="139.5" y1="30" x2="147" y2="42" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="126" y1="75" x2="114" y2="93" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <line class="mapa-cara mapa-cara--slepa" x1="114" y1="93" x2="96" y2="96" pathLength="1" vector-effect="non-scaling-stroke"/>
-          <rect class="mapa-pip" data-retez="r2" data-krok="3" x="30.74" y="63.73" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r2" data-krok="4" x="32.06" y="50.57" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r3" data-krok="6" x="58.01" y="27.98" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r4" data-krok="6" x="48.17" y="51.87" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r4" data-krok="7" x="62.63" y="60.43" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r5" data-krok="9" x="73.38" y="23.45" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r5" data-krok="10" x="88.42" y="29.85" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r5" data-krok="9" x="80.09" y="62.59" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r5" data-krok="10" x="83.21" y="49.71" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r6" data-krok="12" x="110.51" y="27.98" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r7" data-krok="15" x="117.90" y="28.52" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r7" data-krok="16" x="126.04" y="43.48" width="1.7" height="1.7"/>
-          <rect class="mapa-pip" data-retez="r7" data-krok="17" x="120.90" y="59.02" width="1.7" height="1.7"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="49.5" y1="41" x2="27" y2="18" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="27" y1="18" x2="39" y2="8" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="78" y1="14" x2="108" y2="8" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="108" y1="8" x2="120" y2="3" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="93" y1="70" x2="72" y2="88" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="72" y1="88" x2="54" y2="95" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="126" y1="41" x2="144" y2="62" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="144" y1="62" x2="148.5" y2="74" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="126" y1="41" x2="117" y2="92" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <line class="mapa-cara mapa-cara--slepa" x1="117" y1="92" x2="99" y2="96" pathLength="1" vector-effect="non-scaling-stroke"/>
+          <rect class="mapa-pip" data-retez="r4" data-krok="6" x="32.60" y="63.92" width="1.7" height="1.7"/>
+          <rect class="mapa-pip" data-retez="r4" data-krok="7" x="36.20" y="50.38" width="1.7" height="1.7"/>
+          <rect class="mapa-pip" data-retez="r5" data-krok="9" x="60.91" y="32.45" width="1.7" height="1.7"/>
+          <rect class="mapa-pip" data-retez="r5" data-krok="10" x="64.90" y="20.85" width="1.7" height="1.7"/>
+          <rect class="mapa-pip" data-retez="r6" data-krok="12" x="78.18" y="27.47" width="1.7" height="1.7"/>
+          <rect class="mapa-pip" data-retez="r6" data-krok="13" x="88.49" y="40.69" width="1.7" height="1.7"/>
+          <rect class="mapa-pip" data-retez="r6" data-krok="14" x="85.68" y="55.47" width="1.7" height="1.7"/>
+          <rect class="mapa-pip" data-retez="r7" data-krok="15" x="105.84" y="60.84" width="1.7" height="1.7"/>
+          <rect class="mapa-pip" data-retez="r7" data-krok="16" x="111.46" y="48.46" width="1.7" height="1.7"/>
           <rect class="mapa-pip mapa-pip--slepy" x="6.95" y="55.45" width="1.1" height="1.1"/>
           <rect class="mapa-pip mapa-pip--slepy" x="12.95" y="39.45" width="1.1" height="1.1"/>
           <rect class="mapa-pip mapa-pip--slepy" x="3.95" y="26.45" width="1.1" height="1.1"/>
           <rect class="mapa-pip mapa-pip--slepy" x="29.45" y="92.45" width="1.1" height="1.1"/>
           <rect class="mapa-pip mapa-pip--slepy" x="47.45" y="95.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="35.45" y="14.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="45.95" y="5.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="48.95" y="3.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="35.45" y="1.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="90.95" y="8.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="98.45" y="1.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="53.45" y="91.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="71.45" y="95.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="96.95" y="57.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="89.45" y="66.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="138.95" y="29.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="146.45" y="41.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="113.45" y="92.45" width="1.1" height="1.1"/>
-          <rect class="mapa-pip mapa-pip--slepy" x="95.45" y="95.45" width="1.1" height="1.1"/>
+          <rect class="mapa-pip mapa-pip--slepy" x="26.45" y="17.45" width="1.1" height="1.1"/>
+          <rect class="mapa-pip mapa-pip--slepy" x="38.45" y="7.45" width="1.1" height="1.1"/>
+          <rect class="mapa-pip mapa-pip--slepy" x="107.45" y="7.45" width="1.1" height="1.1"/>
+          <rect class="mapa-pip mapa-pip--slepy" x="119.45" y="2.45" width="1.1" height="1.1"/>
+          <rect class="mapa-pip mapa-pip--slepy" x="71.45" y="87.45" width="1.1" height="1.1"/>
+          <rect class="mapa-pip mapa-pip--slepy" x="53.45" y="94.45" width="1.1" height="1.1"/>
+          <rect class="mapa-pip mapa-pip--slepy" x="143.45" y="61.45" width="1.1" height="1.1"/>
+          <rect class="mapa-pip mapa-pip--slepy" x="147.95" y="73.45" width="1.1" height="1.1"/>
+          <rect class="mapa-pip mapa-pip--slepy" x="116.45" y="91.45" width="1.1" height="1.1"/>
+          <rect class="mapa-pip mapa-pip--slepy" x="98.45" y="95.45" width="1.1" height="1.1"/>
         </svg>
-        <button class="mapa-uzel" type="button" data-cil="r1" data-nazev="Herní akademie" data-co="Web pro komunitu" aria-expanded="false">
-          <span class="mapa-hl">
-            <svg class="ik" aria-hidden="true"><use href="#i-data"/></svg>
-
-            <span class="mapa-c" aria-hidden="true">01</span>
-          </span>
-          <span class="mapa-jm">Herní akademie</span>
-          <span class="jen-ctecka">Web pro komunitu</span>
-        </button>
         <button class="mapa-uzel" type="button" data-cil="r2" data-nazev="Restovski" data-co="Prezentace interpreta" aria-expanded="false">
           <span class="mapa-hl">
             <svg class="ik" aria-hidden="true"><use href="#i-kod"/></svg>
 <span class="mapa-d">115K+ IG</span>
-            <span class="mapa-c" aria-hidden="true">02</span>
+            <span class="mapa-c" aria-hidden="true">01</span>
           </span>
           <span class="mapa-jm">Restovski</span>
           <span class="jen-ctecka">Prezentace interpreta, interpret s komunitou 115k+ na Instagramu</span>
-        </button>
-        <button class="mapa-uzel" type="button" data-cil="r3" data-nazev="Vyhlídkář" data-co="Mapa vyhlídek" aria-expanded="false">
-          <span class="mapa-hl">
-            <svg class="ik" aria-hidden="true"><use href="#i-spendlik"/></svg>
-
-            <span class="mapa-c" aria-hidden="true">03</span>
-          </span>
-          <span class="mapa-jm">Vyhlídkář</span>
-          <span class="jen-ctecka">Mapa vyhlídek</span>
         </button>
         <button class="mapa-uzel" type="button" data-cil="r4" data-nazev="Tady Svačinář" data-co="Prezentační web tvůrce" aria-expanded="false">
           <span class="mapa-hl">
             <svg class="ik" aria-hidden="true"><use href="#i-instagram"/></svg>
 <span class="mapa-d">115K+ IG</span>
-            <span class="mapa-c" aria-hidden="true">04</span>
+            <span class="mapa-c" aria-hidden="true">02</span>
           </span>
           <span class="mapa-jm">Tady Svačinář</span>
           <span class="jen-ctecka">Prezentační web tvůrce, tvůrce s komunitou 115k+ na Instagramu</span>
@@ -703,7 +672,7 @@
           <span class="mapa-hl">
             <svg class="ik" aria-hidden="true"><use href="#i-kniha"/></svg>
 
-            <span class="mapa-c" aria-hidden="true">05</span>
+            <span class="mapa-c" aria-hidden="true">03</span>
           </span>
           <span class="mapa-jm">Loremasters</span>
           <span class="jen-ctecka">Web fantasy kanálu</span>
@@ -712,30 +681,32 @@
           <span class="mapa-hl">
             <svg class="ik" aria-hidden="true"><use href="#i-noty"/></svg>
 <span class="mapa-d">3,5M SPOTIFY</span>
-            <span class="mapa-c" aria-hidden="true">06</span>
+            <span class="mapa-c" aria-hidden="true">04</span>
           </span>
           <span class="mapa-jm">Natte Visstick</span>
           <span class="jen-ctecka">Web hudebního producenta, producent se 3,5 milionu posluchačů měsíčně na Spotify</span>
         </button>
-        <button class="mapa-uzel mapa-uzel--zamceny" type="button" data-cil="r7" data-nazev="Sedmý projekt" data-co="Právě se staví" aria-expanded="false">
+        <button class="mapa-uzel mapa-uzel--zamceny" type="button" data-cil="r7" data-nazev="Pátý projekt" data-co="Právě se staví" aria-expanded="false">
           <span class="mapa-hl">
             <svg class="ik" aria-hidden="true"><use href="#i-stit"/></svg>
 
-            <span class="mapa-c" aria-hidden="true">07</span>
+            <span class="mapa-c" aria-hidden="true">05</span>
           </span>
-          <span class="mapa-jm">Sedmý projekt</span>
+          <span class="mapa-jm">Pátý projekt</span>
           <span class="jen-ctecka">Právě se staví</span>
         </button>
       </div>
 
       <ol class="rejstrik wrap rv">
 
+        <!-- Dokud jsou dva weby schované, je rozdělaná práce pátá
+             v pořadí, ne sedmá. Až se vrátí, vrací se i jméno. -->
         <li class="polozka polozka-chysta">
           <h3 class="rejstrik-h">
             <span class="radek" id="r7" data-stanice tabindex="0">
               <span class="radek-b" aria-hidden="true"></span>
-              <span class="radek-c">sedmy-projekt</span>
-              <span class="radek-n">Sedmý projekt</span>
+              <span class="radek-c">paty-projekt</span>
+              <span class="radek-n">Pátý projekt</span>
               <span class="radek-s">Právě se staví</span>
               <span class="radek-t" aria-hidden="true">zamčeno</span>
               <span class="jen-ctecka">zamčeno, projekt se teprve staví</span>
@@ -743,6 +714,11 @@
           </h3>
         </li>
 
+        <!-- Herní akademie je dočasně schovaná.
+             Nic se nemaže: až se má vrátit, smaže se tenhle
+             komentář okolo a v nastroje-v6/mapa.js se vrátí
+             plný seznam uzlů. -->
+        <!--
         <li class="polozka">
           <h3 class="rejstrik-h">
             <button class="radek" data-stanice id="r1" aria-expanded="false" aria-controls="t1">
@@ -766,6 +742,7 @@
             </div>
           </div>
         </li>
+        -->
 
         <li class="polozka">
           <h3 class="rejstrik-h">
@@ -794,6 +771,11 @@
           </div>
         </li>
 
+        <!-- Vyhlídkář je dočasně schovaný.
+             Nic se nemaže: až se má vrátit, smaže se tenhle
+             komentář okolo a v nastroje-v6/mapa.js se vrátí
+             plný seznam uzlů. -->
+        <!--
         <li class="polozka">
           <h3 class="rejstrik-h">
             <button class="radek" data-stanice id="r3" aria-expanded="false" aria-controls="t3">
@@ -817,6 +799,7 @@
             </div>
           </div>
         </li>
+        -->
 
 
 
@@ -902,6 +885,7 @@
       </ol>
     </div>
   </div>
+
 
 
 

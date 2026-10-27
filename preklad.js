@@ -63,8 +63,8 @@
       'You tell me what you need and I design and build the site. From layout and typography to launch.',
     'Podívám se, co je s ním špatně, řeknu vám to česky a co půjde, spravím.':
       'I will look at what is wrong, tell you in plain words, and fix what can be fixed.',
-    'Šest webů, které jsem postavil, i s tím, co na každém z nich stálo za řeč.':
-      'Six sites I have built, each with the part that was worth talking about.',
+    'Čtyři weby, které jsem postavil, i s tím, co na každém z nich stálo za řeč.':
+      'Four sites I have built, each with the part that was worth talking about.',
 
     /* Ukazatel úrovně */
     'Úroveň': 'Level',
@@ -97,8 +97,8 @@
     'Hotové weby': 'Finished sites',
     'Projekty k náhledu,': 'Projects to look through,',
     'některé v procesu': 'some still in progress',
-    'Šest webů, které jsem postavil, vypsaných jako historie: nahoře rozdělaná práce, pod ní hotové. Enter rozbalí, co je uvnitř, druhý enter web otevře.':
-      'Six sites I have built, listed as a history: work in progress on top, finished ones below. Enter opens what is inside, a second enter opens the site.',
+    'Čtyři weby, které jsem postavil, vypsané jako historie: nahoře rozdělaná práce, pod ní hotové. Enter rozbalí, co je uvnitř, druhý enter web otevře.':
+      'Four sites I have built, listed as a history: work in progress on top, finished ones below. Enter opens what is inside, a second enter opens the site.',
     'Žádné sliby, jen hotové věci': 'No promises, only finished work',
     'mapa projektů': 'project map',
     'vyberte uzel': 'pick a node',
@@ -113,7 +113,8 @@
     'klepnutím rozbalíte': 'tap to expand',
     'Otevřít web': 'Open site',
     'Právě se staví': 'Being built right now',
-    'Sedmý projekt': 'Seventh project',
+    /* Dokud jsou dva weby schované, je rozdělaná práce pátá. */
+    'Pátý projekt': 'Fifth project',
     'Rozdělaná práce. Až bude co ukázat, objeví se tu.':
       'Work in progress. When there is something to show, it will turn up here.',
 
@@ -240,7 +241,10 @@
   /* data-co nese podtitulek uzlu mapy. Popisek nad mapou se z něj
      skládá až při výběru, takže stačí přeložit atribut a věta se
      složí rovnou v tom jazyce, který na stránce běží. */
-  var ATRIBUTY = ['placeholder', 'aria-label', 'data-popis', 'data-co'];
+  /* data-nazev je ve slovníku jen kvůli rozdělané práci. Jména
+     projektů v něm nejsou, takže projdou nezměněná: slovník je
+     tím pádem zároveň seznamem toho, co se překládat smí. */
+  var ATRIBUTY = ['placeholder', 'aria-label', 'data-popis', 'data-co', 'data-nazev'];
   var PRESKOCIT = { SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, TEMPLATE: 1 };
 
   var klic = function (s) { return s.replace(/\s+/g, ' ').trim(); };
