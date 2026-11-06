@@ -171,6 +171,17 @@ body{
    ══════════════════════════════════════════════════════════════ */
 
 html, body, a, button, input, textarea, label, select, summary{cursor: none}
+
+/* Po dojetí na konec stránky se ukazatel vrátí. První průchod je
+   zpomalený a bez kurzoru, protože stránku zrovna staví roj
+   a člověk ji má číst, ne do ní šťourat; jakmile ji projde celou,
+   chodí po ní, jak chce. Třídu přidává skript tlumeného posunu. */
+.je-odemknuto, .je-odemknuto body,
+.je-odemknuto input, .je-odemknuto textarea{cursor: auto}
+.je-odemknuto a, .je-odemknuto button,
+.je-odemknuto label, .je-odemknuto select,
+.je-odemknuto summary{cursor: pointer}
+.je-odemknuto input, .je-odemknuto textarea{cursor: text}
 *, *::before, *::after{cursor: inherit}
 
 /* Lišta se ovládá myší, takže v ní ukazatel je. Je to vlastní
@@ -1805,39 +1816,6 @@ footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
 }
 
 
-/* ══ POSUN PO SEKCÍCH NA TELEFONU ══════════════════════════════
-   Na dotyku se stránka posouvá prstem jako každá jiná, ale sama
-   od sebe dosedá na začátky sekcí: když člověk dojede někam do
-   jejich blízkosti a pustí, doklouže na hranu. Dělá to prohlížeč
-   (scroll-snap), takže posun zůstává plynulý a nic se mu nebere.
-
-   Schválně proximity, ne mandatory: povinné dosedání by v dlouhé
-   sekci, jako je kontakt s formulářem, člověka tahalo zpátky
-   a nedalo mu dojet, kam potřebuje. Takhle se sekce chovají jako
-   zarážky, ne jako mříže.
-   ══════════════════════════════════════════════════════════════ */
-
-@media (hover: none), (pointer: coarse){
-  html{
-    scroll-snap-type: y proximity;
-    /* Zarážka sedí pod lištou i pod dráhou, aby po
-       dosednutí nebyl nadpis schovaný za nimi. */
-    scroll-padding-top: calc(var(--nav) + 52px);
-  }
-
-  #hero, #prace, #projekty, #kontakt{
-    scroll-snap-align: start;
-    scroll-margin-top: calc(var(--nav) + 52px);
-  }
-
-  /* Pata je konec cesty, ne zarážka: dosedat na ni by znamenalo
-     přeskočit konec formuláře. */
-  footer{scroll-snap-align: none}
-}
-
-@media (prefers-reduced-motion: reduce){
-  html{scroll-snap-type: none}
-}
 
 
 /* ══ POTLAČENÝ POHYB ═══════════════════════════════════════════ */

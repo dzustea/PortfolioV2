@@ -305,31 +305,57 @@
 
   if (!dotyk && !tlumenyPohyb.matches) {
     /* Kolik dráhy ujede stránka z jednoho otočení kolečkem.
-       Půlka je znatelně pomalejší, a přitom se nikam nejede
-       nekonečně dlouho. */
-    var DIL = 0.5;
-    /* Jak rychle se stránka k cíli přibližuje. Nižší číslo
-       znamená delší doběh. */
-    var DOBEH = 0.11;
+       Necelá polovina je znatelně pomalejší, a přitom se nikam
+       nejede nekonečně dlouho. */
+    var DIL = 0.45;
+    /* Jak rychle se stránka k cíli přibližuje. */
+    var DOBEH = 0.24;
+    /* Jak dlouho se po posledním otočení ještě dojíždí. Když
+       člověk přestane točit, stránka má stát, ne doklouzat. */
+    var TICHO = 110;
 
     var cil = window.scrollY;
     var jede = false;
     var nasPosun = false;
+    var posledni = 0;
+    var odemceno = false;
 
     var strop = function () {
       return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
     };
 
+    var naDne = function () { return window.scrollY >= strop() - 2; };
+
+    /* Odemčení. Jakmile člověk poprvé dojede na konec, roj má
+       postavené všechno a není už co zdržovat: tlumení se sundá,
+       posun je od té chvíle úplně obyčejný a vrátí se i ukazatel
+       myši, aby se dalo po stránce normálně chodit. */
+    var odemkni = function () {
+      if (odemceno) return;
+      odemceno = true;
+      jede = false;
+      window.removeEventListener('wheel', tlum, { passive: false });
+      koren.classList.add('je-odemknuto');
+    };
+
     var snimek = function () {
+      if (odemceno) { jede = false; return; }
+
+      /* Ticho po kolečku znamená stop. Zbytek dráhy se zahodí,
+         takže stránka nedojíždí pod rukama dál, když už jí
+         nikdo nic neříká. */
+      if (Date.now() - posledni > TICHO) {
+        cil = window.scrollY;
+        jede = false;
+        if (naDne()) odemkni();
+        return;
+      }
+
       var rozdil = cil - window.scrollY;
 
-      /* Pod jeden bod už není co dojíždět; kdyby se to nechalo
-         běžet, smyčka by držela procesor vzhůru donekonečna. */
       if (Math.abs(rozdil) < 0.5) {
-        nasPosun = true;
-        window.scrollTo({ top: cil, behavior: "instant" });
-        nasPosun = false;
         jede = false;
+        if (naDne()) odemkni();
         return;
       }
 
@@ -337,30 +363,34 @@
          kvůli odkazům v liště a plynulá animace by se s posunem
          po snímcích prala tak, že by stránka stála na místě. */
       nasPosun = true;
-      window.scrollTo({ top: window.scrollY + rozdil * DOBEH, behavior: "instant" });
+      window.scrollTo({ top: window.scrollY + rozdil * DOBEH, behavior: 'instant' });
       nasPosun = false;
+
+      if (naDne()) { odemkni(); return; }
       requestAnimationFrame(snimek);
     };
 
-    var rozjed = function () {
-      if (jede) return;
-      jede = true;
-      requestAnimationFrame(snimek);
-    };
-
-    window.addEventListener('wheel', function (udalost) {
+    var tlum = function (udalost) {
+      if (odemceno) return;
       if (udalost.ctrlKey) return;              /* přibližování stránky */
       if (vlastniPosun(udalost.target)) return;
       udalost.preventDefault();
 
+      posledni = Date.now();
       cil = Math.max(0, Math.min(strop(), cil + udalost.deltaY * DIL));
-      rozjed();
-    }, { passive: false });
+
+      if (!jede) { jede = true; requestAnimationFrame(snimek); }
+    };
+
+    window.addEventListener('wheel', tlum, { passive: false });
 
     /* Když stránku pohne něco jiného — posuvník, odkaz v liště,
        hledání v prohlížeči — cíl se k ní vrátí, aby při dalším
-       otočení kolečkem neuskočila zpátky. */
+       otočení kolečkem neuskočila zpátky. A kdyby se tudy dostala
+       až na konec, platí to samé odemčení. */
     window.addEventListener('scroll', function () {
+      if (odemceno) return;
+      if (naDne()) { odemkni(); return; }
       if (nasPosun || jede) return;
       cil = window.scrollY;
     }, { passive: true });
