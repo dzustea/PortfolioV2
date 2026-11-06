@@ -131,13 +131,14 @@
     '115K+ IG': '115K+ IG',
     '3,5M SPOTIFY': '3.5M SPOTIFY',
     '115K+ na Instagramu': '115K+ on Instagram',
+    '126K+ na Instagramu': '126K+ on Instagram',
     '3,5M na Spotify': '3.5M on Spotify',
     'Interpret s komunitou 115k+ na Instagramu': 'An artist with a 115k+ community on Instagram',
-    'Tvůrce s komunitou 115k+ na Instagramu': 'A creator with a 115k+ community on Instagram',
+    'Tvůrce s komunitou 126k+ na Instagramu': 'A creator with a 126k+ community on Instagram',
     'Prezentace interpreta, interpret s komunitou 115k+ na Instagramu':
       'Artist showcase, an artist with a 115k+ community on Instagram',
-    'Prezentační web tvůrce, tvůrce s komunitou 115k+ na Instagramu':
-      'Creator showcase site, a creator with a 115k+ community on Instagram',
+    'Prezentační web tvůrce, tvůrce s komunitou 126k+ na Instagramu':
+      'Creator showcase site, a creator with a 126k+ community on Instagram',
     'Web hudebního producenta, producent se 3,5 milionu posluchačů měsíčně na Spotify':
       'Site for a music producer, a producer with 3.5 million monthly listeners on Spotify',
 

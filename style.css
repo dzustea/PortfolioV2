@@ -2314,36 +2314,3 @@ html:has(.doc-strana){scrollbar-width: auto}
   .mapa-uzel[data-cil="r6"]{--x:62; --y:70; --poradi:3}
   .mapa-uzel[data-cil="r7"]{--x:84; --y:41; --poradi:4}
 }
-
-
-/* ══ STISK ═════════════════════════════════════════════════════
-   Tlačítko při stisku o kousek povolí. Je to jediná odezva, kterou
-   ruka dostane dřív, než se cokoli stane, a bez ní působí klepnutí
-   jako netrefa. Stažení je drobné a rychlé: má se cítit, ne vidět.
-   ══════════════════════════════════════════════════════════════ */
-
-.btn, .hdr-cta, .jazyk{
-  transition-property: background-color, border-color, color, transform;
-  transition-duration: .2s, .2s, .2s, .16s;
-  transition-timing-function: ease, ease, ease, cubic-bezier(.23,1,.32,1);
-}
-.btn:active, .hdr-cta:active{transform: scale(.97)}
-.jazyk:active{transform: scale(.93)}
-
-
-/* ══ PŘEPNUTÍ JAZYKA ═══════════════════════════════════════════
-   Věty se vymění naráz, ale oko to nevidí: obsah na okamžik
-   zprůsvitní a lehce rozostří a hned se vrátí. Rozostření schová,
-   že se pod ním mění délky řádků. */
-
-.meni-jazyk main, .meni-jazyk #hdr nav, .meni-jazyk .hdr-cta{
-  animation: jazykProlnuti .4s cubic-bezier(.23,1,.32,1);
-}
-@keyframes jazykProlnuti{
-  from{opacity: .2; filter: blur(3px)}
-  to  {opacity: 1;  filter: blur(0)}
-}
-
-@media (prefers-reduced-motion: reduce){
-  .meni-jazyk main, .meni-jazyk #hdr nav, .meni-jazyk .hdr-cta{animation: none}
-}
