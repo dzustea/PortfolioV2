@@ -1,0 +1,45 @@
+/* Styl knihovny CursorSwarm (ZhengLinLei/cursor-swarm.js, MIT).
+   Vytažený z jejího zdroje do souboru: stránka má style-src self
+   bez unsafe-inline, takže vkládaný <style> by prohlížeč zahodil.
+   Knihovna injektáž přeskočí, když prvek s id cursor-swarm-style
+   už v dokumentu je — a tím je právě odkaz na tenhle soubor. */
+.cs-layer{position:fixed;inset:0;pointer-events:none;overflow:hidden;contain:strict}
+.cs-layer *{box-sizing:border-box}
+.cs-cur{position:absolute;top:0;left:0;will-change:transform;filter:drop-shadow(0 4px 12px rgba(0,0,0,.45));transition:opacity .4s ease}
+.cs-cur svg{display:block}.cs-cur path{transition:fill .4s ease,stroke .4s ease}
+.cs-cur span{position:absolute;left:18px;top:20px;white-space:nowrap;font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.08em;background:var(--c);color:var(--ink,#000);padding:4px 7px;transition:opacity .4s ease,background .4s ease,color .4s ease}
+.cs-cur.cs-flip span{left:auto;right:4px}
+.cs-cur em{position:absolute;left:18px;top:-18px;font:700 10px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-style:normal;letter-spacing:.04em;white-space:nowrap;background:#111;color:#fff;border:1px solid var(--c);border-radius:3px;padding:3px 6px;opacity:0;transform:translateY(4px);transition:opacity .2s ease,transform .2s ease}
+.cs-cur.cs-flip em{left:auto;right:4px}
+.cs-cur.cs-key em{opacity:1;transform:none}
+.cs-drop{position:absolute;top:0;left:0;border:1.5px dashed var(--c);background:color-mix(in srgb,var(--c) 7%,transparent);border-radius:4px;opacity:0;transition:opacity .3s ease}
+.cs-ghost{pointer-events:none!important;transition:none!important}
+.cs-cur.cs-dim{opacity:.45}.cs-cur.cs-dim span{opacity:0}
+.cs-cur.cs-hidden{opacity:0}
+.cs-mq{position:absolute;top:0;left:0;border:1px dashed var(--c);background:color-mix(in srgb,var(--c) 8%,transparent);opacity:0}
+.cs-mq i{position:absolute;width:7px;height:7px;background:#fff;border:1px solid var(--c)}
+.cs-mq i:nth-of-type(1){left:-4px;top:-4px}.cs-mq i:nth-of-type(2){right:-4px;top:-4px}
+.cs-mq i:nth-of-type(3){left:-4px;bottom:-4px}.cs-mq i:nth-of-type(4){right:-4px;bottom:-4px}
+.cs-mq b{position:absolute;left:50%;bottom:-24px;transform:translateX(-50%);font:500 10px/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;background:var(--c);color:var(--ink,#000);padding:3px 6px;white-space:nowrap}
+.cs-gd{position:absolute;top:0;left:0;opacity:0}
+.cs-gd.cs-h{width:100%;border-top:1px solid var(--c)}.cs-gd.cs-v{height:100%;border-left:1px solid var(--c)}
+.cs-caret{position:absolute;top:0;left:0;width:2px;height:20px;background:var(--c);box-shadow:0 0 10px var(--c);opacity:0}
+.cs-caret::after{content:"";position:absolute;inset:0;background:inherit;animation:cs-blink .9s steps(1) infinite}
+.cs-box{position:absolute;top:0;left:0}
+.cs-box i{position:absolute;background:var(--c)}
+.cs-box .t,.cs-box .b{left:0;right:0;height:1px}.cs-box .t{top:0;transform-origin:left}.cs-box .b{bottom:0;transform-origin:right}
+.cs-box .l,.cs-box .r{top:0;bottom:0;width:1px}.cs-box .r{right:0;transform-origin:top}.cs-box .l{left:0;transform-origin:bottom}
+.cs-box .f{inset:0;opacity:0}
+.cs-scan{position:absolute;top:0;left:0;background:var(--c);box-shadow:0 0 24px 6px var(--c)}
+.cs-spark{position:absolute;top:0;left:0;width:5px;height:5px;background:var(--c)}
+@keyframes cs-blink{50%{opacity:0}}
+.cs-c{opacity:0}
+.cs-w{display:inline-block;opacity:0;transform:translateY(.3em);transition:opacity .35s ease,transform .35s ease}
+.cs-c.cs-on,.cs-w.cs-on{opacity:1;transform:none}
+.cs-frame-off{background-color:transparent!important;background-image:none!important;border-color:transparent!important;box-shadow:none!important;outline-color:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.cs-frame-fade{transition:background-color .7s ease,border-color .7s ease,box-shadow .7s ease,outline-color .7s ease!important}
+.cs-hud{position:fixed;display:flex;align-items:center;gap:10px;max-width:calc(100vw - 24px);padding:9px 14px;font:500 10px/1.2 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--cs-hud-fg,#f1efe9);background:var(--cs-hud-bg,rgba(10,10,10,.72));border:1px solid var(--cs-hud-line,rgba(255,255,255,.12));-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);pointer-events:none;transition:opacity .4s ease,background .4s ease,color .4s ease}
+.cs-hud i{width:7px;height:7px;border-radius:50%;flex:none;background:currentColor;transition:background .3s}
+.cs-hud .cs-st{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:46ch;color:var(--cs-hud-mute,#a3a29d)}
+.cs-hud .cs-pct{margin-left:4px;min-width:5ch;text-align:right}
+html.cs-cloak body{visibility:hidden}

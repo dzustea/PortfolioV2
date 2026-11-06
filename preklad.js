@@ -58,7 +58,7 @@
     'klepněte na řádek': 'tap a row',
     'nebo pokračujte dolů': 'or keep going down',
     'odpověď': 'answer',
-    'Vyberte šipkami, s čím jdete.': 'Use the arrows to pick what brings you here.',
+    'Vyberte, s čím jdete.': 'Pick what brings you here.',
     'Napíšete mi, co potřebujete, a já web navrhnu a postavím. Od rozvržení a sazby po spuštění.':
       'You tell me what you need and I design and build the site. From layout and typography to launch.',
     'Podívám se, co je s ním špatně, řeknu vám to česky a co půjde, spravím.':

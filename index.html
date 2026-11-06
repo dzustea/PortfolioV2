@@ -255,94 +255,20 @@
 </script>
 
 <link rel="stylesheet" href="style.css"/>
+<!-- Styl roje kurzorů. Odkaz nese id, které si knihovna hlídá:
+     dokud prvek s ním v dokumentu je, nevkládá si vlastní
+     <style>, který by stránka stejně zahodila kvůli style-src. -->
+<link rel="stylesheet" href="cursor-swarm.css" id="cursor-swarm-style"/>
 
 <!-- Skript se stahuje souběžně s rozborem dokumentu a spustí se,
      až je dokument hotový. Je to totéž pořadí, jaké měl na konci
      těla, jen se o něm prohlížeč dozví hned na začátku. -->
 <script src="preklad.js" defer></script>
+<script src="cursor-swarm.min.js" defer></script>
 <script src="script.js" defer></script>
+<script src="roj.js" defer></script>
 </head>
 <body>
-<!-- ══ OPONA ═════════════════════════════════════════════════════
-     První, co člověk uvidí: čtyři klávesy se šipkami uprostřed
-     tmy. Nic jiného tu nestojí, takže není co číst ani co luštit
-     a je hned jasné, čím se stránka ovládá. Nahoru a dolů jsou
-     rudé, protože ty vedou; doleva a doprava jsou vedle nich
-     tlumené, aby bylo vidět, že jde o klávesnici, a ne o dvě
-     osamocené značky.
-
-     Opona se neodhrne sama: čeká, dokud člověk nestiskne šipku
-     dolů (na telefonu nešvihne prstem). Teprve pak se pod
-     klávesami dopíše START, klávesy se zableskly a propadnou
-     dopředu a pod nimi zůstane hotová stránka.
-
-     Svět za oponou mezitím sílí podle toho, kolik je doopravdy
-     načteno; není to odpočet nastavený dopředu.
-
-     Bez skriptu se opona vůbec nevykreslí: třídu js přidává na
-     dokument skript hned na začátku, takže když neběží, není
-     co odhrnovat a stránka se chová jako obyčejná stránka.
-══════════════════════════════════════════════════════════════════ -->
-<div id="opona" aria-hidden="true">
-  <div class="op-tma"></div>
-
-  <!-- Svět, který se za oknem staví. Mřížka a záře sílí s každým
-       hotovým řádkem výpisu, takže je při načítání vidět, jak
-       stránka vzniká. -->
-  <div class="op-svet"><i class="op-mrizka"></i><i class="op-zar"></i></div>
-
-  <!-- Klávesy uprostřed obrazovky a pod nimi místo pro START.
-       Svislice je drží u sebe, takže slovo při spuštění naskočí
-       přesně pod kresbou, a ne někde stranou. -->
-  <div class="op-stred">
-
-    <!-- Návod k ovládání. Na počítači klávesnicový kříž, na dotyku
-         telefon se švihnutím. Kreslené v SVG, takže se nestahuje
-         žádný obrázek a je to ostré na každé obrazovce. Ukáže se
-         vždycky jen ten, který na daném zařízení dává smysl,
-         a rozeběhne se, teprve až je načteno. -->
-    <div class="op-navod">
-      <div class="nav-p nav-klavesy">
-        <!-- Kříž šipek tak, jak leží na klávesnici: nahoru nad
-             spodní trojicí. Doleva a doprava stránku nevedou,
-             jsou tu proto, aby kresba byla klávesnice; rudé jsou
-             jen ty dvě, kterými se někam dostanete. -->
-        <svg viewBox="0 0 112 74" width="112" height="74" role="img" aria-hidden="true">
-          <g class="kl-vedle">
-            <rect x="1" y="39" width="34" height="34"/>
-            <rect x="77" y="39" width="34" height="34"/>
-            <path d="M12 56l12-8v16z"/>
-            <path d="M100 56l-12-8v16z"/>
-          </g>
-          <g class="kl-vedou">
-            <rect x="39" y="1" width="34" height="34"/>
-            <rect x="39" y="39" width="34" height="34"/>
-            <path d="M56 12l8 12H48z"/>
-            <path d="M56 62l-8-12h16z"/>
-          </g>
-        </svg>
-        <span>šipkami nahoru a dolů</span>
-      </div>
-
-      <div class="nav-p nav-prst">
-        <svg viewBox="0 0 108 76" width="108" height="76" role="img" aria-hidden="true">
-          <g fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="36" y="2" width="36" height="72"/>
-            <path d="M54 56V30"/>
-          </g>
-          <circle cx="54" cy="62" r="4" fill="currentColor"/>
-          <path d="M54 18l9 14H45z" fill="currentColor"/>
-        </svg>
-        <span>švihněte nahoru</span>
-      </div>
-    </div>
-
-    <p class="op-start"><span class="op-psano"></span></p>
-
-  </div>
-</div>
-
-
 <!-- ══ IKONY ═══════════════════════════════════════════════════
      Každá ikona je v dokumentu jednou jako symbol a odkazuje se
      na ni přes <use>, takže třináct ikon na stránce stojí deset
@@ -401,14 +327,6 @@
     <a href="#kontakt" class="hdr-cta">Napsat zprávu</a>
   </div>
 
-  <!-- Dráha s kontrolními body. Vede pod lištou přes celou šířku
-       okna a místo ukazatele postupu po ní přelétá loď: jeden bod
-       je jedna zastávka ve stránce, takže je na první pohled
-       vidět, kde člověk je a kolik mu zbývá. Body dodělá skript,
-       aby jich bylo přesně tolik co zastávek. -->
-  <div class="draha" aria-hidden="true">
-    <span class="lod"><span class="lod-vznos"><i></i></span></span>
-  </div>
 </header>
 
 <main id="main">
@@ -474,9 +392,7 @@
         </div>
 
         <p class="konz-pata" aria-hidden="true">
-          <span class="jen-klavesy">šipky vybírají</span>
-          <span class="jen-klavesy">enter potvrdí</span>
-          <span class="jen-dotyk">klepněte na řádek</span>
+          <span>klepněte na řádek</span>
           <span>nebo pokračujte dolů</span>
         </p>
       </div>
@@ -488,7 +404,7 @@
          a přes textContent. -->
     <div class="odpoved" aria-hidden="true">
       <p class="odp-hl"><b></b>odpověď</p>
-      <p class="odp-t">Vyberte šipkami, s čím jdete.</p>
+      <p class="odp-t">Vyberte, s čím jdete.</p>
       <p class="odp-a"><b></b><span>enter potvrdí</span></p>
     </div>
 

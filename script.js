@@ -36,152 +36,27 @@
 
   var tlumenyPohyb = matchMedia('(prefers-reduced-motion: reduce)');
 
-  /* ── OPONA ────────────────────────────────────────────────────
-     Opona je tma se čtyřmi klávesami uprostřed. Nic se v ní
-     nečte ani neluští: jediné, co říká, je čím se stránka ovládá.
+  /* ── STRÁNKA JE ODHRNUTÁ ROVNOU ───────────────────────────────
+     Opona bývala tma se čtyřmi klávesami, kterou musel člověk
+     odhrnout, než se dostal na web. Teď stránku staví roj
+     kurzorů a ten potřebuje na obsah vidět od první vteřiny,
+     takže se nečeká na nic.
 
-     Svět za ní mezitím sílí podle skutečných událostí, ne podle
-     stopek. Kroky jsou dva:
+     Třída je-odhrnuto ve stylu zůstala, protože na ní visí
+     všechno, co se po odhrnutí rozjíždělo. Přidá se hned, takže
+     stránka naskočí rovnou ve stavu, do kterého se dřív dostávala
+     stiskem šipky.
 
-       1.  dokument je poskládaný
-       2.  písma jsou připravená
-
-     Dokud oba neproběhnou, je mřížka i záře za oponou slabá
-     a nedá se spustit; na pomalém připojení je proto vidět, že
-     se čeká na něco doopravdy, a ne na nastavený odpočet.
-
-     Spustit se musí ručně. Nikdo nic nepíše, dokud člověk
-     nestiskne šipku dolů; pak se pod klávesami dopíše START,
-     znak po znaku, klávesy projedou kolem hlavy a pod nimi
-     zůstane hotová stránka.
-
-     Celý blok je první v souboru a v try/catch, aby případná
-     chyba kdekoli níž nenechala stránku zakrytou.
+     Odhalování při posunu se vypíná taky: od toho je tu roj a dvě
+     animace přes týž prvek by se jen praly.
      ──────────────────────────────────────────────────────────── */
 
   var koren = document.documentElement;
-  var opona = null;
-  var odhrnuto = false;
+  koren.classList.add('js', 'je-odhrnuto');
 
-  try {
-    koren.classList.add('js');
-
-    opona = document.getElementById('opona');
-    var psano = opona ? opona.querySelector('.op-psano') : null;
-    var hotovo = false;
-
-    if (opona) opona.classList.add('op-nacita');
-
-    /* Svět za oponou sílí podle toho, kolik je hotovo. Není to
-       odpočet nastavený dopředu: drží se toho, co prohlížeč
-       opravdu dokončil. */
-    var KROKU = 2;
-    var kroku = 0;
-
-    var postoupil = function () {
-      kroku += 1;
-      if (opona) {
-        opona.style.setProperty('--staveno', (kroku / KROKU).toFixed(2));
-      }
-    };
-
-    /* Čeká se na písma, která jsou pod oponou hned vidět: text
-       v Archivu a jméno s nadpisy v Chakře. Strojopis se
-       nedoprošuje, drobné popisky snesou náhradní řez o chvíli
-       déle. */
-    var pripravaPisem = document.fonts && document.fonts.load
-      ? Promise.all([
-          document.fonts.load('600 1rem Archivo'),
-          document.fonts.load('400 1rem Archivo'),
-          document.fonts.load('600 1rem "Chakra Petch"')
-        ])
-      : Promise.resolve();
-
-    var dokumentHotov = document.readyState === 'loading'
-      ? new Promise(function (splneno) {
-          document.addEventListener('DOMContentLoaded', function () { splneno(); }, { once: true });
-        })
-      : Promise.resolve();
-
-    dokumentHotov.then(postoupil);
-
-    /* Pojistka: kdyby se příslib písem nesplnil, opona se dá
-       otevřít i tak. Písmo má font-display:swap, takže mezitím
-       naskočí náhradní a text je čitelný. */
-    var pojistka = new Promise(function (splneno) { setTimeout(splneno, 1500); });
-
-    var pisemNejvys = dokumentHotov.then(function () {
-      return Promise.race([
-        pripravaPisem,
-        new Promise(function (splneno) { setTimeout(splneno, 300); })
-      ]);
-    });
-
-    Promise.race([pisemNejvys, pojistka]).then(function () {
-      postoupil();
-      hotovo = true;
-      if (opona) opona.classList.remove('op-nacita');
-    });
-
-    /* ── SPUŠTĚNÍ ─────────────────────────────────────────────
-       Stisk šipky dopíše slovo a rozletí okno. Skript při tom
-       nekreslí nic než to slovo; rozlet je v keyframech, takže
-       ho vede grafika.
-       ─────────────────────────────────────────────────────── */
-
-    if (opona) {
-      var spousti = false;
-      var PRIKAZ = 'START';
-
-      var rozlet = function () {
-        koren.classList.add('je-vyjezd');
-        /* Délka je tatáž jako v keyframech rozletu. Po ní opona
-           zmizí nadobro a stránku přebírají šipky. */
-        setTimeout(function () {
-          odhrnuto = true;
-          koren.classList.add('je-odhrnuto');
-          window.scrollTo(0, 0);
-        }, 880);
-      };
-
-      var spust = function () {
-        /* Dokud se sestavuje, není co spouštět. */
-        if (spousti || odhrnuto || !hotovo) return;
-        spousti = true;
-
-        if (!psano) { rozlet(); return; }
-
-        var znak = 0;
-        var pise = setInterval(function () {
-          znak += 1;
-          psano.textContent = PRIKAZ.slice(0, znak);
-          if (znak >= PRIKAZ.length) {
-            clearInterval(pise);
-            setTimeout(rozlet, 170);
-          }
-        }, 58);
-      };
-
-      window.addEventListener('keydown', function (udalost) {
-        if (odhrnuto) return;
-        var k = udalost.key;
-        if (k === 'ArrowDown' || k === ' ' || k === 'Spacebar' ||
-            k === 'PageDown' || k === 'Enter') {
-          udalost.preventDefault();
-          spust();
-        }
-      });
-
-      /* Klepnutí i švihnutí prstem dělají totéž: na telefonu
-         žádná šipka dolů není. */
-      window.addEventListener('pointerdown', function () { spust(); });
-      window.addEventListener('wheel', function () { spust(); }, { passive: true });
-      window.addEventListener('touchmove', function () { spust(); }, { passive: true });
-    }
-  } catch (chyba) {
-    koren.classList.add('je-odhrnuto');
-    odhrnuto = true;
-  }
+  Array.prototype.forEach.call(document.querySelectorAll('.rv'), function (prvek) {
+    prvek.classList.add('bez-prechodu', 'in');
+  });
 
 
   /* ── PODKLAD LIŠTY ────────────────────────────────────────────
@@ -391,10 +266,33 @@
     return jmeno === 'INPUT' || jmeno === 'TEXTAREA' || jmeno === 'SELECT' || prvek.isContentEditable;
   };
 
-  /* ── UZAVŘENÝ POSUN ───────────────────────────────────────────
-     Prohlížeči se posun bere úplně: dokud je opona na místě,
-     nemá se kam posouvat, a po jejím odhrnutí vede stránku jen
-     šipka. Textové pole zprávy si posun uvnitř sebe nechává.
+  /* Hra po zastávkách platila jen tam, kde je klávesnice. Zbylo
+     z ní jediné: na dotyku se některé věci chovají jinak. */
+  var dotyk = matchMedia('(hover: none), (pointer: coarse)').matches;
+
+
+  /* ── TLUMENÝ POSUN ────────────────────────────────────────────
+     Stránka se posouvá normálně, jen pomaleji, než kolik by
+     kolečko odválelo samo. Není to posun po zastávkách: zastaví
+     se kdekoli a dojede kamkoli, jen se tam nedá dostat jedním
+     máchnutím.
+
+     Je to kvůli roji kurzorů. Ten obsah staví před očima a když
+     mu člověk sjede pod rukama o tři obrazovky níž, nemá co
+     ukázat. Tlumení mu dá čas, aniž by komukoli bralo možnost
+     jít, kam chce.
+
+     Jak to funguje: kolečko se zachytí, z jeho hodnoty se posune
+     cíl o zlomek dráhy a stránka se k cíli po snímcích přibližuje.
+     Prst se nezachytává — na telefonu si posun vede systém sám
+     a brát mu ho znamená rozbít setrvačnost, kterou člověk zná.
+
+     Co si posun nebere:
+
+       * psaní v poli a posun uvnitř textarey,
+       * tažení za posuvník a skoky skriptu: když se stránka hne
+         jinudy, cíl se k ní vrátí,
+       * prefers-reduced-motion, tam se netlumí vůbec.
      ──────────────────────────────────────────────────────────── */
 
   var vlastniPosun = function (cil) {
@@ -405,144 +303,67 @@
     return false;
   };
 
-  /* Hra po zastávkách platí jen tam, kde je klávesnice. Na dotyku
-     se stránka posouvá úplně obyčejně, prstem: posouvání po
-     zastávkách je na telefonu boj s tím, co prst umí sám, a šipky,
-     kterými se to ovládá pohodlně, tam nikdo nemá.
+  if (!dotyk && !tlumenyPohyb.matches) {
+    /* Kolik dráhy ujede stránka z jednoho otočení kolečkem.
+       Půlka je znatelně pomalejší, a přitom se nikam nejede
+       nekonečně dlouho. */
+    var DIL = 0.5;
+    /* Jak rychle se stránka k cíli přibližuje. Nižší číslo
+       znamená delší doběh. */
+    var DOBEH = 0.11;
 
-     Opona zůstává i na dotyku, jen ji odhrne švihnutí. */
-  var dotyk = matchMedia('(hover: none), (pointer: coarse)').matches;
+    var cil = window.scrollY;
+    var jede = false;
+    var nasPosun = false;
 
-  var zadrz = function (udalost) {
-    /* V režimu formuláře se stránka posouvat smí: nadzvedne ji
-       klávesnice a člověk musí vidět, do čeho píše. */
-    if (document.documentElement.classList.contains('rezim-formular')) return;
-    if (vlastniPosun(udalost.target)) return;
-    udalost.preventDefault();
-  };
+    var strop = function () {
+      return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    };
 
-  if (!dotyk) window.addEventListener('wheel', zadrz, { passive: false });
+    var snimek = function () {
+      var rozdil = cil - window.scrollY;
 
-  /* Dokud visí opona, nemá se stránka kam posouvat ani na dotyku:
-     švihnutí ji odhrne a nic víc. Jakmile je odhrnutá, prst
-     posouvá stránku úplně normálně. */
-  window.addEventListener('touchmove', function (udalost) {
-    if (odhrnuto && dotyk) return;
-    zadrz(udalost);
-  }, { passive: false });
-
-  /* ── LOĎ NA DRÁZE ─────────────────────────────────────────────
-     Ukazatel postupu. Jeden kontrolní bod je jedna zastávka, loď
-     k němu přeletí pokaždé, když se ukazatel pohne. Body se
-     dodělají podle počtu zastávek, aby to nikdy nesedělo jen
-     náhodou.
-     ──────────────────────────────────────────────────────────── */
-
-  var draha = document.querySelector('.draha');
-  var lod = draha ? draha.querySelector('.lod') : null;
-  var body = [];
-
-  /* Dráha neměří zastávky, ale místa ve stránce. Volby v nabídce
-     jsou rozcestník, ne cesta, a celá historie projektů je jedno
-     místo: loď k němu doletí, počká tam a zase vyrazí, až z něj
-     člověk odejde.
-
-     Každá zastávka proto dostane pořadí svého bodu; ty, které bod
-     nemají, mají mínus jedna. */
-  var liceni = [];
-  var pocetBodu = 0;
-  var rejstrikMa = -1;
-
-  stanice.forEach(function (prvek) {
-    if (prvek.classList.contains('volba')) { liceni.push(-1); return; }
-
-    if (prvek.closest('.rejstrik') || prvek.closest('.mapa')) {
-      if (rejstrikMa < 0) { rejstrikMa = pocetBodu; pocetBodu += 1; }
-      liceni.push(rejstrikMa);
-      return;
-    }
-
-    liceni.push(pocetBodu);
-    pocetBodu += 1;
-  });
-
-  var poloha = function (poradi) {
-    return ((poradi + 0.5) / pocetBodu * 100).toFixed(2) + '%';
-  };
-
-  if (draha && lod && pocetBodu) {
-    for (var l = 0; l < pocetBodu; l++) (function (i) {
-      var bod = document.createElement('i');
-      bod.className = 'bod';
-      bod.style.setProperty('--x', poloha(i));
-      draha.insertBefore(bod, lod);
-      body.push(bod);
-    })(l);
-
-    /* Dokud je člověk v úvodu, stojí loď na začátku dráhy, před
-       prvním bodem: cesta ještě nezačala. */
-    lod.style.setProperty('--x', '24px');
-  }
-
-  var presunLod = function (index) {
-    if (!lod || !body.length) return;
-    var byloKde = kde;
-    var poradi = liceni[index];
-    if (poradi === undefined) poradi = -1;
-    var bylo = kde > -1 ? liceni[kde] : -1;
-
-    /* Uvnitř historie se loď nehýbe: je to jedno místo. */
-    if (poradi > -1 && poradi === bylo) return;
-
-    body.forEach(function (bod, i) {
-      bod.classList.toggle('je-aktivni', i === poradi);
-    });
-
-    /* V úvodu se loď vrátí na začátek dráhy. */
-    if (poradi < 0) {
-      lod.style.setProperty('--x', '24px');
-      lod.style.setProperty('--smer', '-1');
-      return;
-    }
-
-    lod.style.setProperty('--x', 'calc(' + poloha(poradi) + ' - 12px)');
-    lod.style.setProperty('--smer', index < byloKde ? '-1' : '1');
-
-    /* Přelet se přehraje znovu i při druhém stisku téže šipky.
-       Bez vynuceného přečtení rozměru by prohlížeč změnu třídy
-       v jednom snímku neviděl a loď by jen klouzala. */
-    lod.classList.remove('leti');
-    void lod.offsetWidth;
-    lod.classList.add('leti');
-  };
-
-  /* Na dotyku stránku nevede ukazatel, ale prst. Loď proto hlídá,
-     co je zrovna uprostřed okna: dokud je to týž bod, stojí a
-     čeká, a teprve když se objeví další sekce, přeletí. Po dráze
-     tím pádem neklouže ani na telefonu.
-
-     Měří to prohlížeč sám přes IntersectionObserver, takže se
-     při posunu nic nepočítá. Pás uprostřed okna je úzký
-     schválně: rozhoduje, co má člověk před očima. */
-  if (dotyk && 'IntersectionObserver' in window && stanice.length) {
-    var vidim = Object.create(null);
-
-    var sledovacZastavek = new IntersectionObserver(function (zaznamy) {
-      zaznamy.forEach(function (z) {
-        vidim[stanice.indexOf(z.target)] = z.isIntersecting;
-      });
-
-      /* Když do pásu zasahuje víc zastávek, vyhrává ta výš:
-         k té člověk právě dorazil. */
-      for (var i = 0; i < stanice.length; i++) {
-        if (vidim[i]) {
-          if (i !== kde) { presunLod(i); kde = i; }
-          return;
-        }
+      /* Pod jeden bod už není co dojíždět; kdyby se to nechalo
+         běžet, smyčka by držela procesor vzhůru donekonečna. */
+      if (Math.abs(rozdil) < 0.5) {
+        nasPosun = true;
+        window.scrollTo({ top: cil, behavior: "instant" });
+        nasPosun = false;
+        jede = false;
+        return;
       }
-    }, { rootMargin: '-42% 0px -42% 0px' });
 
-    stanice.forEach(function (prvek) { sledovacZastavek.observe(prvek); });
+      /* Skokem, ne plynule: stylopis má scroll-behavior smooth
+         kvůli odkazům v liště a plynulá animace by se s posunem
+         po snímcích prala tak, že by stránka stála na místě. */
+      nasPosun = true;
+      window.scrollTo({ top: window.scrollY + rozdil * DOBEH, behavior: "instant" });
+      nasPosun = false;
+      requestAnimationFrame(snimek);
+    };
+
+    var rozjed = function () {
+      if (jede) return;
+      jede = true;
+      requestAnimationFrame(snimek);
+    };
+
+    window.addEventListener('wheel', function (udalost) {
+      if (udalost.ctrlKey) return;              /* přibližování stránky */
+      if (vlastniPosun(udalost.target)) return;
+      udalost.preventDefault();
+
+      cil = Math.max(0, Math.min(strop(), cil + udalost.deltaY * DIL));
+      rozjed();
+    }, { passive: false });
+
+    /* Když stránku pohne něco jiného — posuvník, odkaz v liště,
+       hledání v prohlížeči — cíl se k ní vrátí, aby při dalším
+       otočení kolečkem neuskočila zpátky. */
+    window.addEventListener('scroll', function () {
+      if (nasPosun || jede) return;
+      cil = window.scrollY;
+    }, { passive: true });
   }
 
 
@@ -609,7 +430,6 @@
     /* Odchod z historie zavře, co v ní zůstalo rozbalené. */
     if (otevriUroven) otevriUroven(deska);
 
-    presunLod(index);
     kde = index;
   };
 
@@ -680,27 +500,6 @@
     if (typeof deska.focus === 'function') deska.focus({ preventScroll: true });
   };
 
-  window.addEventListener('keydown', function (udalost) {
-    if (!odhrnuto || dotyk) return;
-    if (udalost.metaKey || udalost.ctrlKey || udalost.altKey) return;
-
-    var k = udalost.key;
-
-    /* Mezerník a page down by stránkou hnuly po svém. */
-    if ((k === ' ' || k === 'Spacebar' || k === 'PageDown' || k === 'PageUp' ||
-         k === 'Home' || k === 'End') && !psaciPole(document.activeElement)) {
-      udalost.preventDefault();
-      return;
-    }
-
-    var kam = k === 'ArrowDown' ? 1 : (k === 'ArrowUp' ? -1 : 0);
-    if (!kam) return;
-    if (psaciPole(document.activeElement)) return;
-
-    udalost.preventDefault();
-    skoc(kde < 0 ? (kam > 0 ? 0 : stanice.length - 1) : kde + kam);
-  });
-
   /* ── REŽIM FORMULÁŘE ──────────────────────────────────────────
      Stránka se ovládá šipkami, jenže do formuláře se šipkami psát
      nedá. Jakmile tedy pozornost padne do kteréhokoli pole,
@@ -765,24 +564,11 @@
   /* Odkazy v liště a tlačítka v úvodu míří na sekce. Aby po nich
      ukazatel nezůstal stát jinde, než stojí stránka, vede je
      tentýž skok: najde se první zastávka uvnitř cílové sekce. */
-  Array.prototype.forEach.call(document.querySelectorAll('a[href^="#"]'), function (odkaz) {
-    var cil = odkaz.getAttribute('href');
-    if (cil === '#' || cil === '#main') return;
-
-    odkaz.addEventListener('click', function (udalost) {
-      var sekce = document.querySelector(cil);
-      if (!sekce) return;
-
-      var index = -1;
-      for (var i = 0; i < stanice.length; i++) {
-        if (sekce.contains(stanice[i])) { index = i; break; }
-      }
-      if (index < 0) return;
-
-      udalost.preventDefault();
-      skoc(index);
-    });
-  });
+  /* Odkazy v liště si skript nebere. Dřív je převáděl na skok na
+     zastávku, jenže po zastávkách se stránka už neposouvá: jsou
+     to obyčejné kotvy a plynulost jim dá scroll-behavior ve
+     stylu. Tlumený posun jim nestojí v cestě — pozná, že se
+     stránka hnula jinudy, a srovná si cíl podle ní. */
 
   /* Potvrzení klávesou blikne, teprve pak stránka popojede.
      Stisk tak nezůstane bez odezvy. */
