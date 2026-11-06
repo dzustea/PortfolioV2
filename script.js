@@ -358,12 +358,24 @@
       window.removeEventListener('wheel', tlum, { passive: false });
       koren.classList.add('je-odemknuto');
 
-      /* A roj se rozpustí. Stránku postavil celou a víc už nikdy
-         nestaví: kdo jede nahoru a dolů podruhé, má číst, ne se
-         dívat na tutéž animaci. Co ještě nestálo, naskočí hned. */
+      /* A roj se rozpustí — ale až dostaví poslední obrazovku.
+         Dřív se vypínal hned na dně, takže kontakt a patičku nikdy
+         nestavěl, jen je naráz odkryl. Teď posun i ukazatel patří
+         člověku okamžitě, roj dopíše, co má na očích, a teprve
+         potom zmizí. Znovu už nestaví nic: co stojí, zůstane stát.
+
+         Strop devět vteřin je pojistka pro případ, že by se
+         některý prvek nedal dostavět a hlášení o konci nepřišlo. */
       var roj = window.cursorSwarm;
       if (roj && (roj.state === 'running' || roj.state === 'paused')) {
-        roj.stop({ reveal: true });
+        var rozpust = function () {
+          if (roj.state === 'running' || roj.state === 'paused') roj.stop({ reveal: true });
+        };
+        if (roj.progress >= 1) rozpust();
+        else {
+          roj.on('done', rozpust);
+          setTimeout(rozpust, 9000);
+        }
       }
     };
 
@@ -487,6 +499,40 @@
       }
     }, 14);
   };
+
+  /* ── NABÍDKA POD MYŠÍ ─────────────────────────────────────────
+     Volbu v nabídce dřív vybíraly šipky. Ty už po stránce
+     nevedou, takže vybírá ukazatel: najetí na řádek ho označí
+     a vedle se vypíše odpověď, stejně jako dřív po stisku
+     šipky. Klávesnice dostane totéž přes zaostření tabulátorem.
+
+     Odchod z nabídky výběr zruší a odpověď se vrátí na výzvu,
+     aby vedle nezůstal viset popis něčeho, na co už nikdo
+     neukazuje. Kdo má volbu zaostřenou klávesnicí, toho to
+     nechá být. */
+
+  var volby = Array.prototype.slice.call(document.querySelectorAll('.volba'));
+
+  var vyberVolbu = function (volba) {
+    var uz = volba && volba.classList.contains('je-vybrana');
+    volby.forEach(function (v) { v.classList.toggle('je-vybrana', v === volba); });
+    /* Totéž najetí podruhé odpověď nepřepisuje: psaní by se jen
+       rozjelo znovu od začátku. */
+    if (!uz) zapisOdpoved(volba);
+  };
+
+  volby.forEach(function (volba) {
+    volba.addEventListener('mouseenter', function () { vyberVolbu(volba); });
+    volba.addEventListener('focus', function () { vyberVolbu(volba); });
+  });
+
+  var seznamVoleb = document.querySelector('.konz-v');
+  if (seznamVoleb) {
+    seznamVoleb.addEventListener('mouseleave', function () {
+      if (seznamVoleb.contains(document.activeElement)) return;
+      vyberVolbu(null);
+    });
+  }
 
   var oznacStanici = function (index) {
     /* Zvýrazněná je vždy nejvýš jedna zastávka: ukazatel vede

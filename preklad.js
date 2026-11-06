@@ -55,6 +55,7 @@
     'rejstřík projektů': 'project index',
     'šipky vybírají': 'arrows select',
     'enter potvrdí': 'enter confirms',
+    'klepnutím potvrdíte': 'click to confirm',
     'klepněte na řádek': 'tap a row',
     'nebo pokračujte dolů': 'or keep going down',
     'odpověď': 'answer',

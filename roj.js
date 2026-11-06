@@ -43,8 +43,12 @@
 
        .konz-pata je v seznamu kvůli oddělovačům: tečky mezi údaji
        dělá pravidlo span + span, takže kdyby ji agenti rozepsali
-       po slovech, naskočila by tečka mezi každá dvě. */
-    ignore: '#hdr, #hdr *, .skip, .konz-pata, .konz-pata *, .uroven, .uroven *, .pozadi, .pozadi *, .vzorky, .vzorky *',
+       po slovech, naskočila by tečka mezi každá dvě.
+
+       .odp-t píše skript sám, když se najede na volbu. Kdyby ji
+       stavěl i roj, mohl by přes vypsanou odpověď dopsat výzvu,
+       kterou si načetl na startu. */
+    ignore: '#hdr, #hdr *, .skip, .konz-pata, .konz-pata *, .odp-t, .uroven, .uroven *, .pozadi, .pozadi *, .vzorky, .vzorky *',
 
     frames: true,
     /* Co je jednou postavené, zůstane stát. Rozebírat při cestě

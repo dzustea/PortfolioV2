@@ -195,13 +195,18 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 /* Kroužek stojí všude, kde se na stránce klepe: v liště, v mapě
    projektů a v kontaktním formuláři. Nad tím, co se dá stisknout,
    se stáhne a zčervená, takže je cíl vidět dřív, než se klepne.
-   Jinde na stránce ukazatel není: tu vede šipka, ne myš. */
+   Jinde na stránce ukazatel není.
+
+   Nabídka v úvodu ho má taky: volby v ní dřív vybíraly šipky,
+   teď se na ně klepe, a klepat poslepu nejde. */
 #hdr, #hdr *,
+.konz-sloupce, .konz-sloupce *,
 #kontakt, #kontakt *,
 .okno-mapa, .okno-mapa *,
 .skip{cursor: var(--kurzor)}
 
 #hdr a, #hdr button, .skip, .skip:focus-visible,
+.volba, .volba *,
 #kontakt a, #kontakt button,
 .okno-mapa .mapa-uzel, .okno-mapa .mapa-uzel *{cursor: var(--kurzor-cil)}
 
@@ -669,6 +674,22 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
 .volba:is(:focus-visible, .je-vybrana) .volba-c{color: var(--rud-tx)}
 .volba:is(:focus-visible, .je-vybrana) .volba-m{opacity: 1; transform: none}
 .volba:focus-visible{outline: none}
+
+/* Najetí myší. Řádek pod ukazatelem se rozsvítí stejně jako
+   vybraný, jen o stupeň tlumeněji, a jméno volby popojede
+   o pár bodů doprava za klínkem — je vidět, že se na řádek
+   dá klepnout, ještě než se klepne. Jen tam, kde je myš:
+   na dotyku by najetí po klepnutí zůstalo viset. */
+.volba-n{transition: transform .28s cubic-bezier(.23,1,.32,1), color .2s ease}
+@media (hover: hover) and (pointer: fine){
+  .volba:hover{background: rgba(224,36,44,.07); color: var(--kost)}
+  .volba:hover .volba-u{opacity: 1; transform: none}
+  .volba:hover .volba-c{color: var(--rud-tx)}
+  .volba:hover .volba-m{opacity: 1; transform: none}
+  .volba:hover .volba-n,
+  .volba.je-vybrana .volba-n{transform: translateX(4px)}
+  .volba:active{background: rgba(224,36,44,.16)}
+}
 
 /* Potvrzení klávesou blikne, teprve pak stránka popojede.
    Stisk tak nezůstane bez odezvy. */
