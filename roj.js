@@ -27,6 +27,12 @@
 
   if (typeof CursorSwarm !== 'function') return;
 
+  /* Na telefonu roj není vůbec. Stránka je tam stejná, jen se
+     nestaví před očima: na malé obrazovce by kurzory zakrývaly
+     text, který člověk zrovna čte, a prst stejně posouvá rychleji,
+     než by stačily psát. */
+  if (matchMedia('(hover: none), (pointer: coarse)').matches) return;
+
   var roj = new CursorSwarm({
     cursors: 3,
     colors: ['#e0242c', '#f2efe9', '#ef3a3a', '#8b8882'],
@@ -41,7 +47,11 @@
     ignore: '#hdr, #hdr *, .skip, .konz-pata, .konz-pata *, .uroven, .uroven *, .pozadi, .pozadi *, .vzorky, .vzorky *',
 
     frames: true,
-    deconstruct: true,
+    /* Co je jednou postavené, zůstane stát. Rozebírat při cestě
+       nahoru a stavět znovu při cestě dolů by z animace udělalo
+       překážku: kdo se vrací k projektu, chce ho číst, ne se
+       dívat, jak se píše podruhé. */
+    deconstruct: false,
     exitAfterBuild: 'home',
     idle: 'dim',
 
@@ -64,6 +74,40 @@
 
     respectReducedMotion: true
   });
+
+  /* ── ÚKLID PO ROJI ────────────────────────────────────────────
+     Když agenti píšou, rozsekají text na písmena a slova, každé
+     do vlastního spanu. Po zastavení ho tak knihovna nechá: na
+     oko je to tatáž věta, ale v dokumentu je to sedm set kousků.
+
+     Vadí to dvakrát. Čtečka obrazovky pak nadpis hláskuje
+     a překladač stránky celou větu nenajde, protože hledá větu,
+     ne jednotlivá písmena — po přepnutí jazyka by zůstala půlka
+     stránky v původní řeči.
+
+     Proto se po zastavení kousky rozpustí zpátky do textu
+     a sousední textové uzly se slepí. Zbytek dokumentu, třeba
+     otevřený projekt, zůstane, jak je. */
+  var rozpust = function () {
+    var kousky = document.querySelectorAll('span.cs-c, span.cs-w');
+    if (!kousky.length) return;
+
+    var rodice = [];
+    Array.prototype.forEach.call(kousky, function (kus) {
+      var rodic = kus.parentNode;
+      if (!rodic) return;
+      while (kus.firstChild) rodic.insertBefore(kus.firstChild, kus);
+      rodic.removeChild(kus);
+      if (rodice.indexOf(rodic) === -1) rodice.push(rodic);
+    });
+    rodice.forEach(function (rodic) { rodic.normalize(); });
+  };
+
+  roj.on('stop', rozpust);
+
+  /* Překladač si úklid volá sám těsně před výměnou vět, kdyby
+     knihovna text odkryla až po své události. */
+  window.rozpustRoj = rozpust;
 
   roj.init();
 

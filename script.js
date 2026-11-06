@@ -47,16 +47,23 @@
      stránka naskočí rovnou ve stavu, do kterého se dřív dostávala
      stiskem šipky.
 
-     Odhalování při posunu se vypíná taky: od toho je tu roj a dvě
-     animace přes týž prvek by se jen praly.
+     Odhalování při posunu se vypíná jen tam, kde staví roj: dvě
+     animace přes týž prvek by se jen praly. Na telefonu roj není,
+     takže tam se obsah při posunu odhaluje dál a stránka nezůstane
+     bez pohybu úplně.
      ──────────────────────────────────────────────────────────── */
 
   var koren = document.documentElement;
   koren.classList.add('js', 'je-odhrnuto');
 
-  Array.prototype.forEach.call(document.querySelectorAll('.rv'), function (prvek) {
-    prvek.classList.add('bez-prechodu', 'in');
-  });
+  var rojPobezi = !matchMedia('(hover: none), (pointer: coarse)').matches &&
+                  !tlumenyPohyb.matches;
+
+  if (rojPobezi) {
+    Array.prototype.forEach.call(document.querySelectorAll('.rv'), function (prvek) {
+      prvek.classList.add('bez-prechodu', 'in');
+    });
+  }
 
 
   /* ── PODKLAD LIŠTY ────────────────────────────────────────────
@@ -308,16 +315,30 @@
        Necelá polovina je znatelně pomalejší, a přitom se nikam
        nejede nekonečně dlouho. */
     var DIL = 0.45;
-    /* Jak rychle se stránka k cíli přibližuje. */
-    var DOBEH = 0.24;
-    /* Jak dlouho se po posledním otočení ještě dojíždí. Když
-       člověk přestane točit, stránka má stát, ne doklouzat. */
-    var TICHO = 110;
+
+    /* Doběh se počítá z času, ne ze snímků. Dřív se v každém
+       snímku ujela pevná část zbývající cesty, takže na monitoru se
+       sto čtyřiceti hertzi jela stránka dvakrát rychleji než na
+       šedesáti. Teď za TAU milisekund ujede zhruba dvě třetiny
+       zbytku, ať kreslí monitor jakkoli rychle. */
+    var TAU = 85;
+
+    /* Po téhle pauze bez kolečka se stojí. Je delší než mezera
+       mezi dvěma zoubky kolečka, takže se při souvislém točení
+       pohyb nezastavuje a nerozjíždí mezi zoubky — to bylo to
+       trhání. A přitom dost krátká na to, aby stránka po puštění
+       nedoklouzávala. */
+    var TICHO = 260;
 
     var cil = window.scrollY;
+    /* Poloha se drží v desetinách bodu. Prohlížeč posun zaokrouhlí
+       a kdyby se každý snímek četla zpátky z okna, drobné kroky by
+       se ztrácely a doběh by na konci zadrhával. */
+    var poloha = window.scrollY;
     var jede = false;
     var nasPosun = false;
     var posledni = 0;
+    var minule = 0;
     var odemceno = false;
 
     var strop = function () {
@@ -336,34 +357,46 @@
       jede = false;
       window.removeEventListener('wheel', tlum, { passive: false });
       koren.classList.add('je-odemknuto');
+
+      /* A roj se rozpustí. Stránku postavil celou a víc už nikdy
+         nestaví: kdo jede nahoru a dolů podruhé, má číst, ne se
+         dívat na tutéž animaci. Co ještě nestálo, naskočí hned. */
+      var roj = window.cursorSwarm;
+      if (roj && (roj.state === 'running' || roj.state === 'paused')) {
+        roj.stop({ reveal: true });
+      }
     };
 
-    var snimek = function () {
+    var zastav = function () {
+      jede = false;
+      minule = 0;
+      cil = poloha = window.scrollY;
+      if (naDne()) odemkni();
+    };
+
+    var snimek = function (ted) {
       if (odemceno) { jede = false; return; }
 
       /* Ticho po kolečku znamená stop. Zbytek dráhy se zahodí,
          takže stránka nedojíždí pod rukama dál, když už jí
          nikdo nic neříká. */
-      if (Date.now() - posledni > TICHO) {
-        cil = window.scrollY;
-        jede = false;
-        if (naDne()) odemkni();
-        return;
-      }
+      if (ted - posledni > TICHO) { zastav(); return; }
 
-      var rozdil = cil - window.scrollY;
+      var rozdil = cil - poloha;
+      if (Math.abs(rozdil) < 0.25) { zastav(); return; }
 
-      if (Math.abs(rozdil) < 0.5) {
-        jede = false;
-        if (naDne()) odemkni();
-        return;
-      }
+      /* Pauza přes záložku nebo zamrzlý snímek by udělala jeden
+         obří krok. Strop na čtyři snímky ji přetaví v běžný doběh. */
+      var dt = minule ? Math.min(66, ted - minule) : 16.7;
+      minule = ted;
+
+      poloha += rozdil * (1 - Math.exp(-dt / TAU));
 
       /* Skokem, ne plynule: stylopis má scroll-behavior smooth
          kvůli odkazům v liště a plynulá animace by se s posunem
          po snímcích prala tak, že by stránka stála na místě. */
       nasPosun = true;
-      window.scrollTo({ top: window.scrollY + rozdil * DOBEH, behavior: 'instant' });
+      window.scrollTo({ top: poloha, behavior: 'instant' });
       nasPosun = false;
 
       if (naDne()) { odemkni(); return; }
@@ -374,12 +407,23 @@
       if (odemceno) return;
       if (udalost.ctrlKey) return;              /* přibližování stránky */
       if (vlastniPosun(udalost.target)) return;
+
+      /* Roj už nestaví — třeba ho ukončilo přepnutí jazyka. Pak
+         není důvod stránku dál brzdit. */
+      var roj = window.cursorSwarm;
+      if (roj && roj.state === 'stopped') { odemkni(); return; }
+
       udalost.preventDefault();
 
-      posledni = Date.now();
-      cil = Math.max(0, Math.min(strop(), cil + udalost.deltaY * DIL));
+      /* Kolečko s jemným krokem (touchpad) posílá delty v bodech,
+         klasické v řádcích. Řádek se počítá jako šestnáct bodů. */
+      var delta = udalost.deltaY * (udalost.deltaMode === 1 ? 16 : 1);
 
-      if (!jede) { jede = true; requestAnimationFrame(snimek); }
+      posledni = performance.now();
+      if (!jede) poloha = window.scrollY;
+      cil = Math.max(0, Math.min(strop(), cil + delta * DIL));
+
+      if (!jede) { jede = true; minule = 0; requestAnimationFrame(snimek); }
     };
 
     window.addEventListener('wheel', tlum, { passive: false });
@@ -392,7 +436,7 @@
       if (odemceno) return;
       if (naDne()) { odemkni(); return; }
       if (nasPosun || jede) return;
-      cil = window.scrollY;
+      cil = poloha = window.scrollY;
     }, { passive: true });
   }
 

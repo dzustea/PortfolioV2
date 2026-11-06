@@ -272,9 +272,32 @@
 
   var jazyk = 'cs';
 
-  var prepnoutNa = function (cil) {
+  var prepnoutNa = function (cil, rucne) {
     if (cil === jazyk) return;
     var slovnik = cil === 'en' ? EN : CS;
+
+    /* Roj kurzorů si texty načte při startu a pak je píše tak, jak
+       je načetl. Kdyby se jazyk přepnul uprostřed stavění, dopsal
+       by zbytek stránky v původní řeči. Přepnutí proto stavění
+       ukončí: co ještě nestálo, naskočí hned, a teprve potom se
+       překládá — takže se přeloží i to, co roj právě dopsal. */
+    var roj = window.cursorSwarm;
+    if (roj && (roj.state === 'running' || roj.state === 'paused')) {
+      roj.stop({ reveal: true });
+    }
+    /* Roj text rozsekal na písmena a slova; slovník hledá celé
+       věty, takže se kousky musí nejdřív slepit zpátky. */
+    if (typeof window.rozpustRoj === 'function') window.rozpustRoj();
+
+    /* Výměna vět se prolne, aby text nepřeskočil naráz. Jen při
+       ručním přepnutí: první překlad běží dřív, než je co vidět. */
+    if (rucne) {
+      var koren = document.documentElement;
+      koren.classList.remove('meni-jazyk');
+      void koren.offsetWidth;
+      koren.classList.add('meni-jazyk');
+      setTimeout(function () { koren.classList.remove('meni-jazyk'); }, 420);
+    }
 
     textoveUzly().forEach(function (uzel) {
       var puvodni = uzel.nodeValue;
@@ -341,7 +364,7 @@
       b.className = 'jazyk';
       b.dataset.jazyk = kod;
       b.textContent = kod.toUpperCase();
-      b.addEventListener('click', function () { prepnoutNa(kod); });
+      b.addEventListener('click', function () { prepnoutNa(kod, true); });
       prepinac.appendChild(b);
     });
 

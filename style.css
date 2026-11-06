@@ -1390,17 +1390,23 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
   display: grid; grid-template-columns: 20px 112px 1fr; align-items: center;
   gap: 14px; padding: 16px 0;
   border-bottom: 1px solid var(--linka);
-  transition: padding-left .25s ease, color .2s ease;
+  transition: color .2s ease;
 }
+/* Při najetí obsah odjede doprava. Dřív se to dělalo odsazením
+   zleva, a to každý snímek přepočítalo rozvržení celého řádku;
+   posun transformací vykreslí jen to, co se hýbe, a linka pod
+   řádkem zůstane stát na místě. */
+.spojeni a > *{transition: transform .3s cubic-bezier(.23,1,.32,1), color .2s ease}
+.spojeni a:hover > *{transform: translateX(10px)}
 .spojeni a .ik{width: 17px; height: 17px; color: var(--sed-2)}
-.spojeni a:hover .ik{color: var(--rud-tx); transform: scale(1.12)}
+.spojeni a:hover .ik{color: var(--rud-tx); transform: translateX(10px) scale(1.12)}
 .spojeni a > span:first-of-type{
   font-family: var(--mono);
   font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
   color: var(--sed-2);
 }
 .spoj-v{overflow-wrap: anywhere}
-.spojeni a:hover{padding-left: 10px; color: var(--rud-tx)}
+.spojeni a:hover{color: var(--rud-tx)}
 
 #cform{display: grid; gap: 16px}
 .fg{display: grid; gap: 7px}
@@ -2286,4 +2292,37 @@ html:has(.doc-strana){scrollbar-width: auto}
   .mapa-uzel[data-cil="r5"]{--x:52; --y:14; --poradi:2}
   .mapa-uzel[data-cil="r6"]{--x:62; --y:70; --poradi:3}
   .mapa-uzel[data-cil="r7"]{--x:84; --y:41; --poradi:4}
+}
+
+
+/* ══ STISK ═════════════════════════════════════════════════════
+   Tlačítko při stisku o kousek povolí. Je to jediná odezva, kterou
+   ruka dostane dřív, než se cokoli stane, a bez ní působí klepnutí
+   jako netrefa. Stažení je drobné a rychlé: má se cítit, ne vidět.
+   ══════════════════════════════════════════════════════════════ */
+
+.btn, .hdr-cta, .jazyk{
+  transition-property: background-color, border-color, color, transform;
+  transition-duration: .2s, .2s, .2s, .16s;
+  transition-timing-function: ease, ease, ease, cubic-bezier(.23,1,.32,1);
+}
+.btn:active, .hdr-cta:active{transform: scale(.97)}
+.jazyk:active{transform: scale(.93)}
+
+
+/* ══ PŘEPNUTÍ JAZYKA ═══════════════════════════════════════════
+   Věty se vymění naráz, ale oko to nevidí: obsah na okamžik
+   zprůsvitní a lehce rozostří a hned se vrátí. Rozostření schová,
+   že se pod ním mění délky řádků. */
+
+.meni-jazyk main, .meni-jazyk #hdr nav, .meni-jazyk .hdr-cta{
+  animation: jazykProlnuti .4s cubic-bezier(.23,1,.32,1);
+}
+@keyframes jazykProlnuti{
+  from{opacity: .2; filter: blur(3px)}
+  to  {opacity: 1;  filter: blur(0)}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .meni-jazyk main, .meni-jazyk #hdr nav, .meni-jazyk .hdr-cta{animation: none}
 }
