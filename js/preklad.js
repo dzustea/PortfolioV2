@@ -113,6 +113,7 @@
     'otevřít web v novém okně': 'open the site in a new window',
     'klepnutím rozbalíte': 'tap to expand',
     'klepnutím otočíte': 'tap to flip',
+    'Úvod': 'Intro',
     'potáhněte do strany': 'swipe sideways',
     'Otevřít web': 'Open site',
     'Právě se staví': 'Being built right now',

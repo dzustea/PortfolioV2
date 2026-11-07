@@ -1,3 +1,6 @@
 
 # Místní nastavení náhledu v editoru
 .claude/
+
+# Závislosti nástrojů (instalují se přes npm install v tools/)
+node_modules/

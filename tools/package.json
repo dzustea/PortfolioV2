@@ -1,0 +1,9 @@
+{
+  "name": "portfolio-nastroje",
+  "private": true,
+  "description": "Nástroje k portfoliu, na web se nenasazují. Viz README.md v kořeni.",
+  "type": "module",
+  "devDependencies": {
+    "mp4-muxer": "5.1.3"
+  }
+}

@@ -59,9 +59,9 @@ zkopírovat existující `<li class="polozka">`), překlady jeho textů
 do `js/preklad.js`, uzel do mapy (generátor níž) a náhled do
 `projects/`.
 
-**Náhledová videa.** `node tools/nahraj-nahledy.mjs` nahraje všechny
+**Náhledová videa.** Poprvé `cd tools && npm install`, pak `node tools/nahraj-nahledy.mjs` nahraje všechny
 weby znovu, `node tools/nahraj-nahledy.mjs natte` jen jeden. Potřebuje
-Node 22+ a nainstalovaný Google Chrome. Video se na webu stahuje, až
+Node 22+ a nainstalovaný Google Chrome. Videa mají 60 fps a 960 × 540. Video se na webu stahuje, až
 když má hrát, takže nezpomaluje načtení stránky.
 
 **Mapa projektů.** Strom projektů na počítači vyrábí generátor

@@ -1709,18 +1709,19 @@ footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
 }
 
 
-/* ══ UKAZATEL STAVU ════════════════════════════════════════════
-   Vpravo dole, nad zemí. Drží úroveň, ve které člověk právě je,
-   a jednu větu o tom, čím se stránka ovládá. Číslo i název
-   přepisuje skript podle toho, která sekce je v okně.
+/* ══ UKAZATEL SEKCE ════════════════════════════════════════════
+   Vpravo dole, jen na počítači: číslo a jméno sekce, ve které
+   člověk právě je ("02 / 04  Práce"), a pod tím rudá linka, která
+   roste s tím, kolik stránky už má za sebou. Číslo i jméno
+   přepisuje skript, když se v okně vystřídají sekce. Na telefonu
+   není vůbec: zabíral by místo a překrýval obsah.
    ══════════════════════════════════════════════════════════════ */
 
-.ukazatel{opacity: 0; transition: opacity .5s ease .2s}
+.ukazatel{opacity: 0; transition: opacity .35s ease, transform .35s cubic-bezier(.22,1,.36,1)}
 .je-odhrnuto .ukazatel{opacity: 1}
 /* U paty ukazatel uhne: tam už stojí text na stejném místě
    a hlásit není co. */
 .je-odhrnuto.pata-na-ocich .ukazatel{opacity: 0; transform: translateY(10px)}
-.ukazatel{transition: opacity .35s ease, transform .35s cubic-bezier(.22,1,.36,1)}
 
 .ukazatel{
   position: fixed; right: clamp(10px, 3vw, 30px); bottom: 50px;
@@ -1733,30 +1734,27 @@ footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
   font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
   color: var(--sed-2);
   white-space: nowrap;
+  overflow: hidden;
 }
-.ukazatel b{font-weight: 400; color: var(--kost); font-variant-numeric: tabular-nums}
-/* Mezi městem a časem stojí rudý puntík, stejný jako ve spodní
-   liště úvodu. Pomalu dýchá, aby bylo znát, že hodiny jdou. */
-.uk-cas::before{
+.ukazatel b{font-weight: 400; color: var(--rud-tx); font-variant-numeric: tabular-nums}
+.uk-n{color: var(--kost)}
+/* Mezi číslem a jménem rudý puntík, stejný jako ve spodní liště
+   úvodu. */
+.uk-n::before{
   content: ""; display: inline-block; vertical-align: middle;
   width: 4px; height: 4px; margin: -2px 10px 0 0;
   background: var(--rud);
-  animation: ukTep 2.4s ease-in-out infinite;
 }
 @keyframes ukTep{ 0%,100%{opacity: 1} 50%{opacity: .25} }
 /* Linka postupu po stránce, přilepená ke spodní hraně. Roste
    zleva transformací, ne šířkou. */
-.ukazatel{overflow: hidden}
 .uk-p{
   position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
   background: var(--rud);
   transform: scaleX(0); transform-origin: left center;
 }
-@media (prefers-reduced-motion: reduce){
-  .uk-cas::before{animation: none}
-}
-@media (max-width: 560px){
-  .ukazatel{right: 8px; bottom: 46px; padding: 5px 9px; font-size: .55rem; gap: 7px}
+@media (max-width: 760px), (hover: none), (pointer: coarse){
+  .ukazatel{display: none}
 }
 
 

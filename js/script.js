@@ -95,28 +95,25 @@
   var poradi = ['prace', 'projekty', 'kontakt'];
   var sekce = poradi.map(function (id) { return document.getElementById(id); }).filter(Boolean);
 
-  /* Ukazatel vpravo dole: místní čas v Kroměříži a linka
-     postupu po stránce. Čas se bere z pásma Europe/Prague, ne
-     z hodin návštěvníka, takže i z Londýna je vidět, kolik je
-     tady. Přepisuje se jednou za dvacet vteřin, minuta tak
-     nikdy neujede víc, než je znát. */
+  /* Ukazatel vpravo dole (jen počítač): číslo a jméno sekce, ve
+     které člověk právě je, a linka postupu po stránce. Jméno se
+     bere z odkazu v liště, takže je vždy v jazyce, ve kterém
+     stránka zrovna je; úvod v liště odkaz nemá, ten jde přes
+     překladač. */
   var ukazatel = document.querySelector('.ukazatel');
-  var ukCas = ukazatel ? ukazatel.querySelector('.uk-cas') : null;
+  var ukCislo = ukazatel ? ukazatel.querySelector('.uk-u b') : null;
+  var ukJmeno = ukazatel ? ukazatel.querySelector('.uk-n') : null;
   var ukPostup = ukazatel ? ukazatel.querySelector('.uk-p') : null;
 
-  if (ukCas) {
-    var formatCasu;
-    try {
-      formatCasu = new Intl.DateTimeFormat('cs-CZ', { timeZone: 'Europe/Prague', hour: '2-digit', minute: '2-digit', hour12: false });
-    } catch (chyba) { formatCasu = null; }
-    var zapisCas = function () {
-      if (!formatCasu) return;
-      var cas = formatCasu.format(new Date());
-      if (ukCas.textContent !== cas) ukCas.textContent = cas;
-    };
-    zapisCas();
-    setInterval(zapisCas, 20000);
-  }
+  var zapisSekci = function (id) {
+    if (!ukCislo || !ukJmeno) return;
+    var i = poradi.indexOf(id);
+    var cislo = '0' + (i + 2);
+    var jmeno = i >= 0 && odkazy[id] ? odkazy[id].textContent.trim() : t('Úvod');
+    if (i < 0) cislo = '01';
+    if (ukCislo.textContent !== cislo) ukCislo.textContent = cislo;
+    if (ukJmeno.textContent !== jmeno) ukJmeno.textContent = jmeno;
+  };
 
   /* Linka se mění jen transformací, takže posouvání nic
      nepřekresluje; a jen jednou za snímek. */
@@ -162,6 +159,7 @@
         if (videt[poradi[i]]) { aktivni = poradi[i]; break; }
       }
       for (var id in odkazy) odkazy[id].classList.toggle('aktivni', id === aktivni);
+      zapisSekci(aktivni);
     }, { rootMargin: '-38% 0px -55% 0px' });
 
     sekce.forEach(function (prvek) { sledovacSekci.observe(prvek); });
