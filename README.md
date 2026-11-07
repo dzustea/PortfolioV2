@@ -33,7 +33,9 @@ PortfolioV2/
 │                         pro každý web v seznamu projektů
 │
 ├── tools/
+│   ├── kontrola.mjs      kontrola před nasazením (CI, viz níž)
 │   └── nahraj-nahledy.mjs  nahraje videa do projects/ (viz níž)
+├── .github/workflows/    GitHub Actions: spouští kontrolu
 ├── archive/              staré obrázky, které web už nepoužívá.
 │                         Nemažou se, ale nenasazují (.vercelignore).
 │
@@ -67,6 +69,25 @@ když má hrát, takže nezpomaluje načtení stránky.
 **Mapa projektů.** Strom projektů na počítači vyrábí generátor
 `nastroje-v6/mapa.js` v pracovní složce portfolia (mimo tohle repo).
 Zapisuje značky do `index.html` a souřadnice na konec `css/style.css`.
+
+## Nasazení a kontrola (CI)
+
+- **Nasazení dělá Vercel** přes svou integraci s GitHubem: push do
+  `main` = produkce na filiplochman.cz, pull request = náhledové
+  nasazení s vlastní adresou.
+- **Kontrola** (`.github/workflows/kontrola.yml`) běží na GitHubu při
+  každém pushi a pull requestu a pouští `tools/kontrola.mjs`: odkazy na
+  soubory, přísná CSP (žádné vložené skripty, atributy `style` ani
+  `onclick`), syntaxe JS a JSON, velikost souborů. Ručně:
+
+  ```bash
+  node tools/kontrola.mjs
+  ```
+
+- **Aby Vercel na kontrolu čekal**, zapíná se ve Vercelu: projekt
+  *portfolio-v2* → Settings → **Deployment Checks** → přidat
+  „Kontrola webu“. Pak se commit s červenou kontrolou nedostane do
+  produkce.
 
 ## Bezpečnost
 

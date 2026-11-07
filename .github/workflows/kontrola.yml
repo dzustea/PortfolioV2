@@ -1,0 +1,41 @@
+# Kontrola webu před nasazením.
+#
+# Běží při každém pushi do main a u každého pull requestu. Nasazení
+# samo dělá Vercel přes svou integraci s GitHubem (push do main =
+# produkce, pull request = náhled); tahle kontrola k němu přidává
+# zelenou nebo červenou značku u commitu. Co přesně hlídá, je
+# popsané v tools/kontrola.mjs.
+#
+# Aby Vercel na výsledek čekal a rozbitý commit nepustil do
+# produkce, zapíná se to ve Vercelu: Project Settings → Deployment
+# Checks → přidat kontrolu "Kontrola webu" (viz README).
+
+name: Kontrola webu
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kontrola-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  kontrola:
+    name: Kontrola webu
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Odkazy, CSP, syntaxe a velikost
+        run: node tools/kontrola.mjs
