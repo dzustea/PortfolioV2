@@ -1287,9 +1287,12 @@
 
   console.log(
     "%cAhoj.%c Koukáte do konzole, takže asi víte, co je zač.\n" +
-    "Celý web je psaný ručně, bez jediného rámce a bez jediné\n" +
-    "knihovny. Tenhle soubor si můžete přečíst celý, je česky.\n" +
-    "Kdyby vás něco zajímalo: filiplochman.cz",
+    "Celý web je psaný ručně: čisté HTML, CSS a JavaScript, žádný\n" +
+    "framework, žádný build. Cizí kód je tu jen jeden — roj kurzorů\n" +
+    "(cursor-swarm.js, licence MIT). Ikony jsou Phosphor a písma\n" +
+    "Archivo, Chakra Petch a JetBrains Mono. Zbytek si můžete\n" +
+    "přečíst celý, je česky.\n" +
+    "Kdyby vás něco zajímalo: filiplochman.cz · instagram.com/fida.lochman",
     "color:#ef3a3a;font-weight:700", "color:inherit"
   );
 
