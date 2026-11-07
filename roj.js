@@ -47,7 +47,7 @@
        .odp-t píše skript sám, když se najede na volbu. Kdyby ji
        stavěl i roj, mohl by přes vypsanou odpověď dopsat výzvu,
        kterou si načetl na startu. */
-    ignore: '#hdr, #hdr *, .skip, .konz-pata, .konz-pata *, .odp-t, .uroven, .uroven *, .pozadi, .pozadi *, .vzorky, .vzorky *',
+    ignore: '#hdr, #hdr *, .skip, .konz-pata, .konz-pata *, .odp-t, .ukazatel, .ukazatel *, .pozadi, .pozadi *, .vzorky, .vzorky *',
 
     frames: true,
     /* Co je jednou postavené, zůstane stát. Rozebírat při cestě

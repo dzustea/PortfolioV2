@@ -215,10 +215,6 @@ html, body, a, button, input, textarea, label, select, summary{cursor: none}
    zapíše ani kde začíná výběr. Je to funkce, ne nedůslednost. */
 #kontakt input, #kontakt textarea{cursor: text}
 
-/* V režimu formuláře mluví ukazatel stavu jinak. */
-.uk-f{display: none}
-.rezim-formular .uk-k{display: none}
-.rezim-formular .uk-f{display: inline; color: var(--rud-tx)}
 
 /* Pole, ve kterém se právě píše, drží rudou hranu: je to
    tentýž ukazatel jako jinde ve hře, jen v poli. */
@@ -1738,19 +1734,26 @@ footer{border-top: 1px solid var(--linka); padding-block: 28px 104px}
   color: var(--sed-2);
   white-space: nowrap;
 }
-.ukazatel b{font-weight: 400; color: var(--rud-tx)}
-/* Mezi údaji stojí rudý puntík, stejný jako ve spodní liště
-   úvodu. Je to táž lišta, jen zmenšená a přilepená k rohu. */
-.uk-k::before{
+.ukazatel b{font-weight: 400; color: var(--kost); font-variant-numeric: tabular-nums}
+/* Mezi městem a časem stojí rudý puntík, stejný jako ve spodní
+   liště úvodu. Pomalu dýchá, aby bylo znát, že hodiny jdou. */
+.uk-cas::before{
   content: ""; display: inline-block; vertical-align: middle;
-  width: 3px; height: 3px; margin-right: 10px;
+  width: 4px; height: 4px; margin: -2px 10px 0 0;
   background: var(--rud);
+  animation: ukTep 2.4s ease-in-out infinite;
 }
-/* Věta o ovládání stojí jen tam, kde klávesnice je a kde se
-   na ni vejde místo. */
-.uk-k{display: none}
-@media (hover: hover) and (pointer: fine) and (min-width: 900px){
-  .uk-k{display: inline}
+@keyframes ukTep{ 0%,100%{opacity: 1} 50%{opacity: .25} }
+/* Linka postupu po stránce, přilepená ke spodní hraně. Roste
+   zleva transformací, ne šířkou. */
+.ukazatel{overflow: hidden}
+.uk-p{
+  position: absolute; left: 0; right: 0; bottom: 0; height: 2px;
+  background: var(--rud);
+  transform: scaleX(0); transform-origin: left center;
+}
+@media (prefers-reduced-motion: reduce){
+  .uk-cas::before{animation: none}
 }
 @media (max-width: 560px){
   .ukazatel{right: 8px; bottom: 46px; padding: 5px 9px; font-size: .55rem; gap: 7px}

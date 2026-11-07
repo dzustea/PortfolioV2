@@ -95,18 +95,49 @@
   var poradi = ['prace', 'projekty', 'kontakt'];
   var sekce = poradi.map(function (id) { return document.getElementById(id); }).filter(Boolean);
 
-  /* Ukazatel stavu vpravo dole. Úroveň není nic jiného než
-     sekce, jen pojmenovaná tak, jak se stránka tváří. */
+  /* Ukazatel vpravo dole: místní čas v Kroměříži a linka
+     postupu po stránce. Čas se bere z pásma Europe/Prague, ne
+     z hodin návštěvníka, takže i z Londýna je vidět, kolik je
+     tady. Přepisuje se jednou za dvacet vteřin, minuta tak
+     nikdy neujede víc, než je znát. */
   var ukazatel = document.querySelector('.ukazatel');
-  var ukCislo = ukazatel ? ukazatel.querySelector('.uk-u b') : null;
+  var ukCas = ukazatel ? ukazatel.querySelector('.uk-cas') : null;
+  var ukPostup = ukazatel ? ukazatel.querySelector('.uk-p') : null;
 
-  var urovne = { uvod: '1', prace: '2', projekty: '3', kontakt: '4' };
+  if (ukCas) {
+    var formatCasu;
+    try {
+      formatCasu = new Intl.DateTimeFormat('cs-CZ', { timeZone: 'Europe/Prague', hour: '2-digit', minute: '2-digit', hour12: false });
+    } catch (chyba) { formatCasu = null; }
+    var zapisCas = function () {
+      if (!formatCasu) return;
+      var cas = formatCasu.format(new Date());
+      if (ukCas.textContent !== cas) ukCas.textContent = cas;
+    };
+    zapisCas();
+    setInterval(zapisCas, 20000);
+  }
 
-  var zapisUroven = function (id) {
-    if (!ukCislo) return;
-    var cislo = urovne[id] || urovne.uvod;
-    if (ukCislo.textContent !== cislo) ukCislo.textContent = cislo;
-  };
+  /* Linka se mění jen transformací, takže posouvání nic
+     nepřekresluje; a jen jednou za snímek. */
+  if (ukPostup) {
+    var postupCeka = false;
+    var zapisPostup = function () {
+      postupCeka = false;
+      var rozsah = document.documentElement.scrollHeight - innerHeight;
+      var podil = rozsah > 0 ? Math.min(1, Math.max(0, scrollY / rozsah)) : 0;
+      ukPostup.style.transform = 'scaleX(' + podil.toFixed(4) + ')';
+    };
+    var naPosun = function () {
+      if (postupCeka) return;
+      postupCeka = true;
+      requestAnimationFrame(zapisPostup);
+    };
+    addEventListener('scroll', naPosun, { passive: true });
+    addEventListener('resize', naPosun, { passive: true });
+    zapisPostup();
+  }
+
 
   /* U paty ukazatel zmizí. Je to plovoucí lišta v pravém dolním
      rohu a v patě stojí text na stejném místě; na užším okně se
@@ -131,7 +162,6 @@
         if (videt[poradi[i]]) { aktivni = poradi[i]; break; }
       }
       for (var id in odkazy) odkazy[id].classList.toggle('aktivni', id === aktivni);
-      zapisUroven(aktivni);
     }, { rootMargin: '-38% 0px -55% 0px' });
 
     sekce.forEach(function (prvek) { sledovacSekci.observe(prvek); });
