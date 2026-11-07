@@ -112,6 +112,8 @@
     'zamčeno, projekt se teprve staví': 'locked, this project is still being built',
     'otevřít web v novém okně': 'open the site in a new window',
     'klepnutím rozbalíte': 'tap to expand',
+    'klepnutím otočíte': 'tap to flip',
+    'potáhněte do strany': 'swipe sideways',
     'Otevřít web': 'Open site',
     'Právě se staví': 'Being built right now',
     /* Dokud jsou dva weby schované, je rozdělaná práce pátá. */

@@ -2305,6 +2305,190 @@ html:has(.doc-strana){scrollbar-width: auto}
   }
 }
 
+/* ══ BALÍČEK KARET (telefon) ═══════════════════════════════════
+   Na telefonu není výpis projektů historie pod sebou, ale balíček
+   karet vedle sebe. Listuje se palcem do strany, karta uprostřed
+   se rozsvítí a ostatní ustoupí. Klepnutí kartu otočí: na líci je
+   jméno, číslo a dosah, na rubu popis, co web umí, a odkaz.
+
+   Posun obstarává prohlížeč sám (scroll-snap), takže listování má
+   setrvačnost a dorazy telefonu, ne napodobeninu ze skriptu.
+   Skript jen hlídá, která karta je uprostřed, a otáčí je.
+
+   Obě strany karty leží v téže buňce mřížky přes sebe. Karta je
+   proto vždy tak vysoká jako delší z obou stran a při otočení
+   nic neposkočí. Všechny karty v řadě mají výšku té nejvyšší.
+   ══════════════════════════════════════════════════════════════ */
+
+.balicek{display: none}
+
+@media (max-width: 760px){
+
+  .rejstrik{
+    position: relative;
+    display: flex; gap: 12px;
+    max-width: none; width: auto;
+    margin: clamp(26px, 7vw, 36px) calc(var(--pad) * -1) 0;
+    padding: 6px var(--pad) 10px;
+    overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--pad);
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    counter-reset: projekt;
+  }
+  .rejstrik::-webkit-scrollbar{display: none}
+
+  /* ── KARTA ─────────────────────────────────────────────────── */
+  .polozka{
+    flex: 0 0 min(84%, 340px);
+    display: grid;
+    scroll-snap-align: center;
+    transform-style: preserve-3d;
+    transform: perspective(1100px) rotateY(0deg);
+    transition: transform .62s cubic-bezier(.77,0,.175,1),
+                scale .45s cubic-bezier(.23,1,.32,1),
+                opacity .45s ease;
+    scale: .94; opacity: .5;
+  }
+  .polozka.je-aktivni{scale: 1; opacity: 1}
+  .polozka.je-otevrena{transform: perspective(1100px) rotateY(180deg)}
+  .polozka:not(.polozka-chysta){counter-increment: projekt}
+  /* Rozdělaná práce jde na konec balíčku: hotové věci první. */
+  .polozka-chysta{order: 1}
+
+  /* Větev historie v balíčku nemá co dělat. */
+  .polozka::before{display: none}
+
+  /* Obě strany v jedné buňce, rub otočený zády. */
+  .rejstrik-h, .telo{
+    grid-area: 1 / 1;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border: 1px solid var(--linka);
+    background:
+      radial-gradient(120% 80% at 100% 0%, rgba(224,36,44,.10), transparent 60%),
+      var(--noc-2);
+    transition: border-color .35s ease, visibility 0s linear .31s;
+  }
+  .je-aktivni .rejstrik-h, .je-aktivni .telo{border-color: var(--linka-2)}
+  .telo{transform: rotateY(180deg)}
+
+  /* Odvrácená strana se nedá zaostřit ani klepnout. Přepne se
+     přesně v půlce otočky, kdy je karta z boku. */
+  .je-otevrena .rejstrik-h{visibility: hidden}
+  .polozka:not(.je-otevrena) .telo{visibility: hidden}
+
+  /* ── LÍC ───────────────────────────────────────────────────── */
+  .rejstrik-h{display: flex; overflow: hidden; position: relative}
+  .rejstrik-h::before{
+    /* Rudá hrana nahoře, která se u karty uprostřed natáhne. */
+    content: ""; position: absolute; left: 0; top: 0; height: 2px; width: 100%;
+    background: var(--rud);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform .5s cubic-bezier(.23,1,.32,1) .08s;
+  }
+  .je-aktivni .rejstrik-h::before{transform: scaleX(1)}
+
+  .radek{
+    min-height: 250px; height: 100%;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto 1fr auto auto auto auto;
+    grid-template-areas:
+      "slug     stav"
+      ".        ."
+      "nazev    nazev"
+      "typ      typ"
+      "dosah    dosah"
+      "napoveda napoveda";
+    align-items: end;
+    gap: 4px 12px;
+    padding: 18px 18px 18px;
+  }
+  .radek::before{display: none}
+  /* Rychlé dvojí klepnutí karty otočí, ne označí text. */
+  .radek{-webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent}
+  .radek-b, .radek-z{display: none}
+  .radek-c, .radek-t{align-self: start}
+  .radek-n{font-size: 1.85rem; line-height: 1.05; position: relative; z-index: 1}
+  .radek.je-na-rade .radek-n{transform: none}
+  .radek-s, .radek-d, .radek-h{position: relative; z-index: 1}
+  .radek-h{margin-top: 14px}
+
+  /* Velké číslo v pozadí. Při listování jede proti směru prstu
+     (--posun nastavuje skript), takže karta má hloubku. */
+  .radek::after{
+    content: counter(projekt, decimal-leading-zero);
+    position: absolute; right: -4px; top: 34px;
+    font-family: var(--nadpis); font-weight: 600;
+    font-size: 8.5rem; line-height: 1; letter-spacing: -.04em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--linka-2);
+    transform: translateX(var(--posun, 0px));
+    transition: -webkit-text-stroke-color .4s ease;
+    pointer-events: none;
+  }
+  .je-aktivni .radek::after{-webkit-text-stroke-color: rgba(224,36,44,.55)}
+  .polozka-chysta .radek::after{content: "?"}
+  .polozka-chysta .rejstrik-h{border-style: dashed}
+
+  /* ── RUB ───────────────────────────────────────────────────── */
+  .telo{position: relative; grid-template-rows: 1fr; padding: 18px}
+  .telo > .telo-in{overflow: visible}
+  .telo-in{padding-left: 0}
+  .telo-txt{border-left: 0; margin-left: 0; padding: 0}
+  .telo-txt > p{font-size: .92rem; line-height: 1.55}
+  .znacky li{transition-delay: .3s}
+  .je-otevrena .znacky li:nth-child(1){transition-delay: .32s}
+  .je-otevrena .znacky li:nth-child(2){transition-delay: .37s}
+  .je-otevrena .znacky li:nth-child(3){transition-delay: .42s}
+  .je-otevrena .znacky li:nth-child(4){transition-delay: .47s}
+  .je-otevrena .znacky li:nth-child(5){transition-delay: .52s}
+  .odkaz::after{display: none}
+  /* Značka otočení zpět v rohu rubu. */
+  .telo::after{
+    content: "↺"; position: absolute; top: 10px; right: 14px;
+    font-family: var(--mono); font-size: 1rem; color: var(--sed-2);
+  }
+
+  /* ── OVLÁDÁNÍ POD BALÍČKEM ─────────────────────────────────── */
+  .balicek{
+    display: flex; align-items: center; gap: 14px;
+    margin-top: 16px;
+    font-family: var(--mono);
+    font-size: .62rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--sed-2);
+  }
+  .balicek-c{font-variant-numeric: tabular-nums; white-space: nowrap}
+  .balicek-c b{font-weight: 400; color: var(--kost)}
+  .balicek-tecky{display: flex; gap: 6px; flex: 1}
+  .balicek-tecka{
+    position: relative; flex: 1; height: 2px; max-width: 36px;
+    background: var(--linka-2);
+    transition: background-color .3s ease;
+  }
+  /* Klepací plocha je vyšší než viditelná čárka. */
+  .balicek-tecka::before{content: ""; position: absolute; inset: -12px 0}
+  .balicek-tecka.je-aktivni{background: var(--rud)}
+  .balicek-h{white-space: nowrap}
+  .balicek-h::after{
+    content: "→"; display: inline-block; margin-left: 6px; color: var(--rud-tx);
+    animation: balicekPostrc 1.6s cubic-bezier(.77,0,.175,1) infinite;
+  }
+  .balicek.je-osahany .balicek-h{opacity: 0; transition: opacity .4s ease}
+}
+
+@keyframes balicekPostrc{
+  0%, 100%{transform: translateX(0)}
+  50%     {transform: translateX(5px)}
+}
+
+@media (max-width: 760px) and (prefers-reduced-motion: reduce){
+  .polozka{transition: opacity .2s ease}
+  .rejstrik-h, .telo{transition: visibility 0s}
+  .rejstrik-h::before{transition: none}
+  .balicek-h::after{animation: none}
+}
+
 /* ── SOUŘADNICE MAPY (generované) ────────────────────────────────
    Vyrábí je nastroje-v6/mapa.js v pracovním repu. Ručně se do nich
    nesahá: mění se zdroj a pustí se znovu. Jsou tady, a ne v atributu

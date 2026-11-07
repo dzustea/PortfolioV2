@@ -916,8 +916,130 @@
     if (prvni && !document.querySelector('.polozka.je-otevrena')) prepniUroven(prvni);
   }
 
+  /* ── BALÍČEK KARET ────────────────────────────────────────────
+     Na telefonu je výpis balíček karet vedle sebe (vzhled
+     v style.css, BALÍČEK KARET). Tady se hlídá, která karta je
+     uprostřed, kreslí se počítadlo a čárky pod balíčkem a karty
+     se otáčejí.
+
+     Karta mimo střed se klepnutím nejdřív přisune, teprve karta
+     uprostřed se otočí. Rub se otočí zpátky klepnutím kamkoli
+     mimo odkaz, a taky sám, jakmile karta odjede ze středu. */
+  var balicekPlati = matchMedia('(max-width: 760px)');
+  var rejstrik = document.querySelector('.rejstrik');
+  var balicek = document.querySelector('.balicek');
+  var karty = rejstrik ? Array.prototype.slice.call(rejstrik.querySelectorAll(':scope > .polozka')) : [];
+
+  /* Pořadí na obrazovce: rozdělaná práce stojí v balíčku na konci. */
+  karty = karty.filter(function (k) { return !k.classList.contains('polozka-chysta'); })
+    .concat(karty.filter(function (k) { return k.classList.contains('polozka-chysta'); }));
+
+  var aktivniKarta = null;
+  var tecky = [];
+  var cisloKarty = balicek ? balicek.querySelector('.balicek-c b') : null;
+
+  var dvemaCisly = function (n) { return (n < 10 ? '0' : '') + n; };
+
+  var naKartu = function (karta, plynule) {
+    if (!rejstrik || !karta) return;
+    var cil = karta.offsetLeft - (rejstrik.clientWidth - karta.offsetWidth) / 2;
+    rejstrik.scrollTo({ left: cil, behavior: plynule === false || tlumenyPohyb.matches ? 'auto' : 'smooth' });
+  };
+
+  if (balicek && karty.length) {
+    var pocet = balicek.querySelector('.balicek-c');
+    if (pocet && pocet.lastChild) pocet.lastChild.textContent = ' / ' + dvemaCisly(karty.length);
+
+    var drzakTecek = balicek.querySelector('.balicek-tecky');
+    karty.forEach(function (karta) {
+      var tecka = document.createElement('span');
+      tecka.className = 'balicek-tecka';
+      tecka.addEventListener('click', function () { naKartu(karta); });
+      drzakTecek.appendChild(tecka);
+      tecky.push(tecka);
+    });
+  }
+
+  var srovnejBalicek = function () {
+    if (!rejstrik || !karty.length) return;
+
+    if (!balicekPlati.matches) {
+      karty.forEach(function (k) { k.classList.remove('je-aktivni'); k.style.removeProperty('--posun'); });
+      aktivniKarta = null;
+      return;
+    }
+
+    var ramec = rejstrik.getBoundingClientRect();
+    var stred = ramec.left + ramec.width / 2;
+    var nejblizsi = null, nejmene = Infinity;
+
+    karty.forEach(function (karta) {
+      var r = karta.getBoundingClientRect();
+      var odchylka = r.left + r.width / 2 - stred;
+      if (Math.abs(odchylka) < nejmene) { nejmene = Math.abs(odchylka); nejblizsi = karta; }
+      /* Číslo v pozadí jede proti kartě, o pětinu její cesty. */
+      var posun = Math.max(-60, Math.min(60, odchylka * -0.2));
+      var cislo = karta.querySelector('.radek');
+      if (cislo) cislo.style.setProperty('--posun', posun.toFixed(1) + 'px');
+    });
+
+    if (nejblizsi === aktivniKarta) return;
+    aktivniKarta = nejblizsi;
+
+    karty.forEach(function (karta, i) {
+      var je = karta === nejblizsi;
+      karta.classList.toggle('je-aktivni', je);
+      if (tecky[i]) tecky[i].classList.toggle('je-aktivni', je);
+      if (je && cisloKarty) cisloKarty.textContent = dvemaCisly(i + 1);
+    });
+
+    /* Otočená karta, která odjela ze středu, se obrátí zpátky. */
+    var otocena = rejstrik.querySelector('.polozka.je-otevrena');
+    if (otocena && otocena !== nejblizsi) zavriUrovne(null);
+  };
+
+  if (rejstrik) {
+    var balicekCeka = false;
+    rejstrik.addEventListener('scroll', function () {
+      if (balicek && rejstrik.scrollLeft > 8) balicek.classList.add('je-osahany');
+      if (balicekCeka) return;
+      balicekCeka = true;
+      requestAnimationFrame(function () { balicekCeka = false; srovnejBalicek(); });
+    }, { passive: true });
+
+    var priZmeneBalicku = function () { aktivniKarta = null; srovnejBalicek(); };
+    if (balicekPlati.addEventListener) balicekPlati.addEventListener('change', priZmeneBalicku);
+    else if (balicekPlati.addListener) balicekPlati.addListener(priZmeneBalicku);
+    addEventListener('resize', function () { aktivniKarta = null; srovnejBalicek(); }, { passive: true });
+
+    srovnejBalicek();
+    /* První karta stojí na začátku řady, ne uprostřed: přisune
+       se, aby balíček začínal stejně, jako vypadá při listování. */
+    if (balicekPlati.matches && karty[0]) naKartu(karty[0], false);
+
+    /* Rub karty se otočí zpátky klepnutím mimo odkaz. */
+    karty.forEach(function (karta) {
+      var telo = karta.querySelector('.telo');
+      if (!telo) return;
+      telo.addEventListener('click', function (udalost) {
+        if (!balicekPlati.matches || udalost.target.closest('a')) return;
+        zavriUrovne(null);
+        var radek = karta.querySelector('.radek');
+        if (radek) radek.focus({ preventScroll: true });
+      });
+    });
+  }
+
   urovne2.forEach(function (radek) {
-    radek.addEventListener('click', function () { prepniUroven(radek); });
+    radek.addEventListener('click', function () {
+      if (balicekPlati.matches) {
+        var karta = radek.closest('.polozka');
+        if (karta && !karta.classList.contains('je-aktivni')) { naKartu(karta); return; }
+        /* Otočená karta se líc neklepe, ten je vzadu. */
+        if (karta && karta.classList.contains('je-otevrena')) return;
+      }
+      prepniUroven(radek);
+    });
 
     /* Tlačítko by na enter poslalo klepnutí samo, ale zamčená
        úroveň je obyčejný prvek, takže si enter musí odchytit
