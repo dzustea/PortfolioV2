@@ -47,8 +47,8 @@
 <meta property="og:url" content="https://www.filiplochman.cz/"/>
 <meta property="og:title" content="Tvorba webů na míru — Filip Lochman"/>
 <meta property="og:description" content="Weby na míru: návrh, sazba, spuštění. Kroměříž a Zlín, na dálku taky."/>
-<meta property="og:image" content="https://www.filiplochman.cz/og-image.png"/>
-<meta property="og:image:secure_url" content="https://www.filiplochman.cz/og-image.png"/>
+<meta property="og:image" content="https://www.filiplochman.cz/images/og-image.png"/>
+<meta property="og:image:secure_url" content="https://www.filiplochman.cz/images/og-image.png"/>
 <meta property="og:image:type" content="image/png"/>
 <meta property="og:image:width" content="1200"/>
 <meta property="og:image:height" content="630"/>
@@ -56,7 +56,7 @@
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="Tvorba webů na míru — Filip Lochman"/>
 <meta name="twitter:description" content="Weby na míru: návrh, sazba, spuštění. Kroměříž a Zlín, na dálku taky."/>
-<meta name="twitter:image" content="https://www.filiplochman.cz/og-image.png"/>
+<meta name="twitter:image" content="https://www.filiplochman.cz/images/og-image.png"/>
 <meta name="twitter:image:alt" content="Filip Lochman, webový vývojář"/>
 
 <!-- Strukturovaná data. Popisují vyhledávači totéž, co je na stránce
@@ -122,7 +122,7 @@
       "givenName": "Filip",
       "familyName": "Lochman",
       "url": "https://www.filiplochman.cz/",
-      "image": "https://www.filiplochman.cz/og-image.png",
+      "image": "https://www.filiplochman.cz/images/og-image.png",
       "jobTitle": "Webový vývojář",
       "description": "Webový vývojář z Kroměříže. Weby na míru: návrh, sazba, spuštění.",
       "email": "mailto:filda.lochman12@gmail.com",
@@ -150,7 +150,7 @@
       "@id": "https://www.filiplochman.cz/#sluzba",
       "name": "Filip Lochman — tvorba webů na míru",
       "url": "https://www.filiplochman.cz/",
-      "image": "https://www.filiplochman.cz/og-image.png",
+      "image": "https://www.filiplochman.cz/images/og-image.png",
       "description": "Weby na míru od návrhu po spuštění, oprava webů, které nefungují, a péče po spuštění.",
       "provider": { "@id": "https://www.filiplochman.cz/#filip" },
       "email": "mailto:filda.lochman12@gmail.com",
@@ -254,19 +254,19 @@
 }
 </script>
 
-<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" href="css/style.css"/>
 <!-- Styl roje kurzorů. Odkaz nese id, které si knihovna hlídá:
      dokud prvek s ním v dokumentu je, nevkládá si vlastní
      <style>, který by stránka stejně zahodila kvůli style-src. -->
-<link rel="stylesheet" href="cursor-swarm.css" id="cursor-swarm-style"/>
+<link rel="stylesheet" href="vendor/cursor-swarm/cursor-swarm.css" id="cursor-swarm-style"/>
 
 <!-- Skript se stahuje souběžně s rozborem dokumentu a spustí se,
      až je dokument hotový. Je to totéž pořadí, jaké měl na konci
      těla, jen se o něm prohlížeč dozví hned na začátku. -->
-<script src="preklad.js" defer></script>
-<script src="cursor-swarm.min.js" defer></script>
-<script src="script.js" defer></script>
-<script src="roj.js" defer></script>
+<script src="js/preklad.js" defer></script>
+<script src="vendor/cursor-swarm/cursor-swarm.min.js" defer></script>
+<script src="js/script.js" defer></script>
+<script src="js/roj.js" defer></script>
 </head>
 <body>
 <!-- ══ IKONY ═══════════════════════════════════════════════════
@@ -819,15 +819,6 @@
       </div>
     </div>
   </div>
-
-
-
-
-
-
-
-
-
 
 </section>
 

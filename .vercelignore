@@ -1,0 +1,5 @@
+# Co se na web nenasazuje (repo to drží, Vercel ne)
+archive/
+tools/
+README.md
+.claude/
