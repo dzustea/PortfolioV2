@@ -2305,6 +2305,61 @@ html:has(.doc-strana){scrollbar-width: auto}
   }
 }
 
+/* ══ NÁHLEDY WEBŮ ═══════════════════════════════════════════════
+   Snímky hotových webů. Každý má vlastní barvy a na černo-rudé
+   stránce by křičely jedna přes druhou, proto jdou do tisku
+   jedinou barvou: fotka se převede do šedi, přes ni se násobí
+   rudá (bílá zrudne, černá zůstane černá) a navrch přijde jemný
+   rastr teček jako u ofsetu. Všechny čtyři tak vypadají jako
+   jedna série.
+
+   Na počítači se po najetí myší barva vrátí: rudá vybledne
+   a fotka se ukáže, jak opravdu vypadá.
+   ══════════════════════════════════════════════════════════════ */
+
+.nahled{
+  position: relative; display: block; overflow: hidden;
+  aspect-ratio: 16 / 9;
+  background: var(--noc);
+  border: 1px solid var(--linka);
+  isolation: isolate;
+}
+.nahled img{
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+  filter: grayscale(1) contrast(1.18) brightness(.92);
+  transition: filter .6s cubic-bezier(.23,1,.32,1);
+}
+.nahled::before{
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: var(--rud);
+  mix-blend-mode: multiply;
+  transition: opacity .6s cubic-bezier(.23,1,.32,1);
+  pointer-events: none;
+}
+.nahled::after{
+  content: ""; position: absolute; inset: 0; z-index: 2;
+  background:
+    radial-gradient(rgba(11,11,12,.5) .8px, transparent 1.2px) 0 0 / 3px 3px,
+    linear-gradient(180deg, transparent 50%, rgba(11,11,12,.7));
+  pointer-events: none;
+}
+
+.radek-f{display: none}
+.telo-f{margin-bottom: 18px; max-width: 520px}
+
+@media (hover: hover) and (pointer: fine){
+  .telo-f{cursor: var(--kurzor-cil, pointer)}
+  .telo-f:hover img{filter: none}
+  .telo-f:hover::before{opacity: 0}
+}
+
+/* Na počítači stojí panel vedle mapy a má danou výšku: fotka je
+   proto nižší pruh, ať se text pod ní vejde. */
+@media (min-width: 1000px){
+  .okno-telo > .rejstrik .telo-f{aspect-ratio: 2 / 1; max-width: none}
+}
+
 /* ══ BALÍČEK KARET (telefon) ═══════════════════════════════════
    Na telefonu není výpis projektů historie pod sebou, ale balíček
    karet vedle sebe. Listuje se palcem do strany, karta uprostřed
@@ -2341,7 +2396,7 @@ html:has(.doc-strana){scrollbar-width: auto}
 
   /* ── KARTA ─────────────────────────────────────────────────── */
   .polozka{
-    flex: 0 0 min(84%, 340px);
+    flex: 0 0 min(80%, 310px);
     display: grid;
     scroll-snap-align: center;
     transform-style: preserve-3d;
@@ -2390,53 +2445,70 @@ html:has(.doc-strana){scrollbar-width: auto}
   .je-aktivni .rejstrik-h::before{transform: scaleX(1)}
 
   .radek{
-    min-height: 250px; height: 100%;
+    height: 100%;
     grid-template-columns: minmax(0, 1fr) auto;
-    grid-template-rows: auto 1fr auto auto auto auto;
+    grid-template-rows: auto auto auto auto auto 1fr;
     grid-template-areas:
       "slug     stav"
-      ".        ."
+      "foto     foto"
       "nazev    nazev"
       "typ      typ"
       "dosah    dosah"
       "napoveda napoveda";
-    align-items: end;
-    gap: 4px 12px;
-    padding: 18px 18px 18px;
+    align-items: start;
+    gap: 3px 12px;
+    padding: 14px 14px 14px;
   }
+  .radek-f{display: block; grid-area: foto; margin: 9px 0 10px}
+  /* Fotka mimo střed je jen šedá, rudá naskočí kartě uprostřed. */
+  .polozka:not(.je-aktivni) .radek-f::before{opacity: 0}
+  .polozka:not(.je-aktivni) .radek-f img{filter: grayscale(1) contrast(1.1) brightness(.6)}
+  /* Rozdělaná práce fotku nemá: místo ní šrafovaná plocha. */
+  .nahled--prazdny{
+    border-style: dashed; border-color: var(--linka-2);
+    background: repeating-linear-gradient(135deg, rgba(242,239,233,.05) 0 6px, transparent 6px 12px), var(--noc);
+  }
+  .nahled--prazdny::before{display: none}
+  .telo .telo-f{display: none}
   .radek::before{display: none}
   /* Rychlé dvojí klepnutí karty otočí, ne označí text. */
   .radek{-webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent}
   .radek-b, .radek-z{display: none}
   .radek-c, .radek-t{align-self: start}
-  .radek-n{font-size: 1.85rem; line-height: 1.05; position: relative; z-index: 1}
+  .radek-n{font-size: 1.5rem; line-height: 1.1; position: relative; z-index: 1}
   .radek.je-na-rade .radek-n{transform: none}
   .radek-s, .radek-d, .radek-h{position: relative; z-index: 1}
-  .radek-h{margin-top: 14px}
+  .radek-h{margin-top: 10px; align-self: end}
 
   /* Velké číslo v pozadí. Při listování jede proti směru prstu
      (--posun nastavuje skript), takže karta má hloubku. */
   .radek::after{
     content: counter(projekt, decimal-leading-zero);
-    position: absolute; right: -4px; top: 34px;
+    /* Číslo sedí v rohu fotky: mřížka je jeho rámec. */
+    grid-area: foto;
+    position: absolute; right: 6px; bottom: -12px; z-index: 3;
     font-family: var(--nadpis); font-weight: 600;
-    font-size: 8.5rem; line-height: 1; letter-spacing: -.04em;
+    font-size: 4.2rem; line-height: 1; letter-spacing: -.04em;
     color: transparent;
     -webkit-text-stroke: 1px var(--linka-2);
     transform: translateX(var(--posun, 0px));
     transition: -webkit-text-stroke-color .4s ease;
     pointer-events: none;
   }
-  .je-aktivni .radek::after{-webkit-text-stroke-color: rgba(224,36,44,.55)}
+  .radek::after{-webkit-text-stroke-color: rgba(242,239,233,.45)}
+  .je-aktivni .radek::after{-webkit-text-stroke-color: var(--kost)}
   .polozka-chysta .radek::after{content: "?"}
   .polozka-chysta .rejstrik-h{border-style: dashed}
 
   /* ── RUB ───────────────────────────────────────────────────── */
-  .telo{position: relative; grid-template-rows: 1fr; padding: 18px}
+  .telo{position: relative; grid-template-rows: 1fr; padding: 16px 16px 14px}
   .telo > .telo-in{overflow: visible}
   .telo-in{padding-left: 0}
   .telo-txt{border-left: 0; margin-left: 0; padding: 0}
-  .telo-txt > p{font-size: .92rem; line-height: 1.55}
+  .telo-txt > p{font-size: .84rem; line-height: 1.5; padding-right: 14px}
+  .telo .znacky{margin-top: 12px; gap: 2px}
+  .telo .znacky li{font-size: .64rem}
+  .telo .odkaz{margin-top: 14px}
   .znacky li{transition-delay: .3s}
   .je-otevrena .znacky li:nth-child(1){transition-delay: .32s}
   .je-otevrena .znacky li:nth-child(2){transition-delay: .37s}
@@ -2475,6 +2547,7 @@ html:has(.doc-strana){scrollbar-width: auto}
     animation: balicekPostrc 1.6s cubic-bezier(.77,0,.175,1) infinite;
   }
   .balicek.je-osahany .balicek-h{opacity: 0; transition: opacity .4s ease}
+  .balicek-na-ocich .ukazatel{opacity: 0; transform: translateY(10px)}
 }
 
 @keyframes balicekPostrc{

@@ -1013,6 +1013,15 @@
     addEventListener('resize', function () { aktivniKarta = null; srovnejBalicek(); }, { passive: true });
 
     srovnejBalicek();
+
+    /* Dokud je balíček v okně, ukazatel času vpravo dole uhne:
+       na telefonu by ležel přes karty. */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (zaznamy) {
+        koren.classList.toggle('balicek-na-ocich', zaznamy[0].isIntersecting && balicekPlati.matches);
+      }).observe(rejstrik);
+    }
+
     /* První karta stojí na začátku řady, ne uprostřed: přisune
        se, aby balíček začínal stejně, jako vypadá při listování. */
     if (balicekPlati.matches && karty[0]) naKartu(karty[0], false);
