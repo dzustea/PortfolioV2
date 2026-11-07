@@ -758,7 +758,8 @@
     r3: ['r2', 'r3'],
     r4: ['r2', 'r4'],
     r5: ['r2', 'r3', 'r4', 'r5'],
-    r6: ['r2', 'r3', 'r4', 'r5', 'r6']
+    r6: ['r2', 'r3', 'r4', 'r5', 'r6'],
+    r8: ['r2', 'r3', 'r4', 'r5', 'r6', 'r8']
   };
 
   var uzlyMapy = Array.prototype.slice.call(document.querySelectorAll('.mapa-uzel'));

@@ -45,7 +45,14 @@ const weby = [
   ['svacinar', 'https://www.tadysvacinar.cz/', 2400, false],
   ['loremasters', 'https://loremasters.vercel.app/', 1500, false],
   ['natte', 'https://natte-visstick.vercel.app/', 2000, true],
-].filter(w => !jen || w[0] === jen);
+];
+
+// Weby, jejichž adresa nesmí být ve veřejném repu (zatím nezveřejněné
+// projekty), leží v tools/weby.local.json, který git ignoruje. Formát:
+//   [["jmeno", "https://adresa/", 2000, false]]
+const MISTNI_WEBY = fileURLToPath(new URL('./weby.local.json', import.meta.url));
+if (fs.existsSync(MISTNI_WEBY)) weby.push(...JSON.parse(fs.readFileSync(MISTNI_WEBY, 'utf8')));
+const vybrane = weby.filter(w => !jen || w[0] === jen);
 
 const PORT = 9341;
 const W = 1280, H = 720;          // okno prohlížeče při nahrávání
@@ -96,7 +103,7 @@ const js = async (tab, expression) => {
   return r.result.result ? r.result.result.value : undefined;
 };
 
-for (const [jm, url, dolu, preskocIntro] of weby) {
+for (const [jm, url, dolu, preskocIntro] of vybrane) {
   /* ── NAHRÁVÁNÍ ─────────────────────────────────────────────── */
   const web = await novyTab();
   await web('Page.enable');

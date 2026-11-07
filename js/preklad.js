@@ -64,8 +64,8 @@
       'You tell me what you need and I design and build the site. From layout and typography to launch.',
     'Podívám se, co je s ním špatně, řeknu vám to česky a co půjde, spravím.':
       'I will look at what is wrong, tell you in plain words, and fix what can be fixed.',
-    'Čtyři weby, které jsem postavil, i s tím, co na každém z nich stálo za řeč.':
-      'Four sites I have built, each with the part that was worth talking about.',
+    'Pět webů, které jsem postavil, i s tím, co na každém z nich stálo za řeč.':
+      'Five sites I have built, each with the part that was worth talking about.',
 
     /* Ukazatel úrovně */
     'Úroveň': 'Level',
@@ -98,8 +98,8 @@
     'Hotové weby': 'Finished sites',
     'Projekty k náhledu,': 'Projects to look through,',
     'některé v procesu': 'some still in progress',
-    'Čtyři weby, které jsem postavil, vypsané jako historie: nahoře rozdělaná práce, pod ní hotové. Enter rozbalí, co je uvnitř, druhý enter web otevře.':
-      'Four sites I have built, listed as a history: work in progress on top, finished ones below. Enter opens what is inside, a second enter opens the site.',
+    'Pět webů, které jsem postavil, vypsané jako historie: nahoře rozdělaná práce, pod ní hotové. Enter rozbalí, co je uvnitř, druhý enter web otevře.':
+      'Five sites I have built, listed as a history: work in progress on top, finished ones below. Enter opens what is inside, a second enter opens the site.',
     'Žádné sliby, jen hotové věci': 'No promises, only finished work',
     'mapa projektů': 'project map',
     'vyberte uzel': 'pick a node',
@@ -109,6 +109,7 @@
     'hotovo': 'done',
     'čeká': 'waiting',
     'zamčeno': 'locked',
+    'v přípravě': 'in progress',
     'zamčeno, projekt se teprve staví': 'locked, this project is still being built',
     'otevřít web v novém okně': 'open the site in a new window',
     'klepnutím rozbalíte': 'tap to expand',
@@ -119,6 +120,7 @@
     'Právě se staví': 'Being built right now',
     /* Dokud jsou dva weby schované, je rozdělaná práce pátá. */
     'Pátý projekt': 'Fifth project',
+    'Šestý projekt': 'Sixth project',
     'Rozdělaná práce. Až bude co ukázat, objeví se tu.':
       'Work in progress. When there is something to show, it will turn up here.',
 
@@ -188,6 +190,16 @@
     'Web nizozemského hard technového DJe a producenta. Pořadatel si přes formulář řekne o termín a stáhne si press kit, posluchač najde skladby, sety i mapu, kde se hraje. Celý web mluví čtyřmi jazyky a pohyb v něm jde na sto padesát úderů za minutu, stejně jako hudba.':
       'A site for a Dutch hard techno DJ and producer. Promoters ask for a date through the form and download the press kit, listeners find the tracks, the sets and a map of where he plays. The whole site speaks four languages and everything in it moves at a hundred and fifty beats per minute, same as the music.',
     'Poptávka termínu': 'Booking enquiry',
+    'Komunitní mapa jídla': 'Community food map',
+    'Pro Tady Svačináře': 'For Tady Svačinář',
+    'Komunitní mapa míst, kde se dá dobře a levně najíst: pekárny, uzenářství, stánky, trhy, obchody a lavičky na svačinu. Mapu založil Roman Svačina, na sítích Tady Svačinář. Tip přidá každý za minutu, stačí ukázat místo na mapě nebo napsat adresu, a u každého místa je na prvním místě to, co tam ochutnat.':
+      'A community map of places to eat well for little money: bakeries, butchers, food stalls, markets, shops and benches for a snack. The map was started by Roman Svačina, known online as Tady Svačinář. Anyone can add a tip in a minute by pointing at the map or typing an address, and every place leads with what to try there.',
+    'Kategorie odlišené barvou': 'Colour-coded categories',
+    'Tip přes mapu i adresu': 'Tips by map or address',
+    'Hodnocení a fotky': 'Ratings and photos',
+    'Návštěva ověřená polohou': 'Visits verified by location',
+    'Moderace obsahu': 'Content moderation',
+    'Komunitní mapa jídla, mapa pro Tady Svačináře': 'Community food map, a map for Tady Svačinář',
     'Press kit ke stažení': 'Press kit download',
     'Mapa koncertů': 'Tour map',
     'Čtyři jazyky': 'Four languages',

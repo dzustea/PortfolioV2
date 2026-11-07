@@ -4,3 +4,6 @@
 
 # Závislosti nástrojů (instalují se přes npm install v tools/)
 node_modules/
+
+# Adresy nezveřejněných projektů pro nahrávání náhledů
+tools/weby.local.json
