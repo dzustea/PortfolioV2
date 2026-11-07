@@ -29,7 +29,7 @@ PortfolioV2/
 ├── images/
 │   ├── og-image.png      obrázek pro sdílení odkazu na sítích
 │   └── icons/            ikony aplikace (manifest)
-├── projects/             náhledy projektů: video (.mp4) a plakát (.jpg)
+├── projects/             náhledy projektů: video (.mp4) a plakát (.webp)
 │                         pro každý web v seznamu projektů
 │
 ├── tools/

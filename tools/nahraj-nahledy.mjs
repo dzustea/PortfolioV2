@@ -1,7 +1,7 @@
 // NAHRÁNÍ NÁHLEDŮ PROJEKTŮ
 //
 // Nahraje živé weby jako krátkou smyčku do projects/<jméno>.mp4
-// a plakát (snímek po úvodu) do projects/<jméno>.jpg.
+// a plakát (snímek po úvodu, WebP) do projects/<jméno>.webp.
 //
 // Průběh nahrávky: načtení, myš přejede přes úvod, plynulé projetí
 // dolů a krátká pauza na konci.
@@ -157,7 +157,6 @@ for (const [jm, url, dolu, preskocIntro] of weby) {
   const t0 = snimky[0].t;
   const delka = snimky[snimky.length - 1].t - t0;
   const plakat = snimky.find(s => s.t - t0 > 1.2) || snimky[0];
-  fs.writeFileSync(OUT + jm + '.jpg', Buffer.from(plakat.data, 'base64'));
 
   /* ── SKLÁDÁNÍ NA 60 FPS ────────────────────────────────────── */
   const kod = await novyTab();
@@ -195,6 +194,17 @@ for (const [jm, url, dolu, preskocIntro] of weby) {
     }
     throw new Error('H.264 kodér není k dispozici');
   })()`);
+
+  // Plakát jako WebP: stojí v okně, než se video spustí, a stahuje
+  // se pro každý projekt, takže má být co nejmenší.
+  const plakatB64 = await js(kod, `(async () => {
+    await nacti(${JSON.stringify(plakat.data)});
+    const b = await platno.convertToBlob({ type: 'image/webp', quality: 0.8 });
+    const u = new Uint8Array(await b.arrayBuffer()); let s = '';
+    for (let i = 0; i < u.length; i += 32768) s += String.fromCharCode.apply(null, u.subarray(i, i + 32768));
+    return btoa(s);
+  })()`);
+  fs.writeFileSync(OUT + jm + '.webp', Buffer.from(plakatB64, 'base64'));
 
   const pocet = Math.floor(delka * FPS);
   let zdroj = -1;
