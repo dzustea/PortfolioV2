@@ -52,7 +52,7 @@ const W = 1280, H = 720;          // okno prohlížeče při nahrávání
 const VW = 960, VH = 540;         // rozměr videa
 const FPS = 60;
 const DATOVY_TOK = 1_000_000;     // bitů za sekundu
-const RYCHLOST_POSUNU = 320;      // px za sekundu
+const RYCHLOST_POSUNU = 340;      // px za sekundu
 
 const pauza = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -128,24 +128,41 @@ for (const [jm, url, dolu, preskocIntro] of weby) {
     await pauza(16);
   }
   await pauza(150);
-  // Plynulé projetí dolů: kolečko zhruba 60× za sekundu po malých
-  // krocích. Krok se počítá z času, který opravdu uběhl, takže
-  // rychlost je stálá, i když se některá událost zdrží. Kolečko
-  // (ne scrollTo) proto, aby se chytily i weby s vlastním plynulým
-  // posunem a efekty vázanými na kolečko.
-  // (Input.synthesizeScrollGesture by bylo hezčí, ale v headless
-  // Chromu stránkou nepohne.)
-  {
-    let ujeto = 0, minule = performance.now();
-    while (ujeto < dolu) {
-      await pauza(14);
-      const ted = performance.now();
-      const krok = Math.min(dolu - ujeto, Math.max(1, Math.round(RYCHLOST_POSUNU * (ted - minule) / 1000)));
-      minule = ted;
-      ujeto += krok;
-      await web('Input.dispatchMouseEvent', { type: 'mouseWheel', x: 640, y: 400, deltaX: 0, deltaY: krok });
-    }
-  }
+  if (process.env.LADENI) await js(web, `window.__y = []; (function f(){ window.__y.push(scrollY); requestAnimationFrame(f); })(); true`);
+  // Plynulé projetí dolů. Posun řídí stránka sama v každém snímku
+  // (requestAnimationFrame): poloha se počítá z uplynulého času
+  // s jemným rozjezdem a dojezdem, takže se stránka hýbe v každém
+  // snímku o stejný kousek. Kolečko z DevTools to neumí: stránka
+  // po něm stála a pak skočila o 5–12 px, a to bylo ve videu vidět
+  // jako trhání.
+  //
+  // Weby s vlastním plynulým posunem (Lenis, poznají se podle třídy
+  // "lenis" na <html>) posun přes scrollTo přebíjejí. Ty dostanou
+  // v každém snímku událost kolečka o stejný kousek a vyhladí si
+  // ji samy, i s efekty, které na kolečko čekají.
+  const lenis = await js(web, `new Promise((hotovo) => {
+    const D = ${dolu}, T = D / ${RYCHLOST_POSUNU} * 1000;
+    const lenis = document.documentElement.classList.contains('lenis') || !!window.lenis;
+    const y0 = scrollY;
+    const plynule = (p) => p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+    let start = null, minule = 0;
+    const krok = (ted) => {
+      if (start === null) start = ted;
+      const p = Math.min(1, (ted - start) / T);
+      const cil = D * plynule(p);
+      if (lenis) {
+        const d = cil - minule;
+        if (d) document.documentElement.dispatchEvent(new WheelEvent('wheel', { deltaY: d, deltaMode: 0, bubbles: true, cancelable: true, clientX: 640, clientY: 400 }));
+      } else {
+        window.scrollTo({ top: y0 + cil, behavior: 'instant' });
+      }
+      minule = cil;
+      if (p < 1) requestAnimationFrame(krok); else hotovo(lenis);
+    };
+    requestAnimationFrame(krok);
+  })`);
+  if (process.env.LADENI) console.log('  lenis:', lenis);
+  if (process.env.LADENI) { const y = await js(web, 'window.__y'); const d = y.slice(1).map((v, i) => v - y[i]).filter((v, i, arr) => true); const pohyb = d.filter(v => v > 0); const nuly = d.slice(d.findIndex(v => v > 0), d.length - 5).filter(v => v === 0).length; console.log('  posun za snimek: snimku', d.length, 'nulovych uprostred', nuly, 'kroky', [...new Set(pohyb)].slice(0, 12).join(',')); }
   // LADENI=1 vypíše, kam se stránka posunula a kolik snímků přišlo.
   if (process.env.LADENI) console.log('posun po kolecku:', await js(web, 'scrollY'), 'zdrojovych snimku:', snimky.length);
   await pauza(1300);
@@ -156,6 +173,11 @@ for (const [jm, url, dolu, preskocIntro] of weby) {
 
   const t0 = snimky[0].t;
   const delka = snimky[snimky.length - 1].t - t0;
+  if (process.env.LADENI) {
+    const mezery = snimky.slice(1).map((x, i) => (x.t - snimky[i].t) * 1000).sort((p, q) => p - q);
+    const q = (p) => mezery[Math.floor(mezery.length * p)].toFixed(1);
+    console.log('  mezery mezi snimky ms: median', q(0.5), 'p90', q(0.9), 'p99', q(0.99), 'fps zdroje', (snimky.length / delka).toFixed(1));
+  }
   const plakat = snimky.find(s => s.t - t0 > 1.2) || snimky[0];
 
   /* ── SKLÁDÁNÍ NA 60 FPS ────────────────────────────────────── */
@@ -211,7 +233,10 @@ for (const [jm, url, dolu, preskocIntro] of weby) {
   for (let i = 0; i <= pocet; i++) {
     const cas = t0 + i / FPS;
     let k = zdroj < 0 ? 0 : zdroj;
-    while (k + 1 < snimky.length && snimky[k + 1].t <= cas) k++;
+    // Časově nejbližší snímek, ne poslední starší: chyba v poloze je
+    // pak nejvýš půl intervalu screencastu, ne celý, a pohyb méně
+    // škobrtá.
+    while (k + 1 < snimky.length && Math.abs(snimky[k + 1].t - cas) <= Math.abs(snimky[k].t - cas)) k++;
     if (k !== zdroj) { await js(kod, `nacti(${JSON.stringify(snimky[k].data)})`); zdroj = k; }
     await js(kod, `zakoduj(${i})`);
   }
