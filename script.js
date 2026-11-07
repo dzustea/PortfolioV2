@@ -748,6 +748,8 @@
      ──────────────────────────────────────────────────────────── */
 
   var urovne2 = Array.prototype.slice.call(document.querySelectorAll('.polozka .radek'));
+  var balicekPlati = null;
+  var srovnejVidea = function () {};
 
   /* Cesta, po které se k webu došlo. Rozsvítí se celá, aby bylo
      vidět, co bylo dřív; u prvního webu není co svítit, ten je
@@ -812,6 +814,7 @@
     var vybrany = cil ? document.querySelector('.mapa-uzel.je-vybrany') : null;
     if (oknoMapy) oknoMapy.classList.toggle('ma-vyber', !!vybrany);
     napisStav(vybrany);
+    srovnejVidea();
   };
 
   var zavriUrovne = function (krome) {
@@ -925,7 +928,7 @@
      Karta mimo střed se klepnutím nejdřív přisune, teprve karta
      uprostřed se otočí. Rub se otočí zpátky klepnutím kamkoli
      mimo odkaz, a taky sám, jakmile karta odjede ze středu. */
-  var balicekPlati = matchMedia('(max-width: 760px)');
+  balicekPlati = matchMedia('(max-width: 760px)');
   var rejstrik = document.querySelector('.rejstrik');
   var balicek = document.querySelector('.balicek');
   var karty = rejstrik ? Array.prototype.slice.call(rejstrik.querySelectorAll(':scope > .polozka')) : [];
@@ -939,6 +942,14 @@
   var cisloKarty = balicek ? balicek.querySelector('.balicek-c b') : null;
 
   var dvemaCisly = function (n) { return (n < 10 ? '0' : '') + n; };
+
+  /* Číslo karty a celkový počet si bere styl z atributů. */
+  karty.forEach(function (karta, i) {
+    var radek = karta.querySelector('.radek');
+    if (!radek) return;
+    radek.setAttribute('data-cislo', dvemaCisly(i + 1));
+    radek.setAttribute('data-celkem', dvemaCisly(karty.length));
+  });
 
   var naKartu = function (karta, plynule) {
     if (!rejstrik || !karta) return;
@@ -964,7 +975,7 @@
     if (!rejstrik || !karty.length) return;
 
     if (!balicekPlati.matches) {
-      karty.forEach(function (k) { k.classList.remove('je-aktivni'); k.style.removeProperty('--posun'); });
+      karty.forEach(function (k) { k.classList.remove('je-aktivni'); });
       aktivniKarta = null;
       return;
     }
@@ -977,10 +988,6 @@
       var r = karta.getBoundingClientRect();
       var odchylka = r.left + r.width / 2 - stred;
       if (Math.abs(odchylka) < nejmene) { nejmene = Math.abs(odchylka); nejblizsi = karta; }
-      /* Číslo v pozadí jede proti kartě, o pětinu její cesty. */
-      var posun = Math.max(-60, Math.min(60, odchylka * -0.2));
-      var cislo = karta.querySelector('.radek');
-      if (cislo) cislo.style.setProperty('--posun', posun.toFixed(1) + 'px');
     });
 
     if (nejblizsi === aktivniKarta) return;
@@ -996,6 +1003,11 @@
     /* Otočená karta, která odjela ze středu, se obrátí zpátky. */
     var otocena = rejstrik.querySelector('.polozka.je-otevrena');
     if (otocena && otocena !== nejblizsi) zavriUrovne(null);
+    karty.forEach(function (k) {
+      var v = k.querySelector('.radek-f video');
+      if (v && k !== nejblizsi && !v.paused) v.pause();
+    });
+    srovnejVidea();
   };
 
   if (rejstrik) {
@@ -1038,6 +1050,67 @@
       });
     });
   }
+
+  /* ── NÁHLEDY WEBŮ ─────────────────────────────────────────────
+     Video hraje jen tam, kam se člověk dívá: na telefonu u karty
+     uprostřed balíčku (a ne když je otočená), jinde u otevřeného
+     projektu. Navíc musí být okno aspoň z poloviny na obrazovce.
+     Všude jinde stojí a nic nestahuje: zdroj dostane video až ve
+     chvíli, kdy má poprvé hrát. Kdo má vypnuté animace, vidí jen
+     plakát. */
+  var videa = Array.prototype.slice.call(document.querySelectorAll('.nahled-okno video'));
+  var videoVidet = typeof Map === 'function' ? new Map() : null;
+
+  /* Rozhoduje se až po krátké chvíli klidu: při listování a
+     posouvání se stav mění každý snímek a video by se stahovalo
+     i u karet, přes které balíček jen projel. */
+  var videoCas = null;
+  srovnejVidea = function () {
+    clearTimeout(videoCas);
+    videoCas = setTimeout(rozhodniVidea, 260);
+  };
+
+  var rozhodniVidea = function () {
+    if (!videa.length || !videoVidet) return;
+    var mobil = !!(balicekPlati && balicekPlati.matches);
+    videa.forEach(function (video) {
+      var karta = video.closest('.polozka');
+      var naLici = !!video.closest('.radek-f');
+      var chce = !tlumenyPohyb.matches && !!karta && (videoVidet.get(video) || 0) >= 0.5 &&
+        (naLici
+          ? mobil && karta.classList.contains('je-aktivni') && !karta.classList.contains('je-otevrena')
+          : !mobil && karta.classList.contains('je-otevrena'));
+      if (chce) {
+        if (!video.getAttribute('src')) video.setAttribute('src', video.getAttribute('data-src'));
+        video.muted = true;
+        if (video.paused) {
+          var p = video.play();
+          if (p && p.catch) p.catch(function () {});
+        }
+      } else if (!video.paused) {
+        video.pause();
+      }
+    });
+  };
+
+  videa.forEach(function (video) {
+    var okno = video.closest('.nahled');
+    video.addEventListener('playing', function () {
+      video.classList.add('hraje');
+      if (okno) okno.classList.add('hraje');
+    });
+    video.addEventListener('pause', function () { if (okno) okno.classList.remove('hraje'); });
+  });
+
+  if (videa.length && videoVidet && 'IntersectionObserver' in window) {
+    var sledovacVidei = new IntersectionObserver(function (zaznamy) {
+      zaznamy.forEach(function (z) { videoVidet.set(z.target, z.isIntersecting ? z.intersectionRatio : 0); });
+      srovnejVidea();
+    }, { threshold: [0, 0.5, 1] });
+    videa.forEach(function (video) { sledovacVidei.observe(video); });
+  }
+  if (tlumenyPohyb.addEventListener) tlumenyPohyb.addEventListener('change', function () { srovnejVidea(); });
+  if (balicekPlati.addEventListener) balicekPlati.addEventListener('change', function () { srovnejVidea(); });
 
   urovne2.forEach(function (radek) {
     radek.addEventListener('click', function () {

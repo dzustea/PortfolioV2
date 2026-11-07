@@ -2306,18 +2306,18 @@ html:has(.doc-strana){scrollbar-width: auto}
 }
 
 /* ══ NÁHLEDY WEBŮ ═══════════════════════════════════════════════
-   Snímek hotového webu v malém okně prohlížeče. Barvy webu
-   zůstávají, jak jsou: rám okna je stránkový (černá lišta, kostěné
-   čtverečky, jeden rudý, adresa strojopisem), takže snímek působí
+   Hotový web jako krátká smyčka v malém okně prohlížeče. Video
+   ukazuje web, jak opravdu žije: načtení, animace úvodu, pohyb
+   myši a projetí dolů. Rám okna je stránkový (černá lišta, kostěné
+   čtverečky, jeden rudý, adresa strojopisem), takže smyčka působí
    jako vystavený exponát, ne jako cizí obrázek vlepený do stránky.
 
-   Snímek je celá horní část webu, ne jen první obrazovka. Okno
-   po ní pomalu sjíždí dolů a zase nahoru, jako když si člověk web
-   prolistuje; vpravo jede rudý posuvník. Na telefonu jen u karty
-   uprostřed, na počítači po najetí myší.
-
-   Posun počítá s výškou okna přes jednotky kontejneru (cqh), takže
-   nikde nejsou napsané pixely a sedí to na každé šířce.
+   Rychlost: dokud video nehraje, stojí v okně jen lehký plakát
+   (jeden snímek, načte se až u okna). Video samo se nestahuje
+   vůbec, dokud ho není potřeba: na telefonu jen u karty
+   uprostřed, jinde jen u otevřeného projektu. Řídí to skript
+   (script.js, NÁHLEDY WEBŮ). Když video běží, rudý čtvereček
+   v liště bliká jako kontrolka nahrávání.
    ══════════════════════════════════════════════════════════════ */
 
 .nahled{
@@ -2340,43 +2340,21 @@ html:has(.doc-strana){scrollbar-width: auto}
 .nahled-okno{
   position: relative; display: block; overflow: hidden;
   aspect-ratio: 16 / 9;
-  container-type: size;
+  background: var(--noc);
 }
-.nahled-okno img{display: block; width: 100%; height: auto}
-/* Posuvník okna. */
-.nahled-okno::before{
-  content: ""; position: absolute; z-index: 1;
-  right: 2px; top: 2px; width: 2px; height: 24%;
-  background: var(--rud);
+.nahled-okno img, .nahled-okno video{
+  position: absolute; inset: 0;
+  display: block; width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
 }
-
-@keyframes projizdka{
-  0%, 10% {transform: translateY(0)}
-  90%, 100%{transform: translateY(calc(-100% + 100cqh))}
-}
-@keyframes posuvnik{
-  0%, 10% {transform: translateY(0)}
-  90%, 100%{transform: translateY(calc(100cqh - 100% - 4px))}
-}
+/* Video se do okna prolne, až když opravdu hraje, ať přes plakát
+   neblikne prázdný rámeček. */
+.nahled-okno video{opacity: 0; transition: opacity .5s ease}
+.nahled-okno video.hraje{opacity: 1}
+.nahled.hraje .nahled-lista i:first-child{animation: ukTep 1.2s ease-in-out infinite}
 
 .radek-f{display: none}
 .telo-f{margin-bottom: 18px; max-width: 520px}
-
-/* Na počítači se okno prolistuje po najetí myší a po odjetí se
-   rychle vrátí nahoru. */
-@media (hover: hover) and (pointer: fine){
-  .telo-f{cursor: var(--kurzor-cil, pointer)}
-  .telo-f .nahled-okno img,
-  .telo-f .nahled-okno::before{transition: transform .9s cubic-bezier(.23,1,.32,1)}
-  .telo-f:hover .nahled-okno img{
-    transform: translateY(calc(-100% + 100cqh));
-    transition: transform 9s cubic-bezier(.45,0,.55,1);
-  }
-  .telo-f:hover .nahled-okno::before{
-    transform: translateY(calc(100cqh - 100% - 4px));
-    transition: transform 9s cubic-bezier(.45,0,.55,1);
-  }
-}
 
 /* Na počítači stojí panel vedle mapy a má danou výšku: okno je
    proto nižší, ať se text pod ním vejde. */
@@ -2386,7 +2364,7 @@ html:has(.doc-strana){scrollbar-width: auto}
 }
 
 @media (prefers-reduced-motion: reduce){
-  .nahled-okno img, .nahled-okno::before{animation: none !important; transition: none !important; transform: none !important}
+  .nahled.hraje .nahled-lista i:first-child{animation: none}
 }
 
 /* ══ BALÍČEK KARET (telefon) ═══════════════════════════════════
@@ -2489,9 +2467,6 @@ html:has(.doc-strana){scrollbar-width: auto}
     padding: 14px 14px 14px;
   }
   .radek-f{display: block; grid-area: foto; margin: 9px 0 10px}
-  /* Karta uprostřed si svůj web sama prolistuje. */
-  .je-aktivni .radek-f .nahled-okno img{animation: projizdka 16s cubic-bezier(.45,0,.55,1) .6s infinite alternate}
-  .je-aktivni .radek-f .nahled-okno::before{animation: posuvnik 16s cubic-bezier(.45,0,.55,1) .6s infinite alternate}
   /* Rozdělaná práce fotku nemá: místo ní šrafovaná plocha. */
   .nahled--prazdny{
     border-style: dashed; border-color: var(--linka-2);
@@ -2499,9 +2474,7 @@ html:has(.doc-strana){scrollbar-width: auto}
   .nahled--prazdny .nahled-okno{
     background: repeating-linear-gradient(135deg, rgba(242,239,233,.05) 0 6px, transparent 6px 12px), var(--noc);
   }
-  .nahled--prazdny .nahled-okno::before{display: none}
   .telo .telo-f{display: none}
-  .radek::before{display: none}
   /* Rychlé dvojí klepnutí karty otočí, ne označí text. */
   .radek{-webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent}
   .radek-b, .radek-z{display: none}
@@ -2511,24 +2484,36 @@ html:has(.doc-strana){scrollbar-width: auto}
   .radek-s, .radek-d, .radek-h{position: relative; z-index: 1}
   .radek-h{margin-top: 10px; align-self: end}
 
-  /* Velké číslo v pozadí. Při listování jede proti směru prstu
-     (--posun nastavuje skript), takže karta má hloubku. */
+  /* Číslo karty. Plné, ne obrysové, a nic nepřekrývá: stojí
+     v pravém dolním rohu vedle dosahu a nápovědy, kde je volno.
+     Nad ním rudá čárka, vedle drobně celkový počet ("/05").
+     Pořadí bere ze skriptu (data-cislo), protože rozdělaná práce
+     stojí v dokumentu první, ale v balíčku poslední. */
   .radek::after{
-    content: counter(projekt, decimal-leading-zero);
-    /* Velké obrysové číslo v pravém dolním rohu karty, za textem.
-       Nahoře je okno s webem, tak se číslo přesunulo dolů, kde
-       je vedle jména volné místo. Ořízne ho hrana karty. */
-    position: absolute; right: -4px; bottom: -16px; z-index: 0;
+    content: attr(data-cislo);
+    position: absolute; right: 40px; bottom: 13px; z-index: 1;
+    padding-top: 9px;
+    background: linear-gradient(var(--linka-2), var(--linka-2)) left top / 16px 2px no-repeat;
     font-family: var(--nadpis); font-weight: 600;
-    font-size: 8.5rem; line-height: 1; letter-spacing: -.04em;
-    color: transparent;
-    -webkit-text-stroke: 1px var(--linka-2);
-    transform: translateX(var(--posun, 0px));
-    transition: -webkit-text-stroke-color .4s ease;
+    font-size: 2.6rem; line-height: .8; letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+    color: var(--sed-2);
+    transition: color .35s ease;
     pointer-events: none;
   }
-  .je-aktivni .radek::after{-webkit-text-stroke-color: rgba(224,36,44,.55)}
-  .polozka-chysta .radek::after{content: "?"}
+  .radek::before{
+    content: "/" attr(data-celkem);
+    display: block; position: absolute; right: 14px; bottom: 13px; z-index: 1;
+    inset-block-start: auto; inset-inline-start: auto;
+    width: auto; height: auto; background: none; transform: none;
+    font-family: var(--mono); font-size: .62rem; letter-spacing: .04em; line-height: 1;
+    color: var(--sed-2);
+  }
+  .je-aktivni .radek::after{
+    color: var(--kost);
+    background-image: linear-gradient(var(--rud), var(--rud));
+  }
+  .polozka-chysta .radek::after{color: transparent; -webkit-text-stroke: 1px var(--sed-2)}
   .polozka-chysta .rejstrik-h{border-style: dashed}
 
   /* ── RUB ───────────────────────────────────────────────────── */
