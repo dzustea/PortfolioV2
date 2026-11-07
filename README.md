@@ -84,10 +84,9 @@ Zapisuje značky do `index.html` a souřadnice na konec `css/style.css`.
   node tools/kontrola.mjs
   ```
 
-- **Aby Vercel na kontrolu čekal**, zapíná se ve Vercelu: projekt
-  *portfolio-v2* → Settings → **Deployment Checks** → přidat
-  „Kontrola webu“. Pak se commit s červenou kontrolou nedostane do
-  produkce.
+- Vercel na výsledek kontroly sám nečeká: commit s červenou kontrolou
+  se nasadí stejně. Kontrola slouží jako varování u commitu a pull
+  requestu.
 
 ## Bezpečnost
 
