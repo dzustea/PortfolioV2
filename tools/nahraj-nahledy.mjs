@@ -52,7 +52,7 @@ const W = 1280, H = 720;          // okno prohlížeče při nahrávání
 const VW = 960, VH = 540;         // rozměr videa
 const FPS = 60;
 const DATOVY_TOK = 1_000_000;     // bitů za sekundu
-const RYCHLOST_POSUNU = 340;      // px za sekundu
+const RYCHLOST_POSUNU = 300;      // px za sekundu, stálá po celou dobu
 
 const pauza = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -131,7 +131,7 @@ for (const [jm, url, dolu, preskocIntro] of weby) {
   if (process.env.LADENI) await js(web, `window.__y = []; (function f(){ window.__y.push(scrollY); requestAnimationFrame(f); })(); true`);
   // Plynulé projetí dolů. Posun řídí stránka sama v každém snímku
   // (requestAnimationFrame): poloha se počítá z uplynulého času
-  // s jemným rozjezdem a dojezdem, takže se stránka hýbe v každém
+  // stálou rychlostí, takže se stránka hýbe v každém
   // snímku o stejný kousek. Kolečko z DevTools to neumí: stránka
   // po něm stála a pak skočila o 5–12 px, a to bylo ve videu vidět
   // jako trhání.
@@ -144,7 +144,9 @@ for (const [jm, url, dolu, preskocIntro] of weby) {
     const D = ${dolu}, T = D / ${RYCHLOST_POSUNU} * 1000;
     const lenis = document.documentElement.classList.contains('lenis') || !!window.lenis;
     const y0 = scrollY;
-    const plynule = (p) => p < 0.5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2;
+    // Stálá rychlost od začátku do konce, bez rozjezdu a dojezdu:
+    // s nimi stránka uprostřed jela až trojnásobkem a působila uspěchaně.
+    const plynule = (p) => p;
     let start = null, minule = 0;
     const krok = (ted) => {
       if (start === null) start = ted;
