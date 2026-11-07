@@ -1,9 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="FL">
-  <!-- Značka FL. Písmena jsou obtažené cesty, ne text, takže
-       vypadají stejně i tam, kde Geist není. Tečka je jediná
-       rudá plocha, stejně jako na webu. -->
+  <!-- Značka FL. F a L do sebe zapadají: střední rameno F přechází
+       do dříku L a tam, kde se potkají, je jediná rudá plocha.
+       Kreslené v mřížce po 2 jednotkách, aby bylo ostré i v 32 px,
+       a vycentrované, aby přežilo kulatý výřez na Googlu. -->
   <rect width="64" height="64" fill="#0b0b0c"/>
-  <path d="M14 17h17v6.4H20.9v6.1h9.2v6.4h-9.2V47H14z" fill="#f2efe9"/>
-  <path d="M34.6 17h6.9v23.6h9.9V47H34.6z" fill="#f2efe9"/>
-  <rect x="49" y="40" width="7" height="7" fill="#e0242c"/>
+  <path d="M12 12h32v8H22v6h8v8h-8v12H12z" fill="#f2efe9"/>
+  <path d="M30 34h10v10h12v8H30z" fill="#f2efe9"/>
+  <rect x="30" y="26" width="10" height="8" fill="#e0242c"/>
 </svg>
