@@ -11,8 +11,7 @@
        nikam odejít ani přepnout jazyk.
      * Přeskočení na obsah. Je to první zastávka tabulátoru
        a musí fungovat dřív než cokoli jiného.
-     * Ukazatel stavu dole a pozadí. Nejsou to prvky stránky,
-       je to rámování okna.
+     * Pozadí. Není to prvek stránky, je to rámování okna.
 
    Barvy jsou barvy stránky, ne výchozí barvy knihovny: rudá,
    kost a dva tlumené odstíny mezi nimi. Roj tím pádem vypadá
@@ -68,8 +67,10 @@
     trigger: 0.9,
     typeDuration: 1.4,
 
-    hud: true,
-    hudPosition: 'bottom-left',
+    /* Ukazatel stavu roje (ALL AGENTS IDLE · PAGE BUILT) dole
+       vlevo je vypnutý: je to ladicí výpis knihovny, ne součást
+       stránky. */
+    hud: false,
     labels: true,
     marquee: true,
     guides: true,
