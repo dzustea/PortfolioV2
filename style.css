@@ -2515,19 +2515,19 @@ html:has(.doc-strana){scrollbar-width: auto}
      (--posun nastavuje skript), takže karta má hloubku. */
   .radek::after{
     content: counter(projekt, decimal-leading-zero);
-    /* Číslo sedí v rohu fotky: mřížka je jeho rámec. */
-    grid-area: foto;
-    position: absolute; right: 6px; bottom: -12px; z-index: 3;
+    /* Velké obrysové číslo v pravém dolním rohu karty, za textem.
+       Nahoře je okno s webem, tak se číslo přesunulo dolů, kde
+       je vedle jména volné místo. Ořízne ho hrana karty. */
+    position: absolute; right: -4px; bottom: -16px; z-index: 0;
     font-family: var(--nadpis); font-weight: 600;
-    font-size: 4.2rem; line-height: 1; letter-spacing: -.04em;
+    font-size: 8.5rem; line-height: 1; letter-spacing: -.04em;
     color: transparent;
     -webkit-text-stroke: 1px var(--linka-2);
     transform: translateX(var(--posun, 0px));
     transition: -webkit-text-stroke-color .4s ease;
     pointer-events: none;
   }
-  .radek::after{-webkit-text-stroke-color: rgba(242,239,233,.45)}
-  .je-aktivni .radek::after{-webkit-text-stroke-color: var(--kost)}
+  .je-aktivni .radek::after{-webkit-text-stroke-color: rgba(224,36,44,.55)}
   .polozka-chysta .radek::after{content: "?"}
   .polozka-chysta .rejstrik-h{border-style: dashed}
 
