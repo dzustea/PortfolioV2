@@ -2306,58 +2306,87 @@ html:has(.doc-strana){scrollbar-width: auto}
 }
 
 /* ══ NÁHLEDY WEBŮ ═══════════════════════════════════════════════
-   Snímky hotových webů. Každý má vlastní barvy a na černo-rudé
-   stránce by křičely jedna přes druhou, proto jdou do tisku
-   jedinou barvou: fotka se převede do šedi, přes ni se násobí
-   rudá (bílá zrudne, černá zůstane černá) a navrch přijde jemný
-   rastr teček jako u ofsetu. Všechny čtyři tak vypadají jako
-   jedna série.
+   Snímek hotového webu v malém okně prohlížeče. Barvy webu
+   zůstávají, jak jsou: rám okna je stránkový (černá lišta, kostěné
+   čtverečky, jeden rudý, adresa strojopisem), takže snímek působí
+   jako vystavený exponát, ne jako cizí obrázek vlepený do stránky.
 
-   Na počítači se po najetí myší barva vrátí: rudá vybledne
-   a fotka se ukáže, jak opravdu vypadá.
+   Snímek je celá horní část webu, ne jen první obrazovka. Okno
+   po ní pomalu sjíždí dolů a zase nahoru, jako když si člověk web
+   prolistuje; vpravo jede rudý posuvník. Na telefonu jen u karty
+   uprostřed, na počítači po najetí myší.
+
+   Posun počítá s výškou okna přes jednotky kontejneru (cqh), takže
+   nikde nejsou napsané pixely a sedí to na každé šířce.
    ══════════════════════════════════════════════════════════════ */
 
 .nahled{
+  display: flex; flex-direction: column;
+  border: 1px solid var(--linka-2);
+  background: var(--noc);
+}
+.nahled-lista{
+  display: flex; align-items: center; gap: 4px;
+  height: 18px; padding: 0 8px;
+  border-bottom: 1px solid var(--linka);
+  background: var(--noc-2);
+  font-family: var(--mono); font-size: .5rem; letter-spacing: .06em;
+  color: var(--sed-2);
+}
+.nahled-lista i{width: 5px; height: 5px; background: var(--linka-2); flex: none}
+.nahled-lista i:first-child{background: var(--rud)}
+.nahled-lista span{margin-left: 6px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap}
+
+.nahled-okno{
   position: relative; display: block; overflow: hidden;
   aspect-ratio: 16 / 9;
-  background: var(--noc);
-  border: 1px solid var(--linka);
-  isolation: isolate;
+  container-type: size;
 }
-.nahled img{
-  display: block; width: 100%; height: 100%;
-  object-fit: cover; object-position: center top;
-  filter: grayscale(1) contrast(1.18) brightness(.92);
-  transition: filter .6s cubic-bezier(.23,1,.32,1);
-}
-.nahled::before{
-  content: ""; position: absolute; inset: 0; z-index: 1;
+.nahled-okno img{display: block; width: 100%; height: auto}
+/* Posuvník okna. */
+.nahled-okno::before{
+  content: ""; position: absolute; z-index: 1;
+  right: 2px; top: 2px; width: 2px; height: 24%;
   background: var(--rud);
-  mix-blend-mode: multiply;
-  transition: opacity .6s cubic-bezier(.23,1,.32,1);
-  pointer-events: none;
 }
-.nahled::after{
-  content: ""; position: absolute; inset: 0; z-index: 2;
-  background:
-    radial-gradient(rgba(11,11,12,.5) .8px, transparent 1.2px) 0 0 / 3px 3px,
-    linear-gradient(180deg, transparent 50%, rgba(11,11,12,.7));
-  pointer-events: none;
+
+@keyframes projizdka{
+  0%, 10% {transform: translateY(0)}
+  90%, 100%{transform: translateY(calc(-100% + 100cqh))}
+}
+@keyframes posuvnik{
+  0%, 10% {transform: translateY(0)}
+  90%, 100%{transform: translateY(calc(100cqh - 100% - 4px))}
 }
 
 .radek-f{display: none}
 .telo-f{margin-bottom: 18px; max-width: 520px}
 
+/* Na počítači se okno prolistuje po najetí myší a po odjetí se
+   rychle vrátí nahoru. */
 @media (hover: hover) and (pointer: fine){
   .telo-f{cursor: var(--kurzor-cil, pointer)}
-  .telo-f:hover img{filter: none}
-  .telo-f:hover::before{opacity: 0}
+  .telo-f .nahled-okno img,
+  .telo-f .nahled-okno::before{transition: transform .9s cubic-bezier(.23,1,.32,1)}
+  .telo-f:hover .nahled-okno img{
+    transform: translateY(calc(-100% + 100cqh));
+    transition: transform 9s cubic-bezier(.45,0,.55,1);
+  }
+  .telo-f:hover .nahled-okno::before{
+    transform: translateY(calc(100cqh - 100% - 4px));
+    transition: transform 9s cubic-bezier(.45,0,.55,1);
+  }
 }
 
-/* Na počítači stojí panel vedle mapy a má danou výšku: fotka je
-   proto nižší pruh, ať se text pod ní vejde. */
+/* Na počítači stojí panel vedle mapy a má danou výšku: okno je
+   proto nižší, ať se text pod ním vejde. */
 @media (min-width: 1000px){
-  .okno-telo > .rejstrik .telo-f{aspect-ratio: 2 / 1; max-width: none}
+  .okno-telo > .rejstrik .telo-f{max-width: none}
+  .okno-telo > .rejstrik .telo-f .nahled-okno{aspect-ratio: 2 / 1}
+}
+
+@media (prefers-reduced-motion: reduce){
+  .nahled-okno img, .nahled-okno::before{animation: none !important; transition: none !important; transform: none !important}
 }
 
 /* ══ BALÍČEK KARET (telefon) ═══════════════════════════════════
@@ -2460,15 +2489,17 @@ html:has(.doc-strana){scrollbar-width: auto}
     padding: 14px 14px 14px;
   }
   .radek-f{display: block; grid-area: foto; margin: 9px 0 10px}
-  /* Fotka mimo střed je jen šedá, rudá naskočí kartě uprostřed. */
-  .polozka:not(.je-aktivni) .radek-f::before{opacity: 0}
-  .polozka:not(.je-aktivni) .radek-f img{filter: grayscale(1) contrast(1.1) brightness(.6)}
+  /* Karta uprostřed si svůj web sama prolistuje. */
+  .je-aktivni .radek-f .nahled-okno img{animation: projizdka 16s cubic-bezier(.45,0,.55,1) .6s infinite alternate}
+  .je-aktivni .radek-f .nahled-okno::before{animation: posuvnik 16s cubic-bezier(.45,0,.55,1) .6s infinite alternate}
   /* Rozdělaná práce fotku nemá: místo ní šrafovaná plocha. */
   .nahled--prazdny{
     border-style: dashed; border-color: var(--linka-2);
+  }
+  .nahled--prazdny .nahled-okno{
     background: repeating-linear-gradient(135deg, rgba(242,239,233,.05) 0 6px, transparent 6px 12px), var(--noc);
   }
-  .nahled--prazdny::before{display: none}
+  .nahled--prazdny .nahled-okno::before{display: none}
   .telo .telo-f{display: none}
   .radek::before{display: none}
   /* Rychlé dvojí klepnutí karty otočí, ne označí text. */
